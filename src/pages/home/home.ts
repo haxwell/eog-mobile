@@ -1,5 +1,9 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
+import { ProfilePage } from '../profile/profile';
+import { SearchPage } from '../search/search';
+import { RequestsIncomingPage } from '../requests/incoming/requests.incoming';
+import { RequestsOutgoingPage } from '../requests/outgoing/requests.outgoing';
 
 @Component({
   selector: 'page-home',
@@ -9,6 +13,22 @@ export class HomePage {
 
   constructor(public navCtrl: NavController) {
 
+  }
+
+  onProfileBtnTap(event) {
+  	this.navCtrl.push(ProfilePage);
+  }
+
+  onSearchBtnTap(event) {
+  	this.navCtrl.push(SearchPage);
+  }
+
+  onIncomingReqBtnTap(event) {
+  	this.navCtrl.push(RequestsIncomingPage);
+  }
+
+  onOutgoingReqBtnTap(event) {
+  	this.navCtrl.push(RequestsOutgoingPage);
   }
 
 }

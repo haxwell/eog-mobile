@@ -7,8 +7,16 @@
 </ion-header>
 
 <ion-content padding>
-  The world is your oyster.
-  <p>
-    If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will be your guide.
-  </p>
+	    <ion-row>
+      <button ion-button (click)="onProfileBtnTap($event)">Profile</button>
+      </ion-row>
+	    <ion-row>
+      <button ion-button (click)="onSearchBtnTap($event)">Search</button>
+      </ion-row>
+	    <ion-row>
+      <button ion-button (click)="onIncomingReqBtnTap($event)">Incoming Requests</button>
+      </ion-row>
+	    <ion-row>
+      <button ion-button (click)="onOutgoingReqBtnTap($event)">Outgoing Requests</button>
+      </ion-row>
 </ion-content>
