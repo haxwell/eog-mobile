@@ -35,7 +35,7 @@ export class UserService {
 				this._http.get(url, {headers: headers}).subscribe(
 					(userObj) => { 
 						console.log("Credentials Valid!");
-						resolve(userObj);
+						resolve(JSON.parse(userObj["_body"]));
 					 });
 			});
 
@@ -60,7 +60,7 @@ export class UserService {
 				this._http.post(url, data, {headers: headers}).subscribe(
 					(userId) => { 
 						console.log("Credentials Saved! " + JSON.stringify(data));
-						resolve(userId);
+						resolve(JSON.parse(userId["_body"]));
 					 });
 			});
 
