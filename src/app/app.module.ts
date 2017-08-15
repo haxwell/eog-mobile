@@ -18,6 +18,7 @@ import { RequestsOutgoingPage } from '../pages/requests/outgoing/requests.outgoi
 
 import { ApiService } from './_services/api.service';
 import { UserService } from './_services/user.service';
+import { ProfileService } from '../pages/profile/_services/profile.service';
 
 @NgModule({
   declarations: [
@@ -53,6 +54,7 @@ import { UserService } from './_services/user.service';
     SplashScreen,
     ApiService,
     UserService,
+    ProfileService,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })

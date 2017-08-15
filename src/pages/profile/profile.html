@@ -1,3 +1,47 @@
+<ion-header>
+	<ion-navbar>
+		<ion-title>
+			EOG - The App
+		</ion-title>
+	</ion-navbar>
+</ion-header>
+
 <ion-content padding>
-This will be the profile page.
+	<ion-row>
+		<ion-label fixed>Name: </ion-label>
+		<ion-input type="text" placeholder="Name" [(ngModel)]="model.realname" #ctrl="ngModel" required></ion-input>		
+	</ion-row>
+	<ion-row>
+		<ion-label fixed>Points: </ion-label>
+		<ion-input type="number" placeholder="Points" [(ngModel)]="model.points.points" #ctrl="ngModel" required></ion-input>		
+	</ion-row>
+	<ion-row>
+		<ion-label fixed>Phone: </ion-label>
+		<ion-input type="text" placeholder="# " [(ngModel)]="model.phone" #ctrl="ngModel" required></ion-input>		
+		<ion-label fixed>Email: </ion-label>
+		<ion-input type="text" placeholder="you@domain.com" [(ngModel)]="model.email" #ctrl="ngModel" required></ion-input>		
+	</ion-row>
+	<ion-row>
+		<ion-label fixed>Keywords: </ion-label>
+		<ul>
+			<li *ngFor="let item of model.keywords">
+				{{item.key}}
+			</li>
+		</ul>
+		<ion-label fixed>Dreams: </ion-label>
+		<ul>
+			<li *ngFor="let item of model.dreams">
+				{{item.title}}
+			</li>
+		</ul>
+
+		<ion-label fixed>Things: </ion-label>
+		<ul>
+			<li *ngFor="let item of model.things">
+				{{item.title}}
+			</li>
+		</ul>
+
+	</ion-row>
+
 </ion-content>
