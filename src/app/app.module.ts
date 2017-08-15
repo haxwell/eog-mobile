@@ -20,6 +20,7 @@ import { ApiService } from './_services/api.service';
 import { UserService } from './_services/user.service';
 import { ProfileService } from '../pages/profile/_services/profile.service';
 import { RequestsService } from '../pages/requests/_services/requests.service';
+import { SearchService } from '../pages/search/_services/search.service';
 
 @NgModule({
   declarations: [
@@ -55,6 +56,7 @@ import { RequestsService } from '../pages/requests/_services/requests.service';
     SplashScreen,
     ApiService,
     UserService,
+    SearchService,
     ProfileService,
     RequestsService,
     {provide: ErrorHandler, useClass: IonicErrorHandler}

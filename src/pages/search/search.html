@@ -1,3 +1,30 @@
+<ion-header>
+	<ion-navbar>
+		<ion-title>
+			Search
+		</ion-title>
+	</ion-navbar>
+</ion-header>
+
 <ion-content padding>
-This will be the search page.
+	<ion-row>
+		<ion-input type="text" placeholder="Search" [(ngModel)]="searchString" #ctrl="ngModel" required></ion-input>
+		<button ion-button icon-only (click)="onSearchBtnTap($event)">
+			<ion-icon name="search"></ion-icon>
+		</button>
+	</ion-row>
+
+	<ion-row>
+		<ul>
+			<li *ngFor="let item of resultList">
+				{{item.title}}, {{item.description}}
+				<ul>
+					<li *ngFor="let kw of item.keywords">
+						{{kw.key}}
+					</li>
+				</ul>
+			</li>
+		</ul>
+	</ion-row>
+
 </ion-content>
