@@ -19,6 +19,7 @@ import { RequestsOutgoingPage } from '../pages/requests/outgoing/requests.outgoi
 import { ApiService } from './_services/api.service';
 import { UserService } from './_services/user.service';
 import { ProfileService } from '../pages/profile/_services/profile.service';
+import { RequestsService } from '../pages/requests/_services/requests.service';
 
 @NgModule({
   declarations: [
@@ -55,6 +56,7 @@ import { ProfileService } from '../pages/profile/_services/profile.service';
     ApiService,
     UserService,
     ProfileService,
+    RequestsService,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })

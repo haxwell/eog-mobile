@@ -1,3 +1,15 @@
+<ion-header>
+	<ion-navbar>
+		<ion-title>
+			Outgoing Requests
+		</ion-title>
+	</ion-navbar>
+</ion-header>
+
 <ion-content padding>
-This will be the outgoing requests page.
+	<ul>
+		<li *ngFor="let item of model">
+			{{item.thingUser.realname}}, {{item.thing.title}}
+		</li>
+	</ul>
 </ion-content>
