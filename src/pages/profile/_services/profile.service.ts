@@ -39,7 +39,6 @@ export class ProfileService {
 
 		url = environment.apiUrl + "/api/user/" + user["id"] + "/points";
 		this._apiService.get(url).subscribe((pointsObj) => {
-			debugger;
 			let coll = JSON.parse(pointsObj["_body"]);
 
 			coll.map((obj) => model["points"]["points"] += obj["quantity"]);
