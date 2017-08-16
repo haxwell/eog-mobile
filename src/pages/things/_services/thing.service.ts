@@ -18,8 +18,7 @@ export class ThingService {
 		rtn["description"] = '';
 		rtn["title"] = '';
 		rtn["keywords"] = [];
-
-		// TODO: add default points information
+		rtn["rules"] = [];
 
 		return rtn;
 	}

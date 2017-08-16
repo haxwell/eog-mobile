@@ -33,6 +33,7 @@ export class ThingPage {
 
 	onNewRuleBtnTap(evt) {
 		let modal = this.modalCtrl.create(RulePage);
+		modal.onDidDismiss(data => { this.model["rules"].push(data); })
 		modal.present();
 	}
 }

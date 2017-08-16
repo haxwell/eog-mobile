@@ -24,6 +24,7 @@ import { SearchService } from './_services/search.service';
 import { ProfileService } from '../pages/profile/_services/profile.service';
 import { RequestsService } from '../pages/requests/_services/requests.service';
 import { ThingService } from '../pages/things/_services/thing.service';
+import { RuleService } from '../pages/things/_pages/_services/rule.service';
 
 @NgModule({
   declarations: [
@@ -63,6 +64,7 @@ import { ThingService } from '../pages/things/_services/thing.service';
     SplashScreen,
     ApiService,
     UserService,
+    RuleService,
     SearchService,
     ThingService,
     ProfileService,

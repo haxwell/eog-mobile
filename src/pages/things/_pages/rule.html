@@ -1,17 +1,39 @@
+<ion-header>
+	<ion-navbar>
+		<ion-title>
+			Create New Rule
+		</ion-title>
+	</ion-navbar>
+</ion-header>
+
 <ion-content padding>
 	<ion-row>
-		<ion-input type="text" placeholder="Search" [(ngModel)]="searchString" #ctrl="ngModel" required></ion-input>
+		<ion-label>Here, you can create a rule describing the number of points from a given user that you require before someone can request you do your thing...</ion-label>
+	</ion-row>		
+	<ion-row>
+		<ion-input type="text" placeholder="Search for a user's name" [(ngModel)]="searchString" #ctrl="ngModel" required></ion-input>
 		<button ion-button icon-only (click)="onSearchUserBtnTap($event)">
 			<ion-icon name="search"></ion-icon>
 		</button>
 	</ion-row>
 
+	<ion-row *ngIf="resultList !== undefined">
+		<ion-label>Required points</ion-label>
+		<ion-input type="number" placeholder="quantity" [(ngModel)]="pointsQuantity" #ctrl="ngModel" required></ion-input>
+		<ion-list radio-group>
+			<ion-list-header>
+				Matching Users
+			</ion-list-header>
+			<ion-item *ngFor="let user of resultList">
+				<ion-label>{{user.realname}}</ion-label>
+				<ion-radio (ionSelect)="onRadioBtnTap($event)" value="{{user.realname}}"></ion-radio>
+			</ion-item>
+		</ion-list>
+	</ion-row>
+
 	<ion-row>
-		<ul>
-			<li *ngFor="let user of resultList">
-				{{user.realname}}
-			</li>
-		</ul>
+		<button ion-button (click)="onCancelBtnTap($event)">Cancel</button>
+		<button ion-button [disabled]="!isSaveBtnEnabled()" (click)="onSaveBtnTap($event)">Save</button>
 	</ion-row>
 
 </ion-content>
