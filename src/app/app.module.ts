@@ -16,12 +16,13 @@ import { SearchPage } from '../pages/search/search';
 import { ThingPage } from '../pages/things/things';
 import { RequestsIncomingPage } from '../pages/requests/incoming/requests.incoming';
 import { RequestsOutgoingPage } from '../pages/requests/outgoing/requests.outgoing';
+import { RulePage } from '../pages/things/_pages/rule';
 
 import { ApiService } from './_services/api.service';
 import { UserService } from './_services/user.service';
+import { SearchService } from './_services/search.service';
 import { ProfileService } from '../pages/profile/_services/profile.service';
 import { RequestsService } from '../pages/requests/_services/requests.service';
-import { SearchService } from '../pages/search/_services/search.service';
 import { ThingService } from '../pages/things/_services/thing.service';
 
 @NgModule({
@@ -31,6 +32,7 @@ import { ThingService } from '../pages/things/_services/thing.service';
     HomePage,
     ProfilePage,
     ThingPage,
+    RulePage,
     RequestsIncomingPage,
     RequestsOutgoingPage
    , SearchPage
@@ -51,6 +53,7 @@ import { ThingService } from '../pages/things/_services/thing.service';
     HomePage,
     ProfilePage,
     ThingPage,
+    RulePage,
     RequestsIncomingPage,
     RequestsOutgoingPage
     ,SearchPage

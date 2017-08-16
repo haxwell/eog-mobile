@@ -16,7 +16,18 @@
 		<ion-input type="text" placeholder="Description" [(ngModel)]="model.description" #ctrl="ngModel" required></ion-input>		
 	</ion-row>
 	<ion-row>
+		<ion-row>
 		<ion-label fixed>Rules: </ion-label>
+		<button ion-button (click)="onNewRuleBtnTap($event)">Add</button>		
+		</ion-row>
+		<ion-row>
+		<ul>
+			<li *ngFor="let r of model.rules">
+				Red'd User Id: {{r.requiredUserId}}<br/>
+				Req'd Points: {{r.quantity}}
+			</li>
+		</ul>
+		</ion-row>
 	</ion-row>
 	<ion-row>
 		<ion-label fixed>Keywords: </ion-label>

@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 
-import { SearchService } from '../../app/_services/search.service';
+import { SearchService } from '../../../app/_services/search.service';
 
 @Component({
-  selector: 'page-search',
-  templateUrl: 'search.html'
+  selector: 'page-thing-detail-rule',
+  templateUrl: 'rule.html'
 })
-export class SearchPage {
+export class RulePage {
 	searchString = '';
 	resultList = undefined;
 
@@ -15,8 +15,8 @@ export class SearchPage {
 
 	}
 
-	onSearchBtnTap($event) {
-		this._searchService.searchThings(this.searchString).then((data) => {
+	onSearchUserBtnTap($event) {
+		this._searchService.searchUsers(this.searchString).then((data) => {
 			this.resultList = data;
 		});
 	}

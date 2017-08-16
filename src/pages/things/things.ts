@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { OnInit } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
+import { ModalController } from 'ionic-angular';
+import { RulePage } from './_pages/rule'
 
 import { ThingService } from './_services/thing.service'
 
@@ -14,19 +16,23 @@ export class ThingPage {
 	model = {};
 	newKeywordText = '';
 
-	constructor(public navCtrl: NavController, navParams: NavParams, private _thingService: ThingService) {
+	constructor(public navCtrl: NavController, 
+				private navParams: NavParams, 
+				private modalCtrl: ModalController,
+				private _thingService: ThingService) {
 		this.model = navParams.get('thing');
 
 		if (this.model === undefined)
 			this.model = this._thingService.getDefaultModel();
 	}
 
-	ngOnInit() {
-		//this.model = this._thingService.getModel();
-	}
-
 	onNewKeyword(evt) {
 		this.model["keywords"].push({"text": this.newKeywordText});
 		this.newKeywordText = '';
+	}
+
+	onNewRuleBtnTap(evt) {
+		let modal = this.modalCtrl.create(RulePage);
+		modal.present();
 	}
 }

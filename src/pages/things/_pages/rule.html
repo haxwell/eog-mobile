@@ -1,0 +1,17 @@
+<ion-content padding>
+	<ion-row>
+		<ion-input type="text" placeholder="Search" [(ngModel)]="searchString" #ctrl="ngModel" required></ion-input>
+		<button ion-button icon-only (click)="onSearchUserBtnTap($event)">
+			<ion-icon name="search"></ion-icon>
+		</button>
+	</ion-row>
+
+	<ion-row>
+		<ul>
+			<li *ngFor="let user of resultList">
+				{{user.realname}}
+			</li>
+		</ul>
+	</ion-row>
+
+</ion-content>
