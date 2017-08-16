@@ -13,6 +13,7 @@ import { LoginPage } from '../pages/login/login';
 import { HomePage } from '../pages/home/home';
 import { ProfilePage } from '../pages/profile/profile';
 import { SearchPage } from '../pages/search/search';
+import { ThingPage } from '../pages/things/things';
 import { RequestsIncomingPage } from '../pages/requests/incoming/requests.incoming';
 import { RequestsOutgoingPage } from '../pages/requests/outgoing/requests.outgoing';
 
@@ -21,6 +22,7 @@ import { UserService } from './_services/user.service';
 import { ProfileService } from '../pages/profile/_services/profile.service';
 import { RequestsService } from '../pages/requests/_services/requests.service';
 import { SearchService } from '../pages/search/_services/search.service';
+import { ThingService } from '../pages/things/_services/thing.service';
 
 @NgModule({
   declarations: [
@@ -28,6 +30,7 @@ import { SearchService } from '../pages/search/_services/search.service';
     LoginPage,
     HomePage,
     ProfilePage,
+    ThingPage,
     RequestsIncomingPage,
     RequestsOutgoingPage
    , SearchPage
@@ -47,6 +50,7 @@ import { SearchService } from '../pages/search/_services/search.service';
     LoginPage,
     HomePage,
     ProfilePage,
+    ThingPage,
     RequestsIncomingPage,
     RequestsOutgoingPage
     ,SearchPage
@@ -57,6 +61,7 @@ import { SearchService } from '../pages/search/_services/search.service';
     ApiService,
     UserService,
     SearchService,
+    ThingService,
     ProfileService,
     RequestsService,
     {provide: ErrorHandler, useClass: IonicErrorHandler}

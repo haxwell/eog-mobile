@@ -1,0 +1,32 @@
+<ion-header>
+	<ion-navbar>
+		<ion-title>
+			Thing Detail
+		</ion-title>
+	</ion-navbar>
+</ion-header>
+
+<ion-content padding>
+	<ion-row>
+		<ion-label fixed>Title: </ion-label>
+		<ion-input type="text" placeholder="Title" [(ngModel)]="model.title" #ctrl="ngModel" required></ion-input>		
+	</ion-row>
+	<ion-row>
+		<ion-label fixed>Description: </ion-label>
+		<ion-input type="text" placeholder="Description" [(ngModel)]="model.description" #ctrl="ngModel" required></ion-input>		
+	</ion-row>
+	<ion-row>
+		<ion-label fixed>Rules: </ion-label>
+	</ion-row>
+	<ion-row>
+		<ion-label fixed>Keywords: </ion-label>
+		<ion-input type="text" placeholder="Add a keyword" [(ngModel)]="newKeywordText" #ctrl="ngModel" required></ion-input>
+		<button ion-button (click)="onNewKeyword($event)">Add</button>
+	</ion-row>
+	<ul>
+		<li *ngFor="let kw of model.keywords">
+			{{kw.text}}
+		</li>
+	</ul>
+
+</ion-content>

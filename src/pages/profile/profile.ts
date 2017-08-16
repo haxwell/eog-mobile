@@ -4,6 +4,8 @@ import { NavController } from 'ionic-angular';
 
 import { ProfileService } from './_services/profile.service'
 
+import { ThingPage } from '../things/things'
+
 @Component({
   selector: 'page-profile',
   templateUrl: 'profile.html'
@@ -19,6 +21,10 @@ export class ProfilePage {
 
 	ngOnInit() {
 		this.model = this._profileService.getModel();
+	}
+
+	onNewThingBtnTap(evt) {
+		this.navCtrl.push(ThingPage, { thing: undefined });
 	}
 
 }
