@@ -22,8 +22,8 @@ export class PointsService { // TODO: should this be named RulesService??
 		});
 	}
 
-	// be given an array of rules
-	//  and then call for the points of the current user
+	// TODO: The client should cache these results, since this method can be repeatedly called by Angular.
+	//  The arrays won't change during the life of the page, so no need to reprocess them over and over.
 	getUserHasSufficientPointsGivenRules(rulesArray, userPoints) {
 		let arr = rulesArray.slice();
 		let upArr = userPoints.slice();
