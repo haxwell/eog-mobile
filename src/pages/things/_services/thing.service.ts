@@ -25,7 +25,6 @@ export class ThingService {
 
 	get(thingId) {
 		return new Promise((resolve, reject) => {
-			let user = this._userService.getCurrentUser();
 			let url = environment.apiUrl + "/api/things/" + thingId; 
 			this._apiService.get(url)
 			.subscribe((thingObj) => {
@@ -39,7 +38,6 @@ export class ThingService {
 		console.log(data);
 
 		return new Promise((resolve, reject) => {
-			let user = this._userService.getCurrentUser();
 			let url = environment.apiUrl + "/api/things";
 			this._apiService.post(url, data)
 			.subscribe((resp) => {
@@ -49,32 +47,16 @@ export class ThingService {
 		});
 	}
 
-JSON_to_URLEncoded(element,key,list){
-  var list = list || [];
-  if(typeof(element)=='object'){
-    for (var idx in element)
-      this.JSON_to_URLEncoded(element[idx],key?key+'['+idx+']':idx,list);
-  } else {
-    list.push(key+'='+encodeURIComponent(element));
-  }
-  return list.join('&');
-}
-
-
-	getPostStringForModel2(model) {
-		var query = "";
-		var key = undefined;
-
-		for (key in model) {
-		    if (Array.isArray(model[key])) {
-		    	query += key+"Count"+"="+model[key].length+"&";
-
-		    	model[key].map((obj, i) => {
-		    		query += encodeURIComponent(key)+(i+1) +"=" +encodeURIComponent(obj)+"&";	
-		    	});
-		    } 
-		    else
-		    	query += encodeURIComponent(key)+"="+encodeURIComponent(model[key])+"&";	
-		}
+	JSON_to_URLEncoded(element,key,list){
+  		var list = list || [];
+  		if(typeof(element)=='object'){
+    		for (var idx in element)
+      			this.JSON_to_URLEncoded(element[idx],key?key+'['+idx+']':idx,list);
+  		} else {
+    		list.push(key+'='+encodeURIComponent(element));
+  		}
+  		
+  		return list.join('&');
 	}
+
 }
