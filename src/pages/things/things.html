@@ -40,4 +40,9 @@
 		</li>
 	</ul>
 
+	<ion-row>
+		<button ion-button (click)="onCancelBtnTap($event)">Cancel</button>
+		<button ion-button [disabled]="!isSaveBtnEnabled()" (click)="onSaveBtnTap($event)">Save</button>
+	</ion-row>
+
 </ion-content>

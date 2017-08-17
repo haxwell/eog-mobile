@@ -14,16 +14,26 @@ import { ThingPage } from '../things/things'
 export class ProfilePage {
 
 	model = {};
+	dirty = true;
 
 	constructor(public navCtrl: NavController, private _profileService: ProfileService) {
 
 	}
 
 	ngOnInit() {
-		this.model = this._profileService.getModel();
+		if (this.dirty)
+			this.model = this._profileService.getModel();
+
+		this.dirty = false;
+	}
+
+	ionViewWillEnter() {
+		if (this.dirty) 
+			this.ngOnInit();
 	}
 
 	onNewThingBtnTap(evt) {
+		this.dirty = true;
 		this.navCtrl.push(ThingPage, { thing: undefined });
 	}
 

@@ -36,4 +36,22 @@ export class ThingPage {
 		modal.onDidDismiss(data => { this.model["rules"].push(data); })
 		modal.present();
 	}
+
+	isSaveBtnEnabled() {
+		return 	this.model["rules"].length > 0 &&
+				this.model["keywords"].length > 0 &&
+				this.model["title"].length > 0 &&
+				this.model["description"].length > 0;
+	}
+
+	onSaveBtnTap(evt) {
+		this._thingService.save(this.model).then((newThing) => {
+			this.navCtrl.pop();
+		})
+	}
+
+	onCancelBtnTap(evt) {
+		// TODO: Check for changes before popping.
+		this.navCtrl.pop();
+	}
 }
