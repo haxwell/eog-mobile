@@ -5,6 +5,7 @@ import { NavController } from 'ionic-angular';
 import { ProfileService } from './_services/profile.service'
 
 import { ThingPage } from '../things/things'
+import { DreamPage } from '../dreams/dreams'
 
 @Component({
   selector: 'page-profile',
@@ -37,4 +38,8 @@ export class ProfilePage {
 		this.navCtrl.push(ThingPage, { thing: undefined });
 	}
 
+	onNewDreamBtnTap(evt) {
+		this.dirty = true;
+		this.navCtrl.push(DreamPage, { dream: undefined });
+	}
 }

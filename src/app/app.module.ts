@@ -13,6 +13,7 @@ import { LoginPage } from '../pages/login/login';
 import { HomePage } from '../pages/home/home';
 import { ProfilePage } from '../pages/profile/profile';
 import { SearchPage } from '../pages/search/search';
+import { DreamPage } from '../pages/dreams/dreams';
 import { ThingPage } from '../pages/things/things';
 import { RequestsIncomingPage } from '../pages/requests/incoming/requests.incoming';
 import { RequestsOutgoingPage } from '../pages/requests/outgoing/requests.outgoing';
@@ -24,6 +25,7 @@ import { SearchService } from './_services/search.service';
 import { ProfileService } from '../pages/profile/_services/profile.service';
 import { RequestsService } from '../pages/requests/_services/requests.service';
 import { ThingService } from '../pages/things/_services/thing.service';
+import { DreamService } from '../pages/dreams/_services/dream.service';
 import { RuleService } from '../pages/things/_pages/_services/rule.service';
 
 @NgModule({
@@ -32,6 +34,7 @@ import { RuleService } from '../pages/things/_pages/_services/rule.service';
     LoginPage,
     HomePage,
     ProfilePage,
+    DreamPage,
     ThingPage,
     RulePage,
     RequestsIncomingPage,
@@ -53,6 +56,7 @@ import { RuleService } from '../pages/things/_pages/_services/rule.service';
     LoginPage,
     HomePage,
     ProfilePage,
+    DreamPage,
     ThingPage,
     RulePage,
     RequestsIncomingPage,
@@ -66,6 +70,7 @@ import { RuleService } from '../pages/things/_pages/_services/rule.service';
     UserService,
     RuleService,
     SearchService,
+    DreamService,
     ThingService,
     ProfileService,
     RequestsService,

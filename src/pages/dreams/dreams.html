@@ -1,0 +1,34 @@
+<ion-header>
+	<ion-navbar>
+		<ion-title>
+			Dream Detail
+		</ion-title>
+	</ion-navbar>
+</ion-header>
+
+<ion-content padding>
+	<ion-row>
+		<ion-label fixed>Title: </ion-label>
+		<ion-input type="text" placeholder="Title" [(ngModel)]="model.title" #ctrl="ngModel" required></ion-input>		
+	</ion-row>
+	<ion-row>
+		<ion-label fixed>Description: </ion-label>
+		<ion-input type="text" placeholder="Description" [(ngModel)]="model.description" #ctrl="ngModel" required></ion-input>		
+	</ion-row>
+	<ion-row>
+		<ion-label fixed>Keywords: </ion-label>
+		<ion-input type="text" placeholder="Add a keyword" [(ngModel)]="newKeywordText" #ctrl="ngModel" required></ion-input>
+		<button ion-button (click)="onNewKeyword($event)">Add</button>
+	</ion-row>
+	<ul>
+		<li *ngFor="let kw of model.keywords">
+			{{kw.text}}
+		</li>
+	</ul>
+
+	<ion-row>
+		<button ion-button (click)="onCancelBtnTap($event)">Cancel</button>
+		<button ion-button [disabled]="!isSaveBtnEnabled()" (click)="onSaveBtnTap($event)">Save</button>
+	</ion-row>
+
+</ion-content>
