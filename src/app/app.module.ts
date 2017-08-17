@@ -22,11 +22,13 @@ import { RulePage } from '../pages/things/_pages/rule';
 import { ApiService } from './_services/api.service';
 import { UserService } from './_services/user.service';
 import { SearchService } from './_services/search.service';
+import { PointsService } from './_services/points.service';
 import { ProfileService } from '../pages/profile/_services/profile.service';
 import { RequestsService } from '../pages/requests/_services/requests.service';
 import { ThingService } from '../pages/things/_services/thing.service';
 import { DreamService } from '../pages/dreams/_services/dream.service';
 import { RuleService } from '../pages/things/_pages/_services/rule.service';
+
 
 @NgModule({
   declarations: [
@@ -69,6 +71,7 @@ import { RuleService } from '../pages/things/_pages/_services/rule.service';
     ApiService,
     UserService,
     RuleService,
+    PointsService,
     SearchService,
     DreamService,
     ThingService,
