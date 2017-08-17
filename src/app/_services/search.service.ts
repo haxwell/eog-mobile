@@ -24,7 +24,6 @@ export class SearchService {
 
 	searchUsers(qStr) {
 		return new Promise((resolve, reject) => {
-			let user = this._userService.getCurrentUser();
 			let url = environment.apiUrl + "/api/users?q=" + qStr;
 			this._apiService.get(url)
 			.subscribe((searchObj) => {
