@@ -35,7 +35,10 @@ export class RulePage {
 	}
 
 	onSaveBtnTap(evt) {
-		this.viewCtrl.dismiss({pointsQuantity: this.pointsQuantity, requiredUser: this.resultList.find((obj) => { return obj["isSelected"]; })});
+		let user = this.resultList.find((obj) => { return obj["isSelected"]; });
+		delete user["isSelected"];
+		
+		this.viewCtrl.dismiss({pointsQuantity: this.pointsQuantity, requiredUser: user });
 	}
 
 	onCancelBtnTap(evt) {
