@@ -3,7 +3,7 @@ import { OnInit } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { ModalController } from 'ionic-angular';
 
-import { DreamService } from './_services/dream.service'
+import { DreamService } from '../../app/_services/dream.service'
 
 @Component({
   selector: 'page-dream-detail',

@@ -13,6 +13,7 @@ import { LoginPage } from '../pages/login/login';
 import { HomePage } from '../pages/home/home';
 import { ProfilePage } from '../pages/profile/profile';
 import { SearchPage } from '../pages/search/search';
+import { RequestPage } from '../pages/search/_pages/request';
 import { DreamPage } from '../pages/dreams/dreams';
 import { ThingPage } from '../pages/things/things';
 import { RequestsIncomingPage } from '../pages/requests/incoming/requests.incoming';
@@ -21,12 +22,12 @@ import { RulePage } from '../pages/things/_pages/rule';
 
 import { ApiService } from './_services/api.service';
 import { UserService } from './_services/user.service';
+import { DreamService } from './_services/dream.service';
 import { SearchService } from './_services/search.service';
 import { PointsService } from './_services/points.service';
+import { RequestsService } from './_services/requests.service';
 import { ProfileService } from '../pages/profile/_services/profile.service';
-import { RequestsService } from '../pages/requests/_services/requests.service';
 import { ThingService } from '../pages/things/_services/thing.service';
-import { DreamService } from '../pages/dreams/_services/dream.service';
 import { RuleService } from '../pages/things/_pages/_services/rule.service';
 
 
@@ -40,7 +41,8 @@ import { RuleService } from '../pages/things/_pages/_services/rule.service';
     ThingPage,
     RulePage,
     RequestsIncomingPage,
-    RequestsOutgoingPage
+    RequestsOutgoingPage,
+    RequestPage
    , SearchPage
   ],
   imports: [
@@ -62,7 +64,8 @@ import { RuleService } from '../pages/things/_pages/_services/rule.service';
     ThingPage,
     RulePage,
     RequestsIncomingPage,
-    RequestsOutgoingPage
+    RequestsOutgoingPage,
+    RequestPage
     ,SearchPage
   ],
   providers: [
@@ -70,7 +73,7 @@ import { RuleService } from '../pages/things/_pages/_services/rule.service';
     SplashScreen,
     ApiService,
     UserService,
-    RuleService,
+    RuleService, // TODO: Can be Deleted?
     PointsService,
     SearchService,
     DreamService,

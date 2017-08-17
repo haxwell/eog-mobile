@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
+import { ModalController } from 'ionic-angular';
+import { RequestPage } from './_pages/request'
 
 import { SearchService } from '../../app/_services/search.service';
 import { PointsService } from '../../app/_services/points.service';
@@ -15,6 +17,7 @@ export class SearchPage {
 
 	constructor(public navCtrl: NavController, 
 				private _searchService: SearchService,
+				private modalCtrl: ModalController,
 				private _pointsService: PointsService) {
 
 	}
@@ -36,6 +39,8 @@ export class SearchPage {
 	}
 
 	onRequestBtnTap(evt) {
-
+		let modal = this.modalCtrl.create(RequestPage);
+		//modal.onDidDismiss(data => {  });
+		modal.present();
 	}
 }

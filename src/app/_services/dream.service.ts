@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 
-import { UserService } from '../../../app/_services/user.service';
-import { ApiService } from '../../../app/_services/api.service';
+import { UserService } from './user.service';
+import { ApiService } from './api.service';
 
-import { environment } from '../../../_environments/environment';
+import { environment } from '../../_environments/environment';
 
 @Injectable()
 export class DreamService {
@@ -28,6 +28,18 @@ export class DreamService {
 			this._apiService.get(url)
 			.subscribe((thingObj) => {
 				resolve(JSON.parse(thingObj["_body"]));
+			});
+		});
+	}
+
+	getDreamsForCurrentUser() {
+		return new Promise((resolve, reject) => {
+			let user = this._userService.getCurrentUser();
+			let url = environment.apiUrl + "/api/user/" + user["id"] + "/dreams";
+			this._apiService.get(url)
+			.subscribe((obj) => {
+				let rtn = JSON.parse(obj["_body"]);
+				resolve(rtn);
 			});
 		});
 	}

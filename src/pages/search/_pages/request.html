@@ -1,0 +1,28 @@
+<ion-header>
+	<ion-navbar>
+		<ion-title>
+			Make a Request
+		</ion-title>
+	</ion-navbar>
+</ion-header>
+
+<ion-content padding>
+	<ion-row>
+		<ion-label>You are about to request a User do their Thing for you.</ion-label>
+	</ion-row>		
+
+	<ion-row>
+		<ion-label>Which of your dreams do you want to associate with this request?</ion-label>
+	</ion-row>		
+	<ion-row>
+		<ion-select [(ngModel)]="selectedDream" *ngFor="let dream of dreams">
+			<ion-option [value]="dream.id">{{dream.title}}</ion-option>
+		</ion-select>
+	</ion-row>		
+
+	<ion-row>
+		<button ion-button (click)="onCancelBtnTap($event)">Cancel</button>
+		<button ion-button [disabled]="!isSaveBtnEnabled()" (click)="onSaveBtnTap($event)">Save</button>
+	</ion-row>
+
+</ion-content>
