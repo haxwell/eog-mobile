@@ -36,7 +36,6 @@ export class RequestPage {
 
 	onSaveBtnTap(evt) {
 		let dream = this.dreams.find((obj) => { return obj.id === this.selectedDreamId});
-		console.log(dream);		
 		this._requestsService.saveNew(dream, this.thing).then((data) => {
 			this.viewCtrl.dismiss({ });
 		});
