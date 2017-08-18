@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { OnInit } from '@angular/core';
 import { NavController } from 'ionic-angular';
 
-import { RequestsService } from '../_services/requests.service'
+import { RequestsService } from '../../../app/_services/requests.service'
 
 @Component({
   selector: 'page-requests-incoming',
