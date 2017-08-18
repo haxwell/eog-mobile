@@ -39,18 +39,7 @@ export class RequestsService {
 			let url = environment.apiUrl + "/api/user/" + user["id"] + "/requests/outgoing";
 			
 			this._apiService.get(url).subscribe((outgoingObj) => {
-				let model = JSON.parse(outgoingObj["_body"]);
-
-				model.map((obj) => {
-					let url = environment.apiUrl + "/api/user/" + obj["thing"]["userId"];
-					this._apiService.get(url).subscribe((userObj) => {
-						obj["thingUser"] = JSON.parse(userObj["_body"]);
-
-						if (model.every((x) => { return x.hasOwnProperty("thingUser"); })) {
-							resolve(model);
-						}
-					});
-				});
+				resolve(JSON.parse(outgoingObj["_body"]));
 			});
 		})
 
