@@ -38,8 +38,8 @@ export class SearchPage {
 		return this._pointsService.getUserHasSufficientPointsGivenRules(rulesArray, this.userPoints);
 	}
 
-	onRequestBtnTap(evt) {
-		let modal = this.modalCtrl.create(RequestPage);
+	onRequestBtnTap(evt, item) {
+		let modal = this.modalCtrl.create(RequestPage, {thing: item});
 		//modal.onDidDismiss(data => {  });
 		modal.present();
 	}

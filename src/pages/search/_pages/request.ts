@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { OnInit } from '@angular/core';
 
-import { NavController, ViewController } from 'ionic-angular';
+import { NavController, NavParams, ViewController } from 'ionic-angular';
 
 import { RequestsService } 	from '../../../app/_services/requests.service';
 import { DreamService } 	from '../../../app/_services/dream.service'
@@ -12,14 +12,16 @@ import { DreamService } 	from '../../../app/_services/dream.service'
 })
 export class RequestPage {
 
+	thing = undefined;
 	dreams = undefined;
-	selectedDream: string = "";
+	selectedDreamId: string = undefined;
 	
 	constructor(public navCtrl: NavController, 
+				public params: NavParams,
 				private viewCtrl: ViewController, 
 				private _requestsService: RequestsService,
 				private _dreamService: DreamService) {
-
+		this.thing = params.get('thing');
 	}
 
 	ngOnInit() {
@@ -29,11 +31,15 @@ export class RequestPage {
 	}
 
 	isSaveBtnEnabled() {
-		return true;
+		return this.selectedDreamId != undefined;
 	}
 
 	onSaveBtnTap(evt) {
-		this.viewCtrl.dismiss({ });
+		let dream = this.dreams.find((obj) => { return obj.id === this.selectedDreamId});
+		console.log(dream);		
+		this._requestsService.saveNew(dream, this.thing).then((data) => {
+			this.viewCtrl.dismiss({ });
+		});
 	}
 
 	onCancelBtnTap(evt) {

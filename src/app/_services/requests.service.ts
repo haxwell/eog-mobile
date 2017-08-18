@@ -56,4 +56,19 @@ export class RequestsService {
 
 		return self.outgoingPromise;
 	}
+
+	saveNew(dream, thing) {
+		return new Promise((resolve, reject) => {
+			let user = this._userService.getCurrentUser();
+			let url = environment.apiUrl + "/api/requests";
+
+			let data =	"requestingUserId=" + user["id"] + "&requestedThingId=" + thing["id"] + 
+						"&requestingDreamId=" + dream["id"];
+			
+			this._apiService.post(url, data).subscribe((obj) => {
+				let model = JSON.parse(obj["_body"]);
+				resolve(model);
+			});
+		});
+	}
 }

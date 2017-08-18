@@ -9,13 +9,15 @@
 <ion-content padding>
 	<ion-row>
 		<ion-label>You are about to request a User do their Thing for you.</ion-label>
+		<br/>
+		<ion-label>{{thing.title}}</ion-label>
 	</ion-row>		
 
 	<ion-row>
 		<ion-label>Which of your dreams do you want to associate with this request?</ion-label>
 	</ion-row>		
 	<ion-row>
-		<ion-select [(ngModel)]="selectedDream" *ngFor="let dream of dreams">
+		<ion-select [(ngModel)]="selectedDreamId" *ngFor="let dream of dreams">
 			<ion-option [value]="dream.id">{{dream.title}}</ion-option>
 		</ion-select>
 	</ion-row>		
