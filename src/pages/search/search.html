@@ -17,7 +17,7 @@
 	<ion-row>
 		<ul>
 			<li *ngFor="let item of resultList">
-				<button ion-button [id]="item.id" [disabled]="!getUserHasSufficientPointsGivenRules(item.rules)" (click)="onRequestBtnTap($event, item)">Request</button>
+				<button ion-button [id]="item.id" [disabled]="!isRequestable(item)" (click)="onRequestBtnTap($event, item)">Request</button>
 				{{item.title}}, {{item.description}}
 				<ul>
 					<li *ngFor="let kw of item.keywords">

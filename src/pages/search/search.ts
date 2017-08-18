@@ -5,6 +5,7 @@ import { RequestPage } from './_pages/request'
 
 import { SearchService } from '../../app/_services/search.service';
 import { PointsService } from '../../app/_services/points.service';
+import { RequestsService } from '../../app/_services/requests.service';
 
 @Component({
   selector: 'page-search',
@@ -14,11 +15,13 @@ export class SearchPage {
 	searchString = '';
 	resultList = undefined;
 	userPoints = undefined;
+	requestsList = undefined;
 
 	constructor(public navCtrl: NavController, 
 				private _searchService: SearchService,
 				private modalCtrl: ModalController,
-				private _pointsService: PointsService) {
+				private _pointsService: PointsService,
+				private _requestsService: RequestsService) {
 
 	}
 
@@ -26,6 +29,10 @@ export class SearchPage {
 		this._pointsService.getCurrentUserPoints().then((data) => {
 			this.userPoints = data;
 		});
+
+		this._requestsService.getModelForOutgoing().then((data) => {
+			this.requestsList = data;
+		})
 	}
 
 	onSearchBtnTap(evt) {
@@ -34,8 +41,16 @@ export class SearchPage {
 		});
 	}
 
-	getUserHasSufficientPointsGivenRules(rulesArray) {
-		return this._pointsService.getUserHasSufficientPointsGivenRules(rulesArray, this.userPoints);
+	getUserHasSufficientPointsGivenRules(thing) {
+		return this._pointsService.getUserHasSufficientPointsGivenRules(thing["rules"], this.userPoints);
+	}
+
+	getUserHasAlreadyRequestedThisThing(thing) {
+		return this.requestsList.some((obj) => { return obj["thing"]["id"] === thing["id"]; })
+	}
+
+	isRequestable(thing) {
+		return this.getUserHasSufficientPointsGivenRules(thing) && !this.getUserHasAlreadyRequestedThisThing(thing);
 	}
 
 	onRequestBtnTap(evt, item) {
