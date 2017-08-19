@@ -7,9 +7,30 @@
 </ion-header>
 
 <ion-content padding>
-	<ul>
-		<li *ngFor="let item of model">
-			{{item.requestingUser.realname}}, {{item.thing.title}}
-		</li>
-	</ul>
+	<ion-row *ngIf="getAcceptedRequests() !== undefined">
+		Accepted<br/>
+		<ul>
+			<li *ngFor="let item of getAcceptedRequests()">
+				{{item.requestingUser.realname}}, {{item.thing.title}}
+			</li>
+		</ul>
+	</ion-row>
+	<ion-row *ngIf="getPendingRequests() !== undefined">
+		Pending<br/>
+		<ul>
+			<li *ngFor="let item of getPendingRequests()">
+				{{item.requestingUser.realname}}, {{item.thing.title}}
+				<button ion-button (click)="onAcceptBtnTap(item)">Accept</button>
+				<button ion-button (click)="onDeclineBtnTap(item)">Decline</button>
+			</li>
+		</ul>
+	</ion-row>
+	<ion-row *ngIf="getDeclinedRequests() !== undefined">
+		Declined<br/>
+		<ul>
+			<li *ngFor="let item of getDeclinedRequests()">
+				{{item.requestingUser.realname}}, {{item.thing.title}}
+			</li>
+		</ul>
+	</ion-row>	
 </ion-content>

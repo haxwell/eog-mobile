@@ -8,6 +8,9 @@ import { environment } from '../../_environments/environment';
 @Injectable()
 export class RequestsService {
 	
+	REQUEST_STATUS_ACCEPTED = 3;
+	REQUEST_STATUS_DECLINED = 2;	
+
 	// TODO: Refactor incoming/outgoing into one method
 	incomingPromise = undefined;
 	outgoingPromise = undefined;
@@ -64,6 +67,40 @@ export class RequestsService {
 
 			let data =	"requestingUserId=" + user["id"] + "&requestedThingId=" + thing["id"] + 
 						"&requestingDreamId=" + dream["id"];
+			
+			this._apiService.post(url, data).subscribe((obj) => {
+				let model = JSON.parse(obj["_body"]);
+				resolve(model);
+			});
+		});
+	}
+
+	acceptRequest(request) {
+		let self = this;
+		return new Promise((resolve, reject) => {
+			let user = this._userService.getCurrentUser();
+			
+			// TODO: How can this operation be made more secure?
+			let url = environment.apiUrl + "/api/user/" + user["id"] + "/requests/incoming";
+
+			let data =	"requestId=" + request["id"] + "&newStatus=" + self.REQUEST_STATUS_ACCEPTED;
+			
+			this._apiService.post(url, data).subscribe((obj) => {
+				let model = JSON.parse(obj["_body"]);
+				resolve(model);
+			});
+		});
+	}
+
+	declineRequest(request) {
+		let self = this;
+		return new Promise((resolve, reject) => {
+			let user = this._userService.getCurrentUser();
+			
+			// TODO: How can this operation be made more secure?
+			let url = environment.apiUrl + "/api/user/" + user["id"] + "/requests/incoming";
+
+			let data =	"requestId=" + request["id"] + "&newStatus=" + self.REQUEST_STATUS_DECLINED;
 			
 			this._apiService.post(url, data).subscribe((obj) => {
 				let model = JSON.parse(obj["_body"]);
