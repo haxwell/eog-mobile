@@ -1,0 +1,26 @@
+<ion-header>
+	<ion-navbar>
+		<ion-title>
+			Accept a Request
+		</ion-title>
+	</ion-navbar>
+</ion-header>
+
+<ion-content padding>
+	<ion-row>
+		<ion-label>You are about to ACCEPT a request to do your Thing.</ion-label>
+		<ion-label>Be 100% sure you are able to do it! Karma's a Capital B, as they say.</ion-label>
+		<br/>
+		<ion-label>{{request.title}}</ion-label>
+	</ion-row>		
+
+	<ion-row>
+		<ion-label>Are you absotively posilutely 100% sure you can do this task?</ion-label>
+	</ion-row>
+				
+	<ion-row>
+		<button ion-button (click)="onCancelBtnTap($event)">Sorry, no.. Cancel</button>
+		<button ion-button (click)="onSaveBtnTap($event)">YES!</button>
+	</ion-row>
+
+</ion-content>
