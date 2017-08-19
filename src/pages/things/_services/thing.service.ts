@@ -34,8 +34,22 @@ export class ThingService {
 	}
 
 	save(model) {
+		// TODO: Figure out a better way of sending only the necessary data to the API
+		//  don't like deleting attributes from the model, etc..
+
+		let userIdList = [];
+		model["rules"]["requiredUsers"].map((obj) => { userIdList.push( obj["id"] ); });
+
+		let modelCopy = model["rules"];
+		delete model["rules"];
+		model["requiredUserIds"] = userIdList;
+		model["requiredQuantity"] = modelCopy["pointsQuantity"];
+
 		let data = this.JSON_to_URLEncoded(model, undefined, undefined);
 		console.log(data);
+
+		delete model["requiredUserIds"];
+		model["rules"] = modelCopy;
 
 		return new Promise((resolve, reject) => {
 			let url = environment.apiUrl + "/api/things";

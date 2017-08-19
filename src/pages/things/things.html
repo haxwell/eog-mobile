@@ -22,11 +22,14 @@
 		</ion-row>
 		<ion-row>
 		<ul>
-			<li *ngFor="let r of model.rules">
-				Red'd User Id: {{r["requiredUser"]["id"]}}<br/>
-				Req'd Points: {{r["pointsQuantity"]}}
+			<li *ngFor="let r of getRequiredUsers()">
+				Red'd User Id: {{r["id"]}}<br/>
+			</li>
+			<li>
+				Req'd Points: {{getRequiredPointsQuantity()}}
 			</li>
 		</ul>
+
 		</ion-row>
 	</ion-row>
 	<ion-row>

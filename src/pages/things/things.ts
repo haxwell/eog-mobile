@@ -33,12 +33,35 @@ export class ThingPage {
 
 	onNewRuleBtnTap(evt) {
 		let modal = this.modalCtrl.create(RulePage);
-		modal.onDidDismiss(data => { this.model["rules"].push(data); })
+		
+		let self = this;
+		modal.onDidDismiss(data => {
+			self.model["rules"] = data; 
+		})
+		
 		modal.present();
 	}
 
+	getRequiredUsers() {
+		let rtn = undefined;
+
+		if (this.model["rules"])
+			rtn = this.model["rules"]["requiredUsers"];
+
+		return rtn;
+	}
+
+	getRequiredPointsQuantity() {
+		let rtn = 0;
+
+		if (this.model["rules"])
+			rtn = this.model["rules"]["pointsQuantity"];
+
+		return rtn;
+	}
+
 	isSaveBtnEnabled() {
-		return 	this.model["rules"].length > 0 &&
+		return 	this.model["rules"] !== undefined &&
 				this.model["keywords"].length > 0 &&
 				this.model["title"].length > 0 &&
 				this.model["description"].length > 0;
