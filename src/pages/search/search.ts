@@ -6,6 +6,7 @@ import { RequestPage } from './_pages/request'
 import { SearchService } from '../../app/_services/search.service';
 import { PointsService } from '../../app/_services/points.service';
 import { RequestsService } from '../../app/_services/requests.service';
+import { RecommendationService } from '../../app/_services/recommendation.service';
 
 @Component({
   selector: 'page-search',
@@ -16,17 +17,21 @@ export class SearchPage {
 	resultList = undefined;
 	userPoints = undefined;
 	requestsList = undefined;
+	isRequestableObj = {};
 
 	constructor(public navCtrl: NavController, 
 				private _searchService: SearchService,
 				private modalCtrl: ModalController,
 				private _pointsService: PointsService,
-				private _requestsService: RequestsService) {
+				private _requestsService: RequestsService,
+				private _recommendationService: RecommendationService) {
 
 	}
 
 	ngOnInit() {
-		this._pointsService.getCurrentUserPoints().then((data) => {
+		this._recommendationService.init();
+
+		this._pointsService.getCurrentAvailableUserPoints().then((data) => {
 			this.userPoints = data;
 		});
 
@@ -42,18 +47,31 @@ export class SearchPage {
 	}
 
 	getUserHasSufficientPointsGivenRules(thing) {
-		return this._pointsService.getUserHasSufficientPointsGivenRules(thing["rules"], this.userPoints);
+		return this._pointsService.getUserHasSufficientPointsGivenRules(thing, this.userPoints);
 	}
 
 	getUserHasAlreadyRequestedThisThing(thing) {
 		return this.requestsList.some((obj) => { return obj["thing"]["id"] === thing["id"]; })
 	}
 
+	getUserHasNecessaryRecommendations(thing) {
+		return this._recommendationService.getUserHasNecessaryRecommendations(thing);
+	}
+
 	isRequestable(thing) {
-		return this.getUserHasSufficientPointsGivenRules(thing) && !this.getUserHasAlreadyRequestedThisThing(thing);
+		if (!this.isRequestableObj[thing["id"]]) {
+			this.isRequestableObj[thing["id"]] = {	sufficientPoints: this.getUserHasSufficientPointsGivenRules(thing),
+												alreadyRequested: this.getUserHasAlreadyRequestedThisThing(thing),
+												necessaryRecommendations: this.getUserHasNecessaryRecommendations(thing) };
+		}
+
+		return 	this.isRequestableObj[thing["id"]]["sufficientPoints"] &&
+				!this.isRequestableObj[thing["id"]]["alreadyRequested"] &&
+				this.isRequestableObj[thing["id"]]["necessaryRecommendations"];
 	}
 
 	onRequestBtnTap(evt, item) {
+		this.isRequestableObj[item["id"]] = undefined;
 		let modal = this.modalCtrl.create(RequestPage, {thing: item});
 		//modal.onDidDismiss(data => {  });
 		modal.present();

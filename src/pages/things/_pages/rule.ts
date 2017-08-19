@@ -12,6 +12,7 @@ export class RulePage {
 	searchString = '';
 	pointsQuantity = 0;
 	resultList = undefined;
+	userList = [];
 
 	constructor(public navCtrl: NavController, 
 				private viewCtrl: ViewController, 
@@ -27,18 +28,51 @@ export class RulePage {
 	}
 
 	isSaveBtnEnabled() {
-		return this.pointsQuantity > 0 && this.resultList.some((obj) => { return obj["isSelected"]; });
+		return this.pointsQuantity > 0 && this.userList.length > 0;
 	}
 
-	onRadioBtnTap(evt) {
-		this.resultList.map((obj) => { obj["isSelected"] = false; if (obj["realname"] === evt) {obj["isSelected"] = true;} });
+	onMatchingRadioBtnTap(evt) {
+		this.resultList.map((obj) => { obj["isSelectedMatch"] = false; if (obj["realname"] === evt) {obj["isSelectedMatch"] = true;} });
+	}
+
+	onRequiredRadioBtnTap(evt) {
+		this.resultList.map((obj) => { obj["isSelectedRequired"] = false; if (obj["realname"] === evt) {obj["isSelectedRequired"] = true;} });
+	}
+
+	addSelectedUser(evt) {
+		let user = this.resultList.find((obj) => { return obj["isSelectedMatch"]});
+		user["isSelectedRequirement"] = true;
+		user["isSelectedMatch"] = false;
+
+		this.userList.push(user);
+	}
+
+	removeRequiredUser(evt) {
+		let user = this.resultList.find((obj) => { return obj["isSelectedRequirement"]});
+		user["isSelectedRequirement"] = false;
+
+		this.userList = this.userList.filter((obj) => { return obj["id"] !== user["id"]; });
+	}
+
+	getMatchingUserList() {
+		if (this.resultList === undefined)
+			return undefined;
+
+		return this.resultList.filter((obj) => { return !obj.hasOwnProperty("isSelectedRequirement") || obj["isSelectedRequirement"] === false; })
+	}
+
+	getRequiredUserList() {
+		//if (this.resultList === undefined)
+		//	return undefined;
+
+		//return this.resultList.filter((obj) => { return obj["isSelectedRequirement"]; })
+		return this.userList;
 	}
 
 	onSaveBtnTap(evt) {
-		let user = this.resultList.find((obj) => { return obj["isSelected"]; });
-		delete user["isSelected"];
-		
-		this.viewCtrl.dismiss({pointsQuantity: this.pointsQuantity, requiredUser: user });
+		//this.resultList.map((obj) => { delete obj["isSelectedMatch"]; delete obj["isSelectedRequirement"]; });
+
+		this.viewCtrl.dismiss({pointsQuantity: this.pointsQuantity, requiredUsers: this.userList });
 	}
 
 	onCancelBtnTap(evt) {

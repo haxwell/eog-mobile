@@ -25,6 +25,7 @@ import { UserService } from './_services/user.service';
 import { DreamService } from './_services/dream.service';
 import { SearchService } from './_services/search.service';
 import { PointsService } from './_services/points.service';
+import { RecommendationService } from './_services/recommendation.service';
 import { RequestsService } from './_services/requests.service';
 import { ProfileService } from '../pages/profile/_services/profile.service';
 import { ThingService } from '../pages/things/_services/thing.service';
@@ -80,6 +81,7 @@ import { RuleService } from '../pages/things/_pages/_services/rule.service';
     ThingService,
     ProfileService,
     RequestsService,
+    RecommendationService,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })
