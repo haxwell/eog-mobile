@@ -13,7 +13,16 @@
 	</ion-row>
 	<ion-row>
 		<ion-label fixed>Points: </ion-label>
-		<ion-input type="number" placeholder="Points" [(ngModel)]="model.points.points" #ctrl="ngModel" required></ion-input>		
+		<span *ngIf="model.points">Total: {{model.points.total}}  Available: {{model.points.available}}</span>
+	</ion-row>
+	<ion-row>
+		<ion-label fixed>Recommendations: </ion-label>
+		<ul *ngIf="getAvailableIncomingRecommendations()">
+			<li *ngFor="let item of getAvailableIncomingRecommendations()">
+				From User ID {{getUserIdFromRecommendation(item)}}
+			</li>
+		</ul>
+		<span *ngIf="!getAvailableIncomingRecommendations()">No Available Recommendations</span>
 	</ion-row>
 	<ion-row>
 		<ion-label fixed>Phone: </ion-label>

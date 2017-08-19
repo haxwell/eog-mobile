@@ -26,14 +26,18 @@ export class PointsService {
 		});
 	}
 
-	getCurrentUserPoints() {
+	getCurrentUserPointsAsSum() {
 		return new Promise((resolve, reject) => {
 			let user = this._userService.getCurrentUser();
 			let url = environment.apiUrl + "/api/user/" + user["id"] + "/points";
 			this._apiService.get(url)
 			.subscribe((obj) => {
 				let rtn = JSON.parse(obj["_body"]);
-				resolve(rtn);
+
+				let sum = 0;
+				rtn.map((obj) => { sum += obj["quantity"]; });
+
+				resolve(sum);
 			});	
 		});
 	}

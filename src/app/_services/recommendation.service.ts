@@ -42,14 +42,37 @@ export class RecommendationService {
 
 	getUserHasNecessaryRecommendations(thing) {
 		let self = this;
-		let rtn = true;
 
-		this.initPromise.then(() => {
-			thing["requiredUserRecommendations"].map((obj) => {
-				rtn = rtn && self.recommendationsIncoming.some((obj2) => { return obj2["providingUserId"] === obj["requiredRecommendUserId"]; });
+		return new Promise((resolve, reject) => {
+			this.initPromise.then(() => {
+				let count = 0;
+
+				thing["requiredUserRecommendations"].map((obj) => {
+					if (self.recommendationsIncoming.some((obj2) => { return obj2["providingUserId"] === obj["requiredRecommendUserId"]; }))
+						count++;
+				});
+
+				resolve((count === thing["requiredUserRecommendations"].length));
 			});
-		});
-
-		return rtn;
+		})
 	}
+
+	getIncomingRecommendations() {
+		let self = this;
+		return new Promise((resolve, reject) => {
+			this.initPromise.then(() => {
+				resolve(self.recommendationsIncoming);
+			})
+		});
+	}
+
+	getOutgoingRecommendations() {
+		let self = this;
+		return new Promise((resolve, reject) => {
+			this.initPromise.then(() => {
+				resolve(self.recommendationsOutgoing);
+			})
+		});
+	}
+	
 }

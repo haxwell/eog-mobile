@@ -42,4 +42,17 @@ export class ProfilePage {
 		this.dirty = true;
 		this.navCtrl.push(DreamPage, { dream: undefined });
 	}
+
+	getAvailableIncomingRecommendations() {
+		let rtn = undefined;
+		
+		if (this.model["incomingRecommendations"])
+			rtn = this.model["incomingRecommendations"].filter((obj) => { return obj["escrowedRequestId"] === null });
+
+		return rtn;
+	}
+
+	getUserIdFromRecommendation(recommendation) {
+		return recommendation["providingUserId"];
+	}
 }

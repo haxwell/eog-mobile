@@ -47,25 +47,29 @@ export class SearchPage {
 	}
 
 	getUserHasSufficientPointsGivenRules(thing) {
-		return this._pointsService.getUserHasSufficientPointsGivenRules(thing, this.userPoints);
+		this.isRequestableObj[thing["id"]]["sufficientPoints"] = this._pointsService.getUserHasSufficientPointsGivenRules(thing, this.userPoints);
 	}
 
 	getUserHasAlreadyRequestedThisThing(thing) {
-		return this.requestsList.some((obj) => { return obj["thing"]["id"] === thing["id"]; })
+		this.isRequestableObj[thing["id"]]["alreadyRequested"] = this.requestsList.some((obj) => { return obj["thing"]["id"] === thing["id"]; })
 	}
 
 	getUserHasNecessaryRecommendations(thing) {
-		return this._recommendationService.getUserHasNecessaryRecommendations(thing);
+		this._recommendationService.getUserHasNecessaryRecommendations(thing).then((data) => {
+			this.isRequestableObj[thing["id"]]["necessaryRecommendations"] = data;
+		});
 	}
 
 	isRequestable(thing) {
 		if (!this.isRequestableObj[thing["id"]]) {
-			this.isRequestableObj[thing["id"]] = {	sufficientPoints: this.getUserHasSufficientPointsGivenRules(thing),
-												alreadyRequested: this.getUserHasAlreadyRequestedThisThing(thing),
-												necessaryRecommendations: this.getUserHasNecessaryRecommendations(thing) };
+			this.isRequestableObj[thing["id"]] = {};
+			this.getUserHasSufficientPointsGivenRules(thing),
+			this.getUserHasAlreadyRequestedThisThing(thing),
+			this.getUserHasNecessaryRecommendations(thing);
 		}
 
-		return 	this.isRequestableObj[thing["id"]]["sufficientPoints"] &&
+		return 	this.isRequestableObj[thing["id"]] &&
+				this.isRequestableObj[thing["id"]]["sufficientPoints"] &&
 				!this.isRequestableObj[thing["id"]]["alreadyRequested"] &&
 				this.isRequestableObj[thing["id"]]["necessaryRecommendations"];
 	}
