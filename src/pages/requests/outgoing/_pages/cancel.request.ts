@@ -11,6 +11,8 @@ import { RequestsService } 	from '../../../../app/_services/requests.service';
 
 export class CancelOutgoingRequestPage {
 
+	REQUEST_STATUS_ACCEPTED = 3;
+
 	confirmationString = '';
 	request = undefined;
 	
@@ -22,7 +24,11 @@ export class CancelOutgoingRequestPage {
 	}
 
 	isSaveBtnEnabled() {
-		return this.confirmationString.toLowerCase() === 'cancel';
+		return !this.isRequestAccepted() || (this.isRequestAccepted() && this.confirmationString.toLowerCase() === 'cancel');
+	}
+
+	isRequestAccepted() {
+		return this.request.deliveringStatusId === this.REQUEST_STATUS_ACCEPTED;
 	}
 
 	onSaveBtnTap(evt) {

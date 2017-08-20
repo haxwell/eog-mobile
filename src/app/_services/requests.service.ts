@@ -16,53 +16,29 @@ export class RequestsService {
 	INCOMING = "incoming";
 	OUTGOING = "outgoing";
 
-	// TODO: Refactor incoming/outgoing into one method
-	incomingPromise = undefined;
-	outgoingPromise = undefined;
-
 	constructor(private _apiService: ApiService, private _userService: UserService) { }
 
-	getModelForIncoming() {
+	getModel(direction) {
 
 		let self = this;
 		
-		self.incomingPromise = new Promise((resolve, reject) => {
+		return new Promise((resolve, reject) => {
 			let user = this._userService.getCurrentUser();
-			let url = environment.apiUrl + "/api/user/" + user["id"] + "/requests/incoming";
+			let url = environment.apiUrl + "/api/user/" + user["id"] + "/requests/" + direction;
 			
-			this._apiService.get(url).subscribe((incomingObj) => {
-				resolve(JSON.parse(incomingObj["_body"]));
+			this._apiService.get(url).subscribe((obj) => {
+				resolve(JSON.parse(obj["_body"]));
 			});
 		})
 
-		return self.incomingPromise;
+	}
+
+	getModelForIncoming() {
+		return (this.getModel(this.INCOMING));
 	}
 
 	getModelForOutgoing() {
-
-		let self = this;
-		
-		self.outgoingPromise = new Promise((resolve, reject) => {
-			let user = this._userService.getCurrentUser();
-			let url = environment.apiUrl + "/api/user/" + user["id"] + "/requests/outgoing";
-			
-			this._apiService.get(url).subscribe((outgoingObj) => {
-				let model = JSON.parse(outgoingObj["_body"]);
-
-				model.map((obj) => {
-					let url = environment.apiUrl + "/api/users/" + obj["thing"]["userId"];
-					this._apiService.get(url).subscribe((userObj) => {
-						obj["thingUser"] = JSON.parse(userObj["_body"]);
-
-						if (model.every((x) => { return x.hasOwnProperty("thingUser"); })) {
-							resolve(model);
-						}
-					});
-				});
-			});
-		})
-
-		return self.outgoingPromise;
+		return (this.getModel(this.OUTGOING));
 	}
 
 	saveNew(dream, thing) {
@@ -91,7 +67,11 @@ export class RequestsService {
 			let data =	"requestId=" + request["id"] + "&newStatus=" + status;
 			
 			this._apiService.post(url, data).subscribe((obj) => {
-				let model = JSON.parse(obj["_body"]);
+				let model = undefined;
+				
+				if (obj["_body"] && obj["_body"].length > 0)
+					model = JSON.parse(obj["_body"]);
+				
 				resolve(model);
 			});
 		});
