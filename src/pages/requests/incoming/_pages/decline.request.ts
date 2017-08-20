@@ -20,7 +20,7 @@ export class DeclineRequestPage {
 	}
 
 	onSaveBtnTap(evt) {
-		this._requestsService.declineRequest(this.request).then((obj) => {
+		this._requestsService.declineIncomingRequest(this.request).then((obj) => {
 			console.log(obj);
 			this.viewCtrl.dismiss();			
 		})

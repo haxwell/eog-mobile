@@ -20,7 +20,7 @@ export class AcceptRequestPage {
 	}
 
 	onSaveBtnTap(evt) {
-		this._requestsService.acceptRequest(this.request).then((obj) => {
+		this._requestsService.acceptIncomingRequest(this.request).then((obj) => {
 			console.log(obj);
 			this.viewCtrl.dismiss();			
 		})
