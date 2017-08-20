@@ -18,6 +18,9 @@ import { AcceptRequestPage } from '../pages/requests/incoming/_pages/accept.requ
 import { DeclineRequestPage } from '../pages/requests/incoming/_pages/decline.request';
 import { CancelRequestPage } from '../pages/requests/incoming/_pages/cancel.request';
 import { CompleteRequestPage } from '../pages/requests/incoming/_pages/complete.request';
+import { AcceptOutgoingRequestPage } from '../pages/requests/outgoing/_pages/accept.request';
+import { CancelOutgoingRequestPage } from '../pages/requests/outgoing/_pages/cancel.request';
+import { RequestContactInfoPage } from '../pages/requests/_pages/contact.info';
 import { DreamPage } from '../pages/dreams/dreams';
 import { ThingPage } from '../pages/things/things';
 import { RequestsIncomingPage } from '../pages/requests/incoming/requests.incoming';
@@ -52,6 +55,9 @@ import { RuleService } from '../pages/things/_pages/_services/rule.service';
     DeclineRequestPage,
     CancelRequestPage,
     CompleteRequestPage,
+    AcceptOutgoingRequestPage,
+    CancelOutgoingRequestPage,
+    RequestContactInfoPage,
     SearchPage
   ],
   imports: [
@@ -79,6 +85,9 @@ import { RuleService } from '../pages/things/_pages/_services/rule.service';
     DeclineRequestPage,
     CancelRequestPage,
     CompleteRequestPage,
+    AcceptOutgoingRequestPage,
+    CancelOutgoingRequestPage,
+    RequestContactInfoPage,
     SearchPage
   ],
   providers: [

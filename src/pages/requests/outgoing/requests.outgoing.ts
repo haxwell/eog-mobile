@@ -7,7 +7,7 @@ import { RequestsService } from '../../../app/_services/requests.service'
 
 import { AcceptOutgoingRequestPage } from './_pages/accept.request'
 import { CancelOutgoingRequestPage } from './_pages/cancel.request'
-//import { RequestContactInfoPage } from '../_pages/contact.info'
+import { RequestContactInfoPage } from '../_pages/contact.info'
 
 @Component({
   selector: 'page-requests-outgoing',
@@ -76,9 +76,9 @@ export class RequestsOutgoingPage {
 		modal.present();
 	}
 
-//	onViewContactInfoBtnTap(item) {
-//		let modal = this.modalCtrl.create(RequestContactInfoPage, {user: item["directionallyOppositeUser"]});
-//		modal.onDidDismiss(data => {  });
-//		modal.present();
-//	}
+	onViewContactInfoBtnTap(item) {
+		let modal = this.modalCtrl.create(RequestContactInfoPage, {user: item["directionallyOppositeUser"]});
+		modal.onDidDismiss(data => {  });
+		modal.present();
+	}
 }

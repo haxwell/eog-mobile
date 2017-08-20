@@ -7,7 +7,7 @@ import { AcceptRequestPage } from './_pages/accept.request'
 import { DeclineRequestPage } from './_pages/decline.request'
 import { CompleteRequestPage } from './_pages/complete.request'
 import { CancelRequestPage } from './_pages/cancel.request'
-//import { RequestContactInfoPage } from '../_pages/contact.info'
+import { RequestContactInfoPage } from '../_pages/contact.info'
 
 import { RequestsService } from '../../../app/_services/requests.service'
 
@@ -94,9 +94,9 @@ export class RequestsIncomingPage {
 		modal.present();
 	}
 
-//	onViewContactInfoBtnTap(item) {
-//		let modal = this.modalCtrl.create(RequestContactInfoPage, {user: item["directionallyOppositeUser"]});
-//		modal.onDidDismiss(data => {  });
-//		modal.present();
-//	}
+	onViewContactInfoBtnTap(item) {
+		let modal = this.modalCtrl.create(RequestContactInfoPage, {user: item["directionallyOppositeUser"]});
+		modal.onDidDismiss(data => {  });
+		modal.present();
+	}
 }
