@@ -1,0 +1,30 @@
+<ion-header>
+	<ion-navbar>
+		<ion-title>
+			Contact Info
+		</ion-title>
+	</ion-navbar>
+</ion-header>
+
+<ion-content padding>
+	<ion-row>
+		<ion-label>Here is the contact info for {{user.realname}}.</ion-label>
+		<ion-label>You can reach out to them to coordinate the Thing.</ion-label>
+		<br/>		
+		<ion-label>They are able to see your contact info, as well.</ion-label>
+		<br/>
+		<ion-label>{{request.title}}</ion-label>
+	</ion-row>		
+
+	<ion-row>
+		<ion-label><b>{{user.realname}}</b></ion-label>
+		<ion-label>{{user.email}}</ion-label>
+		<ion-label>{{user.phone}}</ion-label>
+		<br/>
+	</ion-row>
+
+	<ion-row>
+		<button ion-button (click)="onSaveBtnTap($event)">OK</button>
+	</ion-row>
+
+</ion-content>

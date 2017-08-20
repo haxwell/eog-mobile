@@ -12,7 +12,7 @@
 		<ul>
 			<li *ngFor="let item of getAcceptedRequests()">
 				For user {{item.directionallyOppositeUser.realname}}, you agreed to do your thing {{item.thing.title}} for their dream {{item.dream.title}}. 
-				<button ion-button (click)="onViewContactInfoBtnTap(item)">View {{item.requestingUser.realname}}'s Contact Info</button>
+				<button ion-button (click)="onViewContactInfoBtnTap(item)">View {{item.directionallyOppositeUser.realname}}'s Contact Info</button>
 				<button ion-button (click)="onCompleteBtnTap(item)">Complete</button>
 				<button ion-button (click)="onCancelBtnTap(item)">Cancel</button>
 			</li>
