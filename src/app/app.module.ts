@@ -16,6 +16,8 @@ import { SearchPage } from '../pages/search/search';
 import { RequestPage } from '../pages/search/_pages/request';
 import { AcceptRequestPage } from '../pages/requests/incoming/_pages/accept.request';
 import { DeclineRequestPage } from '../pages/requests/incoming/_pages/decline.request';
+import { CancelRequestPage } from '../pages/requests/incoming/_pages/cancel.request';
+import { CompleteRequestPage } from '../pages/requests/incoming/_pages/complete.request';
 import { DreamPage } from '../pages/dreams/dreams';
 import { ThingPage } from '../pages/things/things';
 import { RequestsIncomingPage } from '../pages/requests/incoming/requests.incoming';
@@ -47,8 +49,10 @@ import { RuleService } from '../pages/things/_pages/_services/rule.service';
     RequestsOutgoingPage,
     RequestPage,
     AcceptRequestPage,
-    DeclineRequestPage
-   , SearchPage
+    DeclineRequestPage,
+    CancelRequestPage,
+    CompleteRequestPage,
+    SearchPage
   ],
   imports: [
     BrowserModule,
@@ -72,8 +76,10 @@ import { RuleService } from '../pages/things/_pages/_services/rule.service';
     RequestsOutgoingPage,
     RequestPage,
     AcceptRequestPage,
-    DeclineRequestPage
-    ,SearchPage
+    DeclineRequestPage,
+    CancelRequestPage,
+    CompleteRequestPage,
+    SearchPage
   ],
   providers: [
     StatusBar,

@@ -7,9 +7,40 @@
 </ion-header>
 
 <ion-content padding>
-	<ul>
-		<li *ngFor="let item of model">
-			{{item.thingUser.realname}}, {{item.thing.title}}
-		</li>
-	</ul>
+	<ion-row *ngIf="getAcceptedRequests() !== undefined">
+		Accepted<br/>
+		<ul>
+			<li *ngFor="let item of getAcceptedRequests()">
+				User ID {{item.thing.userId}}, agreed to do thing '{{item.thing.title}}' for your dream '{{item.dream.title}}'
+				<button ion-button (click)="onViewContactInfoBtnTap(item)">View Contact Info</button>
+				<button ion-button (click)="onAcceptBtnTap(item)">Complete</button>
+				<button ion-button (click)="onCancelBtnTap(item)">Cancel</button>
+			</li>
+		</ul>
+	</ion-row>
+	<ion-row *ngIf="getPendingRequests() !== undefined">
+		Pending<br/>
+		<ul>
+			<li *ngFor="let item of getPendingRequests()">
+				You requested User ID {{item.thing.userId}}, do thing '{{item.thing.title}}' for your dream '{{item.dream.title}}'
+				<button ion-button (click)="onCancelBtnTap(item)">Cancel Request</button>
+			</li>
+		</ul>
+	</ion-row>
+	<ion-row *ngIf="getCancelledRequests() !== undefined">
+		Cancelled<br/>
+		<ul>
+			<li *ngFor="let item of getCancelledRequests()">
+				User ID {{item.thing.userId}}, agreed to do thing '{{item.thing.title}}' for your dream '{{item.dream.title}}', but they subsequently cancelled. :(
+			</li>
+		</ul>
+	</ion-row>	
+	<ion-row *ngIf="getDeclinedRequests() !== undefined">
+		Declined<br/>
+		<ul>
+			<li *ngFor="let item of getDeclinedRequests()">
+				You requested User ID {{item.thing.userId}}, do thing '{{item.thing.title}}' for your dream '{{item.dream.title}}' but they declined.
+			</li>
+		</ul>
+	</ion-row>	
 </ion-content>

@@ -11,7 +11,10 @@
 		Accepted<br/>
 		<ul>
 			<li *ngFor="let item of getAcceptedRequests()">
-				{{item.requestingUser.realname}}, {{item.thing.title}}
+				For user {{item.requestingUser.realname}}, you agreed to do your thing {{item.thing.title}} for their dream {{item.dream.title}}. 
+				<button ion-button (click)="onViewContactInfoBtnTap(item)">View {{item.requestingUser.realname}}'s Contact Info</button>
+				<button ion-button (click)="onCompleteBtnTap(item)">Complete</button>
+				<button ion-button (click)="onCancelBtnTap(item)">Cancel</button>
 			</li>
 		</ul>
 	</ion-row>
@@ -19,7 +22,7 @@
 		Pending<br/>
 		<ul>
 			<li *ngFor="let item of getPendingRequests()">
-				{{item.requestingUser.realname}}, {{item.thing.title}}
+				User {{item.requestingUser.realname}}, requested you do your thing {{item.thing.title}} for their dream {{item.dream.title}}. 
 				<button ion-button (click)="onAcceptBtnTap(item)">Accept</button>
 				<button ion-button (click)="onDeclineBtnTap(item)">Decline</button>
 			</li>
@@ -29,7 +32,7 @@
 		Declined<br/>
 		<ul>
 			<li *ngFor="let item of getDeclinedRequests()">
-				{{item.requestingUser.realname}}, {{item.thing.title}}
+				You declined to do your thing {{item.thing.title}} for User {{item.requestingUser.realname}}, dashing their dream {{item.dream.title}}.
 			</li>
 		</ul>
 	</ion-row>	

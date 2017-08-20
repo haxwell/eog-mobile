@@ -5,6 +5,9 @@ import { ModalController } from 'ionic-angular';
 
 import { AcceptRequestPage } from './_pages/accept.request'
 import { DeclineRequestPage } from './_pages/decline.request'
+import { CompleteRequestPage } from './_pages/complete.request'
+import { CancelRequestPage } from './_pages/cancel.request'
+//import { RequestContactInfoPage } from '../_pages/contact.info'
 
 import { RequestsService } from '../../../app/_services/requests.service'
 
@@ -22,6 +25,7 @@ export class RequestsIncomingPage {
 
 	model = undefined;
 	dirty = false;
+	theOtherUser = undefined;
 	
 	constructor(public navCtrl: NavController,
 				private modalCtrl: ModalController,
@@ -35,19 +39,6 @@ export class RequestsIncomingPage {
 			self.model = data;
 			this.dirty = false;
 		});
-	}
-
-	ionViewDidLoad() { console.log("viewDidLoad"); }
-	ionViewDidEnter() { console.log("viewDidEnter"); }
-	ionViewWillLeave() { console.log("viewWillLeave"); }
-	ionViewDidLeave() { console.log("viewDidLeave"); }
-	ionViewWillUnload() { console.log("viewWillUnload"); }
-	ionViewCanEnter() { console.log("viewCanEnter"); }
-	ionViewCanLeave() { console.log("viewCanLeave"); }
-
-	ionViewWillEnter() {
-		if (this.dirty) 
-			this.ngOnInit();
 	}
 
 	getAcceptedRequests() {
@@ -86,4 +77,26 @@ export class RequestsIncomingPage {
 		modal.onDidDismiss(data => { self.ngOnInit() });
 		modal.present();
 	}
+
+	onCompletedBtnTap(item) {
+		this.dirty = true;
+		let self = this;
+		let modal = this.modalCtrl.create(CompleteRequestPage, {request: item});
+		modal.onDidDismiss(data => { self.ngOnInit() });
+		modal.present();
+	}
+
+	onUnableToCompleteBtnTap(item) {
+		this.dirty = true;
+		let self = this;
+		let modal = this.modalCtrl.create(CancelRequestPage, {request: item});
+		modal.onDidDismiss(data => { self.ngOnInit() });
+		modal.present();
+	}
+
+//	onViewContactInfoBtnTap(item) {
+//		let modal = this.modalCtrl.create(RequestContactInfoPage, {user: item["directionallyOppositeUser"]});
+//		modal.onDidDismiss(data => {  });
+//		modal.present();
+//	}
 }
