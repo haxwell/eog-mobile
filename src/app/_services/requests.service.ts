@@ -12,6 +12,7 @@ export class RequestsService {
 	REQUEST_STATUS_ACCEPTED = 3;
 	REQUEST_STATUS_COMPLETED = 4;
 	REQUEST_STATUS_CANCELLED = 5;	
+	REQUEST_STATUS_NOT_COMPLETED = 6;		
 
 	INCOMING = "incoming";
 	OUTGOING = "outgoing";
@@ -103,5 +104,9 @@ export class RequestsService {
 
 	completeOutgoingRequest(request) {
 		return this.foo(request, this.REQUEST_STATUS_COMPLETED, this.OUTGOING);
+	}
+
+	completeOutgoingRequest(request) {
+		return this.foo(request, this.REQUEST_STATUS_NOT_COMPLETED, this.OUTGOING);
 	}
 }

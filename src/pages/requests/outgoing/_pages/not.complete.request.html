@@ -1,0 +1,36 @@
+<ion-header>
+	<ion-navbar>
+		<ion-title>
+			Complete a Request
+		</ion-title>
+	</ion-navbar>
+</ion-header>
+
+<ion-content padding>
+	<ion-row>
+		<ion-label>You are about to indicate that you are NOT satisfied with a request someone did for you.</ion-label>
+		<ion-label>If you ARE satisfied, click Cancel below.</ion-label>
+		<br/>
+		<ion-label>{{request.title}}</ion-label>
+		<br/>
+		<ion-label>The spirit of this thing is that you work it out amicably. So, if you mark</ion-label>
+		<ion-label>this incomplete, the other use will have the chance to weigh in one final</ion-label>
+		<ion-label>time. If they still say they did it, then this request will be closed, and</ion-label>
+		<ion-label>you will get half the points you put up, and they will get half. Also, a</ion-label>
+		<ion-label>negative interaction will show on your public histories, so really try to</ion-label>
+		<ion-label>work this out!</ion-label>
+	</ion-row>		
+
+	<ion-row>
+		<ion-label>If you really want to mark this request incomplete,</ion-label>
+		<ion-label>type the word incomplete in the text box.</ion-label>
+		<br/>
+		<ion-input type="text" placeholder="type incomplete here..." [(ngModel)]="confirmationString" #ctrl="ngModel" required></ion-input>		
+	</ion-row>
+
+	<ion-row>
+		<button ion-button (click)="onCancelBtnTap($event)">Sorry, no.. Cancel</button>
+		<button ion-button [disabled]="!isSaveBtnEnabled()" (click)="onSaveBtnTap($event)">YES!</button>
+	</ion-row>
+
+</ion-content>

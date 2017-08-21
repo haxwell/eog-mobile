@@ -9,6 +9,7 @@ import { NavController, NavParams, ViewController } from 'ionic-angular';
 export class RequestContactInfoPage {
 
 	user = undefined;
+	request = undefined;
 	
 	constructor(public navCtrl: NavController, 
 				public params: NavParams,

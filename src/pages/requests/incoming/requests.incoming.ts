@@ -22,6 +22,7 @@ export class RequestsIncomingPage {
 	REQUEST_STATUS_PENDING = 1;
 	REQUEST_STATUS_DECLINED = 2;	
 	REQUEST_STATUS_ACCEPTED = 3;
+	REQUEST_STATUS_COMPLETED = 4;
 
 	model = undefined;
 	dirty = false;
@@ -53,6 +54,10 @@ export class RequestsIncomingPage {
 		return this.filterModelByRequestStatus(this.REQUEST_STATUS_PENDING);
 	}
 
+	getCompletedPendingApprovalRequests() {
+		return this.filterModelByRequestStatus(this.REQUEST_STATUS_COMPLETED);
+	}
+
 	filterModelByRequestStatus(status) {
 		if (this.model) {
 			let rtn = this.model.filter((obj) => { return obj["deliveringStatusId"] === status; });
@@ -78,7 +83,7 @@ export class RequestsIncomingPage {
 		modal.present();
 	}
 
-	onCompletedBtnTap(item) {
+	onCompleteBtnTap(item) {
 		this.dirty = true;
 		let self = this;
 		let modal = this.modalCtrl.create(CompleteRequestPage, {request: item});

@@ -8,12 +8,23 @@
 
 <ion-content padding>
 	<ion-row *ngIf="getAcceptedRequests() !== undefined">
+		Completed, Awaiting Your Approval<br/>
+		<ul>
+			<li *ngFor="let item of getAcceptedRequests()">
+				User {{item.directionallyOppositeUser.realname}}, indicated they finished doing their thing '{{item.thing.title}}' for your dream '{{item.dream.title}}'.
+				<button ion-button (click)="onViewContactInfoBtnTap(item)">View Contact Info</button>
+				<button ion-button (click)="onCompleteBtnTap(item)">Complete</button>
+				<button ion-button (click)="onNotCompleteBtnTap(item)">Not Complete</button>
+			</li>
+		</ul>
+	</ion-row>
+	<ion-row *ngIf="getAcceptedRequests() !== undefined">
 		Accepted<br/>
 		<ul>
 			<li *ngFor="let item of getAcceptedRequests()">
 				User {{item.directionallyOppositeUser.realname}}, agreed to do thing '{{item.thing.title}}' for your dream '{{item.dream.title}}'
 				<button ion-button (click)="onViewContactInfoBtnTap(item)">View Contact Info</button>
-				<button ion-button (click)="onAcceptBtnTap(item)">Complete</button>
+				<button ion-button (click)="onCompleteBtnTap(item)">Complete</button>
 				<button ion-button (click)="onCancelBtnTap(item)">Cancel</button>
 			</li>
 		</ul>

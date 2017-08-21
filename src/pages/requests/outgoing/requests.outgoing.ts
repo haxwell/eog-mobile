@@ -5,7 +5,7 @@ import { ModalController } from 'ionic-angular';
 
 import { RequestsService } from '../../../app/_services/requests.service'
 
-import { AcceptOutgoingRequestPage } from './_pages/accept.request'
+import { CompleteOutgoingRequestPage } from './_pages/complete.request'
 import { CancelOutgoingRequestPage } from './_pages/cancel.request'
 import { RequestContactInfoPage } from '../_pages/contact.info'
 
@@ -62,9 +62,16 @@ export class RequestsOutgoingPage {
 		});
 	}
 
-	onAcceptBtnTap(item) {
+	onCompleteBtnTap(item) {
 		let self = this;
-		let modal = this.modalCtrl.create(AcceptOutgoingRequestPage, {request: item});
+		let modal = this.modalCtrl.create(CompleteOutgoingRequestPage, {request: item});
+		modal.onDidDismiss(data => { self.ngOnInit() });
+		modal.present();
+	}
+
+	onNotCompleteBtnTap(item) {
+		let self = this;
+		let modal = this.modalCtrl.create(NotCompleteOutgoingRequestPage, {request: item});
 		modal.onDidDismiss(data => { self.ngOnInit() });
 		modal.present();
 	}

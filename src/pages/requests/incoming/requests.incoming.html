@@ -18,6 +18,15 @@
 			</li>
 		</ul>
 	</ion-row>
+	<ion-row *ngIf="getCompletedPendingApprovalRequests() !== undefined">
+		Completed Pending Requestor Approval<br/>
+		<ul>
+			<li *ngFor="let item of getCompletedPendingApprovalRequests()">
+				You have indicated you did your thing '{{item.thing.title}}' for User {{item.directionallyOppositeUser.realname}}. We're waiting for their approval.
+				<button ion-button (click)="onViewContactInfoBtnTap(item)">View {{item.directionallyOppositeUser.realname}}'s Contact Info</button>
+			</li>
+		</ul>
+	</ion-row>	
 	<ion-row *ngIf="getPendingRequests() !== undefined">
 		Pending<br/>
 		<ul>
