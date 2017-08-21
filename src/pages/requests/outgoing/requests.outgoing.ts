@@ -53,7 +53,7 @@ export class RequestsOutgoingPage {
 		let self = this;
 
 		if (this.model) {
-			let rtn = this.model.filter((obj) => { return obj["deliveringStatusId"] === self.REQUEST_STATUS_COMPLETED && obj["requestingStatusId"] !== self.REQUEST_STATUS_NOT_COMPLETED; });
+			let rtn = this.model.filter((obj) => { return obj["deliveringStatusId"] === self.REQUEST_STATUS_COMPLETED && obj["requestingStatusId"] !== self.REQUEST_STATUS_COMPLETED; });
 			return rtn.length > 0 ? rtn : undefined			
 		}
 
