@@ -7,14 +7,23 @@
 </ion-header>
 
 <ion-content padding>
-	<ion-row *ngIf="getAcceptedRequests() !== undefined">
+	<ion-row *ngIf="getCompletedAwaitingApprovalRequests() !== undefined">
 		Completed, Awaiting Your Approval<br/>
 		<ul>
-			<li *ngFor="let item of getAcceptedRequests()">
+			<li *ngFor="let item of getCompletedAwaitingApprovalRequests()">
 				User {{item.directionallyOppositeUser.realname}}, indicated they finished doing their thing '{{item.thing.title}}' for your dream '{{item.dream.title}}'.
 				<button ion-button (click)="onViewContactInfoBtnTap(item)">View Contact Info</button>
 				<button ion-button (click)="onCompleteBtnTap(item)">Complete</button>
 				<button ion-button (click)="onNotCompleteBtnTap(item)">Not Complete</button>
+			</li>
+		</ul>
+	</ion-row>
+	<ion-row *ngIf="getNotCompleteAwaitingResolution() !== undefined">
+		Not Complete, Disputed, Awaiting Resolution<br/>
+		<ul>
+			<li *ngFor="let item of getNotCompleteAwaitingResolution()">
+				You and User {{item.directionallyOppositeUser.realname}}, do not agree whether they have finished doing their thing '{{item.thing.title}}' for your dream '{{item.dream.title}}'. Please talk with them, and come to a resolution.
+				<button ion-button (click)="onViewContactInfoBtnTap(item)">View Contact Info</button>
 			</li>
 		</ul>
 	</ion-row>

@@ -18,6 +18,7 @@ import { AcceptRequestPage } from '../pages/requests/incoming/_pages/accept.requ
 import { DeclineRequestPage } from '../pages/requests/incoming/_pages/decline.request';
 import { CancelRequestPage } from '../pages/requests/incoming/_pages/cancel.request';
 import { CompleteRequestPage } from '../pages/requests/incoming/_pages/complete.request';
+import { SecondCompleteRequestPage } from '../pages/requests/incoming/_pages/second.complete.request';
 import { CompleteOutgoingRequestPage } from '../pages/requests/outgoing/_pages/complete.request';
 import { NotCompleteOutgoingRequestPage } from '../pages/requests/outgoing/_pages/not.complete.request';
 import { CancelOutgoingRequestPage } from '../pages/requests/outgoing/_pages/cancel.request';
@@ -56,6 +57,7 @@ import { RuleService } from '../pages/things/_pages/_services/rule.service';
     DeclineRequestPage,
     CancelRequestPage,
     CompleteRequestPage,
+    SecondCompleteRequestPage,
     CompleteOutgoingRequestPage,
     NotCompleteOutgoingRequestPage,
     CancelOutgoingRequestPage,
@@ -87,6 +89,7 @@ import { RuleService } from '../pages/things/_pages/_services/rule.service';
     DeclineRequestPage,
     CancelRequestPage,
     CompleteRequestPage,
+    SecondCompleteRequestPage,
     CompleteOutgoingRequestPage,
     NotCompleteOutgoingRequestPage,
     CancelOutgoingRequestPage,

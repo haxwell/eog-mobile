@@ -5,13 +5,13 @@ import { NavController, NavParams, ViewController } from 'ionic-angular';
 import { RequestsService } 	from '../../../../app/_services/requests.service';
 
 @Component({
-  selector: 'page-requests-outgoing-not-complete',
-  templateUrl: 'not.complete.request.html'
+  selector: 'page-requests-incoming-complete',
+  templateUrl: 'second.complete.request.html'
 })
 
-export class NotCompleteOutgoingRequestPage {
+export class SecondCompleteRequestPage {
 
-	confirmationString = undefined;
+	confirmationString = '';
 	request = undefined;
 	
 	constructor(public navCtrl: NavController, 
@@ -22,13 +22,13 @@ export class NotCompleteOutgoingRequestPage {
 	}
 
 	isSaveBtnEnabled() {
-		return this.confirmationString && this.confirmationString.toLowerCase() === 'incomplete';
+		return this.confirmationString.toLowerCase() === 'complete';
 	}
 
 	onSaveBtnTap(evt) {
-		this._requestsService.notCompleteOutgoingRequest(this.request).then((obj) => {
+		this._requestsService.secondCompleteIncomingRequest(this.request).then((obj) => {
 			console.log(obj);
-			this.viewCtrl.dismiss();
+			this.viewCtrl.dismiss();			
 		});
 	}
 

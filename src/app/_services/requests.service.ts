@@ -102,11 +102,15 @@ export class RequestsService {
 		return this.foo(request, this.REQUEST_STATUS_COMPLETED, this.INCOMING);
 	}
 
+	secondCompleteIncomingRequest(request) {
+		return this.foo(request, this.REQUEST_STATUS_COMPLETED, this.INCOMING);
+	}
+
 	completeOutgoingRequest(request) {
 		return this.foo(request, this.REQUEST_STATUS_COMPLETED, this.OUTGOING);
 	}
 
-	completeOutgoingRequest(request) {
+	notCompleteOutgoingRequest(request) {
 		return this.foo(request, this.REQUEST_STATUS_NOT_COMPLETED, this.OUTGOING);
 	}
 }

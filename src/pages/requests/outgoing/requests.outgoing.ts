@@ -5,6 +5,7 @@ import { ModalController } from 'ionic-angular';
 
 import { RequestsService } from '../../../app/_services/requests.service'
 
+import { NotCompleteOutgoingRequestPage } from './_pages/not.complete.request'
 import { CompleteOutgoingRequestPage } from './_pages/complete.request'
 import { CancelOutgoingRequestPage } from './_pages/cancel.request'
 import { RequestContactInfoPage } from '../_pages/contact.info'
@@ -20,7 +21,9 @@ export class RequestsOutgoingPage {
 	REQUEST_STATUS_PENDING = 1;
 	REQUEST_STATUS_DECLINED = 2;	
 	REQUEST_STATUS_ACCEPTED = 3;
+	REQUEST_STATUS_COMPLETED = 4;
 	REQUEST_STATUS_CANCELLED = 5;
+	REQUEST_STATUS_NOT_COMPLETED = 6;
 
 	model = undefined;
 	
@@ -31,22 +34,44 @@ export class RequestsOutgoingPage {
 	}
 
 	getAcceptedRequests() {
-		return this.filterModelByRequestStatus(this.REQUEST_STATUS_ACCEPTED);
+		return this.filterModelByDeliveringStatus(this.REQUEST_STATUS_ACCEPTED);
 	}
 
 	getCancelledRequests() {
-		return this.filterModelByRequestStatus(this.REQUEST_STATUS_CANCELLED);
+		return this.filterModelByDeliveringStatus(this.REQUEST_STATUS_CANCELLED);
 	}
 
 	getDeclinedRequests() {
-		return this.filterModelByRequestStatus(this.REQUEST_STATUS_DECLINED);
+		return this.filterModelByDeliveringStatus(this.REQUEST_STATUS_DECLINED);
 	}
 
 	getPendingRequests() {
-		return this.filterModelByRequestStatus(this.REQUEST_STATUS_PENDING);
+		return this.filterModelByDeliveringStatus(this.REQUEST_STATUS_PENDING);
 	}
 
-	filterModelByRequestStatus(status) {
+	getCompletedAwaitingApprovalRequests() {
+		let self = this;
+
+		if (this.model) {
+			let rtn = this.model.filter((obj) => { return obj["deliveringStatusId"] === self.REQUEST_STATUS_COMPLETED && obj["requestingStatusId"] !== self.REQUEST_STATUS_NOT_COMPLETED; });
+			return rtn.length > 0 ? rtn : undefined			
+		}
+
+		return undefined;
+	}
+
+	getNotCompleteAwaitingResolution() {
+		let self = this;
+
+		if (this.model) {
+			let rtn = this.model.filter((obj) => { return obj["deliveringStatusId"] === self.REQUEST_STATUS_COMPLETED && obj["requestingStatusId"] === self.REQUEST_STATUS_NOT_COMPLETED; });
+			return rtn.length > 0 ? rtn : undefined			
+		}
+
+		return undefined;
+	}
+
+	filterModelByDeliveringStatus(status) {
 		if (this.model) {
 			let rtn = this.model.filter((obj) => { return obj["deliveringStatusId"] === status; });
 			return rtn.length > 0 ? rtn : undefined

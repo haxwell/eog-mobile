@@ -6,6 +6,7 @@ import { ModalController } from 'ionic-angular';
 import { AcceptRequestPage } from './_pages/accept.request'
 import { DeclineRequestPage } from './_pages/decline.request'
 import { CompleteRequestPage } from './_pages/complete.request'
+import { SecondCompleteRequestPage } from './_pages/second.complete.request'
 import { CancelRequestPage } from './_pages/cancel.request'
 import { RequestContactInfoPage } from '../_pages/contact.info'
 
@@ -23,6 +24,8 @@ export class RequestsIncomingPage {
 	REQUEST_STATUS_DECLINED = 2;	
 	REQUEST_STATUS_ACCEPTED = 3;
 	REQUEST_STATUS_COMPLETED = 4;
+	REQUEST_STATUS_CANCELLED = 5;
+	REQUEST_STATUS_NOT_COMPLETED = 6;
 
 	model = undefined;
 	dirty = false;
@@ -43,22 +46,40 @@ export class RequestsIncomingPage {
 	}
 
 	getAcceptedRequests() {
-		return this.filterModelByRequestStatus(this.REQUEST_STATUS_ACCEPTED);
+		return this.filterModelByDeliveringStatus(this.REQUEST_STATUS_ACCEPTED);
 	}
 
 	getDeclinedRequests() {
-		return this.filterModelByRequestStatus(this.REQUEST_STATUS_DECLINED);
+		return this.filterModelByDeliveringStatus(this.REQUEST_STATUS_DECLINED);
 	}
 
 	getPendingRequests() {
-		return this.filterModelByRequestStatus(this.REQUEST_STATUS_PENDING);
+		return this.filterModelByDeliveringStatus(this.REQUEST_STATUS_PENDING);
 	}
 
 	getCompletedPendingApprovalRequests() {
-		return this.filterModelByRequestStatus(this.REQUEST_STATUS_COMPLETED);
+		let self = this;
+
+		if (this.model) {
+			let rtn = this.model.filter((obj) => { return obj["deliveringStatusId"] === self.REQUEST_STATUS_COMPLETED && obj["requestingStatusId"] !== self.REQUEST_STATUS_NOT_COMPLETED; });
+			return rtn.length > 0 ? rtn : undefined			
+		}
+
+		return undefined;
 	}
 
-	filterModelByRequestStatus(status) {
+	getDisputedCompletedRequests() {
+		let self = this;
+
+		if (this.model) {
+			let rtn = this.model.filter((obj) => { return obj["deliveringStatusId"] === self.REQUEST_STATUS_COMPLETED && obj["requestingStatusId"] === self.REQUEST_STATUS_NOT_COMPLETED; });
+			return rtn.length > 0 ? rtn : undefined			
+		}
+
+		return undefined;
+	}
+
+	filterModelByDeliveringStatus(status) {
 		if (this.model) {
 			let rtn = this.model.filter((obj) => { return obj["deliveringStatusId"] === status; });
 			return rtn.length > 0 ? rtn : undefined
@@ -87,6 +108,14 @@ export class RequestsIncomingPage {
 		this.dirty = true;
 		let self = this;
 		let modal = this.modalCtrl.create(CompleteRequestPage, {request: item});
+		modal.onDidDismiss(data => { self.ngOnInit() });
+		modal.present();
+	}
+
+	onSecondCompleteBtnTap(item) {
+		this.dirty = true;
+		let self = this;
+		let modal = this.modalCtrl.create(SecondCompleteRequestPage, {request: item});
 		modal.onDidDismiss(data => { self.ngOnInit() });
 		modal.present();
 	}

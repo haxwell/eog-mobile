@@ -26,6 +26,16 @@
 				<button ion-button (click)="onViewContactInfoBtnTap(item)">View {{item.directionallyOppositeUser.realname}}'s Contact Info</button>
 			</li>
 		</ul>
+	</ion-row>
+	<ion-row *ngIf="getDisputedCompletedRequests() !== undefined">
+		Disputed, Requestor Marked Not Complete<br/>
+		<ul>
+			<li *ngFor="let item of getDisputedCompletedRequests()">
+				User {{item.directionallyOppositeUser.realname}} has indicated they do not agree that you did your thing '{{item.thing.title}}' for them. Please talk with them, and resolve the situation.
+				<button ion-button (click)="onViewContactInfoBtnTap(item)">View {{item.directionallyOppositeUser.realname}}'s Contact Info</button>
+				<button ion-button (click)="onSecondCompleteBtnTap(item)">Complete</button>
+			</li>
+		</ul>
 	</ion-row>	
 	<ion-row *ngIf="getPendingRequests() !== undefined">
 		Pending<br/>

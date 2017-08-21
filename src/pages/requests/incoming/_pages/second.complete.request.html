@@ -1,0 +1,29 @@
+<ion-header>
+	<ion-navbar>
+		<ion-title>
+			Complete a Disputed Request
+		</ion-title>
+	</ion-navbar>
+</ion-header>
+
+<ion-content padding>
+	<ion-label>This request has been in dispute. By marking it complete, even though the</ion-label>
+	<ion-label>requestor disagrees, this request will be closed, and you will get half </ion-label>
+	<ion-label>the points you put up, and they will get half. Also, a negative interaction</ion-label>
+	<ion-label>will be included in both your public histories.</ion-label>
+	<br/>
+	<ion-label>{{request.thing.title}}</ion-label>
+	<br/>
+	<ion-row>
+		<ion-label>If you really want to mark this request complete,</ion-label>
+		<ion-label>type the word complete in the text box.</ion-label>
+		<br/>
+		<ion-input type="text" placeholder="type complete here..." [(ngModel)]="confirmationString" #ctrl="ngModel" required></ion-input>		
+	</ion-row>
+
+	<ion-row>
+		<button ion-button (click)="onCancelBtnTap($event)">Sorry, no.. Cancel</button>
+		<button ion-button [disabled]="!isSaveBtnEnabled()" (click)="onSaveBtnTap($event)">YES!</button>
+	</ion-row>
+
+</ion-content>
