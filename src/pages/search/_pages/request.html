@@ -17,8 +17,8 @@
 		<ion-label>Which of your dreams do you want to associate with this request?</ion-label>
 	</ion-row>		
 	<ion-row>
-		<ion-select [(ngModel)]="selectedDreamId" *ngFor="let dream of dreams">
-			<ion-option [value]="dream.id">{{dream.title}}</ion-option>
+		<ion-select [(ngModel)]="selectedDreamId" >
+			<ion-option *ngFor="let dream of dreams" [value]="dream.id">{{dream.title}}</ion-option>
 		</ion-select>
 	</ion-row>		
 
