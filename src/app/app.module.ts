@@ -13,6 +13,9 @@ import { LoginPage } from '../pages/login/login';
 import { HomePage } from '../pages/home/home';
 import { ProfilePage } from '../pages/profile/profile';
 import { SearchPage } from '../pages/search/search';
+import { SearchUsersPage } from '../pages/searchUsers/searchUsers';
+import { SendPointPage } from '../pages/searchUsers/_pages/send.point.page';
+import { SendRecommendPage } from '../pages/searchUsers/_pages/send.recommend.page';
 import { RequestPage } from '../pages/search/_pages/request';
 import { AcceptRequestPage } from '../pages/requests/incoming/_pages/accept.request';
 import { DeclineRequestPage } from '../pages/requests/incoming/_pages/decline.request';
@@ -62,7 +65,10 @@ import { RuleService } from '../pages/things/_pages/_services/rule.service';
     NotCompleteOutgoingRequestPage,
     CancelOutgoingRequestPage,
     RequestContactInfoPage,
-    SearchPage
+    SearchPage,
+    SearchUsersPage,
+    SendPointPage,
+    SendRecommendPage
   ],
   imports: [
     BrowserModule,
@@ -94,7 +100,10 @@ import { RuleService } from '../pages/things/_pages/_services/rule.service';
     NotCompleteOutgoingRequestPage,
     CancelOutgoingRequestPage,
     RequestContactInfoPage,
-    SearchPage
+    SearchPage,
+    SearchUsersPage,
+    SendPointPage,
+    SendRecommendPage
   ],
   providers: [
     StatusBar,

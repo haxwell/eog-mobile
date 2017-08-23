@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { ProfilePage } from '../profile/profile';
 import { SearchPage } from '../search/search';
+import { SearchUsersPage } from '../searchUsers/searchUsers';
 import { RequestsIncomingPage } from '../requests/incoming/requests.incoming';
 import { RequestsOutgoingPage } from '../requests/outgoing/requests.outgoing';
 
@@ -19,8 +20,12 @@ export class HomePage {
   	this.navCtrl.push(ProfilePage);
   }
 
-  onSearchBtnTap(event) {
-  	this.navCtrl.push(SearchPage);
+  onSearchForUsersBtnTap(event) {
+    this.navCtrl.push(SearchUsersPage);
+  }
+
+  onSearchForThingsBtnTap(event) {
+    this.navCtrl.push(SearchPage);
   }
 
   onIncomingReqBtnTap(event) {
