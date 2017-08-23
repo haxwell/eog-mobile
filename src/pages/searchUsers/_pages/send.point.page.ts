@@ -3,8 +3,7 @@ import { OnInit } from '@angular/core';
 
 import { NavController, NavParams, ViewController } from 'ionic-angular';
 
-import { RequestsService } 	from '../../../app/_services/requests.service';
-import { DreamService } 	from '../../../app/_services/dream.service'
+import { PointsService } 	from '../../../app/_services/points.service';
 
 @Component({
   selector: 'page-search-users-send-point',
@@ -16,7 +15,8 @@ export class SendPointPage {
 
 	constructor(public navCtrl: NavController, 
 				public params: NavParams,
-				private viewCtrl: ViewController) {
+				private viewCtrl: ViewController,
+				private _pointsService: PointsService) {
 
 		this.user = params.get('user');
 	}
@@ -26,7 +26,9 @@ export class SendPointPage {
 	}
 
 	onSaveBtnTap(evt) {
-
+		this._pointsService.sendAPointToAUser(this.user["id"]).then(() => {
+			this.viewCtrl.dismiss();
+		});
 	}
 
 	onCancelBtnTap(evt) {

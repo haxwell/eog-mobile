@@ -55,4 +55,28 @@ export class PointsService {
 
 		return this.currentUserPointsAsSumPromise;
 	}
+
+	sendAPointToAUser(receivingUserId) {
+		return new Promise((resolve, reject) => {
+			let user = this._userService.getCurrentUser();
+			let url = environment.apiUrl + "/api/user/" + receivingUserId + "/points/receive";
+			let data = "sendingUserId=" + user["id"] + "&quantity=1";
+			this._apiService.post(url, data)
+			.subscribe((obj) => {
+				resolve(JSON.parse(obj["_body"]));
+			});
+		});
+	}
+
+	isCurrentUserAbleToSendAPointTo(receivingUserId) {
+		return new Promise((resolve, reject) => {
+			let user = this._userService.getCurrentUser();
+			let url = environment.apiUrl + "/api/user/" + receivingUserId + "/points/receive/" + user["id"];
+			this._apiService.get(url)
+			.subscribe((obj) => {
+				resolve(JSON.parse(obj["_body"]));
+			});
+		});
+	}
 }
+

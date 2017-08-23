@@ -7,7 +7,6 @@ import { SendRecommendPage } from './_pages/send.recommend.page'
 
 import { SearchService } from '../../app/_services/search.service';
 import { PointsService } from '../../app/_services/points.service';
-import { RequestsService } from '../../app/_services/requests.service';
 import { RecommendationService } from '../../app/_services/recommendation.service';
 
 @Component({
@@ -18,19 +17,19 @@ export class SearchUsersPage {
 	searchString = '';
 	resultList = undefined;
 
+	isPointableObj = {};
 	userSearchResultsPromise = undefined;
 
 	constructor(public navCtrl: NavController, 
 				private _searchService: SearchService,
 				private modalCtrl: ModalController,
 				private _pointsService: PointsService,
-				private _requestsService: RequestsService,
 				private _recommendationService: RecommendationService) {
 
 	}
 
 	ngOnInit() {
-		let self = this;
+			this.isPointableObj = {};
 
 		this._recommendationService.init();
 		this._pointsService.init();
@@ -43,8 +42,21 @@ export class SearchUsersPage {
 		});
 	}
 
+	setPointable(user) {
+		let self = this;
+		this._pointsService.isCurrentUserAbleToSendAPointTo(user["id"]).then((bool) => {
+			self.isPointableObj[user["id"]] = bool;
+		});
+	}
+
 	isPointable(user) {
-		return true;
+		let hasOwnPropertyForGivenUserId = this.isPointableObj[user["id"]] !== undefined;
+		if (!hasOwnPropertyForGivenUserId) {
+			this.isPointableObj[user["id"]] = null;
+			this.setPointable(user);
+		}
+
+		return hasOwnPropertyForGivenUserId && this.isPointableObj[user["id"]] === true;
 	}
 
 	isRecommendable(user) {
