@@ -8,7 +8,6 @@
 
 <ion-content padding>
 	<ion-label>You are about to request a User do their Thing for you.</ion-label>
-	<br/>
 	<ion-label>{{thing.title}}</ion-label>
 	<br/>
 	<ion-label>This will require {{thing.requiredPointsQuantity}} points from you.</ion-label>
@@ -16,7 +15,7 @@
 	<ul>
 		<li *ngFor="let item of getRequiredUserRecommendations()">{{item.requiredRecommendUserId}}</li>
 	</ul>
-	
+
 	<ion-row>
 		<ion-label>Which of your dreams do you want to associate with this request?</ion-label>
 	</ion-row>		
