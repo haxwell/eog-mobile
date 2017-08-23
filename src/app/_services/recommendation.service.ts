@@ -10,7 +10,6 @@ export class RecommendationService {
 	
 	constructor(private _apiService: ApiService, private _userService: UserService) { }
 
-	initialized = false;
 	recommendationsIncoming = undefined;
 	recommendationsOutgoing = undefined;
 	initPromise = undefined;
