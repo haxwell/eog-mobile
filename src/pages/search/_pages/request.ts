@@ -30,6 +30,13 @@ export class RequestPage {
 		})
 	}
 
+	getRequiredUserRecommendations() {
+		if (this.thing["requiredUserRecommendations"].length > 0)
+			return this.thing["requiredUserRecommendations"];
+		else
+			return undefined;
+	}
+
 	isSaveBtnEnabled() {
 		return this.selectedDreamId != undefined;
 	}
