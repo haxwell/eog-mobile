@@ -19,11 +19,11 @@ export class RecommendationService {
 			let self = this;
 			let user = this._userService.getCurrentUser();
 			let url = environment.apiUrl + "/api/user/" + user["id"] + "/recommendations/incoming";
-			let resolutionCount = 0;
+			let numTimesAPICallHasReturned = 0;
 
 			this._apiService.get(url).subscribe((data) => {
 				self.recommendationsIncoming = JSON.parse(data["_body"]);
-				if (++resolutionCount >= 2)
+				if (++numTimesAPICallHasReturned >= 2)
 					resolve(true);
 			});
 
@@ -31,7 +31,7 @@ export class RecommendationService {
 
 			this._apiService.get(url).subscribe((data) => {
 				self.recommendationsOutgoing = JSON.parse(data["_body"]);
-				if (++resolutionCount >= 2)
+				if (++numTimesAPICallHasReturned >= 2)
 					resolve(true);
 			});
 		});

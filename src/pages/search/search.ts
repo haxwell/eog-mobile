@@ -16,11 +16,12 @@ import { RecommendationService } from '../../app/_services/recommendation.servic
 export class SearchPage {
 	searchString = '';
 	resultList = undefined;
-	userPoints = undefined;
-	requestsList = undefined;
-	isRequestableObj = {};
 
 	requestsPromise = undefined;
+
+	userHasNecessaryRecommendationsCache = {};	
+	userHasSufficientPointsGivenRulesCache = {};
+	userHasAlreadyRequestedThisThingCache = {};
 
 	constructor(public navCtrl: NavController, 
 				private _searchService: SearchService,
@@ -33,20 +34,13 @@ export class SearchPage {
 
 	ngOnInit() {
 		let self = this;
-		this.isRequestableObj = {};
-		this.userPoints = undefined;
-		this.requestsList = undefined;
-		this._recommendationService.init().then((data) => {
-			self._pointsService.getCurrentAvailableUserPoints().then((data) => {
-				self.userPoints = data;
-			});
 
-			self.requestsPromise = new Promise((resp, rej) => {
-			 	self._requestsService.getModelForOutgoing().then((data) => {
-					resp(data);
-				})
-			})
-		})
+		self.userHasSufficientPointsGivenRulesCache	= {};
+		self.userHasNecessaryRecommendationsCache = {};	
+		self.userHasAlreadyRequestedThisThingCache = {};
+
+		this._recommendationService.init();
+		this._pointsService.init();
 	}
 
 	onSearchBtnTap(evt) {
@@ -56,40 +50,49 @@ export class SearchPage {
 		});
 	}
 
-	getUserHasSufficientPointsGivenRules(thing) {
-		this.isRequestableObj[thing["id"]]["sufficientPoints"] = thing["requiredPointsQuantity"] <= this.userPoints;
-	}
-
-	getUserHasAlreadyRequestedThisThing(thing) {
+	setUserHasSufficientPointsGivenRules(thing) {
 		let self = this;
-		this.requestsPromise.then((data) => {
-			self.isRequestableObj[thing["id"]]["alreadyRequested"] = data.some((obj) => { return obj["thing"]["id"] === thing["id"]; })
+		this._pointsService.getCurrentAvailableUserPoints().then((data) => {
+			self.userHasSufficientPointsGivenRulesCache[thing["id"]] = (thing["requiredPointsQuantity"] <= data);
 		});
 	}
 
-	getUserHasNecessaryRecommendations(thing) {
+	setUserHasAlreadyRequestedThisThing(thing) {
+		let self = this;
+		this._requestsService.getModelForOutgoing().then((data: Array<Object>) => {
+			self.userHasAlreadyRequestedThisThingCache[thing["id"]] = data.some((obj) => { return obj["thing"]["id"] === thing["id"]; });
+		});
+	}
+
+	setUserHasNecessaryRecommendations(thing) {
 		let self = this;
 		this._recommendationService.getUserHasNecessaryRecommendations(thing).then((data) => {
-			self.isRequestableObj[thing["id"]]["necessaryRecommendations"] = data;
+			self.userHasNecessaryRecommendationsCache[thing["id"]] = data;
 		});
 	}
 
 	isRequestable(thing) {
-		if (!this.isRequestableObj[thing["id"]]) {
-			this.isRequestableObj[thing["id"]] = {};
-			this.getUserHasSufficientPointsGivenRules(thing),
-			this.getUserHasAlreadyRequestedThisThing(thing),
-			this.getUserHasNecessaryRecommendations(thing);
+		if (this.userHasNecessaryRecommendationsCache[thing["id"]] === undefined) {
+			this.userHasNecessaryRecommendationsCache[thing["id"]] = null;
+			this.setUserHasNecessaryRecommendations(thing);
 		}
 
-		return 	this.isRequestableObj[thing["id"]] &&
-				this.isRequestableObj[thing["id"]]["sufficientPoints"] &&
-				!this.isRequestableObj[thing["id"]]["alreadyRequested"] &&
-				this.isRequestableObj[thing["id"]]["necessaryRecommendations"];
+		if (this.userHasAlreadyRequestedThisThingCache[thing["id"]] === undefined) {
+			this.userHasAlreadyRequestedThisThingCache[thing["id"]] = null;
+			this.setUserHasAlreadyRequestedThisThing(thing);
+		}
+
+		if (this.userHasSufficientPointsGivenRulesCache[thing["id"]] === undefined) {
+			this.userHasSufficientPointsGivenRulesCache[thing["id"]] = null;
+			this.setUserHasSufficientPointsGivenRules(thing);
+		}
+
+		return 	(this.userHasNecessaryRecommendationsCache[thing["id"]] === true) &&
+				!(this.userHasAlreadyRequestedThisThingCache[thing["id"]] === true) &&
+				(this.userHasSufficientPointsGivenRulesCache[thing["id"]] === true);
 	}
 
 	onRequestBtnTap(evt, item) {
-		this.isRequestableObj[item["id"]] = undefined;
 		let modal = this.modalCtrl.create(RequestPage, {thing: item});
 		modal.onDidDismiss(data => { this.ngOnInit(); });
 		modal.present();
