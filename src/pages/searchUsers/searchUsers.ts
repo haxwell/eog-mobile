@@ -18,6 +18,8 @@ export class SearchUsersPage {
 	resultList = undefined;
 
 	isPointableObj = {};
+	isRecommendableObj = {};
+
 	userSearchResultsPromise = undefined;
 
 	constructor(public navCtrl: NavController, 
@@ -29,7 +31,8 @@ export class SearchUsersPage {
 	}
 
 	ngOnInit() {
-			this.isPointableObj = {};
+		this.isPointableObj = {};
+		this.isRecommendableObj = {};
 
 		this._recommendationService.init();
 		this._pointsService.init();
@@ -59,8 +62,21 @@ export class SearchUsersPage {
 		return hasOwnPropertyForGivenUserId && this.isPointableObj[user["id"]] === true;
 	}
 
+	setRecommendable(user) {
+		let self = this;
+		this._recommendationService.isCurrentUserAbleToSendARecommendationTo(user["id"]).then((bool) => {
+			self.isRecommendableObj[user["id"]] = bool;
+		});
+	}
+
 	isRecommendable(user) {
-		return true;
+		let hasOwnPropertyForGivenUserId = this.isRecommendableObj[user["id"]] !== undefined;
+		if (!hasOwnPropertyForGivenUserId) {
+			this.isRecommendableObj[user["id"]] = null;
+			this.setRecommendable(user);
+		}
+
+		return hasOwnPropertyForGivenUserId && this.isRecommendableObj[user["id"]] === true;
 	}
 
 	onSendPointBtnTap(evt, item) {

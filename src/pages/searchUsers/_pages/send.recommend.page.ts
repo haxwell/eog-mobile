@@ -3,8 +3,7 @@ import { OnInit } from '@angular/core';
 
 import { NavController, NavParams, ViewController } from 'ionic-angular';
 
-import { RequestsService } 	from '../../../app/_services/requests.service';
-import { DreamService } 	from '../../../app/_services/dream.service'
+import { RecommendationService } 	from '../../../app/_services/recommendation.service';
 
 @Component({
   selector: 'page-search-users-send-recommend',
@@ -16,7 +15,8 @@ export class SendRecommendPage {
 
 	constructor(public navCtrl: NavController, 
 				public params: NavParams,
-				private viewCtrl: ViewController) {
+				private viewCtrl: ViewController,
+				private _recommendationService: RecommendationService) {
 
 		this.user = params.get('user');
 	}
@@ -26,7 +26,9 @@ export class SendRecommendPage {
 	}
 
 	onSaveBtnTap(evt) {
-
+		this._recommendationService.sendARecommendationToAUser(this.user["id"]).then(() => {
+			this.viewCtrl.dismiss();
+		});
 	}
 
 	onCancelBtnTap(evt) {

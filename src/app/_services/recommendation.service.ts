@@ -73,5 +73,28 @@ export class RecommendationService {
 			})
 		});
 	}
+
+	sendARecommendationToAUser(receivingUserId) {
+		return new Promise((resolve, reject) => {
+			let user = this._userService.getCurrentUser();
+			let url = environment.apiUrl + "/api/user/" + receivingUserId + "/recommendations/receive";
+			let data = "sendingUserId=" + user["id"];
+			this._apiService.post(url, data)
+			.subscribe((obj) => {
+				resolve(JSON.parse(obj["_body"]));
+			});
+		});
+	}
+
+	isCurrentUserAbleToSendARecommendationTo(receivingUserId) {
+		return new Promise((resolve, reject) => {
+			let user = this._userService.getCurrentUser();
+			let url = environment.apiUrl + "/api/user/" + receivingUserId + "/recommendations/receive/" + user["id"];
+			this._apiService.get(url)
+			.subscribe((obj) => {
+				resolve(JSON.parse(obj["_body"]));
+			});
+		});
+	}
 	
 }
