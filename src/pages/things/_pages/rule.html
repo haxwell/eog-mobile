@@ -15,17 +15,20 @@
 		<ion-input type="number" placeholder="quantity" [(ngModel)]="pointsQuantity" #ctrl="ngModel" required></ion-input>
 	</ion-row>
 	<ion-row>
-		<ion-input type="text" placeholder="Search for a user's name" [(ngModel)]="searchString" #ctrl="ngModel" required></ion-input>
-		<button ion-button icon-only (click)="onSearchUserBtnTap($event)">
+		<ion-input type="text" placeholder="Search for a user's name" (ionChange)="handleSearchStringChange($event)" [(ngModel)]="searchString" #ctrl="ngModel" required></ion-input>
+		<button ion-button icon-only [disabled]="!isSearchBtnEnabled()" (click)="onSearchUserBtnTap($event)">
 			<ion-icon name="search"></ion-icon>
 		</button>
+	</ion-row>
+	<ion-row *ngIf="getMatchingUserCountString()">
+		{{getMatchingUserCountString()}}
 	</ion-row>
 	<ion-row *ngIf="getMatchingUserList() !== undefined">
 		<ion-list radio-group>
 			<ion-list-header>
 				Matching Users
 			</ion-list-header>
-			<button ion-button (click)="addSelectedUser($event)">Add User</button>
+			<button ion-button [disabled]="!isAddBtnEnabled()" (click)="addSelectedUser($event)">Add User</button>
 			<ion-item *ngFor="let user of getMatchingUserList()">
 				<ion-label>{{user.realname}}</ion-label>
 				<ion-radio (ionSelect)="onMatchingRadioBtnTap($event)" value="{{user.realname}}"></ion-radio>
@@ -35,7 +38,7 @@
 			<ion-list-header>
 				Required Users
 			</ion-list-header>
-			<button ion-button (click)="removeRequiredUser($event)">Remove User</button>
+			<button ion-button [disabled]="!isRemoveBtnEnabled()" (click)="removeRequiredUser($event)">Remove User</button>
 			<ion-item *ngFor="let user of getRequiredUserList()">
 				<ion-label>{{user.realname}}</ion-label>
 				<ion-radio (ionSelect)="onRequiredRadioBtnTap($event)" value="{{user.realname}}"></ion-radio>

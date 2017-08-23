@@ -10,6 +10,7 @@ import { RuleService } from './_services/rule.service';
 })
 export class RulePage {
 	searchString = '';
+	matchingUserCountString = undefined;
 	pointsQuantity = 0;
 	resultList = undefined;
 	userList = [];
@@ -22,13 +23,34 @@ export class RulePage {
 	}
 
 	onSearchUserBtnTap(evt) {
-		this._searchService.searchUsers(this.searchString).then((data) => {
+		this._searchService.searchUsers(this.searchString).then((data: Array<Object>) => {
 			this.resultList = data;
+			this.matchingUserCountString = data.length + " matches found.";
 		});
 	}
 
+	getMatchingUserCountString() {
+		return this.matchingUserCountString;
+	}
+
+	handleSearchStringChange(evt) {
+		this.matchingUserCountString = undefined;
+	}
+
+	isSearchBtnEnabled() {
+		return this.searchString.length > 2;
+	}
+
 	isSaveBtnEnabled() {
-		return this.pointsQuantity > 0 && this.userList.length > 0;
+		return this.pointsQuantity > 0;
+	}
+
+	isAddBtnEnabled() {
+		return this.resultList.some((obj) => { return obj["isSelectedMatch"] === true; })
+	}
+
+	isRemoveBtnEnabled() {
+		return this.resultList.some((obj) => { return obj["isSelectedRequired"] === true; })
 	}
 
 	onMatchingRadioBtnTap(evt) {
@@ -50,12 +72,13 @@ export class RulePage {
 	removeRequiredUser(evt) {
 		let user = this.resultList.find((obj) => { return obj["isSelectedRequirement"]});
 		user["isSelectedRequirement"] = false;
+		user["isSelectedRequired"] = false;
 
 		this.userList = this.userList.filter((obj) => { return obj["id"] !== user["id"]; });
 	}
 
 	getMatchingUserList() {
-		if (this.resultList === undefined)
+		if (this.resultList === undefined || this.resultList.length === 0)
 			return undefined;
 
 		return this.resultList.filter((obj) => { return !obj.hasOwnProperty("isSelectedRequirement") || obj["isSelectedRequirement"] === false; })
