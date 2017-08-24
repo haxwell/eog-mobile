@@ -33,16 +33,19 @@ export class ProfileService {
 		let url = environment.apiUrl + "/api/user/" + user["id"] + "/keywords";
 		this._apiService.get(url).subscribe((keywordsObj) => {
 			model["keywords"] = JSON.parse(keywordsObj["_body"]);
+			model["keywords"].sort((a, b) => { let aText = a.text.toLowerCase(); let bText = b.text.toLowerCase(); if (aText > bText) return 1; else if (aText < bText) return -1; else return 0; })
 		});
 
 		url = environment.apiUrl + "/api/user/" + user["id"] + "/dreams";
 		this._apiService.get(url).subscribe((dreamsObj) => {
 			model["dreams"] = JSON.parse(dreamsObj["_body"]);
+			model["dreams"].sort((a, b) => { let aText = a.title.toLowerCase(); let bText = b.title.toLowerCase(); if (aText > bText) return 1; else if (aText < bText) return -1; else return 0; })
 		});
 
 		url = environment.apiUrl + "/api/user/" + user["id"] + "/things";
 		this._apiService.get(url).subscribe((thingsObj) => {
 			model["things"] = JSON.parse(thingsObj["_body"]);
+			model["things"].sort((a, b) => { let aText = a.title.toLowerCase(); let bText = b.title.toLowerCase(); if (aText > bText) return 1; else if (aText < bText) return -1; else return 0; })
 		});
 
 		this._pointsService.getCurrentAvailableUserPoints().then((pts) => {
