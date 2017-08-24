@@ -2,12 +2,12 @@ import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import { Headers } from '@angular/http';
 
-import { UserService } from './user.service';
+import { LocalStorageService } from 'angular-2-local-storage';
 
 @Injectable()
 export class ApiService {
 	
-	constructor(private _http: Http, private _userService: UserService) { }
+	constructor(private _http: Http, private _localStorageService: LocalStorageService) { }
 
 	getHeaders(username, password) {
 		let headers: Headers = new Headers(); // TO ANSWER: Why do we use new here, but inject the others?
@@ -18,7 +18,7 @@ export class ApiService {
 	}
 
 	get(url: string) {
-		let user = this._userService.getCurrentUser();
+		let user = this._localStorageService.get('user');
 
 	    let username: string = user["name"];
 	    let password: string = user["password"];
@@ -29,7 +29,7 @@ export class ApiService {
 	}
 
 	post(url: string, data: string) {
-		let user = this._userService.getCurrentUser();
+		let user = this._localStorageService.get('user');
 
 	    let username: string = user["name"];
 	    let password: string = user["password"];

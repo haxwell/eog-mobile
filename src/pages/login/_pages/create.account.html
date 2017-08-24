@@ -1,0 +1,33 @@
+<ion-header>
+	<ion-navbar>
+		<ion-title>
+			Create Account
+		</ion-title>
+	</ion-navbar>
+</ion-header>
+
+<ion-content padding>
+	<ion-row>
+		<ion-label>Let's create you an account, so you can get in on the goodness!</ion-label>
+		<br/>
+	</ion-row>		
+
+	<ion-item>
+		<ion-input type="text" placeholder="Real Name" [(ngModel)]="user.realname" #ctrl="ngModel" required></ion-input>
+	</ion-item>
+	<ion-item>
+		<ion-input type="text" placeholder="Email Address" [(ngModel)]="user.email" #ctrl="ngModel" required></ion-input>
+	</ion-item>
+	<ion-item>
+		<ion-input type="text" placeholder="Username" [(ngModel)]="user.name" #ctrl="ngModel" required></ion-input>
+	</ion-item>
+	<ion-item>
+		<ion-input type="text" placeholder="Password" [(ngModel)]="user.password" #ctrl="ngModel" required></ion-input>
+	</ion-item>
+
+	<ion-row>
+		<button ion-button (click)="onCancelBtnTap($event)">Cancel</button>
+		<button ion-button [disabled]="!isSaveBtnEnabled()" (click)="onSaveBtnTap($event)">OK</button>
+	</ion-row>
+
+</ion-content>

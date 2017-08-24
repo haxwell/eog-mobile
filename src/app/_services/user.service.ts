@@ -1,38 +1,27 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
-import { Headers } from '@angular/http';
 
 import { LocalStorageService } from 'angular-2-local-storage';
 
+import { ApiService } from './api.service';
 import { environment } from '../../_environments/environment';
 
 @Injectable()
 export class UserService {
 	promise = undefined;
 	
-	constructor(private _http: Http, private _localStorageService: LocalStorageService) { }
+	constructor(private _apiService: ApiService, private _localStorageService: LocalStorageService) { }
 
 	getCurrentUser() {
 		return this._localStorageService.get('user');		
-	}
-
-	getHeaders(username, password) {
-		let headers: Headers = new Headers(); // TO ANSWER: Why do we use new here, but inject the others?
-		headers.append("Authorization", "Basic " + btoa(username + ":" + password)); 
-		headers.append("Content-Type", "application/x-www-form-urlencoded");
-
-		return headers;
 	}
 
 	verifyAndLoginUser(username, password) {
 		let self = this;
 		let url = environment.apiUrl + "/api/verifyCredentials";
 
-		let headers: Headers = this.getHeaders(username, password);
-
 		self.promise = new Promise(
 			(resolve, reject) => {
-				this._http.get(url, {headers: headers}).subscribe(
+				this._apiService.get(url).subscribe(
 					(userObj) => { 
 						console.log("Credentials Valid!");
 						resolve(JSON.parse(userObj["_body"]));
@@ -42,13 +31,11 @@ export class UserService {
 		return self.promise;
 	}
 
-	saveCurrentUser(user) {
+	save(user) {
 		let self = this;
-		let url = environment.apiUrl + "/api/user";
+		let url = environment.apiUrl + "/api/users";
 
-		let headers: Headers = this.getHeaders(user.name, user.password);
-
-		let data: String = 
+		let data = 
 			"username="+user.name+
 			"&password="+user.password+
 			"&email="+user.email+
@@ -57,7 +44,7 @@ export class UserService {
 
 		self.promise = new Promise(
 			(resolve, reject) => {
-				this._http.post(url, data, {headers: headers}).subscribe(
+				this._apiService.post(url, data).subscribe(
 					(userId) => { 
 						console.log("Credentials Saved! " + JSON.stringify(data));
 						resolve(JSON.parse(userId["_body"]));

@@ -10,6 +10,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 
 import { MyApp } from './app.component';
 import { LoginPage } from '../pages/login/login';
+import { CreateAccountPage } from '../pages/login/_pages/create.account';
 import { HomePage } from '../pages/home/home';
 import { ProfilePage } from '../pages/profile/profile';
 import { SearchPage } from '../pages/search/search';
@@ -48,6 +49,7 @@ import { RuleService } from '../pages/things/_pages/_services/rule.service';
   declarations: [
     MyApp,
     LoginPage,
+    CreateAccountPage,
     HomePage,
     ProfilePage,
     DreamPage,
@@ -83,6 +85,7 @@ import { RuleService } from '../pages/things/_pages/_services/rule.service';
   entryComponents: [
     MyApp,
     LoginPage,
+    CreateAccountPage,
     HomePage,
     ProfilePage,
     DreamPage,

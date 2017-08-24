@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
-import { HomePage } from '../home/home';
-
 import { LocalStorageService } from 'angular-2-local-storage';
+
+import { HomePage } from '../home/home';
+import { CreateAccountPage } from './_pages/create.account'
 
 import { UserService } from '../../app/_services/user.service';
 
@@ -39,7 +40,7 @@ export class LoginPage {
   }
 
   onCreateAccountBtnTap(event) {
-  	//this.navCtrl.push(SearchPage);
+    this.navCtrl.push(CreateAccountPage);
   }
 
 }
