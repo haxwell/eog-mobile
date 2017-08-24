@@ -42,6 +42,18 @@ export class ProfilePage {
 		this.navCtrl.push(DreamPage, { dream: undefined });
 	}
 
+	onDreamBtnTap(item) { 
+		alert(item.title);
+	}
+
+	onThingBtnTap(item) { 
+		alert(item.title);
+	}
+
+	onKeywordBtnTap(item) { 
+		alert(item.text);
+	}
+
 	getAvailableIncomingRecommendations() {
 		return this.model["availableIncomingRecommendations"];
 	}

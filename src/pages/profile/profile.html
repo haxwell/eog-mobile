@@ -1,7 +1,7 @@
 <ion-header>
 	<ion-navbar>
 		<ion-title>
-			EOG - The App
+			Profile
 		</ion-title>
 	</ion-navbar>
 </ion-header>
@@ -55,17 +55,12 @@
 		<ion-card>
 			<ion-card-header>
 				Dreams
+				<button ion-button icon-only small color="danger" (click)="onNewDreamBtnTap($event)"><ion-icon name="add"></ion-icon></button>
 			</ion-card-header>
 			<ion-card-content>
-
-				<ion-fab right>
-					<button ion-fab color="danger"><ion-icon name="add"></ion-icon></button>
-				</ion-fab>
-				<ul>
-					<li *ngFor="let item of model.dreams">
-						{{item.title}}
-					</li>
-				</ul>
+				<span class="blockItem" *ngFor="let item of model.dreams" (click)="onDreamBtnTap(item)">
+					{{item.title}}
+				</span>
 			</ion-card-content>
 		</ion-card>
 	</ion-row>	
@@ -73,17 +68,12 @@
 		<ion-card>
 			<ion-card-header>
 				Things
+				<button ion-button icon-only small color="danger" (click)="onNewThingBtnTap($event)"><ion-icon name="add"></ion-icon></button>				
 			</ion-card-header>
 			<ion-card-content>
-
-				<ion-fab right>
-					<button ion-fab color="danger"><ion-icon name="add"></ion-icon></button>
-				</ion-fab>
-				<ul>
-					<li *ngFor="let item of model.things">
-						{{item.title}}
-					</li>
-				</ul>
+				<span class="blockItem" *ngFor="let item of model.things" (click)="onThingBtnTap(item)">
+					{{item.title}}
+				</span>
 			</ion-card-content>
 		</ion-card>
 	</ion-row>	
@@ -91,24 +81,14 @@
 		<ion-card>
 			<ion-card-header>
 				Keywords
+				<button ion-button icon-only small color="danger" (click)="onNewThingBtnTap($event)"><ion-icon name="add"></ion-icon></button>								
 			</ion-card-header>
 			<ion-card-content>
-
-				<ion-fab right>
-					<button ion-fab color="danger"><ion-icon name="add"></ion-icon></button>
-				</ion-fab>
-				<ul>
-					<li *ngFor="let item of model.keywords">
-						{{item.text}}
-					</li>
-				</ul>
+				<span class="blockItem" *ngFor="let item of model.keywords" (click)="onKeywordBtnTap(item)">
+					{{item.text}}
+				</span>
 			</ion-card-content>
 		</ion-card>
 	</ion-row>	
-
-	<ion-row>
-		<button ion-button (click)="onNewDreamBtnTap($event)">New Dream</button>
-		<button ion-button (click)="onNewThingBtnTap($event)">New Thing</button>
-	</ion-row>
 
 </ion-content>
