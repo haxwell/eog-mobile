@@ -18,6 +18,7 @@ export class ProfileService {
 				}
 
 	getModel() {
+		let self = this;
 		let user = this._userService.getCurrentUser();
 		let model = {};
 
@@ -52,8 +53,14 @@ export class ProfileService {
 			model["points"]["total"] = pts;
 		});
 
-		this._recommendationService.getIncomingRecommendations().then((obj) => {
+		this._recommendationService.getIncomingRecommendations().then((obj: Array<Object>) => {
 			model["incomingRecommendations"] = obj;
+			model["availableIncomingRecommendations"] = obj.filter((obj) => { return obj["escrowedRequestId"] === null });
+			model["availableIncomingRecommendations"].map((rec) => { 
+				self._userService.getUser(rec["providingUserId"]).then((user) => {
+					rec["userInfo"] = user;
+				});
+			});
 		});
 
 		this._recommendationService.getOutgoingRecommendations().then((obj) => {
