@@ -8,8 +8,36 @@ import { environment } from '../../_environments/environment';
 @Injectable()
 export class UserService {
 	promise = undefined;
-	
+	users = {};
+	usersPromise = {};
+
 	constructor(private _apiService: ApiService, private _localStorageService: LocalStorageService) { }
+
+	getUser(userId) {
+		let self = this;
+		let rtn = undefined;
+
+		if (self.users[userId] === undefined) {
+			// no value has been set
+			//  return a promise for the value, which sets this element when it gets a value
+
+			self.users[userId] = null;
+			rtn = new Promise((resolve, reject) => {
+				let url = environment.apiUrl + "/api/users/" + userId;			
+				this._apiService.get(url).subscribe(
+					(userObj) => { 
+						self.users[userId] = JSON.parse(userObj["_body"]);
+						resolve(self.users[userId]);
+					 });
+			});
+
+			self.usersPromise[userId] = rtn;
+		} else {
+			rtn = self.usersPromise[userId];
+		};
+
+		return rtn;
+	}
 
 	getCurrentUser() {
 		return this._localStorageService.get('user');		
