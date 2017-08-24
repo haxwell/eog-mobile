@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { OnInit } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { ModalController } from 'ionic-angular';
 import { RulePage } from './_pages/rule'
@@ -17,7 +16,7 @@ export class ThingPage {
 	newKeywordText = '';
 
 	constructor(public navCtrl: NavController, 
-				private navParams: NavParams, 
+				navParams: NavParams, 
 				private modalCtrl: ModalController,
 				private _thingService: ThingService) {
 		this.model = navParams.get('thing');

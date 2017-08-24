@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { OnInit } from '@angular/core';
 
 import { NavController, NavParams, ViewController } from 'ionic-angular';
 

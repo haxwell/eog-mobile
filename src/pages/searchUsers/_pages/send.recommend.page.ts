@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { OnInit } from '@angular/core';
 
 import { NavController, NavParams, ViewController } from 'ionic-angular';
 
@@ -19,10 +18,6 @@ export class SendRecommendPage {
 				private _recommendationService: RecommendationService) {
 
 		this.user = params.get('user');
-	}
-
-	ngOnInit() {
-
 	}
 
 	onSaveBtnTap(evt) {

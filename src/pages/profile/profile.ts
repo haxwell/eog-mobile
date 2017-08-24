@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { OnInit } from '@angular/core';
 import { NavController } from 'ionic-angular';
 
 import { ProfileService } from './_services/profile.service'

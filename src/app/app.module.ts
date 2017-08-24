@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
-import { HttpModule, Http } from '@angular/http';
+import { HttpModule } from '@angular/http';
 
 import { LocalStorageModule } from 'angular-2-local-storage';
 
@@ -42,7 +42,6 @@ import { RecommendationService } from './_services/recommendation.service';
 import { RequestsService } from './_services/requests.service';
 import { ProfileService } from '../pages/profile/_services/profile.service';
 import { ThingService } from '../pages/things/_services/thing.service';
-import { RuleService } from '../pages/things/_pages/_services/rule.service';
 
 
 @NgModule({
@@ -113,7 +112,6 @@ import { RuleService } from '../pages/things/_pages/_services/rule.service';
     SplashScreen,
     ApiService,
     UserService,
-    RuleService, // TODO: Can be Deleted?
     PointsService,
     SearchService,
     DreamService,

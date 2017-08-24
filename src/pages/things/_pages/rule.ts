@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { NavController, ViewController } from 'ionic-angular';
 
 import { SearchService } from '../../../app/_services/search.service';
-import { RuleService } from './_services/rule.service';
 
 @Component({
   selector: 'page-thing-detail-rule',
@@ -17,8 +16,7 @@ export class RulePage {
 
 	constructor(public navCtrl: NavController, 
 				private viewCtrl: ViewController, 
-				private _searchService: SearchService,
-				private _ruleService: RuleService) {
+				private _searchService: SearchService) {
 
 	}
 
@@ -85,16 +83,10 @@ export class RulePage {
 	}
 
 	getRequiredUserList() {
-		//if (this.resultList === undefined)
-		//	return undefined;
-
-		//return this.resultList.filter((obj) => { return obj["isSelectedRequirement"]; })
 		return this.userList;
 	}
 
 	onSaveBtnTap(evt) {
-		//this.resultList.map((obj) => { delete obj["isSelectedMatch"]; delete obj["isSelectedRequirement"]; });
-
 		this.viewCtrl.dismiss({pointsQuantity: this.pointsQuantity, requiredUsers: this.userList });
 	}
 

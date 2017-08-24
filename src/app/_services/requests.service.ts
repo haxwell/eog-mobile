@@ -20,9 +20,6 @@ export class RequestsService {
 	constructor(private _apiService: ApiService, private _userService: UserService) { }
 
 	getModel(direction) {
-
-		let self = this;
-		
 		return new Promise((resolve, reject) => {
 			let user = this._userService.getCurrentUser();
 			let url = environment.apiUrl + "/api/user/" + user["id"] + "/requests/" + direction;
@@ -58,7 +55,6 @@ export class RequestsService {
 	}
 
 	foo(request, status, direction) {
-		let self = this;
 		return new Promise((resolve, reject) => {
 			let user = this._userService.getCurrentUser();
 			

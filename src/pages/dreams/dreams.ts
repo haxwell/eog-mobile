@@ -1,7 +1,5 @@
 import { Component } from '@angular/core';
-import { OnInit } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
-import { ModalController } from 'ionic-angular';
 
 import { DreamService } from '../../app/_services/dream.service'
 
@@ -16,8 +14,7 @@ export class DreamPage {
 	newKeywordText = '';
 
 	constructor(public navCtrl: NavController, 
-				private navParams: NavParams, 
-				private modalCtrl: ModalController,
+				navParams: NavParams, 
 				private _dreamService: DreamService) {
 		this.model = navParams.get('dream');
 
