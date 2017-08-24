@@ -43,15 +43,16 @@ export class ProfilePage {
 	}
 
 	getAvailableIncomingRecommendations() {
-		let rtn = undefined;
-		
-		if (this.model["incomingRecommendations"])
-			rtn = this.model["incomingRecommendations"].filter((obj) => { return obj["escrowedRequestId"] === null });
-
-		return rtn;
+		return this.model["availableIncomingRecommendations"];
 	}
 
-	getUserIdFromRecommendation(recommendation) {
-		return recommendation["providingUserId"];
+	getRealName(item) {
+		let rtn = undefined;
+		
+		if (item["userInfo"]) {
+			rtn = item["userInfo"]["realname"];
+		}
+
+		return rtn
 	}
 }

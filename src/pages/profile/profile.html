@@ -11,15 +11,22 @@
 		<ion-label fixed>Name: </ion-label>
 		<ion-input type="text" placeholder="Name" [(ngModel)]="model.realname" #ctrl="ngModel" required></ion-input>		
 	</ion-row>
-	<ion-row>
+	<ion-row *ngIf="model.points">
 		<ion-label fixed>Points: </ion-label>
-		<span *ngIf="model.points">Total: {{model.points.total}}  Available: {{model.points.available}}</span>
+		<ion-item>
+			Total: 
+			<ion-badge item-end>{{model.points.total}}</ion-badge>
+		</ion-item>
+		<ion-item>
+			Available:
+			<ion-badge item-end>{{model.points.available}}</ion-badge>
+		</ion-item>
 	</ion-row>
-	<ion-row>
+	<ion-row *ngIf="getAvailableIncomingRecommendations()">
 		<ion-label fixed>Recommendations: </ion-label>
-		<ul *ngIf="getAvailableIncomingRecommendations()">
+		<ul>
 			<li *ngFor="let item of getAvailableIncomingRecommendations()">
-				From User ID {{getUserIdFromRecommendation(item)}}
+				From User {{getRealName(item)}}
 			</li>
 		</ul>
 		<span *ngIf="!getAvailableIncomingRecommendations()">No Available Recommendations</span>
