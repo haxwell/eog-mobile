@@ -20,49 +20,91 @@
 		<ion-input type="text" placeholder="# " [(ngModel)]="model.phone" #ctrl="ngModel" required></ion-input>
 	</ion-row>
 	<ion-row *ngIf="model.points">
-		<ion-label fixed>Points: </ion-label>
-		<ion-item>
-			Total: 
-			<ion-badge item-end>{{model.points.total}}</ion-badge>
-		</ion-item>
-		<ion-item>
-			Available:
-			<ion-badge item-end>{{model.points.available}}</ion-badge>
-		</ion-item>
-	</ion-row>
-	<ion-row *ngIf="getAvailableIncomingRecommendations()">
-		<ion-label fixed>Recommendations: </ion-label>
-		<ul>
-			<li *ngFor="let item of getAvailableIncomingRecommendations()">
-				From User {{getRealName(item)}}
-			</li>
-		</ul>
-		<span *ngIf="!getAvailableIncomingRecommendations()">No Available Recommendations</span>
+		<ion-card>
+			<ion-card-header>
+				Points
+			</ion-card-header>
+			<ion-card-content>
+				<ion-item>
+					Total: 
+					<ion-badge item-end>{{model.points.total}}</ion-badge>
+				</ion-item>
+				<ion-item>
+					Available:
+					<ion-badge item-end>{{model.points.available}}</ion-badge>
+				</ion-item>
+			</ion-card-content>
+		</ion-card>
 	</ion-row>
 	<ion-row>
-		<ion-label fixed>Dreams: </ion-label>
-		<ul>
-			<li *ngFor="let item of model.dreams">
-				{{item.title}}
-			</li>
-		</ul>
-	</ion-row>
-	<ion-row>
-		<ion-label fixed>Things: </ion-label>
-		<ul>
-			<li *ngFor="let item of model.things">
-				{{item.title}}
-			</li>
-		</ul>
+		<ion-card>
+			<ion-card-header>
+				Recommendations
+			</ion-card-header>
+			<ion-card-content>
+				<div *ngIf="getAvailableIncomingRecommendations()">
+					<span *ngFor="let item of getAvailableIncomingRecommendations()">
+						{{getRealName(item)}}
+					</span>
+				</div>
+				<span *ngIf="!getAvailableIncomingRecommendations()">No Available Recommendations</span>				
+			</ion-card-content>
+		</ion-card>
 	</ion-row>	
 	<ion-row>
-		<ion-label fixed>Keywords: </ion-label>
-		<ul>
-			<li *ngFor="let item of model.keywords">
-				{{item.text}}
-			</li>
-		</ul>
-	</ion-row>
+		<ion-card>
+			<ion-card-header>
+				Dreams
+			</ion-card-header>
+			<ion-card-content>
+
+				<ion-fab right>
+					<button ion-fab color="danger"><ion-icon name="add"></ion-icon></button>
+				</ion-fab>
+				<ul>
+					<li *ngFor="let item of model.dreams">
+						{{item.title}}
+					</li>
+				</ul>
+			</ion-card-content>
+		</ion-card>
+	</ion-row>	
+	<ion-row>
+		<ion-card>
+			<ion-card-header>
+				Things
+			</ion-card-header>
+			<ion-card-content>
+
+				<ion-fab right>
+					<button ion-fab color="danger"><ion-icon name="add"></ion-icon></button>
+				</ion-fab>
+				<ul>
+					<li *ngFor="let item of model.things">
+						{{item.title}}
+					</li>
+				</ul>
+			</ion-card-content>
+		</ion-card>
+	</ion-row>	
+	<ion-row>
+		<ion-card>
+			<ion-card-header>
+				Keywords
+			</ion-card-header>
+			<ion-card-content>
+
+				<ion-fab right>
+					<button ion-fab color="danger"><ion-icon name="add"></ion-icon></button>
+				</ion-fab>
+				<ul>
+					<li *ngFor="let item of model.keywords">
+						{{item.text}}
+					</li>
+				</ul>
+			</ion-card-content>
+		</ion-card>
+	</ion-row>	
 
 	<ion-row>
 		<button ion-button (click)="onNewDreamBtnTap($event)">New Dream</button>
