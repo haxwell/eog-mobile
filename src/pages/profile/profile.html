@@ -11,6 +11,14 @@
 		<ion-label fixed>Name: </ion-label>
 		<ion-input type="text" placeholder="Name" [(ngModel)]="model.realname" #ctrl="ngModel" required></ion-input>		
 	</ion-row>
+	<ion-row>
+		<ion-label fixed>Email: </ion-label>
+		<ion-input type="text" placeholder="you@domain.com" [(ngModel)]="model.email" #ctrl="ngModel" required></ion-input>		
+	</ion-row>
+	<ion-row>
+		<ion-label fixed>Phone: </ion-label>
+		<ion-input type="text" placeholder="# " [(ngModel)]="model.phone" #ctrl="ngModel" required></ion-input>
+	</ion-row>
 	<ion-row *ngIf="model.points">
 		<ion-label fixed>Points: </ion-label>
 		<ion-item>
@@ -32,11 +40,21 @@
 		<span *ngIf="!getAvailableIncomingRecommendations()">No Available Recommendations</span>
 	</ion-row>
 	<ion-row>
-		<ion-label fixed>Phone: </ion-label>
-		<ion-input type="text" placeholder="# " [(ngModel)]="model.phone" #ctrl="ngModel" required></ion-input>		
-		<ion-label fixed>Email: </ion-label>
-		<ion-input type="text" placeholder="you@domain.com" [(ngModel)]="model.email" #ctrl="ngModel" required></ion-input>		
+		<ion-label fixed>Dreams: </ion-label>
+		<ul>
+			<li *ngFor="let item of model.dreams">
+				{{item.title}}
+			</li>
+		</ul>
 	</ion-row>
+	<ion-row>
+		<ion-label fixed>Things: </ion-label>
+		<ul>
+			<li *ngFor="let item of model.things">
+				{{item.title}}
+			</li>
+		</ul>
+	</ion-row>	
 	<ion-row>
 		<ion-label fixed>Keywords: </ion-label>
 		<ul>
@@ -44,26 +62,10 @@
 				{{item.text}}
 			</li>
 		</ul>
-		<ion-label fixed>Dreams: </ion-label>
-		<ul>
-			<li *ngFor="let item of model.dreams">
-				{{item.title}}
-			</li>
-		</ul>
-
-		<ion-label fixed>Things: </ion-label>
-		<ul>
-			<li *ngFor="let item of model.things">
-				{{item.title}}
-			</li>
-		</ul>
-
-	</ion-row>	
+	</ion-row>
 
 	<ion-row>
 		<button ion-button (click)="onNewDreamBtnTap($event)">New Dream</button>
-	</ion-row>
-	<ion-row>
 		<button ion-button (click)="onNewThingBtnTap($event)">New Thing</button>
 	</ion-row>
 
