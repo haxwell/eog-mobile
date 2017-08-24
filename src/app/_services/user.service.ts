@@ -21,7 +21,7 @@ export class UserService {
 
 		self.promise = new Promise(
 			(resolve, reject) => {
-				this._apiService.get(url).subscribe(
+				this._apiService.getWithUsernameAndPassword(url, username, password).subscribe(
 					(userObj) => { 
 						console.log("Credentials Valid!");
 						resolve(JSON.parse(userObj["_body"]));

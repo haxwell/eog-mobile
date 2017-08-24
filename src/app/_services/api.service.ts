@@ -23,8 +23,11 @@ export class ApiService {
 	    let username: string = user["name"];
 	    let password: string = user["password"];
 
-		let headers: Headers = this.getHeaders(username, password);
+	    return this.getWithUsernameAndPassword(url, username, password);
+	}
 
+	getWithUsernameAndPassword(url: string, uName: string, uPW: string) {
+		let headers: Headers = this.getHeaders(uName, uPW);
 		return this._http.get(url, {headers: headers});
 	}
 
