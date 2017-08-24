@@ -18,9 +18,6 @@ export class UserService {
 		let rtn = undefined;
 
 		if (self.users[userId] === undefined) {
-			// no value has been set
-			//  return a promise for the value, which sets this element when it gets a value
-
 			self.users[userId] = null;
 			rtn = new Promise((resolve, reject) => {
 				let url = environment.apiUrl + "/api/users/" + userId;			
