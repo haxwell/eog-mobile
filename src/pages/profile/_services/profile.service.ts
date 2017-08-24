@@ -14,12 +14,15 @@ export class ProfileService {
 				private _userService: UserService, 
 				private _pointsService: PointsService,
 				private _recommendationService: RecommendationService) { 
-					this._recommendationService.init();
+
 				}
 
 	getModel() {
 		let user = this._userService.getCurrentUser();
 		let model = {};
+
+		this._pointsService.init();
+		this._recommendationService.init();
 
 		model["realname"] = user["realname"];
 		model["phone"] = user["phone"];
