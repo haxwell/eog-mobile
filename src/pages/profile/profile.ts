@@ -37,17 +37,25 @@ export class ProfilePage {
 		this.navCtrl.push(ThingPage, { thing: undefined });
 	}
 
+	onThingBtnTap(item) { 
+		this.navCtrl.push(ThingPage, { thing: item });
+	}
+
 	onNewDreamBtnTap(evt) {
 		this.dirty = true;
 		this.navCtrl.push(DreamPage, { dream: undefined });
 	}
 
 	onDreamBtnTap(item) { 
-		alert(item.title);
-	}
-
-	onThingBtnTap(item) { 
-		alert(item.title);
+		let self = this;
+		this.navCtrl.push(DreamPage, { dream: item, callback: 
+			(_params) => {
+				return new Promise((resolve, reject) => {
+					self.dirty = (_params === true);
+					resolve();
+				});
+			}
+ 		});
 	}
 
 	onKeywordBtnTap(item) { 

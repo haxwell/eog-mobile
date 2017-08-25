@@ -44,6 +44,17 @@ export class DreamService {
 		});
 	}
 
+	delete(model) {
+		return new Promise((resolve, reject) => {
+			let url = environment.apiUrl + "/api/dreams/" + model["id"];
+			this._apiService.delete(url)
+			.subscribe((resp) => {
+				console.log(JSON.parse(resp["_body"]));
+				resolve(JSON.parse(resp["_body"]));
+			});
+		});	
+	}
+
 	save(model) {
 		let data = this.JSON_to_URLEncoded(model, undefined, undefined);
 		console.log(data);
