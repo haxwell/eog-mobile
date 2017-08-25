@@ -20,6 +20,8 @@ export class DeleteThingPage {
 	thing = undefined;
 	thingRequests = undefined;
 	thingRequestsInProgress = undefined;
+	thingRequestsNotInProgress = undefined;
+	isInitialized = false;
 	
 	constructor(public navCtrl: NavController, 
 				public params: NavParams,
@@ -33,24 +35,33 @@ export class DeleteThingPage {
 		let self = this;
 
 		this._requestsService.getModelForIncoming().then((model: Array<Object>) => {
+			// get all the requests for this thing
 			self.thingRequests = model.filter((obj) => {
 				return obj["thing"]["id"] === self.thing["id"]; });
 
+			// create another list with all the requests for this thing that are in progress
 			self.thingRequestsInProgress = self.thingRequests.filter((obj) => { 
 				return obj["deliveringStatusId"] === self.REQUEST_STATUS_ACCEPTED; });
+
+			// a third list for all the requests for this thing that are not in progress
+			self.thingRequestsNotInProgress = self.thingRequests.filter((obj) => {
+				return self.thingRequestsInProgress.some((obj2) => { return obj2["id"] !== obj["id"]; }); 
+			});
+
+			self.isInitialized = true;
 		});
 	}
 
-	getThingRequests() {
-		return this.thingRequests;
+	getThingRequestsNotInProgress() {
+		return this.thingRequestsNotInProgress;
 	}
 
 	getThingRequestsInProgress() {
 		return this.thingRequestsInProgress;
 	}
 
-	isThingAttachedToARequest() {
-		return this.thingRequests && this.thingRequests.length > 0;
+	isThingAttachedToARequestNotInProgress() {
+		return this.thingRequestsNotInProgress && this.thingRequestsNotInProgress.length > 0;
 	}
 
 	isThingAttachedToAnInProgressRequest() {
@@ -58,7 +69,7 @@ export class DeleteThingPage {
 	}
 
 	isDeleteBtnEnabled() {
-		return !this.isThingAttachedToAnInProgressRequest();
+		return this.isInitialized && !this.isThingAttachedToAnInProgressRequest();
 	}
 
 	onDeleteBtnTap(evt) {
