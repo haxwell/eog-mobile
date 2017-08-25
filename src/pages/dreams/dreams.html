@@ -16,15 +16,21 @@
 		<ion-input type="text" placeholder="Description" [(ngModel)]="model.description" #ctrl="ngModel" required></ion-input>		
 	</ion-row>
 	<ion-row>
-		<ion-label fixed>Keywords: </ion-label>
-		<ion-input type="text" placeholder="Add a keyword" [(ngModel)]="newKeywordText" #ctrl="ngModel" required></ion-input>
-		<button ion-button (click)="onNewKeyword($event)">Add</button>
+		<ion-card>
+			<ion-card-header>
+				Keywords
+				<button ion-button icon-only small color="danger" (click)="onAddKeywordBtnTap($event)"><ion-icon name="add"></ion-icon></button>								
+			</ion-card-header>
+			<ion-card-content>
+				<span *ngIf="userHasNoKeywords()">
+					Keywords are like #hashtags. Add some that describe you!
+				</span>
+				<span class="blockItem" *ngFor="let item of model.keywords" (press)="onIndividualKeywordPress(item)">
+					{{item.text}}
+				</span>
+			</ion-card-content>
+		</ion-card>
 	</ion-row>
-	<ul>
-		<li *ngFor="let kw of model.keywords">
-			{{kw.text}}
-		</li>
-	</ul>
 
 	<ion-row>
 		<button ion-button (click)="onCancelBtnTap($event)">Cancel</button>

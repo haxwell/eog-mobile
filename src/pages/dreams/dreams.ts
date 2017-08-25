@@ -4,52 +4,79 @@ import { NavController, NavParams } from 'ionic-angular';
 import { ModalController } from 'ionic-angular';
 
 import { DeleteDreamPage } from './_pages/delete.dream'
+import { KeywordEntryPage } from '../keyword.entry/keyword.entry'
 import { DreamService } from '../../app/_services/dream.service'
 
 @Component({
   selector: 'page-dream-detail',
-  templateUrl: 'dreams.html'
+  templateUrl: 'dreams.html',
 })
 
 export class DreamPage {
 
 	model = {};
 	callback = undefined;
-	isNew = false;
-	newKeywordText = '';
+	new = false;
+	dirty = false;
+	newKeywords = [];
 
 	constructor(public navCtrl: NavController, 
 				navParams: NavParams,
 				private modalCtrl: ModalController,
 				private _dreamService: DreamService) {
-		this.model = navParams.get('dream');
+		this.model = Object.assign({}, navParams.get('dream'));
 		this.callback = navParams.get('callback');
 
 		if (this.model === undefined) {
 			this.model = this._dreamService.getDefaultModel();
-			this.isNew = true;
+			this.setDirty(true);
 		}
 	}
 
-	onNewKeyword(evt) {
-		this.model["keywords"].push({"text": this.newKeywordText});
-		this.newKeywordText = '';
+	isDirty() {
+		return this.dirty;
+	}
+
+	setDirty(b) {
+		this.dirty = b;
+	}
+
+	isNewObject() {
+		return this.new;
+	}
+
+	userHasNoKeywords() {
+		return this.model["keywords"] === undefined || this.model["keywords"].length === 0;
 	}
 
 	isSaveBtnEnabled() {
-		return this.model["keywords"].length > 0 &&
+		return this.isDirty() && this.model["keywords"].length > 0 &&
 			this.model["title"].length > 0 &&
 			this.model["description"].length > 0;
 	}
 
-	isNewObject() {
-		return this.isNew;
+	onSaveBtnTap(evt) {
+		let self = this;
+		self.callback(this.isDirty()).then(() => {
+			self._dreamService.save(self.model).then((newDream) => {
+				self.navCtrl.pop();
+			})
+		});
 	}
 
-	onSaveBtnTap(evt) {
-		this._dreamService.save(this.model).then((newDream) => {
-			this.navCtrl.pop();
-		})
+	onIndividualKeywordPress(item) {
+		this.model["keywords"] = this.model["keywords"].filter((obj) => {
+			return obj["text"] !== item["text"];
+		});
+
+		this.setDirty(true);
+	}
+
+	onAddKeywordBtnTap(evt) {
+		let self = this;
+		let modal = this.modalCtrl.create(KeywordEntryPage, {keywordModel: self.newKeywords});
+		modal.onDidDismiss((data: Array<Object>) => { data.map((obj) => { self.setDirty(true); self.model["keywords"].push({id: undefined, text: obj}); }) } );
+		modal.present();
 	}
 
 	onDeleteBtnTap(evt) {

@@ -34,6 +34,7 @@ import { DeleteThingPage } from '../pages/things/_pages/delete.thing';
 import { RequestsIncomingPage } from '../pages/requests/incoming/requests.incoming';
 import { RequestsOutgoingPage } from '../pages/requests/outgoing/requests.outgoing';
 import { RulePage } from '../pages/things/_pages/rule';
+import { KeywordEntryPage } from '../pages/keyword.entry/keyword.entry';
 
 import { ApiService } from './_services/api.service';
 import { UserService } from './_services/user.service';
@@ -73,7 +74,9 @@ import { ThingService } from '../pages/things/_services/thing.service';
     SearchPage,
     SearchUsersPage,
     SendPointPage,
-    SendRecommendPage
+    SendRecommendPage,
+
+    KeywordEntryPage
   ],
   imports: [
     BrowserModule,
@@ -111,7 +114,9 @@ import { ThingService } from '../pages/things/_services/thing.service';
     SearchPage,
     SearchUsersPage,
     SendPointPage,
-    SendRecommendPage
+    SendRecommendPage,
+
+    KeywordEntryPage
   ],
   providers: [
     StatusBar,
