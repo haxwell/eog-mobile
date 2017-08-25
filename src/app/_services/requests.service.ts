@@ -54,7 +54,7 @@ export class RequestsService {
 		});
 	}
 
-	foo(request, status, direction) {
+	setRequestStatusByUserIdAndDirection(request, status, direction) {
 		return new Promise((resolve, reject) => {
 			let user = this._userService.getCurrentUser();
 			
@@ -75,38 +75,38 @@ export class RequestsService {
 	}
 
 	declineIncomingRequest(request) {
-		return this.foo(request, this.REQUEST_STATUS_DECLINED, this.INCOMING);
+		return this.setRequestStatusByUserIdAndDirection(request, this.REQUEST_STATUS_DECLINED, this.INCOMING);
 	}
 
 	acceptIncomingRequest(request) {
-		return this.foo(request, this.REQUEST_STATUS_ACCEPTED, this.INCOMING);
+		return this.setRequestStatusByUserIdAndDirection(request, this.REQUEST_STATUS_ACCEPTED, this.INCOMING);
 	}
 
 	acceptOutgoingRequest(request) {
-		return this.foo(request, this.REQUEST_STATUS_ACCEPTED, this.OUTGOING);
+		return this.setRequestStatusByUserIdAndDirection(request, this.REQUEST_STATUS_ACCEPTED, this.OUTGOING);
 	}
 
 	cancelOutgoingRequest(request) {
-		return this.foo(request, this.REQUEST_STATUS_CANCELLED, this.OUTGOING);
+		return this.setRequestStatusByUserIdAndDirection(request, this.REQUEST_STATUS_CANCELLED, this.OUTGOING);
 	}
 
 	cancelIncomingRequest(request) {
-		return this.foo(request, this.REQUEST_STATUS_CANCELLED, this.INCOMING);
+		return this.setRequestStatusByUserIdAndDirection(request, this.REQUEST_STATUS_CANCELLED, this.INCOMING);
 	}
 
 	completeIncomingRequest(request) {
-		return this.foo(request, this.REQUEST_STATUS_COMPLETED, this.INCOMING);
+		return this.setRequestStatusByUserIdAndDirection(request, this.REQUEST_STATUS_COMPLETED, this.INCOMING);
 	}
 
 	secondCompleteIncomingRequest(request) {
-		return this.foo(request, this.REQUEST_STATUS_COMPLETED, this.INCOMING);
+		return this.setRequestStatusByUserIdAndDirection(request, this.REQUEST_STATUS_COMPLETED, this.INCOMING);
 	}
 
 	completeOutgoingRequest(request) {
-		return this.foo(request, this.REQUEST_STATUS_COMPLETED, this.OUTGOING);
+		return this.setRequestStatusByUserIdAndDirection(request, this.REQUEST_STATUS_COMPLETED, this.OUTGOING);
 	}
 
 	notCompleteOutgoingRequest(request) {
-		return this.foo(request, this.REQUEST_STATUS_NOT_COMPLETED, this.OUTGOING);
+		return this.setRequestStatusByUserIdAndDirection(request, this.REQUEST_STATUS_NOT_COMPLETED, this.OUTGOING);
 	}
 }
