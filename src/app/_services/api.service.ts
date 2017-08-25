@@ -41,4 +41,15 @@ export class ApiService {
 
 	    return this._http.post(url, data, {headers: headers});
 	}
+
+	delete(url: string) {
+		let user = this._localStorageService.get('user');
+
+	    let username: string = user["name"];
+	    let password: string = user["password"];
+
+		let headers: Headers = this.getHeaders(username, password);
+
+	    return this._http.delete(url, {headers: headers});
+	}
 }
