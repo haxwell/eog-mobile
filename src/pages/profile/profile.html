@@ -58,6 +58,9 @@
 				<button ion-button icon-only small color="danger" (click)="onNewDreamBtnTap($event)"><ion-icon name="add"></ion-icon></button>
 			</ion-card-header>
 			<ion-card-content>
+				<span *ngIf="userHasNoDreams()">
+					Where do you see yourself tomorrow? Add a dream here!
+				</span>
 				<span class="blockItem" *ngFor="let item of model.dreams" (click)="onDreamBtnTap(item)">
 					{{item.title}}
 				</span>
@@ -71,6 +74,9 @@
 				<button ion-button icon-only small color="danger" (click)="onNewThingBtnTap($event)"><ion-icon name="add"></ion-icon></button>				
 			</ion-card-header>
 			<ion-card-content>
+				<span *ngIf="userHasNoThings()">
+					Got some thing you do well? List your thing here!
+				</span>
 				<span class="blockItem" *ngFor="let item of model.things" (click)="onThingBtnTap(item)">
 					{{item.title}}
 				</span>
@@ -84,6 +90,9 @@
 				<button ion-button icon-only small color="danger" (click)="onNewThingBtnTap($event)"><ion-icon name="add"></ion-icon></button>								
 			</ion-card-header>
 			<ion-card-content>
+				<span *ngIf="userHasNoKeywords()">
+					Keywords are like #hashtags. Add some to describe you!
+				</span>
 				<span class="blockItem" *ngFor="let item of model.keywords" (click)="onKeywordBtnTap(item)">
 					{{item.text}}
 				</span>

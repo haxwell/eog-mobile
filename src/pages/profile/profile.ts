@@ -83,4 +83,16 @@ export class ProfilePage {
 
 		return rtn
 	}
+
+	userHasNoDreams() {
+		return this.model["dreams"] === undefined || this.model["dreams"].length === 0;
+	}
+
+	userHasNoThings() {
+		return this.model["things"] === undefined || this.model["things"].length === 0;
+	}
+
+	userHasNoKeywords() {
+		return this.model["keywords"] === undefined || this.model["keywords"].length === 0;
+	}
 }

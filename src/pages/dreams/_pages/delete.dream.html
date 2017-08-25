@@ -1,13 +1,17 @@
 <ion-header>
 	<ion-navbar>
 		<ion-title>
-			Delete a Dream
+			Delete a Dream - {{dream.title}}
 		</ion-title>
 	</ion-navbar>
 </ion-header>
 
 <ion-content padding>
-	<ion-row *ngIf="isDreamAttachedToARequest() || isDreamAttachedToAnInProgressRequest">
+	<ion-row *ngIf="!isDreamAttachedToARequest() && !isDreamAttachedToAnInProgressRequest()">
+		<ion-label>Are you sure you want to delete this dream?</ion-label>
+	</ion-row>
+
+	<ion-row *ngIf="isDreamAttachedToARequest() || isDreamAttachedToAnInProgressRequest()">
 		<ion-label>This dream is attached to one or more requests.</ion-label>
 	</ion-row>
 	<ion-row *ngIf="isDreamAttachedToARequest()">
@@ -17,7 +21,7 @@
 			</ion-card-header>
 			<ion-card-content>
 				<ion-item *ngFor="let item of getDreamRequests()">
-						User: {{item.directionallyOppositeUser.realname}} Thing: {{item.thing.title}}
+					User: {{item.directionallyOppositeUser.realname}} Thing: {{item.thing.title}}
 				</ion-item>
 			</ion-card-content>
 		</ion-card>
@@ -29,7 +33,7 @@
 			</ion-card-header>
 			<ion-card-content>
 				<ion-item *ngFor="let item of getDreamRequestsInProgress()">
-						User: {{item.directionallyOppositeUser.realname}} Thing: {{item.thing.title}}
+					User: {{item.directionallyOppositeUser.realname}} Thing: {{item.thing.title}}
 				</ion-item>
 			</ion-card-content>
 		</ion-card>
