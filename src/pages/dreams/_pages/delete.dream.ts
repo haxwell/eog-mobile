@@ -20,6 +20,8 @@ export class DeleteDreamPage {
 	dream = undefined;
 	dreamRequests = undefined;
 	dreamRequestsInProgress = undefined;
+	dreamRequestsNotInProgress = undefined;
+	isInitialized = false;
 	
 	constructor(public navCtrl: NavController, 
 				public params: NavParams,
@@ -33,24 +35,33 @@ export class DeleteDreamPage {
 		let self = this;
 
 		this._requestsService.getModelForOutgoing().then((model: Array<Object>) => {
+			// get all the requests for this dream
 			self.dreamRequests = model.filter((obj) => {
 				return obj["dream"]["id"] === self.dream["id"]; });
 
+			// create another list with all the requests for this dream that are in progress
 			self.dreamRequestsInProgress = self.dreamRequests.filter((obj) => { 
 				return obj["deliveringStatusId"] === self.REQUEST_STATUS_ACCEPTED; });
+
+			// a third list for all the requests for this dream that are not in progress
+			self.dreamRequestsNotInProgress = self.dreamRequests.filter((obj) => {
+				return self.dreamRequestsInProgress.some((obj2) => { return obj2["id"] !== obj["id"]; }); 
+			});
+
+			self.isInitialized = true;
 		});
 	}
 
-	getDreamRequests() {
-		return this.dreamRequests;
+	getDreamRequestsNotInProgress() {
+		return this.dreamRequestsNotInProgress;
 	}
 
 	getDreamRequestsInProgress() {
 		return this.dreamRequestsInProgress;
 	}
 
-	isDreamAttachedToARequest() {
-		return this.dreamRequests && this.dreamRequests.length > 0;
+	isDreamAttachedToARequestNotInProgress() {
+		return this.dreamRequestsNotInProgress && this.dreamRequestsNotInProgress.length > 0;
 	}
 
 	isDreamAttachedToAnInProgressRequest() {
@@ -58,7 +69,7 @@ export class DeleteDreamPage {
 	}
 
 	isDeleteBtnEnabled() {
-		return !this.isDreamAttachedToAnInProgressRequest();
+		return this.isInitialized && !this.isDreamAttachedToAnInProgressRequest();
 	}
 
 	onDeleteBtnTap(evt) {

@@ -7,20 +7,20 @@
 </ion-header>
 
 <ion-content padding>
-	<ion-row *ngIf="!isDreamAttachedToARequest() && !isDreamAttachedToAnInProgressRequest()">
+	<ion-row *ngIf="!isDreamAttachedToARequestNotInProgress() && !isDreamAttachedToAnInProgressRequest()">
 		<ion-label>Are you sure you want to delete this dream?</ion-label>
 	</ion-row>
 
-	<ion-row *ngIf="isDreamAttachedToARequest() || isDreamAttachedToAnInProgressRequest()">
-		<ion-label>This dream is attached to one or more requests.</ion-label>
+	<ion-row *ngIf="isDreamAttachedToARequestNotInProgress() || isDreamAttachedToAnInProgressRequest()">
+		<ion-label>You have made requests linked to this dream.</ion-label>
 	</ion-row>
-	<ion-row *ngIf="isDreamAttachedToARequest()">
+	<ion-row *ngIf="isDreamAttachedToARequestNotInProgress()">
 		<ion-card>
 			<ion-card-header>
-				These requests have not yet been accepted, so they will also be deleted.
+				These requests have not yet been accepted. If you delete this dream, they will be cancelled.
 			</ion-card-header>
 			<ion-card-content>
-				<ion-item *ngFor="let item of getDreamRequests()">
+				<ion-item *ngFor="let item of getDreamRequestsNotInProgress()">
 					User: {{item.directionallyOppositeUser.realname}} Thing: {{item.thing.title}}
 				</ion-item>
 			</ion-card-content>
@@ -29,7 +29,7 @@
 	<ion-row *ngIf="isDreamAttachedToAnInProgressRequest()">
 		<ion-card>
 			<ion-card-header>
-				These requests are in progress. You will need to resolve these before deleting this Dream.
+				These requests are in progress.<br/>You will need to resolve these before deleting this Dream.
 			</ion-card-header>
 			<ion-card-content>
 				<ion-item *ngFor="let item of getDreamRequestsInProgress()">
