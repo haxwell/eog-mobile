@@ -30,6 +30,7 @@ import { RequestContactInfoPage } from '../pages/requests/_pages/contact.info';
 import { DreamPage } from '../pages/dreams/dreams';
 import { DeleteDreamPage } from '../pages/dreams/_pages/delete.dream';
 import { ThingPage } from '../pages/things/things';
+import { DeleteThingPage } from '../pages/things/_pages/delete.thing';
 import { RequestsIncomingPage } from '../pages/requests/incoming/requests.incoming';
 import { RequestsOutgoingPage } from '../pages/requests/outgoing/requests.outgoing';
 import { RulePage } from '../pages/things/_pages/rule';
@@ -55,6 +56,7 @@ import { ThingService } from '../pages/things/_services/thing.service';
     DreamPage,
     DeleteDreamPage,
     ThingPage,
+    DeleteThingPage,
     RulePage,
     RequestsIncomingPage,
     RequestsOutgoingPage,
@@ -92,6 +94,7 @@ import { ThingService } from '../pages/things/_services/thing.service';
     DreamPage,
     DeleteDreamPage,
     ThingPage,
+    DeleteThingPage,
     RulePage,
     RequestsIncomingPage,
     RequestsOutgoingPage,

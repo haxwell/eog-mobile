@@ -73,4 +73,14 @@ export class ThingService {
   		return list.join('&');
 	}
 
+	delete(model) {
+		return new Promise((resolve, reject) => {
+			let url = environment.apiUrl + "/api/things/" + model["id"];
+			this._apiService.delete(url)
+			.subscribe((resp) => {
+				console.log(JSON.parse(resp["_body"]));
+				resolve(JSON.parse(resp["_body"]));
+			});
+		});	
+	}
 }

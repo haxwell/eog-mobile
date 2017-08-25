@@ -38,7 +38,15 @@ export class ProfilePage {
 	}
 
 	onThingBtnTap(item) { 
-		this.navCtrl.push(ThingPage, { thing: item });
+		let self = this;
+		this.navCtrl.push(ThingPage, { thing: item, callback: 
+			(_params) => {
+				return new Promise((resolve, reject) => {
+					self.dirty = (_params === true);
+					resolve();
+				});
+			}
+ 		});
 	}
 
 	onNewDreamBtnTap(evt) {

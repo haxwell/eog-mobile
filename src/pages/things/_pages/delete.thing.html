@@ -1,0 +1,43 @@
+<ion-header>
+	<ion-navbar>
+		<ion-title>
+			Delete a Thing
+		</ion-title>
+	</ion-navbar>
+</ion-header>
+
+<ion-content padding>
+	<ion-row *ngIf="isThingAttachedToARequest() || isThingAttachedToAnInProgressRequest">
+		<ion-label>This thing is attached to one or more requests.</ion-label>
+	</ion-row>
+	<ion-row *ngIf="isThingAttachedToARequest()">
+		<ion-card>
+			<ion-card-header>
+				These requests have not yet been accepted, so they will also be deleted.
+			</ion-card-header>
+			<ion-card-content>
+				<ion-item *ngFor="let item of getThingRequests()">
+						User: {{item.directionallyOppositeUser.realname}} Dream: {{item.dream.title}}
+				</ion-item>
+			</ion-card-content>
+		</ion-card>
+	</ion-row>		
+	<ion-row *ngIf="isThingAttachedToAnInProgressRequest()">
+		<ion-card>
+			<ion-card-header>
+				These requests are in progress. You will need to resolve these before deleting this Thing.
+			</ion-card-header>
+			<ion-card-content>
+				<ion-item *ngFor="let item of getThingRequestsInProgress()">
+						User: {{item.directionallyOppositeUser.realname}} Dream: {{item.dream.title}}
+				</ion-item>
+			</ion-card-content>
+		</ion-card>
+	</ion-row>
+
+	<ion-row>
+		<button ion-button (click)="onCancelBtnTap($event)">Sorry, no.. Cancel</button>
+		<button ion-button color="danger" [disabled]="!isDeleteBtnEnabled()" (click)="onDeleteBtnTap($event)">DELETE!</button>
+	</ion-row>
+
+</ion-content>
