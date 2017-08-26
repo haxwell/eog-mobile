@@ -22,8 +22,8 @@
 				<button ion-button icon-only small color="danger" (click)="onAddKeywordBtnTap($event)"><ion-icon name="add"></ion-icon></button>								
 			</ion-card-header>
 			<ion-card-content>
-				<span *ngIf="userHasNoKeywords()">
-					Keywords are like #hashtags. Add some that describe you!
+				<span *ngIf="dreamHasNoKeywords()">
+					Keywords are like #hashtags. Add some that describe this Dream!
 				</span>
 				<span class="blockItem" *ngFor="let item of model.keywords" (press)="onIndividualKeywordPress(item)">
 					{{item.text}}

@@ -45,7 +45,7 @@ export class DreamPage {
 		return this.new;
 	}
 
-	userHasNoKeywords() {
+	dreamHasNoKeywords() {
 		return this.model["keywords"] === undefined || this.model["keywords"].length === 0;
 	}
 
@@ -58,7 +58,7 @@ export class DreamPage {
 	onSaveBtnTap(evt) {
 		let self = this;
 		self.callback(this.isDirty()).then(() => {
-			self._dreamService.save(self.model).then((newDream) => {
+			self._dreamService.save(self.model).then((newObj) => {
 				self.navCtrl.pop();
 			})
 		});
