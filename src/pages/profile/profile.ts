@@ -56,7 +56,7 @@ export class ProfilePage {
 	}
 
 	onKeywordBtnTap(item) { 
-		alert(item.text);
+
 	}
 
 	getAvailableIncomingRecommendations() {
