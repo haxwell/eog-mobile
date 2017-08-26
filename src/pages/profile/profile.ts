@@ -32,38 +32,27 @@ export class ProfilePage {
 			this.ngOnInit();
 	}
 
+	thingAndDreamCallback = (_params) => {
+		return new Promise((resolve, reject) => {
+			this.dirty = (_params === true);
+			resolve();
+		});
+	}
+
 	onNewThingBtnTap(evt) {
-		this.dirty = true;
-		this.navCtrl.push(ThingPage, { thing: undefined });
+		this.navCtrl.push(ThingPage, { thing: undefined, callback: this.thingAndDreamCallback });
 	}
 
 	onThingBtnTap(item) { 
-		let self = this;
-		this.navCtrl.push(ThingPage, { thing: item, callback: 
-			(_params) => {
-				return new Promise((resolve, reject) => {
-					self.dirty = (_params === true);
-					resolve();
-				});
-			}
- 		});
+		this.navCtrl.push(ThingPage, { thing: item, callback:  this.thingAndDreamCallback });
 	}
 
 	onNewDreamBtnTap(evt) {
-		this.dirty = true;
-		this.navCtrl.push(DreamPage, { dream: undefined });
+		this.navCtrl.push(DreamPage, { dream: undefined, callback: this.thingAndDreamCallback });
 	}
 
 	onDreamBtnTap(item) { 
-		let self = this;
-		this.navCtrl.push(DreamPage, { dream: item, callback: 
-			(_params) => {
-				return new Promise((resolve, reject) => {
-					self.dirty = (_params === true);
-					resolve();
-				});
-			}
- 		});
+		this.navCtrl.push(DreamPage, { dream: item, callback: this.thingAndDreamCallback });
 	}
 
 	onKeywordBtnTap(item) { 
