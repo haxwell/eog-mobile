@@ -51,11 +51,11 @@ export class ThingPage {
 	}
 
 	handleDescriptionChange() {
-		setDirty(true);
+		this.setDirty(true);
 	}
 
 	handleTitleChange() {
-		setDirty(true);
+		this.setDirty(true);
 	}
 
 	thingHasNoKeywords() {
