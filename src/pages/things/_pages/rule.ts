@@ -87,7 +87,10 @@ export class RulePage {
 	}
 
 	onSaveBtnTap(evt) {
-		this.viewCtrl.dismiss({pointsQuantity: this.pointsQuantity, requiredUsers: this.userList });
+		let arr = [];
+		this.userList.map((obj) => { arr.push({id: undefined, requiredRecommendUserId: obj["id"]}); });
+
+		this.viewCtrl.dismiss({requiredPointsQuantity: this.pointsQuantity, requiredUserRecommendations: arr });
 	}
 
 	onCancelBtnTap(evt) {

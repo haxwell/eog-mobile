@@ -9,11 +9,11 @@
 <ion-content padding>
 	<ion-row>
 		<ion-label fixed>Title: </ion-label>
-		<ion-input type="text" placeholder="Title" [(ngModel)]="model.title" #ctrl="ngModel" required></ion-input>		
+		<ion-input type="text" placeholder="Title" (ionChange)="handleTitleChange($event)" [(ngModel)]="model.title" #ctrl="ngModel" required></ion-input>		
 	</ion-row>
 	<ion-row>
 		<ion-label fixed>Description: </ion-label>
-		<ion-input type="text" placeholder="Description" [(ngModel)]="model.description" #ctrl="ngModel" required></ion-input>		
+		<ion-input type="text" placeholder="Description" (ionChange)="handleDescriptionChange($event)" [(ngModel)]="model.description" #ctrl="ngModel" required></ion-input>		
 	</ion-row>
 	<ion-row>
 		<ion-row>
@@ -23,7 +23,7 @@
 		<ion-row>
 		<ul>
 			<li *ngFor="let r of getRequiredUsers()">
-				Red'd User Id: {{r["id"]}}<br/>
+				Red'd User Id: {{r["requiredRecommendUserId"]}}<br/>
 			</li>
 			<li>
 				Req'd Points: {{getRequiredPointsQuantity()}}
@@ -33,16 +33,21 @@
 		</ion-row>
 	</ion-row>
 	<ion-row>
-		<ion-label fixed>Keywords: </ion-label>
-		<ion-input type="text" placeholder="Add a keyword" [(ngModel)]="newKeywordText" #ctrl="ngModel" required></ion-input>
-		<button ion-button (click)="onNewKeyword($event)">Add</button>
+		<ion-card>
+			<ion-card-header>
+				Keywords
+				<button ion-button icon-only small color="danger" (click)="onAddKeywordBtnTap($event)"><ion-icon name="add"></ion-icon></button>								
+			</ion-card-header>
+			<ion-card-content>
+				<span *ngIf="thingHasNoKeywords()">
+					Keywords are like #hashtags. Add some that describe this Thing!
+				</span>
+				<span class="blockItem" *ngFor="let item of model.keywords" (press)="onIndividualKeywordPress(item)">
+					{{item.text}}
+				</span>
+			</ion-card-content>
+		</ion-card>
 	</ion-row>
-	<ul>
-		<li *ngFor="let kw of model.keywords">
-			{{kw.text}}
-		</li>
-	</ul>
-
 	<ion-row>
 		<button ion-button (click)="onCancelBtnTap($event)">Cancel</button>
 		<button ion-button [hidden]="isNewObject()" color="danger" (click)="onDeleteBtnTap($event)">Delete</button>			

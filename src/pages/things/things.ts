@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
+
 import { NavController, NavParams } from 'ionic-angular';
 import { ModalController } from 'ionic-angular';
 
 import { RulePage } from './_pages/rule'
 import { DeleteThingPage } from './_pages/delete.thing'
-
+import { KeywordEntryPage } from '../keyword.entry/keyword.entry'
 import { ThingService } from './_services/thing.service'
 
 @Component({
@@ -16,25 +17,81 @@ export class ThingPage {
 
 	model = {};
 	callback = undefined;
-	isNew = false;	
-	newKeywordText = '';
+	new = false;
+	dirty = false;
+	newKeywords = [];
 
 	constructor(public navCtrl: NavController, 
 				navParams: NavParams, 
 				private modalCtrl: ModalController,
 				private _thingService: ThingService) {
-		this.model = navParams.get('thing');
-		this.callback = navParams.get('callback');
 
-		if (this.model === undefined) {
+		let tmp = navParams.get('thing');
+
+		if (tmp === undefined) {
 			this.model = this._thingService.getDefaultModel();
-			this.isNew = true;
+			this.new = true;
+		} else {
+			this.model = Object.assign({}, tmp);
 		}
+
+		this.callback = navParams.get('callback');		
 	}
 
-	onNewKeyword(evt) {
-		this.model["keywords"].push({"text": this.newKeywordText});
-		this.newKeywordText = '';
+	isDirty() {
+		return this.dirty;
+	}
+
+	setDirty(b) {
+		this.dirty = b;
+	}
+
+	isNewObject() {
+		return this.new;
+	}
+
+	handleDescriptionChange() {
+		setDirty(true);
+	}
+
+	handleTitleChange() {
+		setDirty(true);
+	}
+
+	thingHasNoKeywords() {
+		return this.model["keywords"] === undefined || this.model["keywords"].length === 0;
+	}
+
+	isSaveBtnEnabled() {
+		return this.isDirty() && 
+			(this.model["requiredPointsQuantity"] !== undefined && this.model["requiredPointsQuantity"] > 0) &&
+			this.model["keywords"].length > 0 &&
+			this.model["title"].length > 0 &&
+			this.model["description"].length > 0;
+	}
+
+	onSaveBtnTap(evt) {
+		let self = this;
+		self.callback(this.isDirty()).then(() => {
+			self._thingService.save(self.model).then((newObj) => {
+				self.navCtrl.pop();
+			})
+		});
+	}
+
+	onIndividualKeywordPress(item) {
+		this.model["keywords"] = this.model["keywords"].filter((obj) => {
+			return obj["text"] !== item["text"];
+		});
+
+		this.setDirty(true);
+	}
+
+	onAddKeywordBtnTap(evt) {
+		let self = this;
+		let modal = this.modalCtrl.create(KeywordEntryPage, {keywordModel: self.newKeywords});
+		modal.onDidDismiss((data: Array<Object>) => { data.map((obj) => { self.setDirty(true); self.model["keywords"].push({id: undefined, text: obj}); }) } );
+		modal.present();
 	}
 
 	onNewRuleBtnTap(evt) {
@@ -42,61 +99,12 @@ export class ThingPage {
 		
 		let self = this;
 		modal.onDidDismiss(data => {
-			self.model["rules"] = data; 
+			self.model["requiredPointsQuantity"] = data["requiredPointsQuantity"];
+			self.model["requiredUserRecommendations"] = data["requiredUserRecommendations"];
+			this.setDirty(true);
 		})
 		
 		modal.present();
-	}
-
-	getRequiredUsers() {
-		let rtn = undefined;
-
-		if (this.model["rules"])
-			rtn = this.model["rules"]["requiredUsers"];
-		else
-			rtn = this.model["requiredUserRecommendations"];
-
-		return rtn;
-	}
-
-	getRequiredPointsQuantity() {
-		let rtn = 0;
-
-		if (this.model["rules"])
-			rtn = this.model["rules"]["pointsQuantity"];
-		else
-			rtn = this.model["requiredPointsQuantity"];
-
-		return rtn;
-	}
-
-	isNewObject() {
-		return this.isNew;
-	}
-
-	isSaveBtnEnabled() {
-		let rulesCondition = false;
-
-		if (this.isNewObject)
-			rulesCondition = (this.model["requiredPointsQuantity"] !== undefined && this.model["requiredPointsQuantity"] > 0);
-		else
-			rulesCondition = (this.model["rules"] !== undefined);
-
-		return 	rulesCondition &&
-				this.model["keywords"].length > 0 &&
-				this.model["title"].length > 0 &&
-				this.model["description"].length > 0;
-	}
-
-	onSaveBtnTap(evt) {
-		this._thingService.save(this.model).then((newThing) => {
-			this.navCtrl.pop();
-		})
-	}
-
-	onCancelBtnTap(evt) {
-		// TODO: Check for changes before popping.
-		this.navCtrl.pop();
 	}
 
 	onDeleteBtnTap(evt) {
@@ -104,5 +112,18 @@ export class ThingPage {
 		let modal = this.modalCtrl.create(DeleteThingPage, {thing: this.model});
 		modal.onDidDismiss(data => { self.callback(data).then(() => { if (data === true) self.navCtrl.pop(); }) } );
 		modal.present();
+	}
+
+	onCancelBtnTap(evt) {
+		// TODO: Check for changes before popping.
+		this.navCtrl.pop();
+	}
+
+	getRequiredUsers() {
+		return this.model["requiredUserRecommendations"];
+	}
+
+	getRequiredPointsQuantity() {
+		return this.model["requiredPointsQuantity"];
 	}
 }
