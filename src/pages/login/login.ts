@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
-import { LocalStorageService } from 'angular-2-local-storage';
 
 import { HomePage } from '../home/home';
 import { CreateAccountPage } from './_pages/create.account'
@@ -16,8 +15,7 @@ export class LoginPage {
   user = {id:-1, name: 'eogadmin', password: 'password'};
   
   constructor(public navCtrl: NavController,
-              private _userService: UserService,
-              private _localStorageService: LocalStorageService) {
+              private _userService: UserService) {
 
   }
 
@@ -33,8 +31,8 @@ export class LoginPage {
       self.user["password"] = pw;
       self.user["name"] = un;
 
-      self._localStorageService.set('user', self.user);
-
+      this._userService.setCurrentUser(self.user);
+      
       this.navCtrl.push(HomePage);
     });
   }

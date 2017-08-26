@@ -72,4 +72,48 @@ export class ProfileService {
 
 		return model;
 	}
+
+	save(model) {
+		let tmp = {};
+
+		let user = this._userService.getCurrentUser();
+
+		tmp["profileId"] = model["id"];
+		tmp["userId"] = user["id"];
+		tmp["realname"] = model["realname"];
+		tmp["phone"] = model["phone"];
+		tmp["email"] = model["email"];
+		tmp["keywords"] = model["keywords"];
+
+		let data = this.JSON_to_URLEncoded(tmp, undefined, undefined);
+		console.log(data);
+
+		let self = this;
+		return new Promise((resolve, reject) => {
+			let url = environment.apiUrl + "/api/profiles";
+			self._apiService.post(url, data)
+			.subscribe((resp) => {
+				console.log(JSON.parse(resp["_body"]));
+
+				self._userService.getUser(user["id"], true).then((userObj) => {
+					userObj["password"] = user["password"];
+					self._userService.setCurrentUser(userObj);
+
+					resolve(JSON.parse(resp["_body"]));					
+				});
+			});
+		});
+	}
+
+	JSON_to_URLEncoded(element,key,list){
+  		var list = list || [];
+  		if(typeof(element)=='object'){
+    		for (var idx in element)
+      			this.JSON_to_URLEncoded(element[idx],key?key+'['+idx+']':idx,list);
+  		} else {
+    		list.push(key+'='+encodeURIComponent(element));
+  		}
+  		
+  		return list.join('&');
+	}
 }

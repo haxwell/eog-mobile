@@ -8,17 +8,28 @@
 
 <ion-content padding>
 	<ion-row>
-		<ion-label fixed>Name: </ion-label>
-		<ion-input type="text" placeholder="Name" [(ngModel)]="model.realname" #ctrl="ngModel" required></ion-input>		
+		<button ion-button (click)="onCancelBtnTap($event)">Cancel</button>
+		<button ion-button [disabled]="!isSaveBtnEnabled()" (click)="onSaveBtnTap($event)">Save</button>
 	</ion-row>
-	<ion-row>
-		<ion-label fixed>Email: </ion-label>
-		<ion-input type="text" placeholder="you@domain.com" [(ngModel)]="model.email" #ctrl="ngModel" required></ion-input>		
-	</ion-row>
-	<ion-row>
-		<ion-label fixed>Phone: </ion-label>
-		<ion-input type="text" placeholder="# " [(ngModel)]="model.phone" #ctrl="ngModel" required></ion-input>
-	</ion-row>
+	<ion-card>
+		<ion-card-header>
+			Contact Info
+		</ion-card-header>
+		<ion-card-content>
+			<ion-item>
+				<ion-label fixed>Name: </ion-label>
+				<ion-input type="text" placeholder="Name" (ionChange)="onNameChange()" [(ngModel)]="model.realname" #ctrl="ngModel" required></ion-input>		
+			</ion-item>
+			<ion-item>
+				<ion-label fixed>Email: </ion-label>
+				<ion-input type="text" placeholder="you@domain.com" (ionChange)="onEmailChange()" [(ngModel)]="model.email" #ctrl="ngModel" required></ion-input>		
+			</ion-item>
+			<ion-item>
+				<ion-label fixed>Phone: </ion-label>
+				<ion-input type="text" placeholder="# " (ionChange)="onPhoneChange()" [(ngModel)]="model.phone" #ctrl="ngModel" required></ion-input>
+			</ion-item>
+		</ion-card-content>
+	</ion-card>
 	<ion-row *ngIf="model.points">
 		<ion-card>
 			<ion-card-header>
@@ -87,17 +98,21 @@
 		<ion-card>
 			<ion-card-header>
 				Keywords
-				<button ion-button icon-only small color="danger" (click)="onNewThingBtnTap($event)"><ion-icon name="add"></ion-icon></button>								
+				<button ion-button icon-only small color="danger" (click)="onAddKeywordBtnTap($event)"><ion-icon name="add"></ion-icon></button>								
 			</ion-card-header>
 			<ion-card-content>
 				<span *ngIf="userHasNoKeywords()">
 					Keywords are like #hashtags. Add some to describe you!
 				</span>
-				<span class="blockItem" *ngFor="let item of model.keywords" (click)="onKeywordBtnTap(item)">
+				<span class="blockItem" *ngFor="let item of model.keywords" (press)="onIndividualKeywordPress(item)">
 					{{item.text}}
 				</span>
 			</ion-card-content>
 		</ion-card>
 	</ion-row>	
+	<ion-row>
+		<button ion-button (click)="onCancelBtnTap($event)">Cancel</button>
+		<button ion-button [disabled]="!isSaveBtnEnabled()" (click)="onSaveBtnTap($event)">Save</button>
+	</ion-row>
 
 </ion-content>

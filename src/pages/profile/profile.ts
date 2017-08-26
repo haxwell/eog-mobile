@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { NavController, ModalController } from 'ionic-angular';
 
 import { ProfileService } from './_services/profile.service'
 
 import { ThingPage } from '../things/things'
 import { DreamPage } from '../dreams/dreams'
+import { KeywordEntryPage } from '../keyword.entry/keyword.entry'
 
 @Component({
   selector: 'page-profile',
@@ -16,25 +17,25 @@ export class ProfilePage {
 	model = {};
 	dirty = true;
 
-	constructor(public navCtrl: NavController, private _profileService: ProfileService) {
+	constructor(public navCtrl: NavController, public modalCtrl: ModalController, private _profileService: ProfileService) {
 
 	}
 
 	ngOnInit() {
-		if (this.dirty)
+		if (this.isDirty())
 			this.model = this._profileService.getModel();
 
-		this.dirty = false;
+		this.setDirty(false);
 	}
 
 	ionViewWillEnter() {
-		if (this.dirty) 
+		if (this.isDirty()) 
 			this.ngOnInit();
 	}
 
 	thingAndDreamCallback = (_params) => {
 		return new Promise((resolve, reject) => {
-			this.dirty = (_params === true);
+			this.setDirty(_params === true);
 			resolve();
 		});
 	}
@@ -55,8 +56,47 @@ export class ProfilePage {
 		this.navCtrl.push(DreamPage, { dream: item, callback: this.thingAndDreamCallback });
 	}
 
-	onKeywordBtnTap(item) { 
+	onIndividualKeywordPress(item) {
+		this.model["keywords"] = this.model["keywords"].filter((obj) => {
+			return obj["text"] !== item["text"];
+		});
 
+		this.setDirty(true);
+	}
+
+	onAddKeywordBtnTap(evt) {
+		let self = this;
+		let modal = this.modalCtrl.create(KeywordEntryPage);
+		
+		modal.onDidDismiss((data: Array<Object>) => { 
+			data.map((obj) => {
+				self.setDirty(true);
+				self.model["keywords"].push({id: undefined, text: obj}); 
+			});
+			self.model["keywords"].sort((a, b) => { 
+				let aText = a.text.toLowerCase(); 
+				let bText = b.text.toLowerCase(); 
+				if (aText > bText) return 1; 
+				else if (aText < bText) return -1; 
+				else return 0; 
+			});
+		});
+		
+		modal.present();
+	}
+
+	onCancelBtnTap() {
+		this.navCtrl.pop();
+	}
+
+	onSaveBtnTap() {
+		this._profileService.save(this.model).then(() => {
+			this.navCtrl.pop();
+		})
+	}
+
+	isSaveBtnEnabled() {
+		return this.isDirty();
 	}
 
 	getAvailableIncomingRecommendations() {
@@ -83,5 +123,25 @@ export class ProfilePage {
 
 	userHasNoKeywords() {
 		return this.model["keywords"] === undefined || this.model["keywords"].length === 0;
+	}
+
+	onNameChange() {
+		this.setDirty(true);
+	}
+
+	onEmailChange() {
+		this.setDirty(true);
+	}
+
+	onPhoneChange() {
+		this.setDirty(true);
+	}
+
+	isDirty() {
+		return this.dirty;
+	}
+
+	setDirty(b) {
+		this.dirty = b;
 	}
 }

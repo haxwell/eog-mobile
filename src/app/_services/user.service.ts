@@ -13,11 +13,11 @@ export class UserService {
 
 	constructor(private _apiService: ApiService, private _localStorageService: LocalStorageService) { }
 
-	getUser(userId) {
+	getUser(userId, force?: boolean) {
 		let self = this;
 		let rtn = undefined;
 
-		if (self.users[userId] === undefined) {
+		if (self.users[userId] === undefined || force) {
 			self.users[userId] = null;
 			rtn = new Promise((resolve, reject) => {
 				let url = environment.apiUrl + "/api/users/" + userId;			
@@ -37,7 +37,11 @@ export class UserService {
 	}
 
 	getCurrentUser() {
-		return this._localStorageService.get('user');		
+		return this._localStorageService.get('user');
+	}
+
+	setCurrentUser(user) {
+		this._localStorageService.set('user', user);
 	}
 
 	verifyAndLoginUser(username, password) {
