@@ -3,6 +3,7 @@ import { NavController } from 'ionic-angular';
 import { ModalController } from 'ionic-angular';
 
 import { RequestPage } from './_pages/request'
+import { ThingPage } from '../things/things'
 
 import { SearchService } from '../../app/_services/search.service';
 import { PointsService } from '../../app/_services/points.service';
@@ -141,5 +142,38 @@ export class SearchPage {
 
 	areRecommendationsRequired(thing) {
 		return (thing["requiredUserRecommendations"] && thing["requiredUserRecommendations"].length > 0);
+	}
+
+	thingCallback = (_params) => {
+		return new Promise((resolve, reject) => {
+//			this.setDirty(_params === true);
+			resolve();
+		});
+	}
+
+	showThingDetail(_thing) {
+		let msgs = [];
+
+		if (this.userHasSufficientPointsGivenRulesCache[_thing["id"]] === true) {
+			msgs.push({type: 'go', msg: 'You have enough points to request this Thing.'});
+		} else {
+			msgs.push({type: 'stop', msg: 'You need more points in order to request this Thing.'});
+		}
+
+		if (this.userHasAlreadyRequestedThisThingCache[_thing["id"]] === false) {
+			msgs.push({type: 'go', msg: 'You have not yet requested this Thing.'});
+		} else {
+			msgs.push({type: 'stop', msg: 'You have already requested this Thing.'});
+		}
+
+		if (this.areRecommendationsRequired(_thing)) {
+			if (this.userHasNecessaryRecommendationsCache[_thing["id"]] === true) {
+				msgs.push({type: 'go', msg: 'You have enough recommendations to request this Thing.'});
+			} else {
+				msgs.push({type: 'stop', msg: 'You need additional recommendations in order to request this Thing.'});
+			}
+		}
+
+		this.navCtrl.push(ThingPage, { thing: _thing, readOnly: true, requestable: this.isRequestable(_thing), requestMsgs: msgs });
 	}
 }

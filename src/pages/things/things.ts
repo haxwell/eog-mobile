@@ -19,6 +19,9 @@ export class ThingPage {
 	callback = undefined;
 	new = false;
 	dirty = false;
+	readOnly = false;
+	requestMsgs = undefined;
+	requestable = false;
 	newKeywords = [];
 
 	constructor(public navCtrl: NavController, 
@@ -35,7 +38,14 @@ export class ThingPage {
 			this.model = Object.assign({}, tmp);
 		}
 
-		this.callback = navParams.get('callback');		
+		this.requestable = navParams.get('requestable') || false;
+		this.requestMsgs = navParams.get('requestMsgs') || undefined;
+		this.readOnly = navParams.get('readOnly') || false;
+		this.callback = navParams.get('callback') || function() { };
+	}
+
+	isReadOnly() {
+		return this.readOnly;
 	}
 
 	isDirty() {
@@ -50,6 +60,10 @@ export class ThingPage {
 		return this.new;
 	}
 
+	isDeleteBtnVisible() {
+		return !this.isNewObject() && !this.isReadOnly();
+	}
+
 	handleDescriptionChange() {
 		this.setDirty(true);
 	}
@@ -62,8 +76,28 @@ export class ThingPage {
 		return this.model["keywords"] === undefined || this.model["keywords"].length === 0;
 	}
 
+	isRequestMessageAvailable() {
+		return this.requestMsgs !== undefined;
+	}
+
+	getRequestMessages() {
+		return this.requestMsgs;
+	}
+
+	isRequestBtnVisible() {
+		return this.isReadOnly() && this.requestable;
+	}
+
+	onRequestBtnTap(evt) {
+
+	}	
+
+	isSaveBtnVisible() {
+		return !this.isReadOnly() && !this.isRequestBtnVisible();
+	}
+
 	isSaveBtnEnabled() {
-		return this.isDirty() && 
+		return !this.isReadOnly() && this.isDirty() && 
 			(this.model["requiredPointsQuantity"] !== undefined && this.model["requiredPointsQuantity"] > 0) &&
 			this.model["keywords"].length > 0 &&
 			this.model["title"].length > 0 &&
@@ -80,11 +114,13 @@ export class ThingPage {
 	}
 
 	onIndividualKeywordPress(item) {
-		this.model["keywords"] = this.model["keywords"].filter((obj) => {
-			return obj["text"] !== item["text"];
-		});
+		if (!this.isReadOnly()) {
+			this.model["keywords"] = this.model["keywords"].filter((obj) => {
+				return obj["text"] !== item["text"];
+			});
 
-		this.setDirty(true);
+			this.setDirty(true);
+		}
 	}
 
 	onAddKeywordBtnTap(evt) {

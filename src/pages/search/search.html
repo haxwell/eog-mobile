@@ -14,7 +14,7 @@
 		</button>
 	</ion-row>
 
-	<ion-card *ngFor="let item of resultList">
+	<ion-card *ngFor="let item of resultList" (click)="showThingDetail(item)">
 		<ion-card-header>
 			<ion-icon [ngStyle]="{'color':getAlreadyRequestedIconColor(item)}" name="megaphone"> </ion-icon>
 			<ion-icon [ngStyle]="{'color':getSufficientPointsIconColor(item)}" name="pricetag"></ion-icon>
