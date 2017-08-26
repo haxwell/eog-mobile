@@ -14,7 +14,7 @@ import { RecommendationService } from '../../app/_services/recommendation.servic
   templateUrl: 'search.html'
 })
 export class SearchPage {
-	searchString = '';
+	searchString = 'denv';
 	resultList = undefined;
 
 	requestsPromise = undefined;
@@ -96,5 +96,50 @@ export class SearchPage {
 		let modal = this.modalCtrl.create(RequestPage, {thing: item});
 		modal.onDidDismiss(data => { this.ngOnInit(); });
 		modal.present();
+	}
+
+	initRequirementsCache(thing) {
+		if (this.userHasNecessaryRecommendationsCache[thing["id"]] === undefined) {
+			this.userHasNecessaryRecommendationsCache[thing["id"]] = null;
+			this.setUserHasNecessaryRecommendations(thing);
+		}
+
+		if (this.userHasAlreadyRequestedThisThingCache[thing["id"]] === undefined) {
+			this.userHasAlreadyRequestedThisThingCache[thing["id"]] = null;
+			this.setUserHasAlreadyRequestedThisThing(thing);
+		}
+
+		if (this.userHasSufficientPointsGivenRulesCache[thing["id"]] === undefined) {
+			this.userHasSufficientPointsGivenRulesCache[thing["id"]] = null;
+			this.setUserHasSufficientPointsGivenRules(thing);
+		}
+	}
+
+	getNecessaryRecommendationsIconColor(thing) {
+		this.initRequirementsCache(thing);
+		if (this.userHasNecessaryRecommendationsCache[thing["id"]] === true)
+			return "green";
+		else
+			return "red";
+	}
+
+	getAlreadyRequestedIconColor(thing) {
+		this.initRequirementsCache(thing);
+		if (this.userHasAlreadyRequestedThisThingCache[thing["id"]] === false)
+			return "green";
+		else
+			return "red";
+	}
+
+	getSufficientPointsIconColor(thing) {
+		this.initRequirementsCache(thing);
+		if (this.userHasSufficientPointsGivenRulesCache[thing["id"]] === true)
+			return "green";
+		else
+			return "red";
+	}
+
+	areRecommendationsRequired(thing) {
+		return (thing["requiredUserRecommendations"] && thing["requiredUserRecommendations"].length > 0);
 	}
 }

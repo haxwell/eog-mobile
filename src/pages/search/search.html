@@ -14,18 +14,17 @@
 		</button>
 	</ion-row>
 
-	<ion-row>
-		<ul>
-			<li *ngFor="let item of resultList">
-				<button ion-button [id]="item.id" [disabled]="!isRequestable(item)" (click)="onRequestBtnTap($event, item)">Request</button>
-				{{item.title}}, {{item.description}}
-				<ul>
-					<li *ngFor="let kw of item.keywords">
-						{{kw.text}}
-					</li>
-				</ul>
-			</li>
-		</ul>
-	</ion-row>
+	<ion-card *ngFor="let item of resultList">
+		<ion-card-header>
+			<ion-icon [ngStyle]="{'color':getAlreadyRequestedIconColor(item)}" name="megaphone"> </ion-icon>
+			<ion-icon [ngStyle]="{'color':getSufficientPointsIconColor(item)}" name="pricetag"></ion-icon>
+			<ion-icon *ngIf="areRecommendationsRequired(item)" [ngStyle]="{'color':getNecessaryRecommendationsIconColor(item)}" name="people"></ion-icon>
+			<br/>
+			{{item.title}}
+		</ion-card-header>
+		<ion-card-content>
+			{{item.description}}
+		</ion-card-content>
+	</ion-card>
 
 </ion-content>
