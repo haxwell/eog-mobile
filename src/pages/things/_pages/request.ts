@@ -13,6 +13,7 @@ export class RequestPage {
 
 	thing = undefined;
 	dreams = undefined;
+	callback = undefined;
 	selectedDreamId: string = undefined;
 	
 	constructor(public navCtrl: NavController, 
@@ -21,6 +22,7 @@ export class RequestPage {
 				private _requestsService: RequestsService,
 				private _dreamService: DreamService) {
 		this.thing = params.get('thing');
+		this.callback = params.get('callback') || undefined;
 	}
 
 	ngOnInit() {
@@ -43,7 +45,10 @@ export class RequestPage {
 	onSaveBtnTap(evt) {
 		let dream = this.dreams.find((obj) => { return obj.id === this.selectedDreamId});
 		this._requestsService.saveNew(dream, this.thing).then((data) => {
-			this.viewCtrl.dismiss({ });
+			if (this.callback)
+				this.callback(true).then(() => {
+					this.viewCtrl.dismiss({ });
+				});
 		});
 	}
 

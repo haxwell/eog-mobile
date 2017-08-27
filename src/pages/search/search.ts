@@ -17,6 +17,7 @@ import { RecommendationService } from '../../app/_services/recommendation.servic
 export class SearchPage {
 	searchString = 'denv';
 	resultList = undefined;
+	dirty = false;
 
 	requestsPromise = undefined;
 
@@ -43,11 +44,27 @@ export class SearchPage {
 
 		this._recommendationService.init();
 		this._pointsService.init();
+
+		this.setDirty(false);
 	}
 
-	onSearchBtnTap(evt) {
+	ionViewWillEnter() {
+		if (this.isDirty()) 
+			this.ngOnInit();
+	}
+
+	isDirty() {
+		return this.dirty;
+	}
+
+	setDirty(b) {
+		this.dirty = b;
+	}
+
+	onSearchBtnTap(evt?) {
 		let self = this;
 		this._searchService.searchThings(this.searchString).then((data) => {
+			self.ngOnInit();
 			self.resultList = data;
 		});
 	}
@@ -141,7 +158,8 @@ export class SearchPage {
 
 	thingCallback = (_params) => {
 		return new Promise((resolve, reject) => {
-//			this.setDirty(_params === true);
+			//this.onSearchBtnTap();
+			this.setDirty(true);
 			resolve();
 		});
 	}
@@ -185,6 +203,6 @@ export class SearchPage {
 			}
 		}
 
-		this.navCtrl.push(ThingPage, { thing: _thing, readOnly: true, requestable: this.isRequestable(_thing), requestMsgs: _msgs  });
+		this.navCtrl.push(ThingPage, { thing: _thing, readOnly: true, callback: self.thingCallback, requestable: this.isRequestable(_thing), requestMsgs: _msgs  });
 	}
 }

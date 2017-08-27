@@ -129,8 +129,19 @@ export class ThingPage {
 		return this.isReadOnly() && this.requestable;
 	}
 
+	requestCallback = (_params) => {
+		return new Promise((resolve, reject) => {
+			if (this.callback !== undefined) 
+				this.callback(_params).then(() => {
+					resolve();
+				});
+			else
+				resolve();
+		});
+	}
+
 	onRequestBtnTap(evt) {
-		let modal = this.modalCtrl.create(RequestPage, {thing: this.model});
+		let modal = this.modalCtrl.create(RequestPage, {thing: this.model, callback: this.requestCallback});
 		modal.onDidDismiss(data => { this.navCtrl.pop(); });
 		modal.present();
 	}
