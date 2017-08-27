@@ -9,7 +9,8 @@
 <ion-content padding>
 	<ion-card *ngIf="getAcceptedRequests() !== undefined">
 		<ion-card-header>
-			Accepted
+			Accepted<br/>
+			<i>These requests are accepted, and in-progress.</i>
 		</ion-card-header>
 		<ion-card-content *ngFor="let item of getAcceptedRequests()">
 			<ion-item>
@@ -17,14 +18,15 @@
 				{{item.directionallyOppositeUser.realname}}
 				{{item.dream.title}}
 			</ion-item>
-				<button ion-button (click)="onViewContactInfoBtnTap(item)">View Contact Info</button>
+				<button ion-button (click)="onViewContactInfoBtnTap(item)">Contact Info</button>
 				<button ion-button (click)="onCompleteBtnTap(item)">Complete</button>
 				<button ion-button (click)="onCancelBtnTap(item)">Cancel</button>
 		</ion-card-content>
 	</ion-card>
 	<ion-card *ngIf="getPendingRequests() !== undefined">
 		<ion-card-header>
-			Pending
+			Pending<br/>
+			<i>We're still waiting to hear about these requests.</i>
 		</ion-card-header>
 		<ion-card-content *ngFor="let item of getPendingRequests()">
 			<ion-item>
@@ -37,7 +39,8 @@
 	</ion-card>
 	<ion-card *ngIf="getCompletedAwaitingApprovalRequests() !== undefined">
 		<ion-card-header>
-			Completed, Awaiting Your Approval
+			Completed, Awaiting Your Approval<br/>
+			<i>The people you made requests of have indicated these are done!</i>
 		</ion-card-header>
 		<ion-card-content *ngFor="let item of getCompletedAwaitingApprovalRequests()">
 			<ion-item>
@@ -52,7 +55,9 @@
 	</ion-card>
 	<ion-card *ngIf="getNotCompleteAwaitingResolution() !== undefined">
 		<ion-card-header>
-			Not Complete, Disputed, Awaiting Resolution
+			Not Complete, Disputed, Awaiting Resolution<br/>
+			<i>You've indicated you don't think these tasks are completed.</i>
+			<i>Please talk with the other user, and lets get these resolved!</i>
 		</ion-card-header>
 		<ion-card-content *ngFor="let item of getNotCompleteAwaitingResolution()">
 			<ion-item>
@@ -65,7 +70,8 @@
 	</ion-card>
 	<ion-card *ngIf="getCancelledRequests() !== undefined">
 		<ion-card-header>
-			Cancelled
+			Cancelled<br/>
+			<i>These are requests you have cancelled.</i>
 		</ion-card-header>
 		<ion-card-content *ngFor="let item of getCancelledRequests()">
 			<ion-item>
@@ -78,7 +84,8 @@
 	</ion-card>
 	<ion-card *ngIf="getDeclinedRequests() !== undefined">
 		<ion-card-header>
-			Declined
+			Declined<br/>
+			<i>These are requests the other user declined to do.</i>
 		</ion-card-header>
 		<ion-card-content *ngFor="let item of getDeclinedRequests()">
 			<ion-item>
