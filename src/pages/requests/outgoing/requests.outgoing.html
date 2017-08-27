@@ -26,7 +26,7 @@
 	<ion-card *ngIf="getPendingRequests() !== undefined">
 		<ion-card-header>
 			Pending<br/>
-			<i>We're still waiting to hear about these requests.</i>
+			<i>We're waiting for other users to respond to these requests.</i>
 		</ion-card-header>
 		<ion-card-content *ngFor="let item of getPendingRequests()">
 			<ion-item>
