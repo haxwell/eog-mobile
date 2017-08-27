@@ -17,7 +17,7 @@ import { SearchPage } from '../pages/search/search';
 import { SearchUsersPage } from '../pages/searchUsers/searchUsers';
 import { SendPointPage } from '../pages/searchUsers/_pages/send.point.page';
 import { SendRecommendPage } from '../pages/searchUsers/_pages/send.recommend.page';
-import { RequestPage } from '../pages/search/_pages/request';
+import { RequestPage } from '../pages/things/_pages/request';
 import { AcceptRequestPage } from '../pages/requests/incoming/_pages/accept.request';
 import { DeclineRequestPage } from '../pages/requests/incoming/_pages/decline.request';
 import { CancelRequestPage } from '../pages/requests/incoming/_pages/cancel.request';

@@ -1,0 +1,33 @@
+<ion-header>
+	<ion-navbar>
+		<ion-title>
+			Make a Request
+		</ion-title>
+	</ion-navbar>
+</ion-header>
+
+<ion-content padding>
+	<ion-label>You are about to request a User do their Thing for you.</ion-label>
+	<ion-label>{{thing.title}}</ion-label>
+	<br/>
+	<ion-label>This will require {{thing.requiredPointsQuantity}} points from you.</ion-label>
+	<ion-label *ngIf="getRequiredUserRecommendations()">This will require the following recommendations from you.</ion-label>
+	<ul>
+		<li *ngFor="let item of getRequiredUserRecommendations()">{{item.requiredRecommendUserId}}</li>
+	</ul>
+
+	<ion-row>
+		<ion-label>Which of your dreams do you want to associate with this request?</ion-label>
+	</ion-row>		
+	<ion-row>
+		<ion-select [(ngModel)]="selectedDreamId" >
+			<ion-option *ngFor="let dream of dreams" [value]="dream.id">{{dream.title}}</ion-option>
+		</ion-select>
+	</ion-row>		
+
+	<ion-row>
+		<button ion-button (click)="onCancelBtnTap($event)">Cancel</button>
+		<button ion-button [disabled]="!isSaveBtnEnabled()" (click)="onSaveBtnTap($event)">Save</button>
+	</ion-row>
+
+</ion-content>
