@@ -7,52 +7,72 @@
 </ion-header>
 
 <ion-content padding>
-	<ion-row *ngIf="getAcceptedRequests() !== undefined">
-		Accepted<br/>
-		<ul>
-			<li *ngFor="let item of getAcceptedRequests()">
-				For user {{item.directionallyOppositeUser.realname}}, you agreed to do your thing {{item.thing.title}} for their dream {{item.dream.title}}. 
-				<button ion-button (click)="onViewContactInfoBtnTap(item)">View {{item.directionallyOppositeUser.realname}}'s Contact Info</button>
+	<ion-card *ngIf="getAcceptedRequests() !== undefined">
+		<ion-card-header>
+			Accepted
+		</ion-card-header>
+		<ion-card-content *ngFor="let item of getAcceptedRequests()">
+			<ion-item>
+				{{item.thing.title}}
+				{{item.directionallyOppositeUser.realname}}
+				{{item.dream.title}}
+			</ion-item>
+				<button ion-button (click)="onViewContactInfoBtnTap(item)">Contact Info</button>
 				<button ion-button (click)="onCompleteBtnTap(item)">Complete</button>
 				<button ion-button (click)="onUnableToCompleteBtnTap(item)">Cancel</button>
-			</li>
-		</ul>
-	</ion-row>
-	<ion-row *ngIf="getCompletedPendingApprovalRequests() !== undefined">
-		Completed Pending Requestor Approval<br/>
-		<ul>
-			<li *ngFor="let item of getCompletedPendingApprovalRequests()">
-				You have indicated you did your thing '{{item.thing.title}}' for User {{item.directionallyOppositeUser.realname}}. We're waiting for their approval.
-				<button ion-button (click)="onViewContactInfoBtnTap(item)">View {{item.directionallyOppositeUser.realname}}'s Contact Info</button>
-			</li>
-		</ul>
-	</ion-row>
-	<ion-row *ngIf="getDisputedCompletedRequests() !== undefined">
-		Disputed, Requestor Marked Not Complete<br/>
-		<ul>
-			<li *ngFor="let item of getDisputedCompletedRequests()">
-				User {{item.directionallyOppositeUser.realname}} has indicated they do not agree that you did your thing '{{item.thing.title}}' for them. Please talk with them, and resolve the situation.
-				<button ion-button (click)="onViewContactInfoBtnTap(item)">View {{item.directionallyOppositeUser.realname}}'s Contact Info</button>
-				<button ion-button (click)="onSecondCompleteBtnTap(item)">Complete</button>
-			</li>
-		</ul>
-	</ion-row>	
-	<ion-row *ngIf="getPendingRequests() !== undefined">
-		Pending<br/>
-		<ul>
-			<li *ngFor="let item of getPendingRequests()">
-				User {{item.directionallyOppositeUser.realname}}, requested you do your thing {{item.thing.title}} for their dream {{item.dream.title}}. 
+		</ion-card-content>
+	</ion-card>
+	<ion-card *ngIf="getCompletedPendingApprovalRequests() !== undefined">
+		<ion-card-header>
+			Completed Pending Requestor Approval
+		</ion-card-header>
+		<ion-card-content *ngFor="let item of getCompletedPendingApprovalRequests()">
+			<ion-item>
+				{{item.thing.title}}
+				{{item.directionallyOppositeUser.realname}}
+				{{item.dream.title}}
+			</ion-item>
+				<button ion-button (click)="onViewContactInfoBtnTap(item)">Contact Info</button>
+		</ion-card-content>
+	</ion-card>
+	<ion-card *ngIf="getDisputedCompletedRequests() !== undefined">
+		<ion-card-header>
+			Disputed, Requestor Marked Not Complete
+		</ion-card-header>
+		<ion-card-content *ngFor="let item of getDisputedCompletedRequests()">
+			<ion-item>
+				{{item.thing.title}}
+				{{item.directionallyOppositeUser.realname}}
+				{{item.dream.title}}
+			</ion-item>
+				<button ion-button (click)="onViewContactInfoBtnTap(item)">Contact Info</button>
+				<button ion-button (click)="onCompleteBtnTap(item)">Complete</button>
+		</ion-card-content>
+	</ion-card>
+	<ion-card *ngIf="getPendingRequests() !== undefined">
+		<ion-card-header>
+			Pending
+		</ion-card-header>
+		<ion-card-content *ngFor="let item of getPendingRequests()">
+			<ion-item>
+				{{item.thing.title}}
+				{{item.directionallyOppositeUser.realname}}
+				{{item.dream.title}}
+			</ion-item>
 				<button ion-button (click)="onAcceptBtnTap(item)">Accept</button>
 				<button ion-button (click)="onDeclineBtnTap(item)">Decline</button>
-			</li>
-		</ul>
-	</ion-row>
-	<ion-row *ngIf="getDeclinedRequests() !== undefined">
-		Declined<br/>
-		<ul>
-			<li *ngFor="let item of getDeclinedRequests()">
-				You declined to do your thing {{item.thing.title}} for User {{item.directionallyOppositeUser.realname}}, dashing their dream {{item.dream.title}}.
-			</li>
-		</ul>
-	</ion-row>	
+		</ion-card-content>
+	</ion-card>
+	<ion-card *ngIf="getDeclinedRequests() !== undefined">
+		<ion-card-header>
+			Declined
+		</ion-card-header>
+		<ion-card-content *ngFor="let item of getDeclinedRequests()">
+			<ion-item>
+				{{item.thing.title}}
+				{{item.directionallyOppositeUser.realname}}
+				{{item.dream.title}}
+			</ion-item>
+		</ion-card-content>
+	</ion-card>
 </ion-content>
