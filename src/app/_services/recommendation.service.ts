@@ -39,7 +39,7 @@ export class RecommendationService {
 		return this.initPromise;
 	}
 
-	getUserHasNecessaryRecommendations(thing) {
+	getUserHasNecessaryRecommendations(thing, request?) {
 		let self = this;
 
 		return new Promise((resolve, reject) => {
@@ -47,7 +47,7 @@ export class RecommendationService {
 				let count = 0;
 
 				thing["requiredUserRecommendations"].map((obj) => {
-					if (self.recommendationsIncoming.some((obj2) => { return obj2["providingUserId"] === obj["requiredRecommendUserId"]; }))
+					if (self.recommendationsIncoming.some((obj2) => { return obj2["escrowedRequestId"] === null && obj2["providingUserId"] === obj["requiredRecommendUserId"]; }))
 						count++;
 				});
 
