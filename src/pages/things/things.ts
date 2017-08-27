@@ -205,7 +205,7 @@ export class ThingPage {
 		return this.model["requiredPointsQuantity"];
 	}
 
-	getName(req) {
-		return req["realname"];
+	areRecommendationsRequired(thing) {
+		return (this.model["requiredUserRecommendations"] && this.model["requiredUserRecommendations"].length > 0);
 	}
 }

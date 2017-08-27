@@ -41,10 +41,12 @@
 				Rules
 				<button ion-button icon-only small color="danger" [hidden]="isReadOnly()" (click)="onNewThingBtnTap($event)"><ion-icon name="add"></ion-icon></button><br/>
 				<i>Required Points:  </i> {{getRequiredPointsQuantity()}}<br/>
-				<i>Required Recommendations:</i><br/>
-				<span *ngFor="let realname of getRequiredUsers()">
-					{{realname}}<br/>
-				</span>
+				<div *ngIf="areRecommendationsRequired()">
+					<i>Required Recommendations:</i><br/>
+					<span *ngFor="let realname of getRequiredUsers()">
+						{{realname}}<br/>
+					</span>
+				</div>
 			</ion-item>
 		</ion-card-content>
 	</ion-card>
