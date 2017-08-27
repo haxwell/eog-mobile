@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { NavController, ModalController } from 'ionic-angular';
 
 import { ProfileService } from './_services/profile.service'
+import { NotificationService } from './_services/notification.service'
 
 import { ThingPage } from '../things/things'
 import { DreamPage } from '../dreams/dreams'
@@ -17,8 +18,12 @@ export class ProfilePage {
 	model = {};
 	dirty = true;
 
-	constructor(public navCtrl: NavController, public modalCtrl: ModalController, private _profileService: ProfileService) {
+	constructor(public navCtrl: NavController,
+				public modalCtrl: ModalController,
+				private _profileService: ProfileService,
+				private _notificationService: NotificationService) {
 
+				this._profileService.init();
 	}
 
 	ngOnInit() {
@@ -123,6 +128,18 @@ export class ProfilePage {
 
 	userHasNoKeywords() {
 		return this.model["keywords"] === undefined || this.model["keywords"].length === 0;
+	}
+
+	userHasNoNotifications() { 
+		return this.model["notifications"] === undefined || this.model["notifications"].length ==0;
+	}
+
+	onNotificationPress(item) {
+		this._notificationService.delete(item).then(() => {
+			this.model["notifications"] = this.model["notifications"].filter((obj) => {
+				return obj["id"] !== item["id"];
+			});
+		});
 	}
 
 	onNameChange() {

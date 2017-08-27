@@ -111,6 +111,21 @@
 		</ion-card>
 	</ion-row>	
 	<ion-row>
+		<ion-card>
+			<ion-card-header>
+				Notifications
+			</ion-card-header>
+			<ion-card-content>
+				<span *ngIf="userHasNoNotifications()">
+					No notifications.. go make something happen!
+				</span>
+				<span *ngFor="let item of model.notifications" (press)="onNotificationPress(item)">
+					{{item.message}}<br/>
+				</span>
+			</ion-card-content>
+		</ion-card>
+	</ion-row>	
+	<ion-row>
 		<button ion-button (click)="onCancelBtnTap($event)">Cancel</button>
 		<button ion-button [disabled]="!isSaveBtnEnabled()" (click)="onSaveBtnTap($event)">Save</button>
 	</ion-row>

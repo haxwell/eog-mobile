@@ -4,6 +4,7 @@ import { UserService } from '../../../app/_services/user.service';
 import { ApiService } from '../../../app/_services/api.service';
 import { PointsService } from '../../../app/_services/points.service';
 import { RecommendationService } from '../../../app/_services/recommendation.service';
+import { NotificationService } from './notification.service'
 
 import { environment } from '../../../_environments/environment';
 
@@ -13,9 +14,15 @@ export class ProfileService {
 	constructor(private _apiService: ApiService, 
 				private _userService: UserService, 
 				private _pointsService: PointsService,
-				private _recommendationService: RecommendationService) { 
+				private _recommendationService: RecommendationService,
+				private _notificationService: NotificationService) { 
 
 				}
+	init() {
+		this._recommendationService.init();
+		this._pointsService.init();
+		this._notificationService.init();
+	}
 
 	getModel() {
 		let self = this;
@@ -68,6 +75,10 @@ export class ProfileService {
 
 		this._recommendationService.getOutgoingRecommendations().then((obj) => {
 			model["outgoingRecommendations"] = obj;
+		});
+
+		this._notificationService.get().then((obj) => {
+			model["notifications"] = obj;
 		});
 
 		return model;

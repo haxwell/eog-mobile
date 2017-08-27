@@ -44,6 +44,7 @@ import { PointsService } from './_services/points.service';
 import { RecommendationService } from './_services/recommendation.service';
 import { RequestsService } from './_services/requests.service';
 import { ProfileService } from '../pages/profile/_services/profile.service';
+import { NotificationService } from '../pages/profile/_services/notification.service';
 import { ThingService } from '../pages/things/_services/thing.service';
 
 
@@ -130,6 +131,7 @@ import { ThingService } from '../pages/things/_services/thing.service';
     ProfileService,
     RequestsService,
     RecommendationService,
+    NotificationService,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })
