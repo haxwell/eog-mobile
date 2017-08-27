@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
-import { ModalController } from 'ionic-angular';
 
 import { ThingPage } from '../things/things'
 
@@ -27,7 +26,6 @@ export class SearchPage {
 
 	constructor(public navCtrl: NavController, 
 				private _searchService: SearchService,
-				private modalCtrl: ModalController,
 				private _pointsService: PointsService,
 				private _requestsService: RequestsService,
 				private _userService: UserService,
@@ -191,9 +189,9 @@ export class SearchPage {
 							}
 						}
 
-						for (var x=0; x < tmpReqdRecs.length; x++) {
-							if (tmpReqdRecs[x] !== undefined) {
-								self._userService.getUser(tmpReqdRecs[x]["requiredRecommendUserId"]).then((user) => {
+						for (var z=0; z < tmpReqdRecs.length; z++) {
+							if (tmpReqdRecs[z] !== undefined) {
+								self._userService.getUser(tmpReqdRecs[z]["requiredRecommendUserId"]).then((user) => {
 									_msgs.push({ type: 'reqd', msg: user["realname"] });
 								});
 							}
