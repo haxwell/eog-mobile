@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { ModalController } from 'ionic-angular';
 
-import { RequestPage } from './_pages/request'
 import { ThingPage } from '../things/things'
 
 import { SearchService } from '../../app/_services/search.service';
@@ -93,12 +92,6 @@ export class SearchPage {
 		return 	(this.userHasNecessaryRecommendationsCache[thing["id"]] === true) &&
 				!(this.userHasAlreadyRequestedThisThingCache[thing["id"]] === true) &&
 				(this.userHasSufficientPointsGivenRulesCache[thing["id"]] === true);
-	}
-
-	onRequestBtnTap(evt, item) {
-		let modal = this.modalCtrl.create(RequestPage, {thing: item});
-		modal.onDidDismiss(data => { this.ngOnInit(); });
-		modal.present();
 	}
 
 	initRequirementsCache(thing) {

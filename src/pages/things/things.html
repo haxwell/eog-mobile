@@ -39,12 +39,12 @@
 			</ion-item>
 			<ion-item>
 				Rules
-				<button ion-button icon-only small color="danger" [hidden]="isReadOnly()" (click)="onNewThingBtnTap($event)"><ion-icon name="add"></ion-icon></button><br/>
+				<button ion-button icon-only small color="danger" [hidden]="isReadOnly()" (click)="onNewRuleBtnTap($event)"><ion-icon name="add"></ion-icon></button><br/>
 				<i>Required Points:  </i> {{getRequiredPointsQuantity()}}<br/>
 				<div *ngIf="areRecommendationsRequired()">
 					<i>Required Recommendations:</i><br/>
-					<span *ngFor="let realname of getRequiredUsers()">
-						{{realname}}<br/>
+					<span *ngFor="let user of getRequiredUsers()">
+						{{user.realname}}<br/>
 					</span>
 				</div>
 			</ion-item>

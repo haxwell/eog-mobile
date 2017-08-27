@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { ModalController } from 'ionic-angular';
 
+import { RequestPage } from './_pages/request'
 import { RulePage } from './_pages/rule'
 import { DeleteThingPage } from './_pages/delete.thing'
 import { KeywordEntryPage } from '../keyword.entry/keyword.entry'
@@ -44,6 +45,20 @@ export class ThingPage {
 		this.requestMsgs = navParams.get('requestMsgs') || undefined;
 		this.readOnly = navParams.get('readOnly') || false;
 		this.callback = navParams.get('callback') || function() { };
+	}
+
+	ngOnInit() {
+		let self = this;
+		let arr = [];
+		this.model["requiredUserRecommendations"].map((obj) => {
+			if (!obj.hasOwnProperty("roles")) {
+				self._userService.getUser(obj["requiredRecommendUserId"]).then((user) => {
+					arr.push(user);
+				});
+			}
+		});
+
+		this.model["requiredUserRecommendations"] = arr;
 	}
 
 	isReadOnly() {
@@ -115,8 +130,10 @@ export class ThingPage {
 	}
 
 	onRequestBtnTap(evt) {
-
-	}	
+		let modal = this.modalCtrl.create(RequestPage, {thing: this.model});
+		modal.onDidDismiss(data => { this.navCtrl.pop(); });
+		modal.present();
+	}
 
 	isSaveBtnVisible() {
 		return !this.isReadOnly() && !this.isRequestBtnVisible();
@@ -157,9 +174,9 @@ export class ThingPage {
 	}
 
 	onNewRuleBtnTap(evt) {
-		let modal = this.modalCtrl.create(RulePage);
-		
 		let self = this;
+		let modal = this.modalCtrl.create(RulePage, {requiredPointsQuantity: self.model["requiredPointsQuantity"], requiredUserRecommendations: self.model["requiredUserRecommendations"]});
+		
 		modal.onDidDismiss(data => {
 			self.model["requiredPointsQuantity"] = data["requiredPointsQuantity"];
 			self.model["requiredUserRecommendations"] = data["requiredUserRecommendations"];
@@ -181,24 +198,8 @@ export class ThingPage {
 		this.navCtrl.pop();
 	}
 
-	requiredUsersList = undefined;
-	setRequiredUsersList() {
-		let self = this;
-		self.requiredUsersList = [];
-		self.model["requiredUserRecommendations"].map((obj) => {
-			self._userService.getUser(obj["requiredRecommendUserId"]).then((user) => {
-				self.requiredUsersList.push(user["realname"]);
-			});
-		});
-	}
-
 	getRequiredUsers() {
-		if (this.requiredUsersList === undefined) {
-			this.requiredUsersList = null;
-			this.setRequiredUsersList();
-		}
-
-		return this.requiredUsersList;
+		return this.model["requiredUserRecommendations"]; 
 	}
 
 	getRequiredPointsQuantity() {
