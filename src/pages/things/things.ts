@@ -7,6 +7,7 @@ import { RulePage } from './_pages/rule'
 import { DeleteThingPage } from './_pages/delete.thing'
 import { KeywordEntryPage } from '../keyword.entry/keyword.entry'
 import { ThingService } from './_services/thing.service'
+import { UserService } from '../../app/_services/user.service'
 
 @Component({
   selector: 'page-thing-detail',
@@ -27,7 +28,8 @@ export class ThingPage {
 	constructor(public navCtrl: NavController, 
 				navParams: NavParams, 
 				private modalCtrl: ModalController,
-				private _thingService: ThingService) {
+				private _thingService: ThingService,
+				private _userService: UserService) {
 
 		let tmp = navParams.get('thing');
 
@@ -80,8 +82,32 @@ export class ThingPage {
 		return this.requestMsgs !== undefined;
 	}
 
+	isAlreadyRequestedMessageAvailable() {
+		return this.requestMsgs !== undefined && this.requestMsgs.some((obj) => { return obj["type"] === "alreadyRequested"});
+	}
+
+	isPointsRequestMessageAvailable() {
+		return this.requestMsgs !== undefined && this.requestMsgs.some((obj) => { return obj["type"] === "points"});
+	}
+
+	isRecommendationsRequestMessageAvailable() {
+		return this.requestMsgs !== undefined && this.requestMsgs.some((obj) => { return obj["type"] === "reqd"});
+	}
+
 	getRequestMessages() {
 		return this.requestMsgs;
+	}
+
+	getAlreadyRequestedRequestMessages() {
+		return this.requestMsgs.filter((obj) => { return obj["type"] === "alreadyRequested"});
+	}
+
+	getPointsRequestMessages() {
+		return this.requestMsgs.filter((obj) => { return obj["type"] === "points"});
+	}
+
+	getRecommendationsRequestMessages() {
+		return this.requestMsgs.filter((obj) => { return obj["type"] === "reqd"});
 	}
 
 	isRequestBtnVisible() {
@@ -155,11 +181,31 @@ export class ThingPage {
 		this.navCtrl.pop();
 	}
 
+	requiredUsersList = undefined;
+	setRequiredUsersList() {
+		let self = this;
+		self.requiredUsersList = [];
+		self.model["requiredUserRecommendations"].map((obj) => {
+			self._userService.getUser(obj["requiredRecommendUserId"]).then((user) => {
+				self.requiredUsersList.push(user["realname"]);
+			});
+		});
+	}
+
 	getRequiredUsers() {
-		return this.model["requiredUserRecommendations"];
+		if (this.requiredUsersList === undefined) {
+			this.requiredUsersList = null;
+			this.setRequiredUsersList();
+		}
+
+		return this.requiredUsersList;
 	}
 
 	getRequiredPointsQuantity() {
 		return this.model["requiredPointsQuantity"];
+	}
+
+	getName(req) {
+		return req["realname"];
 	}
 }

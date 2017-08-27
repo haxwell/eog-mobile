@@ -8,33 +8,43 @@
 
 <ion-content padding>
 	<ion-card *ngIf="isRequestMessageAvailable()">
-		<ion-card-content>
-			<ion-item *ngFor="let item of getRequestMessages()">
-			{{item.type}} - {{item.msg}}
+		<ion-card-content *ngIf="isAlreadyRequestedMessageAvailable()">
+			<ion-item *ngFor="let item of getAlreadyRequestedRequestMessages()" [ngStyle]="{'color':'red'}">
+				{{item.msg}}
 			</ion-item>
+		</ion-card-content>	
+		<ion-card-content *ngIf="isPointsRequestMessageAvailable()">
+			<span *ngFor="let item of getPointsRequestMessages()" [ngStyle]="{'color':'red'}">
+				You need {{item.msg}}.
+			</span>
+		</ion-card-content>	
+		<ion-card-content *ngIf="isRecommendationsRequestMessageAvailable()">
+			You need recommendations from:
+			<ul>
+				<li *ngFor="let item of getRecommendationsRequestMessages()" [ngStyle]="{'color':'red'}">
+					{{item.msg}}
+				</li>
+			</ul>
 		</ion-card-content>	
 	</ion-card>
 	<ion-card>
 		<ion-card-content>
 			<ion-item>
-				<ion-label fixed>Title: </ion-label>
-				<ion-input type="text" placeholder="Title" [disabled]="isReadOnly()" (ionChange)="handleTitleChange($event)" [(ngModel)]="model.title" #ctrl="ngModel" required></ion-input>		
+				Title: 
+				<ion-input type="text" placeholder="Title" [disabled]="isReadOnly()" (ionChange)="handleTitleChange($event)" [(ngModel)]="model.title" #ctrl="ngModel" required></ion-input>
 			</ion-item>
 			<ion-item>
-				<ion-label fixed>Description: </ion-label>
-				<ion-input type="text" placeholder="Description" [disabled]="isReadOnly()" (ionChange)="handleDescriptionChange($event)" [(ngModel)]="model.description" #ctrl="ngModel" required></ion-input>		
+				Description: 
+				<ion-input type="text" placeholder="Description" [disabled]="isReadOnly()" (ionChange)="handleDescriptionChange($event)" [(ngModel)]="model.description" #ctrl="ngModel" required></ion-input>
 			</ion-item>
 			<ion-item>
-				<ion-label fixed>Rules: </ion-label>
-				<button *ngIf="!isReadOnly()" ion-button (click)="onNewRuleBtnTap($event)">Add</button>		
-				<ul>
-					<li *ngFor="let r of getRequiredUsers()">
-						Red'd User Id: {{r["requiredRecommendUserId"]}}<br/>
-					</li>
-					<li>
-						Req'd Points: {{getRequiredPointsQuantity()}}
-					</li>
-				</ul>
+				Rules
+				<button ion-button icon-only small color="danger" [hidden]="isReadOnly()" (click)="onNewThingBtnTap($event)"><ion-icon name="add"></ion-icon></button><br/>
+				<i>Required Points:  </i> {{getRequiredPointsQuantity()}}<br/>
+				<i>Required Recommendations:</i><br/>
+				<span *ngFor="let realname of getRequiredUsers()">
+					{{realname}}<br/>
+				</span>
 			</ion-item>
 		</ion-card-content>
 	</ion-card>

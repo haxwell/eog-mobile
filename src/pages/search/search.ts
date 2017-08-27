@@ -8,6 +8,7 @@ import { ThingPage } from '../things/things'
 import { SearchService } from '../../app/_services/search.service';
 import { PointsService } from '../../app/_services/points.service';
 import { RequestsService } from '../../app/_services/requests.service';
+import { UserService } from '../../app/_services/user.service';
 import { RecommendationService } from '../../app/_services/recommendation.service';
 
 @Component({
@@ -29,6 +30,7 @@ export class SearchPage {
 				private modalCtrl: ModalController,
 				private _pointsService: PointsService,
 				private _requestsService: RequestsService,
+				private _userService: UserService,
 				private _recommendationService: RecommendationService) {
 
 	}
@@ -152,28 +154,44 @@ export class SearchPage {
 	}
 
 	showThingDetail(_thing) {
-		let msgs = [];
+		let _msgs = [];
 
-		if (this.userHasSufficientPointsGivenRulesCache[_thing["id"]] === true) {
-			msgs.push({type: 'go', msg: 'You have enough points to request this Thing.'});
+		let self = this;
+		if (this.userHasAlreadyRequestedThisThingCache[_thing["id"]] === true) {
+			_msgs.push({type: 'alreadyRequested', msg: 'You have already requested this Thing.'});
 		} else {
-			msgs.push({type: 'stop', msg: 'You need more points in order to request this Thing.'});
-		}
+			if (this.userHasSufficientPointsGivenRulesCache[_thing["id"]] === false) {
+				this._pointsService.getCurrentAvailableUserPoints().then((data) => {
+					_msgs.push({type: 'points', msg: (_thing["requiredPointsQuantity"] - data) + ' more points'});
+				});
+			}
 
-		if (this.userHasAlreadyRequestedThisThingCache[_thing["id"]] === false) {
-			msgs.push({type: 'go', msg: 'You have not yet requested this Thing.'});
-		} else {
-			msgs.push({type: 'stop', msg: 'You have already requested this Thing.'});
-		}
+			if (this.areRecommendationsRequired(_thing)) {
+				if (this.userHasNecessaryRecommendationsCache[_thing["id"]] === false) {
+					let tmpReqdRecs = _thing["requiredUserRecommendations"].slice();
+					self._recommendationService.getIncomingRecommendations().then((list: Array<Object>) => {
 
-		if (this.areRecommendationsRequired(_thing)) {
-			if (this.userHasNecessaryRecommendationsCache[_thing["id"]] === true) {
-				msgs.push({type: 'go', msg: 'You have enough recommendations to request this Thing.'});
-			} else {
-				msgs.push({type: 'stop', msg: 'You need additional recommendations in order to request this Thing.'});
+						// inefficient O(n2) algorithm.. but the lists should 
+						// be relatively short, so it kinda (kinda) okay.
+						for (var y=0; y < list.length; y++) {
+							for (var x=0; x < tmpReqdRecs.length; x++) {
+								if (tmpReqdRecs[x]["requiredRecommendUserId"] === list[y]["providingUserId"])
+									tmpReqdRecs[x] = undefined;
+							}
+						}
+
+						for (var x=0; x < tmpReqdRecs.length; x++) {
+							if (tmpReqdRecs[x] !== undefined) {
+								self._userService.getUser(tmpReqdRecs[x]["requiredRecommendUserId"]).then((user) => {
+									_msgs.push({ type: 'reqd', msg: user["realname"] });
+								});
+							}
+						}
+					});
+				}
 			}
 		}
 
-		this.navCtrl.push(ThingPage, { thing: _thing, readOnly: true, requestable: this.isRequestable(_thing), requestMsgs: msgs });
+		this.navCtrl.push(ThingPage, { thing: _thing, readOnly: true, requestable: this.isRequestable(_thing), requestMsgs: _msgs  });
 	}
 }
