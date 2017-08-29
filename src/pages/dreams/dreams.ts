@@ -24,13 +24,14 @@ export class DreamPage {
 				navParams: NavParams,
 				private modalCtrl: ModalController,
 				private _dreamService: DreamService) {
-		this.model = Object.assign({}, navParams.get('dream'));
-		this.callback = navParams.get('callback');
-
-		if (this.model === undefined) {
+		let tmp = navParams.get('dream')
+		if (tmp === undefined) {
+			this.new = true;
 			this.model = this._dreamService.getDefaultModel();
-			this.setDirty(true);
-		}
+		} else 
+		 	this.model = Object.assign({}, tmp);
+
+		this.callback = navParams.get('callback');
 	}
 
 	isDirty() {
@@ -75,7 +76,12 @@ export class DreamPage {
 	onAddKeywordBtnTap(evt) {
 		let self = this;
 		let modal = this.modalCtrl.create(KeywordEntryPage, {keywordModel: self.newKeywords});
-		modal.onDidDismiss((data: Array<Object>) => { data.map((obj) => { self.setDirty(true); self.model["keywords"].push({id: undefined, text: obj}); }) } );
+		modal.onDidDismiss((data: Array<Object>) => { 
+			data.map((obj) => { 
+				self.setDirty(true); 
+				self.model["keywords"].push({id: undefined, text: obj}); 
+			})
+		});
 		modal.present();
 	}
 
