@@ -5,19 +5,12 @@ import { ApiService } from './api.service';
 
 import { environment } from '../../_environments/environment';
 
+import { Constants } from '../../_constants/constants'
+
 @Injectable()
 export class RequestsService {
 	
-	REQUEST_STATUS_DECLINED = 2;	
-	REQUEST_STATUS_ACCEPTED = 3;
-	REQUEST_STATUS_COMPLETED = 4;
-	REQUEST_STATUS_CANCELLED = 5;	
-	REQUEST_STATUS_NOT_COMPLETED = 6;		
-
-	INCOMING = "incoming";
-	OUTGOING = "outgoing";
-
-	constructor(private _apiService: ApiService, private _userService: UserService) { }
+	constructor(private _apiService: ApiService, private _userService: UserService, private _constants: Constants) { }
 
 	getModel(direction) {
 		return new Promise((resolve, reject) => {
@@ -32,11 +25,11 @@ export class RequestsService {
 	}
 
 	getModelForIncoming() {
-		return (this.getModel(this.INCOMING));
+		return (this.getModel(this._constants.INCOMING));
 	}
 
 	getModelForOutgoing() {
-		return (this.getModel(this.OUTGOING));
+		return (this.getModel(this._constants.OUTGOING));
 	}
 
 	saveNew(dream, thing) {
@@ -75,38 +68,38 @@ export class RequestsService {
 	}
 
 	declineIncomingRequest(request) {
-		return this.setRequestStatusByUserIdAndDirection(request, this.REQUEST_STATUS_DECLINED, this.INCOMING);
+		return this.setRequestStatusByUserIdAndDirection(request, this._constants.REQUEST_STATUS_DECLINED, this._constants.INCOMING);
 	}
 
 	acceptIncomingRequest(request) {
-		return this.setRequestStatusByUserIdAndDirection(request, this.REQUEST_STATUS_ACCEPTED, this.INCOMING);
+		return this.setRequestStatusByUserIdAndDirection(request, this._constants.REQUEST_STATUS_ACCEPTED, this._constants.INCOMING);
 	}
 
 	acceptOutgoingRequest(request) {
-		return this.setRequestStatusByUserIdAndDirection(request, this.REQUEST_STATUS_ACCEPTED, this.OUTGOING);
+		return this.setRequestStatusByUserIdAndDirection(request, this._constants.REQUEST_STATUS_ACCEPTED, this._constants.OUTGOING);
 	}
 
 	cancelOutgoingRequest(request) {
-		return this.setRequestStatusByUserIdAndDirection(request, this.REQUEST_STATUS_CANCELLED, this.OUTGOING);
+		return this.setRequestStatusByUserIdAndDirection(request, this._constants.REQUEST_STATUS_CANCELLED, this._constants.OUTGOING);
 	}
 
 	cancelIncomingRequest(request) {
-		return this.setRequestStatusByUserIdAndDirection(request, this.REQUEST_STATUS_CANCELLED, this.INCOMING);
+		return this.setRequestStatusByUserIdAndDirection(request, this._constants.REQUEST_STATUS_CANCELLED, this._constants.INCOMING);
 	}
 
 	completeIncomingRequest(request) {
-		return this.setRequestStatusByUserIdAndDirection(request, this.REQUEST_STATUS_COMPLETED, this.INCOMING);
+		return this.setRequestStatusByUserIdAndDirection(request, this._constants.REQUEST_STATUS_COMPLETED, this._constants.INCOMING);
 	}
 
 	secondCompleteIncomingRequest(request) {
-		return this.setRequestStatusByUserIdAndDirection(request, this.REQUEST_STATUS_COMPLETED, this.INCOMING);
+		return this.setRequestStatusByUserIdAndDirection(request, this._constants.REQUEST_STATUS_COMPLETED, this._constants.INCOMING);
 	}
 
 	completeOutgoingRequest(request) {
-		return this.setRequestStatusByUserIdAndDirection(request, this.REQUEST_STATUS_COMPLETED, this.OUTGOING);
+		return this.setRequestStatusByUserIdAndDirection(request, this._constants.REQUEST_STATUS_COMPLETED, this._constants.OUTGOING);
 	}
 
 	notCompleteOutgoingRequest(request) {
-		return this.setRequestStatusByUserIdAndDirection(request, this.REQUEST_STATUS_NOT_COMPLETED, this.OUTGOING);
+		return this.setRequestStatusByUserIdAndDirection(request, this._constants.REQUEST_STATUS_NOT_COMPLETED, this._constants.OUTGOING);
 	}
 }

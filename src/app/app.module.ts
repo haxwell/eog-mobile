@@ -47,6 +47,7 @@ import { ProfileService } from '../pages/profile/_services/profile.service';
 import { NotificationService } from '../pages/profile/_services/notification.service';
 import { ThingService } from '../pages/things/_services/thing.service';
 
+import { Constants } from '../_constants/constants';
 
 @NgModule({
   declarations: [
@@ -120,6 +121,7 @@ import { ThingService } from '../pages/things/_services/thing.service';
     KeywordEntryPage
   ],
   providers: [
+    Constants,
     StatusBar,
     SplashScreen,
     ApiService,

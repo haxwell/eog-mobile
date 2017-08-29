@@ -11,6 +11,8 @@ import { RequestContactInfoPage } from '../_pages/contact.info'
 
 import { RequestsService } from '../../../app/_services/requests.service'
 
+import { Constants } from '../../../_constants/constants'
+
 @Component({
   selector: 'page-requests-incoming',
   templateUrl: 'requests.incoming.html'
@@ -18,21 +20,14 @@ import { RequestsService } from '../../../app/_services/requests.service'
 
 export class RequestsIncomingPage {
 
-	// TODO: Put these in a constants object and share it.. 
-	REQUEST_STATUS_PENDING = 1;
-	REQUEST_STATUS_DECLINED = 2;	
-	REQUEST_STATUS_ACCEPTED = 3;
-	REQUEST_STATUS_COMPLETED = 4;
-	REQUEST_STATUS_CANCELLED = 5;
-	REQUEST_STATUS_NOT_COMPLETED = 6;
-
 	model = undefined;
 	dirty = false;
 	theOtherUser = undefined;
 	
 	constructor(public navCtrl: NavController,
 				private modalCtrl: ModalController,
-				private _requestsService: RequestsService) {
+				private _requestsService: RequestsService,
+				private _constants: Constants) {
 
 	}
 
@@ -45,22 +40,22 @@ export class RequestsIncomingPage {
 	}
 
 	getAcceptedRequests() {
-		return this.filterModelByDeliveringStatus(this.REQUEST_STATUS_ACCEPTED);
+		return this.filterModelByDeliveringStatus(this._constants.REQUEST_STATUS_ACCEPTED);
 	}
 
 	getDeclinedRequests() {
-		return this.filterModelByDeliveringStatus(this.REQUEST_STATUS_DECLINED);
+		return this.filterModelByDeliveringStatus(this._constants.REQUEST_STATUS_DECLINED);
 	}
 
 	getPendingRequests() {
-		return this.filterModelByDeliveringStatus(this.REQUEST_STATUS_PENDING);
+		return this.filterModelByDeliveringStatus(this._constants.REQUEST_STATUS_PENDING);
 	}
 
 	getCompletedPendingApprovalRequests() {
 		let self = this;
 
 		if (this.model) {
-			let rtn = this.model.filter((obj) => { return obj["deliveringStatusId"] === self.REQUEST_STATUS_COMPLETED && obj["requestingStatusId"] !== self.REQUEST_STATUS_COMPLETED; });
+			let rtn = this.model.filter((obj) => { return obj["deliveringStatusId"] === self._constants.REQUEST_STATUS_COMPLETED && obj["requestingStatusId"] !== self._constants.REQUEST_STATUS_COMPLETED; });
 			return rtn.length > 0 ? rtn : undefined			
 		}
 
@@ -71,7 +66,7 @@ export class RequestsIncomingPage {
 		let self = this;
 
 		if (this.model) {
-			let rtn = this.model.filter((obj) => { return obj["deliveringStatusId"] === self.REQUEST_STATUS_COMPLETED && obj["requestingStatusId"] === self.REQUEST_STATUS_NOT_COMPLETED; });
+			let rtn = this.model.filter((obj) => { return obj["deliveringStatusId"] === self._constants.REQUEST_STATUS_COMPLETED && obj["requestingStatusId"] === self._constants.REQUEST_STATUS_NOT_COMPLETED; });
 			return rtn.length > 0 ? rtn : undefined			
 		}
 
