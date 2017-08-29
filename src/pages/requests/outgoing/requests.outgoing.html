@@ -7,6 +7,11 @@
 </ion-header>
 
 <ion-content padding>
+	<ion-card *ngIf="isRequestModelEmpty()">
+		<ion-card-content>
+			There are no requests that you've made of others.
+		</ion-card-content>
+	</ion-card>
 	<ion-card *ngIf="getAcceptedRequests() !== undefined">
 		<ion-card-header>
 			Accepted<br/>

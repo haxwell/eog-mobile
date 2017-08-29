@@ -39,6 +39,10 @@ export class RequestsIncomingPage {
 		});
 	}
 
+	isRequestModelEmpty() {
+		return this.model == undefined || this.model.length === 0;
+	}
+
 	getAcceptedRequests() {
 		return this.filterModelByDeliveringStatus(this._constants.REQUEST_STATUS_ACCEPTED);
 	}

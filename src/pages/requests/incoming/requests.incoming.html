@@ -7,6 +7,11 @@
 </ion-header>
 
 <ion-content padding>
+	<ion-card *ngIf="isRequestModelEmpty()">
+		<ion-card-content>
+			No one has made any requests of you. Yet!
+		</ion-card-content>
+	</ion-card>
 	<ion-card *ngIf="getPendingRequests() !== undefined">
 		<ion-card-header>
 			Pending<br/>
