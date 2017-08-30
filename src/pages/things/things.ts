@@ -180,7 +180,16 @@ export class ThingPage {
 	onAddKeywordBtnTap(evt) {
 		let self = this;
 		let modal = this.modalCtrl.create(KeywordEntryPage, {keywordModel: self.newKeywords});
-		modal.onDidDismiss((data: Array<Object>) => { data.map((obj) => { self.setDirty(true); self.model["keywords"].push({id: undefined, text: obj}); }) } );
+		modal.onDidDismiss(
+			(data: Array<Object>) => { 
+				if (data) {
+					data.map((obj) => { 
+						self.setDirty(true); 
+						self.model["keywords"].push({id: undefined, text: obj}); 
+					});
+				} 
+			}
+		);
 		modal.present();
 	}
 
@@ -189,9 +198,11 @@ export class ThingPage {
 		let modal = this.modalCtrl.create(RulePage, {requiredPointsQuantity: self.model["requiredPointsQuantity"], requiredUserRecommendations: self.model["requiredUserRecommendations"]});
 		
 		modal.onDidDismiss(data => {
-			self.model["requiredPointsQuantity"] = data["requiredPointsQuantity"];
-			self.model["requiredUserRecommendations"] = data["requiredUserRecommendations"];
-			this.setDirty(true);
+			if (data) {
+				self.model["requiredPointsQuantity"] = data["requiredPointsQuantity"];
+				self.model["requiredUserRecommendations"] = data["requiredUserRecommendations"];
+				this.setDirty(true);
+			}
 		})
 		
 		modal.present();
