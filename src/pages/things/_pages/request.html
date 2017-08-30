@@ -8,17 +8,16 @@
 
 <ion-content padding>
 	<ion-label>You are about to request a User do their Thing for you.</ion-label>
-	<ion-label>{{thing.title}}</ion-label>
-	<br/>
-	<ion-label>This will require {{thing.requiredPointsQuantity}} points from you.</ion-label>
-	<ion-label *ngIf="getRequiredUserRecommendations()">This will require the following recommendations from you.</ion-label>
-
+	<ion-label><b>{{thing.title}}</b></ion-label>
+	<ion-label *ngIf="!getRequiredUserRecommendations()">This will require {{thing.requiredPointsQuantity}} points from you.</ion-label>
+	<ion-label *ngIf="getRequiredUserRecommendations()">This will require {{thing.requiredPointsQuantity}} points, and the following recommendations from you.</ion-label>
 	<span class="blockItem" *ngFor="let user of getRequiredUserRecommendations()">
 		{{user.realname}}
 	</span>
-
+	<hr/>
+	<ion-label>People do their Thing because they want to help you with your Dream. A relevant Dream can motivate them to accept your request!</ion-label>
 	<ion-row>
-		<ion-label>Which of your dreams do you want to associate with this request?</ion-label>
+		<ion-label>Which of your Dreams do you want to associate with this request?</ion-label>
 	</ion-row>		
 	<ion-row>
 		<ion-select [(ngModel)]="selectedDreamId" >
