@@ -7,11 +7,9 @@
 </ion-header>
 
 <ion-content padding>
-	<ion-row>
-		<ion-label>You are about to DECLINE a request to do your Thing.</ion-label>
-		<br/>
-		<ion-label>{{request.title}}</ion-label>
-	</ion-row>		
+	<ion-label>You are about to DECLINE a request to do your Thing.</ion-label>
+	<br/>
+	<ion-label>{{request.thing.title}}</ion-label>
 
 	<ion-row>
 		<button ion-button (click)="onCancelBtnTap($event)">Sorry, no.. Cancel</button>
