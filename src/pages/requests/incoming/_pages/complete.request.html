@@ -7,19 +7,17 @@
 </ion-header>
 
 <ion-content padding>
-	<ion-row>
-		<ion-label>You are about to mark a request to do your Thing as COMPLETELY done.</ion-label>
-		<ion-label>The requesting user will have a chance to mark it COMPLETE, as well.</ion-label>
-		<ion-label>If they do mark it COMPLETE, you'll then get their points.</ion-label>
-		<br/>
-		<ion-label>{{request.title}}</ion-label>
-	</ion-row>		
+	<ion-label>You are about to mark a request to do your Thing as COMPLETELY done.</ion-label>
+	<ion-label>The requesting user will have a chance to mark it COMPLETE, as well.</ion-label>
+	<ion-label>If they do mark it COMPLETE, you'll then get their points.</ion-label>
+	<br/>
+	<ion-label>'{{request.thing.title}}' for {{request.directionallyOppositeUser.realname}}</ion-label>
 
 	<ion-row>
 		<ion-label>Type the word complete, and then press the YES! button if you're sure.</ion-label>
 		<ion-input type="text" placeholder="type complete here..." [(ngModel)]="confirmationString" #ctrl="ngModel" required></ion-input>		
 	</ion-row>
-				
+
 	<ion-row>
 		<button ion-button (click)="onCancelBtnTap($event)">Sorry, no.. Cancel</button>
 		<button ion-button [disabled]="!isSaveBtnEnabled()" (click)="onSaveBtnTap($event)">YES!</button>
