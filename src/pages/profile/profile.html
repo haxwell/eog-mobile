@@ -30,6 +30,22 @@
 			</ion-item>
 		</ion-card-content>
 	</ion-card>
+	<ion-row>
+		<ion-card>
+			<ion-card-header>
+				Profile Keywords
+				<button ion-button icon-only small color="danger" (click)="onAddKeywordBtnTap($event)"><ion-icon name="add"></ion-icon></button>								
+			</ion-card-header>
+			<ion-card-content>
+				<span *ngIf="userHasNoKeywords()">
+					Keywords are descriptive words and phrases. Add some to describe you!
+				</span>
+				<span class="blockItem" *ngFor="let item of model.keywords" (press)="onIndividualKeywordPress(item)">
+					{{item.text}}
+				</span>
+			</ion-card-content>
+		</ion-card>
+	</ion-row>	
 	<ion-row *ngIf="model.points">
 		<ion-card>
 			<ion-card-header>
@@ -90,22 +106,6 @@
 				</span>
 				<span class="blockItem" *ngFor="let item of model.things" (click)="onThingBtnTap(item)">
 					{{item.title}}
-				</span>
-			</ion-card-content>
-		</ion-card>
-	</ion-row>	
-	<ion-row>
-		<ion-card>
-			<ion-card-header>
-				Keywords
-				<button ion-button icon-only small color="danger" (click)="onAddKeywordBtnTap($event)"><ion-icon name="add"></ion-icon></button>								
-			</ion-card-header>
-			<ion-card-content>
-				<span *ngIf="userHasNoKeywords()">
-					Keywords are descriptive words and phrases. Add some to describe you!
-				</span>
-				<span class="blockItem" *ngFor="let item of model.keywords" (press)="onIndividualKeywordPress(item)">
-					{{item.text}}
 				</span>
 			</ion-card-content>
 		</ion-card>
