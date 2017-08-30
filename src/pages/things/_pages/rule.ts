@@ -9,7 +9,7 @@ import { SearchService } from '../../../app/_services/search.service';
 })
 export class RulePage {
 	searchString: string = '';
-	searchResultListCounString: string = undefined;
+	searchResultListCountString: string = undefined;
 	pointsQuantity: number = 0;
 	requiredUserRecommendations: Array<Object> = undefined;
 	searchResultList: Array<Object> = [];
@@ -28,18 +28,27 @@ export class RulePage {
 	}
 
 	onSearchUserBtnTap(evt) {
+		let self = this;
 		this._searchService.searchUsers(this.searchString).then((data: Array<Object>) => {
-			this.searchResultList = data;
-			this.searchResultListCounString = data.length + " matches found.";
+			self.searchResultList = data;
+			let tmp = self.searchResultList.filter((obj) => { 
+				return !self.requiredUserRecommendations.some(
+					(obj2) => { return obj["id"] === obj2["id"]; }
+				) 
+			});
+			let count = self.searchResultList.length - tmp.length;
+			self.searchResultList = tmp;
+			self.searchResultListCountString = data.length + " matches found. ";
+			if (count > 0) self.searchResultListCountString += count + " already required.";
 		});
 	}
 
 	getSearchResultListCountString() {
-		return this.searchResultListCounString;
+		return this.searchResultListCountString;
 	}
 
 	handleSearchStringChange(evt) {
-		this.searchResultListCounString = undefined;
+		this.searchResultListCountString = undefined;
 	}
 
 	isSearchBtnEnabled() {
@@ -53,6 +62,8 @@ export class RulePage {
 	onIndividualSearchResultTap(item) {
 		this.requiredUserRecommendations.push(item);
 		this.searchResultList = this.searchResultList.filter((obj) => { return obj["id"] !== item["id"]; });
+
+		if (this.searchResultList.length === 0) this.searchResultListCountString === undefined;
 	}
 
 	onIndividualRequiredUserPress(item) {

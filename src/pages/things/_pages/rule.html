@@ -13,7 +13,7 @@
 		required recommendations, they will not be able to send you a request for this Thing.</ion-label>		
 		<ion-row>
 			<ion-label>Required points</ion-label>
-			<ion-input type="number" placeholder="quantity" [(ngModel)]="pointsQuantity" #ctrl="ngModel" required></ion-input>
+			<ion-input type="number" placeholder="quantity" max="10000" [(ngModel)]="pointsQuantity" #ctrl="ngModel" required></ion-input>
 		</ion-row>
 		<ion-row>
 			<table>
@@ -41,9 +41,6 @@
 		</ion-row>
 		<ion-row *ngIf="getSearchResultList() !== undefined">
 			<ion-list radio-group>
-				<ion-list-header>
-					Matching Users
-				</ion-list-header>
 				<span class="blockItem" *ngFor="let user of getSearchResultList()" (click)="onIndividualSearchResultTap(user)">
 					{{user.realname}}
 				</span>
