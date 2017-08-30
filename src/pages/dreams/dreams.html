@@ -23,7 +23,7 @@
 			</ion-card-header>
 			<ion-card-content>
 				<span *ngIf="dreamHasNoKeywords()">
-					Keywords are like #hashtags. Add some that describe this Dream!
+					Keywords are descriptive words and phrases. Add some that describe this Dream!
 				</span>
 				<span class="blockItem" *ngFor="let item of model.keywords" (press)="onIndividualKeywordPress(item)">
 					{{item.text}}

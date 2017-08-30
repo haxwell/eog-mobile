@@ -102,7 +102,7 @@
 			</ion-card-header>
 			<ion-card-content>
 				<span *ngIf="userHasNoKeywords()">
-					Keywords are like #hashtags. Add some to describe you!
+					Keywords are descriptive words and phrases. Add some to describe you!
 				</span>
 				<span class="blockItem" *ngFor="let item of model.keywords" (press)="onIndividualKeywordPress(item)">
 					{{item.text}}
