@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { NavController, NavParams, ViewController, ModalController } from 'ionic-angular';
+import { ViewController } from 'ionic-angular';
 
 @Component({
   selector: 'page-keyword-entry',
@@ -10,14 +10,12 @@ export class KeywordEntryPage {
 
 	keywordString: string = undefined;
 
-	constructor(public navCtrl: NavController, 
-				public params: NavParams,
-				private viewCtrl: ViewController) {
+	constructor(private viewCtrl: ViewController) {
 
 	}
 
 	isSaveBtnEnabled() {
-		return true;
+		return this.keywordString !== undefined && this.keywordString.length > 1;
 	}
 
 	onSaveBtnTap(evt) {
