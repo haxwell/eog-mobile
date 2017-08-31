@@ -37,6 +37,7 @@ import { RulePage } from '../pages/things/_pages/rule';
 import { KeywordEntryPage } from '../pages/keyword.entry/keyword.entry';
 
 import { ApiService } from './_services/api.service';
+import { WebsocketService } from './_services/websocket.service';
 import { UserService } from './_services/user.service';
 import { DreamService } from './_services/dream.service';
 import { SearchService } from './_services/search.service';
@@ -134,6 +135,7 @@ import { Constants } from '../_constants/constants';
     RequestsService,
     RecommendationService,
     NotificationService,
+    WebsocketService,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })
