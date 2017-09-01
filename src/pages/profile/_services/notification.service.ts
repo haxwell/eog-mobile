@@ -5,8 +5,6 @@ import { ApiService } from '../../../app/_services/api.service';
 
 import { environment } from '../../../_environments/environment';
 
-import Stomp from 'stompjs';
-
 @Injectable()
 export class NotificationService {
 	
