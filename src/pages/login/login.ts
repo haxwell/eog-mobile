@@ -5,6 +5,7 @@ import { HomePage } from '../home/home';
 import { CreateAccountPage } from './_pages/create.account'
 
 import { UserService } from '../../app/_services/user.service';
+import { WebsocketService } from '../../app/_services/websocket.service';
 
 @Component({
   selector: 'page-login',
@@ -15,7 +16,8 @@ export class LoginPage {
   user = {id:-1, name: 'eogadmin', password: 'password'};
   
   constructor(public navCtrl: NavController,
-              private _userService: UserService) {
+              private _userService: UserService,
+              private _websocketService: WebsocketService) {
 
   }
 
@@ -32,6 +34,7 @@ export class LoginPage {
       self.user["name"] = un;
 
       this._userService.setCurrentUser(self.user);
+      this._websocketService.init();
       
       this.navCtrl.push(HomePage);
     });
