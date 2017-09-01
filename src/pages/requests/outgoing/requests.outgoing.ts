@@ -36,7 +36,11 @@ export class RequestsOutgoingPage {
 	}
 
 	isRequestModelEmpty() {
-		return this.model == undefined || this.model.length === 0;
+		return this.model == undefined || 
+				this.model.length === 0 || 
+				this.model.filter((obj) => { 
+					return obj["deliveringStatusId"] === this._constants.REQUEST_STATUS_COMPLETED && obj["receivingStatusId"] === this._constants.REQUEST_STATUS_COMPLETED;
+				}).length === 0;
 	}
 
 	getAcceptedRequests() {
