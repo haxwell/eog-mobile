@@ -69,10 +69,10 @@ export class WebsocketService {
 			} else if (request["deliveringStatusId"] === this._constants.REQUEST_STATUS_DELETED) {
 				return dou_realname + ' deleted their thing, ' + obj["request"]["thing"]["title"] + ', so your request was removed, too.';
 			}
-		} else if (obj["recommendationReceived"] !== undefined) {
-			return "You just received a recommendation";
-		} else if (obj["pointReceived"] !== undefined) {
-			return "You just received a point!"
+		} else if (obj["recommendation"] !== undefined) {
+			return "You just received a recommendation from " + obj["directionallyOppositeUser"]["realname"];
+		} else if (obj["points"] !== undefined) {
+			return "You just received a point from " + obj["directionallyOppositeUser"]["realname"];
 		}
 
 		return 'Something interesting just happened!';
