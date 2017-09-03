@@ -31,7 +31,7 @@ export class SearchPage {
 				private _requestsService: RequestsService,
 				private _userService: UserService,
 				private _recommendationService: RecommendationService,
-				private _events: Events) {
+				_events: Events) {
 		let func = (data) => {
 			// a declined event means points that were escrowed have become available,
 			//  so that means the state rules, (sufficient points, already requested, necessary recommends)

@@ -29,7 +29,7 @@ export class RequestsIncomingPage {
 				private modalCtrl: ModalController,
 				private _requestsService: RequestsService,
 				private _constants: Constants,
-				private _events: Events) {
+				_events: Events) {
 		
 		let func = (data) => {
 			this.replaceModelElement(data["request"]);

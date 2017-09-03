@@ -50,7 +50,6 @@ export class WebsocketService {
 			delete data["directionallyOppositeUser"];
 
 			let request = data["request"];
-			let dou_realname = request["directionallyOppositeUser"]["realname"];
 
 			if (request["deliveringStatusId"] === this._constants.REQUEST_STATUS_PENDING && request["requestingStatusId"] === null) {
 				this.handleRequestReceived(data)
@@ -161,7 +160,7 @@ export class WebsocketService {
 		let recommendation = data["recommendation"];
 		let dou_realname = recommendation["directionallyOppositeUser"]["realname"];
 
-		this.presentToast("You just received a recommendation from " + recommendation["directionallyOppositeUser"]["realname"]);
+		this.presentToast("You just received a recommendation from " + dou_realname;
 		this._events.publish('recommendation:received', data);
 	}
 
@@ -169,7 +168,7 @@ export class WebsocketService {
 		let points = data["request"];
 		let dou_realname = points["directionallyOppositeUser"]["realname"];
 
-		this.presentToast("You just received a point from " + points["directionallyOppositeUser"]["realname"]);
+		this.presentToast("You just received a point from " + dou_realname;
 		this._events.publish('points:received', data);
 	}
 }
