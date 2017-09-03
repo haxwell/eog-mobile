@@ -30,9 +30,15 @@ export class RequestsIncomingPage {
 				private _requestsService: RequestsService,
 				private _constants: Constants,
 				private _events: Events) {
-		_events.subscribe('request:received', (data) => {
+		
+		let func = (data) => {
 			this.replaceModelElement(data["request"]);
-		});
+		};
+
+		_events.subscribe('request:received', func);
+		_events.subscribe('request:cancelled', func);
+		_events.subscribe('request:completedAndApproved', func);
+		_events.subscribe('request:isInDispute', func);
 	}
 
 	replaceModelElement(request) {

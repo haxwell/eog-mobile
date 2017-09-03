@@ -27,9 +27,14 @@ export class RequestsOutgoingPage {
 				private _requestsService: RequestsService,
 				private _constants: Constants,
 				private _events: Events) { 
-		_events.subscribe('request:accepted', (data) => {
+		let func = (data) => {
 			this.replaceModelElement(data["request"]);
-		});
+		};
+
+		_events.subscribe('request:accepted', func);
+		_events.subscribe('request:declined', func);
+		_events.subscribe('request:completed', func);
+		_events.subscribe('request:deleted', func);
 	}
 
 	replaceModelElement(request) {

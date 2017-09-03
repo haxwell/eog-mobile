@@ -56,41 +56,32 @@ export class WebsocketService {
 				this.handleRequestReceived(data)
 			} else if (request["deliveringStatusId"] === this._constants.REQUEST_STATUS_ACCEPTED && request["requestingStatusId"] === null) {
 				this.handleRequestAccepted(data);
-			} 
-		}
-	}
-
-	getMessage(data) {
-		let obj = JSON.parse(data["body"]);
-		
-		if (obj["request"] !== undefined) {
-			let request = obj["request"];
-			let dou_realname = obj["directionallyOppositeUser"]["realname"];
-
-			if (request["deliveringStatusId"] === this._constants.REQUEST_STATUS_PENDING && request["requestingStatusId"] === null) {
-				return dou_realname + ' just requested you do your Thing, ' + obj["request"]["thing"]["title"];
-			} else if (request["deliveringStatusId"] === this._constants.REQUEST_STATUS_ACCEPTED && request["requestingStatusId"] === null) {
-				return dou_realname + ' just accepted your request, ' + obj["request"]["thing"]["title"];
 			} else if (request["deliveringStatusId"] === this._constants.REQUEST_STATUS_DECLINED && request["requestingStatusId"] === null) {
-				return dou_realname + ' declined your request, ' + obj["request"]["thing"]["title"];
+				this.handleRequestDeclined(data);
 			} else if (request["deliveringStatusId"] === this._constants.REQUEST_STATUS_COMPLETED && request["requestingStatusId"] === null) {
-				return dou_realname + ' just marked your request, ' + obj["request"]["thing"]["title"] + ' as completed.';
+				this.handleRequestCompleted(data); 
 			} else if (request["deliveringStatusId"] === this._constants.REQUEST_STATUS_CANCELLED && request["requestingStatusId"] === null) {
-				return dou_realname + ' just cancelled your request, ' + obj["request"]["thing"]["title"];
+				this.handleRequestCancelled(data);
 			} else if (request["deliveringStatusId"] === this._constants.REQUEST_STATUS_COMPLETED && request["requestingStatusId"] === this._constants.REQUEST_STATUS_COMPLETED) {
-				return 'You just received ' + request["thing"]["requiredPointsQuantity"] + ' points from ' + dou_realname;
+				this.handleRequestCompletedAndApproved(data); 
 			} else if (request["deliveringStatusId"] === this._constants.REQUEST_STATUS_COMPLETED && request["requestingStatusId"] === this._constants.REQUEST_STATUS_NOT_COMPLETED) {
-				return dou_realname + ' disagrees that your Thing, ' + obj["request"]["thing"]["title"] + ' was completed. Get in touch with them!';
+				this.handleRequestIsInDispute(data); 
 			} else if (request["deliveringStatusId"] === this._constants.REQUEST_STATUS_DELETED) {
-				return dou_realname + ' deleted their thing, ' + obj["request"]["thing"]["title"] + ', so your request was removed, too.';
+				this.handleRequestDeleted(data); 
 			}
-		} else if (obj["recommendation"] !== undefined) {
-			return "You just received a recommendation from " + obj["directionallyOppositeUser"]["realname"];
-		} else if (obj["points"] !== undefined) {
-			return "You just received a point from " + obj["directionallyOppositeUser"]["realname"];
-		}
+		} else if (data["recommendation"] !== undefined) {
 
-		return 'Something interesting just happened!';
+			data["recommendation"]["directionallyOppositeUser"] = Object.assign({}, data["directionallyOppositeUser"]);
+			delete data["directionallyOppositeUser"];
+
+			this.handleRecommendationReceived(data); 
+		} else if (data["points"] !== undefined) {
+
+			data["points"]["directionallyOppositeUser"] = Object.assign({}, data["directionallyOppositeUser"]);
+			delete data["directionallyOppositeUser"];
+
+			this.handlePointsReceived(data); 
+		}
 	}
 
 	presentToast(msg) {
@@ -116,5 +107,69 @@ export class WebsocketService {
 
 		this.presentToast(dou_realname + ' just accepted your request, ' + request["thing"]["title"]);
 		this._events.publish('request:accepted', data);
+	}
+
+	handleRequestDeclined(data) {
+		let request = data["request"];
+		let dou_realname = request["directionallyOppositeUser"]["realname"];
+
+		this.presentToast(dou_realname + ' has declined your request, ' + request["thing"]["title"]);
+		this._events.publish('request:declined', data);
+	}
+
+	handleRequestCompleted(data) {
+		let request = data["request"];
+		let dou_realname = request["directionallyOppositeUser"]["realname"];
+
+		this.presentToast(dou_realname + ' just marked your request, ' + request["thing"]["title"] + ' as completed.');
+		this._events.publish('request:completed', data);
+	}
+
+	handleRequestCancelled(data) {
+		let request = data["request"];
+		let dou_realname = request["directionallyOppositeUser"]["realname"];
+
+		this.presentToast(dou_realname + ' just cancelled your request, ' + request["thing"]["title"]);
+		this._events.publish('request:cancelled', data);
+	}
+
+	handleRequestCompletedAndApproved(data) {
+		let request = data["request"];
+		let dou_realname = request["directionallyOppositeUser"]["realname"];
+
+		this.presentToast('You just received ' + request["thing"]["requiredPointsQuantity"] + ' points from ' + dou_realname);
+		this._events.publish('request:completedAndApproved', data);
+	}
+
+	handleRequestIsInDispute(data) {
+		let request = data["request"];
+		let dou_realname = request["directionallyOppositeUser"]["realname"];
+
+		this.presentToast(dou_realname + ' disagrees that your Thing, ' + request["thing"]["title"] + ' was completed. Get in touch with them!');
+		this._events.publish('request:isInDispute', data);
+	}
+
+	handleRequestDeleted(data) {
+		let request = data["request"];
+		let dou_realname = request["directionallyOppositeUser"]["realname"];
+
+		this.presentToast(dou_realname + ' deleted their thing, ' + request["thing"]["title"] + ', so your request was removed, too.');
+		this._events.publish('request:deleted', data);
+	}
+
+	handleRecommendationReceived(data) {
+		let recommendation = data["recommendation"];
+		let dou_realname = recommendation["directionallyOppositeUser"]["realname"];
+
+		this.presentToast("You just received a recommendation from " + recommendation["directionallyOppositeUser"]["realname"]);
+		this._events.publish('recommendation:received', data);
+	}
+
+	handlePointsReceived(data) {
+		let points = data["request"];
+		let dou_realname = points["directionallyOppositeUser"]["realname"];
+
+		this.presentToast("You just received a point from " + points["directionallyOppositeUser"]["realname"]);
+		this._events.publish('points:received', data);
 	}
 }

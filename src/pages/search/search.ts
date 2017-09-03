@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
+import { Events } from 'ionic-angular';
 
 import { ThingPage } from '../things/things'
 
@@ -29,8 +30,20 @@ export class SearchPage {
 				private _pointsService: PointsService,
 				private _requestsService: RequestsService,
 				private _userService: UserService,
-				private _recommendationService: RecommendationService) {
+				private _recommendationService: RecommendationService,
+				private _events: Events) {
+		let func = (data) => {
+			// a declined event means points that were escrowed have become available,
+			//  so that means the state rules, (sufficient points, already requested, necessary recommends)
+			//  need to be recalculated. So init everything.
+			this.ngOnInit(); 
+		};
 
+		_events.subscribe('request:declined', func);
+		_events.subscribe('request:deleted', func);
+		_events.subscribe('request:completedAndAccepted', func);
+		_events.subscribe('recommendation:received', func);
+		_events.subscribe('points:received', func);
 	}
 
 	ngOnInit() {
