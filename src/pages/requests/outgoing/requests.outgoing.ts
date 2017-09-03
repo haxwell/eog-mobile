@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 
 import { NavController } from 'ionic-angular';
 import { ModalController } from 'ionic-angular';
+import { Events } from 'ionic-angular';
 
 import { RequestsService } from '../../../app/_services/requests.service'
 
@@ -24,8 +25,17 @@ export class RequestsOutgoingPage {
 	constructor(public navCtrl: NavController,
 				private modalCtrl: ModalController,
 				private _requestsService: RequestsService,
-				private _constants: Constants) { 
+				private _constants: Constants,
+				private _events: Events) { 
+		_events.subscribe('request:accepted', (data) => {
+			this.replaceModelElement(data["request"]);
+		});
+	}
 
+	replaceModelElement(request) {
+		let temp = this.model.filter((obj) => { return obj["id"] !== request["id"]; });
+		temp.push(request);
+		this.model = temp;
 	}
 
 	ngOnInit() {
