@@ -19,7 +19,9 @@ export class KeywordEntryPage {
 	}
 
 	onSaveBtnTap(evt) {
-		this.viewCtrl.dismiss(this.keywordString.split(','));
+		let tmp = this.keywordString.split(',');
+		tmp = tmp.filter((obj) => { return obj != undefined && obj.length > 0 });
+		this.viewCtrl.dismiss(tmp);
 	}
 
 	onCancelBtnTap(evt) {
