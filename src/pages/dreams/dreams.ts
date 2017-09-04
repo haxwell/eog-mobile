@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 
 import { NavController, NavParams } from 'ionic-angular';
 import { ModalController } from 'ionic-angular';
+import { LoadingController } from 'ionic-angular';
 
 import { DeleteDreamPage } from './_pages/delete.dream'
 import { KeywordEntryPage } from '../keyword.entry/keyword.entry'
@@ -19,11 +20,13 @@ export class DreamPage {
 	new = false;
 	dirty = false;
 	newKeywords = [];
+	loading = undefined;
 
 	constructor(public navCtrl: NavController, 
 				navParams: NavParams,
 				private modalCtrl: ModalController,
-				private _dreamService: DreamService) {
+				private _dreamService: DreamService,
+				private loadingCtrl: LoadingController) {
 		let tmp = navParams.get('dream')
 		if (tmp === undefined) {
 			this.new = true;
@@ -58,8 +61,16 @@ export class DreamPage {
 
 	onSaveBtnTap(evt) {
 		let self = this;
+
+		self.loading = self.loadingCtrl.create({
+			content: 'Please wait...'
+		})
+
+		self.loading.present();
+
 		self.callback(this.isDirty()).then(() => {
 			self._dreamService.save(self.model).then((newObj) => {
+				self.loading.dismiss();
 				self.navCtrl.pop();
 			})
 		});
