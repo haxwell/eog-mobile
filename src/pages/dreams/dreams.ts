@@ -77,10 +77,12 @@ export class DreamPage {
 		let self = this;
 		let modal = this.modalCtrl.create(KeywordEntryPage, {keywordModel: self.newKeywords});
 		modal.onDidDismiss((data: Array<Object>) => { 
-			data.map((obj) => { 
-				self.setDirty(true); 
-				self.model["keywords"].push({id: undefined, text: obj}); 
-			})
+			if (data) {
+				data.map((obj) => { 
+					self.setDirty(true); 
+					self.model["keywords"].push({id: undefined, text: obj}); 
+				})
+			}
 		});
 		modal.present();
 	}
