@@ -7,18 +7,16 @@
 </ion-header>
 
 <ion-content padding>
-	<ion-row>
-		<ion-label>You are about to CANCEL a request that you committed to doing.</ion-label>
-		<ion-label>This will be included in your history, and will be public!</ion-label>
-		<br/>
-		<ion-label>{{request.title}}</ion-label>
-	</ion-row>		
+	<ion-label>You are about to CANCEL a request that you committed to doing.</ion-label>
+	<ion-label>This will be included in your history, and will be public!</ion-label>
+	<hr/>
+	<ion-label><b>{{request.title}}</b></ion-label>
 
 	<ion-row>
 		<ion-label>Type the word cancel, and then press the YES! button if you're sure.</ion-label>
 		<ion-input type="text" placeholder="type cancel here..." [(ngModel)]="confirmationString" #ctrl="ngModel" required></ion-input>		
 	</ion-row>
-				
+
 	<ion-row>
 		<button ion-button (click)="onCancelBtnTap($event)">Sorry, no.. Cancel</button>
 		<button ion-button [disabled]="!isSaveBtnEnabled()" (click)="onSaveBtnTap($event)">YES!</button>
