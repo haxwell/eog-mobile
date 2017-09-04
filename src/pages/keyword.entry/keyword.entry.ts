@@ -20,8 +20,13 @@ export class KeywordEntryPage {
 
 	onSaveBtnTap(evt) {
 		let tmp = this.keywordString.split(',');
-		tmp = tmp.filter((obj) => { return obj != undefined && obj.length > 0 });
-		this.viewCtrl.dismiss(tmp);
+		let tmp2 = [];
+		tmp.map((obj) => { 
+			if (!tmp2.some((obj2) => { return obj2 === obj; }))
+				tmp2.push(obj);
+		});
+		tmp2 = tmp2.filter((obj) => { return obj != undefined && obj.length > 0 });
+		this.viewCtrl.dismiss(tmp2);
 	}
 
 	onCancelBtnTap(evt) {
