@@ -8,6 +8,9 @@ import { NavController, NavParams, ViewController } from 'ionic-angular';
 })
 export class RequestContactInfoPage {
 
+	/** Deprecated.. The Profile Page can now be read-only **/
+	/**  So Feel Free to DELETE this component one day 20170903 **/
+
 	user = undefined;
 	request = undefined;
 	
