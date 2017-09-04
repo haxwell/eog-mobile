@@ -4,6 +4,7 @@ import { ModalController } from 'ionic-angular';
 
 import { SendPointPage } from './_pages/send.point.page'
 import { SendRecommendPage } from './_pages/send.recommend.page'
+import { ProfilePage } from '../../pages/profile/profile'
 
 import { SearchService } from '../../app/_services/search.service';
 import { PointsService } from '../../app/_services/points.service';
@@ -88,6 +89,12 @@ export class SearchUsersPage {
 	onSendRecommendBtnTap(evt, item) {
 		let modal = this.modalCtrl.create(SendRecommendPage, {user: item});
 		modal.onDidDismiss(data => { this.ngOnInit(); });
+		modal.present();
+	}
+
+	onViewProfileBtnTap(evt, item) {
+		let modal = this.modalCtrl.create(ProfilePage, {user: item, readOnly: true});
+		modal.onDidDismiss(data => {  });
 		modal.present();
 	}
 }

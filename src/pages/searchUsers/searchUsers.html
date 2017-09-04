@@ -17,8 +17,9 @@
 	<ion-card *ngFor="let item of resultList">
 		<ion-card-content>
 			{{item.realname}}
-			<button ion-button [id]="item.id" [disabled]="!isPointable(item)" (click)="onSendPointBtnTap($event, item)">Send Point</button>
-			<button ion-button [id]="item.id" [disabled]="!isRecommendable(item)" (click)="onSendRecommendBtnTap($event, item)">Send Recommend</button>
+			<button ion-button (click)="onViewProfileBtnTap($event, item)">View Profile</button>
+			<button ion-button [disabled]="!isPointable(item)" (click)="onSendPointBtnTap($event, item)">Send Point</button>
+			<button ion-button [disabled]="!isRecommendable(item)" (click)="onSendRecommendBtnTap($event, item)">Send Recommend</button>
 		</ion-card-content>
 	</ion-card>
 
