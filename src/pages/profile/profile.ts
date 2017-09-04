@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController, ModalController, NavParams } from 'ionic-angular';
 import { Events } from 'ionic-angular';
+import { LoadingController } from 'ionic-angular';
 
 import { ProfileService } from './_services/profile.service'
 import { NotificationService } from './_services/notification.service'
@@ -20,13 +21,15 @@ export class ProfilePage {
 	user = undefined;
 	dirty = true;
 	readOnly = false;
+	loading = undefined;
 
 	constructor(public navCtrl: NavController,
 				navParams: NavParams, 
 				public modalCtrl: ModalController,
 				private _profileService: ProfileService,
 				private _notificationService: NotificationService,
-				private _events: Events) {
+				private _events: Events,
+				private loadingCtrl: LoadingController) {
 
 		this.user = Object.assign({}, navParams.get('user'));
 		this.readOnly = navParams.get('readOnly') || false;
@@ -126,8 +129,16 @@ export class ProfilePage {
 	}
 
 	onSaveBtnTap() {
+		let self = this;
+		self.loading = self.loadingCtrl.create({
+			content: 'Please wait...'
+		})
+
+		self.loading.present();
+
 		this._profileService.save(this.model).then(() => {
-			this.navCtrl.pop();
+			self.loading.dismiss();
+			self.navCtrl.pop();
 		})
 	}
 
