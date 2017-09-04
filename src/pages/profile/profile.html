@@ -50,7 +50,7 @@
 			</ion-card-content>
 		</ion-card>
 	</ion-row>	
-	<ion-row *ngIf="model.points">
+	<ion-row *ngIf="!isReadOnly() && model.points">
 		<ion-card>
 			<ion-card-header>
 				Points
