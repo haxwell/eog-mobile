@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController, ModalController, NavParams } from 'ionic-angular';
+import { Events } from 'ionic-angular';
 
 import { ProfileService } from './_services/profile.service'
 import { NotificationService } from './_services/notification.service'
@@ -24,10 +25,22 @@ export class ProfilePage {
 				navParams: NavParams, 
 				public modalCtrl: ModalController,
 				private _profileService: ProfileService,
-				private _notificationService: NotificationService) {
+				private _notificationService: NotificationService,
+				private _events: Events) {
 
 		this.user = Object.assign({}, navParams.get('user'));
 		this.readOnly = navParams.get('readOnly') || false;
+
+		let func = (data) => {
+			this.model["notifications"].push({id: -1, message: data["message"], userId: data["request"]["directionallyOppositeUser"]["id"], timestamp: new Date().getTime(), howLongAgo: "Just Now"});
+		}
+
+		this._events.subscribe('request:received', func);
+		this._events.subscribe('request:accepted', func);
+		this._events.subscribe('request:declined', func);
+		this._events.subscribe('request:completed', func);
+		this._events.subscribe('request:completedAndApproved', func);
+		this._events.subscribe('request:cancelled', func);
 	}
 
 	ngOnInit() {
