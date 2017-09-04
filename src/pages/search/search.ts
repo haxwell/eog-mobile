@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { Events } from 'ionic-angular';
+import { LoadingController } from 'ionic-angular';
 
 import { ThingPage } from '../things/things'
 
@@ -18,6 +19,7 @@ export class SearchPage {
 	searchString = 'denv';
 	resultList = undefined;
 	dirty = false;
+	loading = undefined;
 
 	requestsPromise = undefined;
 
@@ -31,6 +33,7 @@ export class SearchPage {
 				private _requestsService: RequestsService,
 				private _userService: UserService,
 				private _recommendationService: RecommendationService,
+				private loadingCtrl: LoadingController,
 				_events: Events) {
 		let func = (data) => {
 			// a declined event means points that were escrowed have become available,
@@ -74,8 +77,15 @@ export class SearchPage {
 
 	onSearchBtnTap(evt?) {
 		let self = this;
+		self.loading = self.loadingCtrl.create({
+			content: 'Please wait...'
+		})
+
+		self.loading.present();
+
 		this._searchService.searchThings(this.searchString).then((data) => {
 			self.ngOnInit();
+			self.loading.dismiss();
 			self.resultList = data;
 		});
 	}

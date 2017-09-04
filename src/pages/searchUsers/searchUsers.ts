@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { ModalController } from 'ionic-angular';
+import { LoadingController } from 'ionic-angular';
 
 import { SendPointPage } from './_pages/send.point.page'
 import { SendRecommendPage } from './_pages/send.recommend.page'
@@ -22,12 +23,14 @@ export class SearchUsersPage {
 	isRecommendableObj = {};
 
 	userSearchResultsPromise = undefined;
+	loading = undefined;
 
 	constructor(public navCtrl: NavController, 
 				private _searchService: SearchService,
 				private modalCtrl: ModalController,
 				private _pointsService: PointsService,
-				private _recommendationService: RecommendationService) {
+				private _recommendationService: RecommendationService,
+				private loadingCtrl: LoadingController) {
 
 	}
 
@@ -41,7 +44,13 @@ export class SearchUsersPage {
 
 	onSearchBtnTap(evt) {
 		let self = this;
+		self.loading = self.loadingCtrl.create({
+			content: 'Please wait...'
+		})
+
+		self.loading.present();
 		this._searchService.searchUsers(this.searchString).then((data) => {
+			self.loading.dismiss();
 			self.resultList = data;
 		});
 	}

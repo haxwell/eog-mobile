@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { NavController, NavParams, ViewController } from 'ionic-angular';
+import { NavController, NavParams, ViewController, LoadingController } from 'ionic-angular';
 
 import { PointsService } 	from '../../../app/_services/points.service';
 
@@ -11,18 +11,28 @@ import { PointsService } 	from '../../../app/_services/points.service';
 export class SendPointPage {
 	
 	user = undefined;
+	loading = undefined;
 
 	constructor(public navCtrl: NavController, 
 				public params: NavParams,
 				private viewCtrl: ViewController,
-				private _pointsService: PointsService) {
+				private _pointsService: PointsService,
+				private loadingCtrl: LoadingController) {
 
 		this.user = params.get('user');
 	}
 
 	onSaveBtnTap(evt) {
+		let self = this;
+		self.loading = self.loadingCtrl.create({
+			content: 'Please wait...'
+		})
+
+		self.loading.present();
+
 		this._pointsService.sendAPointToAUser(this.user["id"]).then(() => {
-			this.viewCtrl.dismiss();
+			self.loading.dismiss()
+			self.viewCtrl.dismiss();
 		});
 	}
 
