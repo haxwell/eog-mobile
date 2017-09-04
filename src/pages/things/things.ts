@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 
 import { NavController, NavParams } from 'ionic-angular';
 import { ModalController } from 'ionic-angular';
+import { LoadingController } from 'ionic-angular';
 
 import { RequestPage } from './_pages/request'
 import { RulePage } from './_pages/rule'
@@ -25,12 +26,14 @@ export class ThingPage {
 	requestMsgs = undefined;
 	requestable = false;
 	newKeywords = [];
+	loading = undefined;
 
 	constructor(public navCtrl: NavController, 
 				navParams: NavParams, 
 				private modalCtrl: ModalController,
 				private _thingService: ThingService,
-				private _userService: UserService) {
+				private _userService: UserService,
+				private loadingCtrl: LoadingController) {
 
 		let tmp = navParams.get('thing');
 
@@ -160,8 +163,16 @@ export class ThingPage {
 
 	onSaveBtnTap(evt) {
 		let self = this;
+
+		self.loading = self.loadingCtrl.create({
+			content: 'Please wait...'
+		})
+
+		self.loading.present();
+
 		self.callback(this.isDirty()).then(() => {
 			self._thingService.save(self.model).then((newObj) => {
+				self.loading.dismiss();
 				self.navCtrl.pop();
 			})
 		});
