@@ -144,7 +144,6 @@ export class RequestsIncomingPage {
 	}
 
 	onViewContactInfoBtnTap(item) {
-		//let modal = this.modalCtrl.create(RequestContactInfoPage, {request: item});
 		let modal = this.modalCtrl.create(ProfilePage, {user: item["directionallyOppositeUser"], readOnly: true});
 		modal.onDidDismiss(data => {  });
 		modal.present();
