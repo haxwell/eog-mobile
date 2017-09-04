@@ -86,7 +86,7 @@ export class WebsocketService {
 	presentToast(msg) {
 		let toast = this.toastCtrl.create({
 			message: msg,
-			duration: 4000,
+			duration: 6500,
 			position: 'top'
 		});
 		toast.present();
