@@ -146,7 +146,7 @@ export class WebsocketService {
 		let request = data["request"];
 		let dou_realname = request["directionallyOppositeUser"]["realname"];
 
-		data["message"] = 'You just received ' + request["thing"]["requiredPointsQuantity"] + ' points from ' + dou_realname;
+		data["message"] = dou_realname + ' approved your completion, and sent you ' + request["thing"]["requiredPointsQuantity"] + ' points for ' + request["thing"]["title"] + '.';
 
 		this.presentToast(data["message"]);
 		this._events.publish('request:completedAndApproved', data);
