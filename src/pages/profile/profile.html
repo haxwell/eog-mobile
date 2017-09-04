@@ -31,7 +31,7 @@
 			</ion-item>
 		</ion-card-content>
 	</ion-card>
-	<ion-row>
+	<ion-row [class]="getKeywordsCardClass()">
 		<ion-card>
 			<ion-card-header>
 				Profile Keywords
@@ -50,7 +50,7 @@
 			</ion-card-content>
 		</ion-card>
 	</ion-row>	
-	<ion-row *ngIf="!isReadOnly() && model.points">
+	<ion-row *ngIf="!isReadOnly() && model.points" [class]="getPointsCardClass()">
 		<ion-card>
 			<ion-card-header>
 				Points
@@ -67,7 +67,7 @@
 			</ion-card-content>
 		</ion-card>
 	</ion-row>
-	<ion-row>
+	<ion-row [class]="getRecommendationsCardClass()">
 		<ion-card>
 			<ion-card-header>
 				Recommendations
@@ -82,7 +82,7 @@
 			</ion-card-content>
 		</ion-card>
 	</ion-row>	
-	<ion-row>
+	<ion-row [class]="getDreamsCardClass()">
 		<ion-card>
 			<ion-card-header>
 				Dreams
@@ -101,7 +101,7 @@
 			</ion-card-content>
 		</ion-card>
 	</ion-row>	
-	<ion-row>
+	<ion-row [class]="getThingsCardClass()">
 		<ion-card>
 			<ion-card-header>
 				Things
@@ -120,7 +120,7 @@
 			</ion-card-content>
 		</ion-card>
 	</ion-row>	
-	<ion-row *ngIf="!isReadOnly()">
+	<ion-row *ngIf="!isReadOnly()" [class]="getNotificationsCardClass()">
 		<ion-card>
 			<ion-card-header>
 				Notifications 

@@ -198,4 +198,30 @@ export class ProfilePage {
 	setDirty(b) {
 		this.dirty = b;
 	}
+
+	getNotificationsCardClass() {
+		return (this.model["notifications"] === undefined) ? "darkerWhileLoading" : "";
+	}
+
+	getPointsCardClass() {
+		return (this.model["points"] === undefined) ? "darkerWhileLoading" : "";
+	}
+
+	getRecommendationsCardClass() {
+		return (this.model["incomingRecommendations"] === undefined) ? "darkerWhileLoading" : "";
+	}
+
+	getThingsCardClass() {
+		return (this.model["things"] === undefined) ? "darkerWhileLoading" : "";
+	}
+
+	getDreamsCardClass() {
+		return (this.model["dreams"] === undefined) ? "darkerWhileLoading" : "";
+	}
+
+	getKeywordsCardClass() {
+		return (this.model["keywords"] === undefined) ? "darkerWhileLoading" : "";
+	}
+
+
 }
