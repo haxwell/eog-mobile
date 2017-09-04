@@ -123,14 +123,17 @@
 	<ion-row *ngIf="!isReadOnly()">
 		<ion-card>
 			<ion-card-header>
-				Notifications
+				Notifications 
+				<span *ngIf="!userHasNoNotifications()" class="blockItem" (press)="onNotificationClearAllBtnPress(item)">
+					Press Here to Clear All
+				</span>
 			</ion-card-header>
 			<ion-card-content>
 				<span *ngIf="userHasNoNotifications()">
 					No notifications.. go make something happen!
 				</span>
 				<span *ngFor="let item of model.notifications" (press)="onNotificationPress(item)">
-					{{item.message}}<br/>
+					<i>{{item.howLongAgo}}</i> - {{item.message}}<br/>
 				</span>
 			</ion-card-content>
 		</ion-card>

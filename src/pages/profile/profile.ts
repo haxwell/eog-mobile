@@ -160,6 +160,12 @@ export class ProfilePage {
 		});
 	}
 
+	onNotificationClearAllBtnPress() {
+		this._notificationService.deleteAll().then(() => {
+			this.model["notifications"] = undefined;
+		});
+	}
+
 	onNameChange() {
 		this.setDirty(true);
 	}
