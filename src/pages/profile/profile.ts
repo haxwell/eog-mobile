@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, ModalController } from 'ionic-angular';
+import { NavController, ModalController, NavParams } from 'ionic-angular';
 
 import { ProfileService } from './_services/profile.service'
 import { NotificationService } from './_services/notification.service'
@@ -16,19 +16,25 @@ import { KeywordEntryPage } from '../keyword.entry/keyword.entry'
 export class ProfilePage {
 
 	model = {};
+	user = undefined;
 	dirty = true;
+	readOnly = false;
 
 	constructor(public navCtrl: NavController,
+				navParams: NavParams, 
 				public modalCtrl: ModalController,
 				private _profileService: ProfileService,
 				private _notificationService: NotificationService) {
 
-				this._profileService.init();
+		this.user = Object.assign({}, navParams.get('user'));
+		this.readOnly = navParams.get('readOnly') || false;
 	}
 
 	ngOnInit() {
-		if (this.isDirty())
-			this.model = this._profileService.getModel();
+		if (this.isDirty()) {
+			this._profileService.init();
+			this.model = this._profileService.getModel(this.user, this.readOnly);
+		}
 
 		this.setDirty(false);
 	}
@@ -36,6 +42,10 @@ export class ProfilePage {
 	ionViewWillEnter() {
 		if (this.isDirty()) 
 			this.ngOnInit();
+	}
+
+	isReadOnly() {
+		return this.readOnly;
 	}
 
 	thingAndDreamCallback = (_params) => {
@@ -50,7 +60,8 @@ export class ProfilePage {
 	}
 
 	onThingBtnTap(item) { 
-		this.navCtrl.push(ThingPage, { thing: item, callback:  this.thingAndDreamCallback });
+		if (!this.isReadOnly())
+			this.navCtrl.push(ThingPage, { thing: item, callback:  this.thingAndDreamCallback });
 	}
 
 	onNewDreamBtnTap(evt) {
@@ -58,38 +69,43 @@ export class ProfilePage {
 	}
 
 	onDreamBtnTap(item) { 
-		this.navCtrl.push(DreamPage, { dream: item, callback: this.thingAndDreamCallback });
+		if (!this.isReadOnly())
+			this.navCtrl.push(DreamPage, { dream: item, callback: this.thingAndDreamCallback });
 	}
 
 	onIndividualKeywordPress(item) {
-		this.model["keywords"] = this.model["keywords"].filter((obj) => {
-			return obj["text"] !== item["text"];
-		});
+		if (!this.isReadOnly()) {
+			this.model["keywords"] = this.model["keywords"].filter((obj) => {
+				return obj["text"] !== item["text"];
+			});
 
-		this.setDirty(true);
+			this.setDirty(true);
+		}
 	}
 
 	onAddKeywordBtnTap(evt) {
-		let self = this;
-		let modal = this.modalCtrl.create(KeywordEntryPage);
-		
-		modal.onDidDismiss((data: Array<Object>) => { 
-			if (data) {
-				data.map((obj) => {
-					self.setDirty(true);
-					self.model["keywords"].push({id: undefined, text: obj}); 
-				});
-				self.model["keywords"].sort((a, b) => { 
-					let aText = a.text.toLowerCase(); 
-					let bText = b.text.toLowerCase(); 
-					if (aText > bText) return 1; 
-					else if (aText < bText) return -1; 
-					else return 0; 
-				});
-			}
-		});
-		
-		modal.present();
+		if (!this.isReadOnly()) {
+			let self = this;
+			let modal = this.modalCtrl.create(KeywordEntryPage);
+			
+			modal.onDidDismiss((data: Array<Object>) => { 
+				if (data) {
+					data.map((obj) => {
+						self.setDirty(true);
+						self.model["keywords"].push({id: undefined, text: obj}); 
+					});
+					self.model["keywords"].sort((a, b) => { 
+						let aText = a.text.toLowerCase(); 
+						let bText = b.text.toLowerCase(); 
+						if (aText > bText) return 1; 
+						else if (aText < bText) return -1; 
+						else return 0; 
+					});
+				}
+			});
+			
+			modal.present();
+		}
 	}
 
 	onCancelBtnTap() {

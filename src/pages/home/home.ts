@@ -6,18 +6,26 @@ import { SearchUsersPage } from '../searchUsers/searchUsers';
 import { RequestsIncomingPage } from '../requests/incoming/requests.incoming';
 import { RequestsOutgoingPage } from '../requests/outgoing/requests.outgoing';
 
+import { UserService } from '../../app/_services/user.service'
+
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
 })
 export class HomePage {
 
-  constructor(public navCtrl: NavController) {
+  user = undefined;
+
+  constructor(public navCtrl: NavController, private _userService: UserService) {
 
   }
 
+  ngOnInit() {
+    this.user = this._userService.getCurrentUser();
+  }
+
   onProfileBtnTap(event) {
-  	this.navCtrl.push(ProfilePage);
+  	this.navCtrl.push(ProfilePage, {user: this.user, readOnly: false});
   }
 
   onSearchForUsersBtnTap(event) {

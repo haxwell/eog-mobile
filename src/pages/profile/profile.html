@@ -8,8 +8,9 @@
 
 <ion-content padding>
 	<ion-row>
-		<button ion-button (click)="onCancelBtnTap($event)">Cancel</button>
-		<button ion-button [disabled]="!isSaveBtnEnabled()" (click)="onSaveBtnTap($event)">Save</button>
+		<button *ngIf="isReadOnly()" ion-button (click)="onCancelBtnTap($event)">Close</button>
+		<button *ngIf="!isReadOnly()" ion-button (click)="onCancelBtnTap($event)">Cancel</button>
+		<button ion-button [hidden]="isReadOnly()" [disabled]="!isSaveBtnEnabled()" (click)="onSaveBtnTap($event)">Save</button>
 	</ion-row>
 	<ion-card>
 		<ion-card-header>
@@ -18,15 +19,15 @@
 		<ion-card-content>
 			<ion-item>
 				<ion-label fixed>Name: </ion-label>
-				<ion-input type="text" placeholder="Name" (ionChange)="onNameChange()" [(ngModel)]="model.realname" #ctrl="ngModel" required></ion-input>		
+				<ion-input type="text" placeholder="Name" [disabled]="isReadOnly()" (ionChange)="onNameChange()" [(ngModel)]="model.realname" #ctrl="ngModel" required></ion-input>		
 			</ion-item>
 			<ion-item>
 				<ion-label fixed>Email: </ion-label>
-				<ion-input type="text" placeholder="you@domain.com" (ionChange)="onEmailChange()" [(ngModel)]="model.email" #ctrl="ngModel" required></ion-input>		
+				<ion-input type="text" placeholder="you@domain.com" [disabled]="isReadOnly()" (ionChange)="onEmailChange()" [(ngModel)]="model.email" #ctrl="ngModel" required></ion-input>		
 			</ion-item>
 			<ion-item>
 				<ion-label fixed>Phone: </ion-label>
-				<ion-input type="text" placeholder="# " (ionChange)="onPhoneChange()" [(ngModel)]="model.phone" #ctrl="ngModel" required></ion-input>
+				<ion-input type="text" placeholder="# " [disabled]="isReadOnly()" (ionChange)="onPhoneChange()" [(ngModel)]="model.phone" #ctrl="ngModel" required></ion-input>
 			</ion-item>
 		</ion-card-content>
 	</ion-card>
@@ -34,11 +35,14 @@
 		<ion-card>
 			<ion-card-header>
 				Profile Keywords
-				<button ion-button icon-only small color="danger" (click)="onAddKeywordBtnTap($event)"><ion-icon name="add"></ion-icon></button>								
+				<button *ngIf="!isReadOnly()" ion-button icon-only small color="danger" (click)="onAddKeywordBtnTap($event)"><ion-icon name="add"></ion-icon></button>								
 			</ion-card-header>
 			<ion-card-content>
-				<span *ngIf="userHasNoKeywords()">
+				<span *ngIf="userHasNoKeywords() && !isReadOnly">
 					Keywords are descriptive words and phrases. Add some to describe you!
+				</span>
+				<span *ngIf="userHasNoKeywords() && isReadOnly">
+					This user has not defined any keywords yet.
 				</span>
 				<span class="blockItem" *ngFor="let item of model.keywords" (press)="onIndividualKeywordPress(item)">
 					{{item.text}}
@@ -70,7 +74,7 @@
 			</ion-card-header>
 			<ion-card-content>
 				<div *ngIf="getAvailableIncomingRecommendations()">
-					<span *ngFor="let item of getAvailableIncomingRecommendations()">
+					<span class="blockItem" *ngFor="let item of getAvailableIncomingRecommendations()">
 						{{getRealName(item)}}
 					</span>
 				</div>
@@ -82,11 +86,14 @@
 		<ion-card>
 			<ion-card-header>
 				Dreams
-				<button ion-button icon-only small color="danger" (click)="onNewDreamBtnTap($event)"><ion-icon name="add"></ion-icon></button>
+				<button *ngIf="!isReadOnly()" ion-button icon-only small color="danger" (click)="onNewDreamBtnTap($event)"><ion-icon name="add"></ion-icon></button>
 			</ion-card-header>
 			<ion-card-content>
-				<span *ngIf="userHasNoDreams()">
+				<span *ngIf="userHasNoDreams() && !isReadOnly()">
 					Where do you see yourself tomorrow? Add a dream here!
+				</span>
+				<span *ngIf="userHasNoDreams() && isReadOnly()">
+					This user has not added any dreams yet!
 				</span>
 				<span class="blockItem" *ngFor="let item of model.dreams" (click)="onDreamBtnTap(item)">
 					{{item.title}}
@@ -98,11 +105,14 @@
 		<ion-card>
 			<ion-card-header>
 				Things
-				<button ion-button icon-only small color="danger" (click)="onNewThingBtnTap($event)"><ion-icon name="add"></ion-icon></button>				
+				<button *ngIf="!isReadOnly()" ion-button icon-only small color="danger" (click)="onNewThingBtnTap($event)"><ion-icon name="add"></ion-icon></button>				
 			</ion-card-header>
 			<ion-card-content>
-				<span *ngIf="userHasNoThings()">
+				<span *ngIf="userHasNoThings() && !isReadOnly()">
 					Got some thing you do well? List your thing here!
+				</span>
+				<span *ngIf="userHasNoThings() && isReadOnly()">
+					This user has not added any Things yet!
 				</span>
 				<span class="blockItem" *ngFor="let item of model.things" (click)="onThingBtnTap(item)">
 					{{item.title}}
@@ -110,7 +120,7 @@
 			</ion-card-content>
 		</ion-card>
 	</ion-row>	
-	<ion-row>
+	<ion-row *ngIf="!isReadOnly()">
 		<ion-card>
 			<ion-card-header>
 				Notifications
@@ -126,8 +136,9 @@
 		</ion-card>
 	</ion-row>	
 	<ion-row>
-		<button ion-button (click)="onCancelBtnTap($event)">Cancel</button>
-		<button ion-button [disabled]="!isSaveBtnEnabled()" (click)="onSaveBtnTap($event)">Save</button>
+		<button *ngIf="isReadOnly()" ion-button (click)="onCancelBtnTap($event)">Close</button>
+		<button *ngIf="!isReadOnly()" ion-button (click)="onCancelBtnTap($event)">Cancel</button>
+		<button ion-button [hidden]="isReadOnly()" [disabled]="!isSaveBtnEnabled()" (click)="onSaveBtnTap($event)">Save</button>
 	</ion-row>
 
 </ion-content>

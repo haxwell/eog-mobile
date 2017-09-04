@@ -24,9 +24,8 @@ export class ProfileService {
 		this._notificationService.init();
 	}
 
-	getModel() {
+	getModel(user, readOnly: boolean) {
 		let self = this;
-		let user = this._userService.getCurrentUser();
 		let model = {};
 
 		this._pointsService.init();
@@ -73,13 +72,15 @@ export class ProfileService {
 			});
 		});
 
-		this._recommendationService.getOutgoingRecommendations().then((obj) => {
-			model["outgoingRecommendations"] = obj;
-		});
+		if (!readOnly) {
+			this._recommendationService.getOutgoingRecommendations().then((obj) => {
+				model["outgoingRecommendations"] = obj;
+			});
 
-		this._notificationService.get().then((obj) => {
-			model["notifications"] = obj;
-		});
+			this._notificationService.get().then((obj) => {
+				model["notifications"] = obj;
+			});
+		}
 
 		return model;
 	}
