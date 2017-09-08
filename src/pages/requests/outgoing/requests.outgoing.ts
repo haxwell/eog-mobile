@@ -51,11 +51,29 @@ export class RequestsOutgoingPage {
 	}
 
 	isRequestModelEmpty() {
-		return this.model == undefined || 
-				this.model.length === 0 || 
-				(this.model.length > 0 && this.model.filter((obj) => { 
-					return obj["deliveringStatusId"] !== this._constants.REQUEST_STATUS_COMPLETED && obj["receivingStatusId"] !== this._constants.REQUEST_STATUS_COMPLETED;
-				}).length === 0);
+		let rtn = this.model === undefined || this.model.length === 0;
+
+		let len = 0;
+		if (!rtn) {
+			len = this.model.length;
+			len -= this.getNumberOfMatchingElements((obj) => { 
+					return obj["deliveringStatusId"] === this._constants.REQUEST_STATUS_COMPLETED && obj["requestingStatusId"] === this._constants.REQUEST_STATUS_COMPLETED;
+				});
+
+			rtn = len <= 0;
+		}
+
+		return rtn;
+	}
+
+	getNumberOfMatchingElements(func) {
+		if (this.model === undefined)
+			return 0;
+
+		let count = 0;
+		this.model.map((obj) => { if (func(obj)) count++; });
+
+		return count;
 	}
 
 	getAcceptedRequests() {
