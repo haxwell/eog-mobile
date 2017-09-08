@@ -7,6 +7,7 @@ import { LocalStorageModule } from 'angular-2-local-storage';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
+import { Push, PushObject, PushOptions } from '@ionic-native/push';
 
 import { MyApp } from './app.component';
 import { LoginPage } from '../pages/login/login';
@@ -38,6 +39,7 @@ import { KeywordEntryPage } from '../pages/keyword.entry/keyword.entry';
 
 import { ApiService } from './_services/api.service';
 import { WebsocketService } from './_services/websocket.service';
+import { PushMessagingService } from './_services/push.messaging.service';
 import { UserService } from './_services/user.service';
 import { DreamService } from './_services/dream.service';
 import { SearchService } from './_services/search.service';
@@ -125,6 +127,7 @@ import { Constants } from '../_constants/constants';
     Constants,
     StatusBar,
     SplashScreen,
+    Push, 
     ApiService,
     UserService,
     PointsService,
@@ -136,6 +139,7 @@ import { Constants } from '../_constants/constants';
     RecommendationService,
     NotificationService,
     WebsocketService,
+    PushMessagingService,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })
