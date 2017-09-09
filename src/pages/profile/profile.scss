@@ -6,6 +6,10 @@
 	margin-right: .25em;
 }
 
-.darkerWhileLoading {
-	background-color: grey;
+.rotate90 {
+	-webkit-transform: rotate(90deg);
+    -moz-transform: rotate(90deg);
+    -o-transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
+    transform: rotate(90deg);
 }
