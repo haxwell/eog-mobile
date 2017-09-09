@@ -12,7 +12,7 @@ import { LoginPage } from '../pages/login/login';
 export class MyApp {
   rootPage:any = LoginPage;
 
-  constructor(private platform: Platform, 
+  constructor(platform: Platform, 
               statusBar: StatusBar, 
               splashScreen: SplashScreen) {
     
