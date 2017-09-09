@@ -7,7 +7,6 @@ import { Push, PushObject, PushOptions } from '@ionic-native/push';
 import { UserService } from '../../app/_services/user.service';
 import { ApiService } from '../../app/_services/api.service';
 
-import { Constants } from '../../_constants/constants';
 import { environment } from '../../_environments/environment';
 
 @Injectable()
@@ -18,7 +17,6 @@ export class PushMessagingService {
 	constructor(private platform: Platform,
 				private _userService: UserService,
 				private _apiService: ApiService,
-				private _constants: Constants,
 				public _events: Events,
 				public push: Push, 
 				public alertCtrl: AlertController) { 
