@@ -15,6 +15,7 @@ import { LoginPage } from '../pages/login/login';
 import { CreateAccountPage } from '../pages/login/_pages/create.account';
 import { HomePage } from '../pages/home/home';
 import { ProfilePage } from '../pages/profile/profile';
+import { ChoosePhotoSourcePage } from '../pages/profile/_pages/choose-photo-source';
 import { SearchPage } from '../pages/search/search';
 import { SearchUsersPage } from '../pages/searchUsers/searchUsers';
 import { SendPointPage } from '../pages/searchUsers/_pages/send.point.page';
@@ -48,6 +49,7 @@ import { PointsService } from './_services/points.service';
 import { RecommendationService } from './_services/recommendation.service';
 import { RequestsService } from './_services/requests.service';
 import { ProfileService } from '../pages/profile/_services/profile.service';
+import { CameraService } from '../pages/profile/_services/camera.service';
 import { NotificationService } from '../pages/profile/_services/notification.service';
 import { ThingService } from '../pages/things/_services/thing.service';
 
@@ -60,6 +62,7 @@ import { Constants } from '../_constants/constants';
     CreateAccountPage,
     HomePage,
     ProfilePage,
+    ChoosePhotoSourcePage,
     DreamPage,
     DeleteDreamPage,
     ThingPage,
@@ -100,6 +103,7 @@ import { Constants } from '../_constants/constants';
     CreateAccountPage,
     HomePage,
     ProfilePage,
+    ChoosePhotoSourcePage,
     DreamPage,
     DeleteDreamPage,
     ThingPage,
@@ -137,6 +141,7 @@ import { Constants } from '../_constants/constants';
     DreamService,
     ThingService,
     ProfileService,
+    CameraService,
     RequestsService,
     RecommendationService,
     NotificationService,

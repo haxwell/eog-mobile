@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { NavController, ModalController, NavParams } from 'ionic-angular';
 import { Events } from 'ionic-angular';
 import { LoadingController } from 'ionic-angular';
-import { Camera, CameraOptions } from '@ionic-native/camera';
 
 import { ProfileService } from './_services/profile.service'
 import { NotificationService } from './_services/notification.service'
@@ -10,6 +9,7 @@ import { NotificationService } from './_services/notification.service'
 import { ThingPage } from '../things/things'
 import { DreamPage } from '../dreams/dreams'
 import { KeywordEntryPage } from '../keyword.entry/keyword.entry'
+import { ChoosePhotoSourcePage } from './_pages/choose-photo-source'
 
 @Component({
   selector: 'page-profile',
@@ -31,7 +31,6 @@ export class ProfilePage {
 				private _profileService: ProfileService,
 				private _notificationService: NotificationService,
 				private _events: Events,
-				private _camera: Camera, 
 				private loadingCtrl: LoadingController) {
 
 		this.user = Object.assign({}, navParams.get('user'));
@@ -154,28 +153,18 @@ export class ProfilePage {
 	}
 
 	onThumbnailPress($event) {
-		console.log("onThumbnailPress() called");
-		const options: CameraOptions = {
-		 	quality: 100,
-		 	destinationType: this._camera.DestinationType.DATA_URL,
-		 	encodingType: this._camera.EncodingType.JPEG,
-		 	mediaType: this._camera.MediaType.PICTURE
+		if (!this.isReadOnly()) {
+			let self = this;
+			let modal = this.modalCtrl.create(ChoosePhotoSourcePage);
+			
+			modal.onDidDismiss((promise) => {
+				promise.then((imageAsString) => { 
+					self.base64Image = imageAsString;
+				})
+			});
+			
+			modal.present();
 		}
-
-		let self = this;
-		self._camera.getPicture(options).then((imageData) => {
-		 	// imageData is either a base64 encoded string or a file URI
-		 	if (self.isBase64(imageData)) {
-		 		self.base64Image = 'data:image/jpeg;base64,' + imageData;
-		 	}
-		}, (err) => {
-		 	// Handle error
-		});
-	}
-
-	isBase64(data) {
-		var base64Regex = /^(?:[A-Z0-9+\/]{4})*(?:[A-Z0-9+\/]{2}==|[A-Z0-9+\/]{3}=|[A-Z0-9+\/]{4})$/i;
-		return base64Regex.test(data); // data is the base64 string
 	}
 
 	isSaveBtnEnabled() {
