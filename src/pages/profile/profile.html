@@ -18,6 +18,9 @@
 		</ion-card-header>
 		<ion-card-content>
 			<ion-item>
+				<ion-thumbnail item-start>
+					<img src="../../assets/img/mushroom.jpg">
+				</ion-thumbnail>
 				<ion-label fixed>Name: </ion-label>
 				<ion-input type="text" placeholder="Name" [disabled]="isReadOnly()" (ionChange)="onNameChange()" [(ngModel)]="model.realname" #ctrl="ngModel" required></ion-input>		
 			</ion-item>

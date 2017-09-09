@@ -77,6 +77,7 @@
         <splash height="960" src="resources/ios/splash/Default@2x~iphone.png" width="640" />
         <splash height="480" src="resources/ios/splash/Default~iphone.png" width="320" />
     </platform>
+    <allow-navigation href="http://192.168.1.57:8101" />
     <engine name="android" spec="^6.2.3" />
     <plugin name="cordova-plugin-console" spec="^1.0.5" />
     <plugin name="cordova-plugin-device" spec="^1.1.4" />
@@ -87,4 +88,5 @@
     <plugin name="phonegap-plugin-push" spec="^1.10.5">
         <variable name="SENDER_ID" value="386608926885" />
     </plugin>
+    <plugin name="cordova-plugin-camera" spec="^2.4.1" />
 </widget>
