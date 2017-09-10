@@ -44,4 +44,8 @@ export class ChoosePhotoSourcePage {
 			});
 		}));
 	}
+
+	onCancelBtnTap(evt) {
+		this.viewCtrl.dismiss();
+	}
 }
