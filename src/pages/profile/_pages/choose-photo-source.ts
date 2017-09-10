@@ -22,7 +22,10 @@ export class ChoosePhotoSourcePage {
 		self.imageAsString = undefined;
 		
 		self.viewCtrl.dismiss(new Promise((resolve, reject) => {
-			self.cameraService.takePicture().then((imgAsString: string) => { self.imageAsString = imgAsString; resolve(imgAsString); });
+			self.cameraService.takePicture().then((imgAsString: string) => { 
+				self.imageAsString = imgAsString; 
+				resolve(imgAsString); 
+			});
 		}));
 	}
 
@@ -35,7 +38,10 @@ export class ChoosePhotoSourcePage {
 		self.imageAsString = undefined;
 
 		self.viewCtrl.dismiss(new Promise((resolve, reject) => {
-			self.cameraService.loadGalleryPicture().then((imgAsString: string) => { self.imageAsString = imgAsString; resolve(imgAsString); });
+			self.cameraService.loadGalleryPicture().then((imgAsString: string) => { 
+				self.imageAsString = imgAsString; 
+				resolve(imgAsString); 
+			});
 		}));
 	}
 }

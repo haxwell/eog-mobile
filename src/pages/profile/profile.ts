@@ -23,7 +23,6 @@ export class ProfilePage {
 	dirty = true;
 	readOnly = false;
 	loading = undefined;
-	base64Image: string = undefined;
 
 	constructor(public navCtrl: NavController,
 				navParams: NavParams, 
@@ -145,11 +144,14 @@ export class ProfilePage {
 	}
 
 	isThumbnailImageAvailable() {
-		return this.base64Image !== undefined;
+		return this.model["base64Image"] !== undefined;
 	}
 
 	getBase64ThumbnailImage() {
-		return this.base64Image;
+		if (this.model["base64Image"] === undefined)
+			return undefined;
+		else
+			return 'data:image/jpeg;base64,' + this.model["base64Image"];
 	}
 
 	onThumbnailPress($event) {
@@ -159,7 +161,7 @@ export class ProfilePage {
 			
 			modal.onDidDismiss((promise) => {
 				promise.then((imageAsString) => { 
-					self.base64Image = imageAsString;
+					self.model["base64Image"] = imageAsString;
 				})
 			});
 			

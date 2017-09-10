@@ -40,7 +40,7 @@ export class CameraService {
 			self._camera.getPicture(options).then((imageData) => {
 			 	// imageData is either a base64 encoded string or a file URI
 			 	if (self.isBase64(imageData)) {
-			 		self.base64Image = 'data:image/jpeg;base64,' + imageData;
+			 		self.base64Image = imageData;
 			 		resolve(self.base64Image);
 			 	} else {
 			 		// Handle error
@@ -69,7 +69,7 @@ export class CameraService {
 			self._camera.getPicture(options).then((imageData) => {
 			 	// imageData is either a base64 encoded string or a file URI
 			 	if (self.isBase64(imageData)) {
-			 		self.base64Image = 'data:image/jpeg;base64,' + imageData;
+			 		self.base64Image = imageData;
 			 		resolve(self.base64Image);
 			 	} else {
 			 		// Handle error

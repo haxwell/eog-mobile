@@ -36,7 +36,12 @@ export class ProfileService {
 		model["email"] = user["email"];
 		model["points"] = {"total" : 0, "available": 0};
 
-		let url = environment.apiUrl + "/api/user/" + user["id"] + "/keywords";
+		let url = environment.apiUrl + "/api/user/" + user["id"] + "/profile/picture";
+		this._apiService.get(url).subscribe((base64ImageData) => {
+			model["base64Image"] = base64ImageData["_body"];
+		});
+
+		url = environment.apiUrl + "/api/user/" + user["id"] + "/keywords";
 		this._apiService.get(url).subscribe((keywordsObj) => {
 			model["keywords"] = JSON.parse(keywordsObj["_body"]);
 			model["keywords"].sort((a, b) => { let aText = a.text.toLowerCase(); let bText = b.text.toLowerCase(); if (aText > bText) return 1; else if (aText < bText) return -1; else return 0; })
@@ -97,6 +102,8 @@ export class ProfileService {
 		tmp["email"] = model["email"];
 		tmp["keywords"] = model["keywords"];
 
+		let profileImageData = this.JSON_to_URLEncoded({base64ImageData: model["base64Image"]}, undefined, undefined);
+
 		let data = this.JSON_to_URLEncoded(tmp, undefined, undefined);
 		console.log(data);
 
@@ -107,11 +114,19 @@ export class ProfileService {
 			.subscribe((resp) => {
 				console.log(JSON.parse(resp["_body"]));
 
-				self._userService.getUser(user["id"], true).then((userObj) => {
-					userObj["password"] = user["password"];
-					self._userService.setCurrentUser(userObj);
+				// TODO: Check to see that this photo changed before making the API call
 
-					resolve(JSON.parse(resp["_body"]));					
+				url = environment.apiUrl + "/api/user/" + user["id"] + "/profile/picture";
+				self._apiService.post(url, profileImageData)
+				.subscribe((resp) => {
+					
+					// force refresh of current user in the userService
+					self._userService.getUser(user["id"], true).then((userObj) => {
+						userObj["password"] = user["password"];
+						self._userService.setCurrentUser(userObj);
+
+						resolve(JSON.parse(resp["_body"]));					
+					});
 				});
 			});
 		});
