@@ -16,6 +16,12 @@
 
 	<ion-card *ngFor="let item of resultList">
 		<ion-card-content>
+			<ion-item>
+				<ion-thumbnail item-start >
+					<img [src]="getThumbnailImageForUser(item)">
+				</ion-thumbnail>
+			</ion-item>
+
 			{{item.realname}}
 			<button ion-button (click)="onViewProfileBtnTap($event, item)">View Profile</button>
 			<button ion-button [disabled]="!isPointable(item)" (click)="onSendPointBtnTap($event, item)">Send Point</button>

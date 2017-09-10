@@ -82,4 +82,24 @@ export class UserService {
 
 		return self.promise;
 	}
+
+	thumbnailPromises = {};
+	getThumbnailImageForUser(user) {
+		let self = this;
+		if (self.thumbnailPromises[user["id"]])
+			return self.thumbnailPromises[user["id"]];
+		else {
+			let url = environment.apiUrl + "/api/user/" + user["id"] + "/profile/picture";
+
+			self.thumbnailPromises[user["id"]] = new Promise(
+				(resolve, reject) => {
+					this._apiService.get(url).subscribe(
+						(base64ImageString) => {
+							resolve(base64ImageString);
+						});
+					});
+
+			return self.thumbnailPromises[user["id"]];
+		}
+	}
 }

@@ -7,6 +7,7 @@ import { SendPointPage } from './_pages/send.point.page'
 import { SendRecommendPage } from './_pages/send.recommend.page'
 import { ProfilePage } from '../../pages/profile/profile'
 
+import { UserService } from '../../app/_services/user.service';
 import { SearchService } from '../../app/_services/search.service';
 import { PointsService } from '../../app/_services/points.service';
 import { RecommendationService } from '../../app/_services/recommendation.service';
@@ -30,6 +31,7 @@ export class SearchUsersPage {
 				private modalCtrl: ModalController,
 				private _pointsService: PointsService,
 				private _recommendationService: RecommendationService,
+				private _userService: UserService,
 				private loadingCtrl: LoadingController) {
 
 	}
@@ -40,6 +42,33 @@ export class SearchUsersPage {
 
 		this._recommendationService.init();
 		this._pointsService.init();
+	}
+
+	thumbnailImages = {};
+	setThumbnailImageForUser(user) {
+		let self = this;
+		self._userService.getThumbnailImageForUser(user).then((base64ImageStr) => {
+			self.thumbnailImages[user["id"]] = base64ImageStr["_body"];
+		});
+	}
+
+	getThumbnailImageForUser(user) {
+		let self = this;
+		if (self.thumbnailImages[user["id"]] === undefined)
+			self.setThumbnailImageForUser(user);
+
+		// TODO: control the size of this list.. think: memory issues. Perhaps a structure
+		// which keeps the list, and only the last N recently used entries remain in the list
+		// If one gets pushed out of the RUL, it has to be recalled from the API. So, 
+		// a queue max length N, as userIds are called in the api, the userIds are pushed
+		// in the queue, until it gets to N length, and then one is pushed. The first one in is pushed.
+
+		if (self.thumbnailImages[user["id"]] === undefined)
+			return "assets/img/mushroom.jpg";
+		else if (self.thumbnailImages[user["id"]].length < 6)
+			return "assets/img/mushroom.jpg";
+		else
+			return "data:image/jpeg;base64," + self.thumbnailImages[user["id"]];
 	}
 
 	onSearchBtnTap(evt) {

@@ -79,4 +79,6 @@ export class CameraService {
 			});
 		})
 	}
+
+	
 }
