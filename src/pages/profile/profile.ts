@@ -160,9 +160,12 @@ export class ProfilePage {
 			let modal = this.modalCtrl.create(ChoosePhotoSourcePage);
 			
 			modal.onDidDismiss((promise) => {
-				promise.then((imageAsString) => { 
-					self.model["base64Image"] = imageAsString;
-				})
+				if (promise) {
+					promise.then((imageAsString) => { 
+						self.setDirty(true);
+						self.model["base64Image"] = imageAsString;
+					})
+				}
 			});
 			
 			modal.present();
