@@ -72,7 +72,7 @@ export class RequestsService {
 			// TODO: How can this operation be made more secure?
 			let url = environment.apiUrl + "/api/user/" + user["id"] + "/requests/" + direction;
 
-			let data =	"requestId=" + request["id"] + "&newStatus=" + status +"&declinedReasonCode=" + request["declinedReasonCode"] * 1;
+			let data =	"requestId=" + request["id"] + "&newStatus=" + status + "&requestAgainDelayCode=" + request["requestAgainDelayCode"] + "&declinedReasonCode=" + request["declinedReasonCode"];
 			
 			this._apiService.post(url, data).subscribe((obj) => {
 				let model = undefined;

@@ -16,6 +16,8 @@ export class DeclineRequestPage {
 	request = undefined;
 	declineReasonCodes = undefined;
 	selectedDeclineReasonId = undefined;
+	requestAgainDelayCodes = undefined;
+	selectedRequestAgainDelayId = undefined;
 
 	constructor(public navCtrl: NavController, 
 				public params: NavParams,
@@ -31,17 +33,23 @@ export class DeclineRequestPage {
 		this._apiService.get(url).subscribe((data) => {
 			self.declineReasonCodes = JSON.parse(data["_body"]);
 		});
+
+		url = environment.apiUrl + "/api/requestAgainDelayCodes";
+		this._apiService.get(url).subscribe((data) => {
+			self.requestAgainDelayCodes = JSON.parse(data["_body"]);
+		})
 	}
 
 	isSaveBtnAvailable() {
-		return this.selectedDeclineReasonId !== undefined;
+		return this.selectedDeclineReasonId !== undefined && this.selectedRequestAgainDelayId !== undefined;
 	}
 
 	onSaveBtnTap(evt) {
 		this.request["declinedReasonCode"] = this.selectedDeclineReasonId;
+		this.request["requestAgainDelayCode"] = this.selectedRequestAgainDelayId;
 		this._requestsService.declineIncomingRequest(this.request).then((obj) => {
 			console.log(obj);
-			this.viewCtrl.dismiss();			
+			this.viewCtrl.dismiss();
 		})
 	}
 
