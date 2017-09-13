@@ -19,13 +19,12 @@
 		</ion-card-header>
 		<ion-card-content *ngFor="let item of getPendingRequests()">
 			<ion-item>
-				{{item.thing.title}}
-				{{item.directionallyOppositeUser.realname}}
-				{{item.dream.title}}
+				Your promise: <b>{{item.thing.title}}</b><br/>
+				Requested by: {{item.directionallyOppositeUser.realname}}<br/>
+				Their dream: {{item.dream.title}}<br/>
 				<button ion-button (click)="onViewContactInfoBtnTap(item)">Contact Info</button>
 				<button ion-button (click)="onAcceptBtnTap(item)">Accept</button>
 				<button ion-button (click)="onDeclineBtnTap(item)">Decline</button>
-
 			</ion-item>
 		</ion-card-content>
 	</ion-card>
@@ -36,9 +35,9 @@
 		</ion-card-header>
 		<ion-card-content *ngFor="let item of getAcceptedRequests()">
 			<ion-item>
-				{{item.thing.title}}
-				{{item.directionallyOppositeUser.realname}}
-				{{item.dream.title}}
+				Your promise: <b>{{item.thing.title}}</b><br/>
+				Requested by: {{item.directionallyOppositeUser.realname}}<br/>
+				Their dream: {{item.dream.title}}<br/>
 			</ion-item>
 			<button ion-button (click)="onViewContactInfoBtnTap(item)">Contact Info</button>
 			<button ion-button (click)="onCompleteBtnTap(item)">Complete</button>
@@ -52,10 +51,10 @@
 		</ion-card-header>
 		<ion-card-content *ngFor="let item of getDeclinedRequests()">
 			<ion-item>
-				{{item.thing.title}}
-				{{item.directionallyOppositeUser.realname}}
-				{{item.dream.title}}
-				{{item.declinedReasonCode.text}}
+				Your promise: <b>{{item.thing.title}}</b><br/>
+				Requested by: {{item.directionallyOppositeUser.realname}}<br/>
+				Their dream: {{item.dream.title}}<br/>
+				Decline Reason: {{item.declinedReasonCode.text}}<br/>
 			</ion-item>
 		</ion-card-content>
 	</ion-card>
@@ -67,9 +66,9 @@
 		</ion-card-header>
 		<ion-card-content *ngFor="let item of getCompletedPendingApprovalRequests()">
 			<ion-item>
-				{{item.thing.title}}
-				{{item.directionallyOppositeUser.realname}}
-				{{item.dream.title}}
+				Your promise: <b>{{item.thing.title}}</b><br/>
+				Requested by: {{item.directionallyOppositeUser.realname}}<br/>
+				Their dream: {{item.dream.title}}<br/>
 			</ion-item>
 			<button ion-button (click)="onViewContactInfoBtnTap(item)">Contact Info</button>
 		</ion-card-content>
@@ -84,9 +83,9 @@
 		</ion-card-header>
 		<ion-card-content *ngFor="let item of getDisputedCompletedRequests()">
 			<ion-item>
-				{{item.thing.title}}
-				{{item.directionallyOppositeUser.realname}}
-				{{item.dream.title}}
+				Your promise: <b>{{item.thing.title}}</b><br/>
+				Requested by: {{item.directionallyOppositeUser.realname}}<br/>
+				Their dream: {{item.dream.title}}<br/>
 			</ion-item>
 			<button ion-button (click)="onViewContactInfoBtnTap(item)">Contact Info</button>
 			<button ion-button (click)="onCompleteBtnTap(item)">Complete</button>
