@@ -123,6 +123,14 @@ export class RequestsOutgoingPage {
 			return undefined;
 	}
 
+	onAcknowledgeBtnTap(item) {
+		let self = this;
+		self._requestsService.acknowledgeDeclinedRequest(item).then((data) => {
+			let list = self.model.filter((obj) => { return obj["id"] !== item["id"]; });
+			self.model = list;
+		});
+	}
+
 	onCompleteBtnTap(item) {
 		let self = this;
 		let modal = this.modalCtrl.create(CompleteOutgoingRequestPage, {request: item});

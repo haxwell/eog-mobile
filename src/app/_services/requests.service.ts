@@ -54,7 +54,7 @@ export class RequestsService {
 			// TODO: How can this operation be made more secure?
 			let url = environment.apiUrl + "/api/user/" + user["id"] + "/requests/" + direction;
 
-			let data =	"requestId=" + request["id"] + "&newStatus=" + status;
+			let data =	"requestId=" + request["id"] + "&newStatus=" + status +"&declinedReasonCode=" + request["declinedReasonCode"];
 			
 			this._apiService.post(url, data).subscribe((obj) => {
 				let model = undefined;
@@ -65,6 +65,10 @@ export class RequestsService {
 				resolve(model);
 			});
 		});
+	}
+
+	acknowledgeDeclinedRequest(request) {
+		return this.setRequestStatusByUserIdAndDirection(request, this._constants.REQUEST_STATUS_REQUESTOR_ACKNOWLEDGED, this._constants.OUTGOING);
 	}
 
 	declineIncomingRequest(request) {

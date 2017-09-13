@@ -9,11 +9,20 @@
 <ion-content padding>
 	<ion-label>You are about to DECLINE a request to do your Thing.</ion-label>
 	<br/>
-	<ion-label>{{request.thing.title}}</ion-label>
+	<ion-label><b>{{request.thing.title}}</b></ion-label>
+
+	<ion-row>
+		<ion-label>Please select a reason why you are declining...</ion-label>
+	</ion-row>		
+	<ion-row>
+		<ion-select [(ngModel)]="selectedDeclineReasonId" >
+			<ion-option *ngFor="let drc of declineReasonCodes" [value]="drc.id">{{drc.text}}</ion-option>
+		</ion-select>
+	</ion-row>		
 
 	<ion-row>
 		<button ion-button (click)="onCancelBtnTap($event)">Sorry, no.. Cancel</button>
-		<button ion-button (click)="onSaveBtnTap($event)">YES!</button>
+		<button ion-button [disabled]="!isSaveBtnAvailable()" (click)="onSaveBtnTap($event)">YES!</button>
 	</ion-row>
 
 </ion-content>

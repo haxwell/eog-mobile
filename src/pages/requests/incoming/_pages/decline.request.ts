@@ -2,7 +2,10 @@ import { Component } from '@angular/core';
 
 import { NavController, NavParams, ViewController } from 'ionic-angular';
 
+import { environment } from '../../../../_environments/environment';
+
 import { RequestsService } 	from '../../../../app/_services/requests.service';
+import { ApiService } 	from '../../../../app/_services/api.service';
 
 @Component({
   selector: 'page-requests-incoming-decline',
@@ -11,15 +14,31 @@ import { RequestsService } 	from '../../../../app/_services/requests.service';
 export class DeclineRequestPage {
 	
 	request = undefined;
+	declineReasonCodes = undefined;
+	selectedDeclineReasonId = undefined;
 
 	constructor(public navCtrl: NavController, 
 				public params: NavParams,
 				private viewCtrl: ViewController, 
-				private _requestsService: RequestsService) {
+				private _requestsService: RequestsService,
+				private _apiService: ApiService) {
 		this.request = params.get('request');
 	}
 
+	ngOnInit() {
+		let self = this;
+		let url = environment.apiUrl + "/api/declineReasonCodes";
+		this._apiService.get(url).subscribe((data) => {
+			self.declineReasonCodes = JSON.parse(data["_body"]);
+		});
+	}
+
+	isSaveBtnAvailable() {
+		return this.selectedDeclineReasonId !== undefined;
+	}
+
 	onSaveBtnTap(evt) {
+		this.request["declinedReasonCode"] = this.selectedDeclineReasonId;
 		this._requestsService.declineIncomingRequest(this.request).then((obj) => {
 			console.log(obj);
 			this.viewCtrl.dismiss();			

@@ -149,7 +149,9 @@ export class ProfilePage {
 
 	getBase64ThumbnailImage() {
 		if (this.model["base64Image"] === undefined)
-			return undefined;
+			return "assets/img/mushroom.jpg";
+		else if (this.model["base64Image"].length < 6)
+			return "assets/img/mushroom.jpg";
 		else
 			return 'data:image/jpeg;base64,' + this.model["base64Image"];
 	}
