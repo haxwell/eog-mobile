@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { UserService } from './user.service';
 import { ApiService } from './api.service';
+import { DeclineReasonCodeService } from './declined-reason-codes.service';
 
 import { environment } from '../../_environments/environment';
 
@@ -10,15 +11,32 @@ import { Constants } from '../../_constants/constants'
 @Injectable()
 export class RequestsService {
 	
-	constructor(private _apiService: ApiService, private _userService: UserService, private _constants: Constants) { }
+	constructor(private _apiService: ApiService, 
+				private _userService: UserService, 
+				private _declineReasonCodeService: DeclineReasonCodeService,
+				private _constants: Constants) { }
 
 	getModel(direction) {
+		let self = this;
 		return new Promise((resolve, reject) => {
 			let user = this._userService.getCurrentUser();
 			let url = environment.apiUrl + "/api/user/" + user["id"] + "/requests/" + direction;
 			
-			this._apiService.get(url).subscribe((obj) => {
-				resolve(JSON.parse(obj["_body"]));
+			self._apiService.get(url).subscribe((obj) => {
+				let arr = JSON.parse(obj["_body"]);
+
+				self._declineReasonCodeService.getDeclineReasonCodes().then((drcs: Array<Object>) => {
+					arr.map((req) => { 
+						if (req["declinedReasonCode"] === null) {
+							req["declinedReasonCode"] = {id: undefined, text: undefined};
+						} else {
+							let drc = drcs.find((obj) => { return req["declinedReasonCode"] });
+							req["declinedReasonCode"] = {id: drc["id"], text: drc["text"]};
+						}
+					});
+
+					resolve(arr);
+				});
 			});
 		})
 
@@ -54,7 +72,7 @@ export class RequestsService {
 			// TODO: How can this operation be made more secure?
 			let url = environment.apiUrl + "/api/user/" + user["id"] + "/requests/" + direction;
 
-			let data =	"requestId=" + request["id"] + "&newStatus=" + status +"&declinedReasonCode=" + request["declinedReasonCode"];
+			let data =	"requestId=" + request["id"] + "&newStatus=" + status +"&declinedReasonCode=" + request["declinedReasonCode"] * 1;
 			
 			this._apiService.post(url, data).subscribe((obj) => {
 				let model = undefined;
