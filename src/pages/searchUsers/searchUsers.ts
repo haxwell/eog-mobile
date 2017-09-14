@@ -101,6 +101,10 @@ export class SearchUsersPage {
 		return hasOwnPropertyForGivenUserId && this.isPointableObj[user["id"]] === true;
 	}
 
+	getSendPointColor(user) {
+		return this.isPointable(user) ? "green" : "red";
+	}
+
 	setRecommendable(user) {
 		let self = this;
 		this._recommendationService.isCurrentUserAbleToSendARecommendationTo(user["id"]).then((bool) => {
@@ -116,6 +120,10 @@ export class SearchUsersPage {
 		}
 
 		return hasOwnPropertyForGivenUserId && this.isRecommendableObj[user["id"]] === true;
+	}
+
+	getSendRecommendColor(user) {
+		return this.isRecommendable(user) ? "green" : "red";
 	}
 
 	onSendPointBtnTap(evt, item) {

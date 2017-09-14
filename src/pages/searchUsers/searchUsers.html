@@ -14,18 +14,24 @@
 		</button>
 	</ion-row>
 
-	<ion-card *ngFor="let item of resultList">
+	<ion-card *ngFor="let user of resultList">
 		<ion-card-content>
-			<ion-item>
-				<ion-thumbnail item-start >
-					<img [src]="getThumbnailImageForUser(item)">
-				</ion-thumbnail>
-			</ion-item>
-
-			{{item.realname}}
-			<button ion-button (click)="onViewProfileBtnTap($event, item)">View Profile</button>
-			<button ion-button [disabled]="!isPointable(item)" (click)="onSendPointBtnTap($event, item)">Send Point</button>
-			<button ion-button [disabled]="!isRecommendable(item)" (click)="onSendRecommendBtnTap($event, item)">Send Recommend</button>
+			<table (click)="onViewProfileBtnTap($event, user)">
+				<tr>
+					<td>
+						<ion-item>
+							<ion-thumbnail item-start >
+								<img [src]="getThumbnailImageForUser(user)">
+							</ion-thumbnail>
+						</ion-item>
+					</td>
+					<td>
+						{{user.realname}}
+						<ion-icon [ngStyle]="{'color':getSendPointColor(user)}" (click)="onSendPointBtnTap($event, user)" name="color-wand">Send Point</ion-icon>
+						<ion-icon [ngStyle]="{'color':getSendRecommendColor(user)}" (click)="onSendRecommendBtnTap($event, user)" name="ribbon">Send Recommendation</ion-icon>
+					</td>
+				</tr>
+			</table>
 		</ion-card-content>
 	</ion-card>
 
