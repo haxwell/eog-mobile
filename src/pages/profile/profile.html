@@ -39,11 +39,11 @@
 					</td>
 				</tr>
 			</table>
-			<ion-item>
+			<ion-item *ngIf="!isReadOnly()">
 				<ion-label fixed>Email: </ion-label>
 				<ion-input type="text" placeholder="you@domain.com" [disabled]="isReadOnly()" (ionChange)="onEmailChange()" [(ngModel)]="model.email" #ctrl="ngModel" required></ion-input>		
 			</ion-item>
-			<ion-item>
+			<ion-item *ngIf="!isReadOnly()">
 				<ion-label fixed>Phone: </ion-label>
 				<ion-input type="text" placeholder="# " [disabled]="isReadOnly()" (ionChange)="onPhoneChange()" [(ngModel)]="model.phone" #ctrl="ngModel" required></ion-input>
 			</ion-item>
