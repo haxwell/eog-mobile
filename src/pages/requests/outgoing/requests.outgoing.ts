@@ -38,10 +38,6 @@ export class RequestsOutgoingPage {
 	}
 
 	replaceModelElement(request) {
-		if (this.model === undefined) {
-			console.log("The model is undefined, and an event was called. That shouldn't be.")
-			debugger;
-		}
 		let temp = this.model.filter((obj) => { return obj["id"] !== request["id"]; });
 		temp.push(request);
 		this.model = temp;
