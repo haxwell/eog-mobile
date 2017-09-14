@@ -163,7 +163,7 @@ export class SearchPage {
 		return 	(this.userHasNecessaryRecommendationsCache[prm["id"]] === true) &&
 				!(this.userHasAlreadyRequestedThisPrmCache[prm["id"]] === true) &&
 				(this.userHasSufficientPointsGivenRulesCache[prm["id"]] === true) &&
-				(this.userIsPastRequestAgainDateCache[prm["id"]] === true);
+				(this.userIsPastRequestAgainDateCache[prm["id"]] === true || this.userIsPastRequestAgainDateCache[prm["id"]] === null);
 	}
 
 	initRequirementsCache(prm) {
