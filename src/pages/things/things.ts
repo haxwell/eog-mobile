@@ -112,8 +112,16 @@ export class ThingPage {
 		return this.requestMsgs !== undefined && this.requestMsgs.some((obj) => { return obj["type"] === "reqd"});
 	}
 
+	isStillMoreTimeLeftMessageAvailable() {
+		return this.requestMsgs !== undefined && this.requestMsgs.some((obj) => { return obj["type"] === "timeRemaining"});
+	}
+
 	getRequestMessages() {
 		return this.requestMsgs;
+	}
+
+	getStillMoreTimeLeftMessages() {
+		return this.requestMsgs.filter((obj) => { return obj["type"] === "timeRemaining"});
 	}
 
 	getAlreadyRequestedRequestMessages() {

@@ -8,6 +8,11 @@
 
 <ion-content padding>
 	<ion-card *ngIf="isRequestMessageAvailable()">
+		<ion-card-content *ngIf="isStillMoreTimeLeftMessageAvailable()">
+			<ion-item *ngFor="let item of getStillMoreTimeLeftMessages()" [ngStyle]="{'color':'red'}">
+				{{item.msg}}
+			</ion-item>
+		</ion-card-content>	
 		<ion-card-content *ngIf="isAlreadyRequestedMessageAvailable()">
 			<ion-item *ngFor="let item of getAlreadyRequestedRequestMessages()" [ngStyle]="{'color':'red'}">
 				{{item.msg}}

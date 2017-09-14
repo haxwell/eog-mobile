@@ -11,10 +11,49 @@ import { Constants } from '../../_constants/constants'
 @Injectable()
 export class RequestsService {
 	
+	archivedUserRequestsForThingPromiseCache = {};
+
 	constructor(private _apiService: ApiService, 
 				private _userService: UserService, 
 				private _declineReasonCodeService: DeclineReasonCodeService,
 				private _constants: Constants) { }
+
+	saveNew(dream, thing) {
+		return new Promise((resolve, reject) => {
+			let user = this._userService.getCurrentUser();
+			let url = environment.apiUrl + "/api/requests";
+
+			let data =	"requestingUserId=" + user["id"] + "&requestedThingId=" + thing["id"] + 
+						"&requestingDreamId=" + dream["id"];
+			
+			this._apiService.post(url, data).subscribe((obj) => {
+				let model = JSON.parse(obj["_body"]);
+				resolve(model);
+			});
+		});
+	}
+
+	getArchivedUserRequestsForThing(thing) {
+		if (this.archivedUserRequestsForThingPromiseCache[thing["id"]] === undefined) {
+			this.archivedUserRequestsForThingPromiseCache[thing["id"]] = null;
+			this.initArchivedUserRequestsForThingPromiseCache(thing); 
+		}
+
+		return this.archivedUserRequestsForThingPromiseCache[thing["id"]];
+	}
+
+	initArchivedUserRequestsForThingPromiseCache(thing) {
+		let self = this;
+		self.archivedUserRequestsForThingPromiseCache[thing["id"]] = new Promise((resolve, reject) => {
+			let user = this._userService.getCurrentUser();
+			let url = environment.apiUrl + "/api/user/" + user["id"] + "/requests/thing/" + thing["id"] + "/archived";
+
+			this._apiService.get(url).subscribe((obj) => {
+				let model = JSON.parse(obj["_body"]);
+				resolve(model);
+			});
+		});
+	}
 
 	getModel(direction) {
 		let self = this;
@@ -48,21 +87,6 @@ export class RequestsService {
 
 	getModelForOutgoing() {
 		return (this.getModel(this._constants.OUTGOING));
-	}
-
-	saveNew(dream, thing) {
-		return new Promise((resolve, reject) => {
-			let user = this._userService.getCurrentUser();
-			let url = environment.apiUrl + "/api/requests";
-
-			let data =	"requestingUserId=" + user["id"] + "&requestedThingId=" + thing["id"] + 
-						"&requestingDreamId=" + dream["id"];
-			
-			this._apiService.post(url, data).subscribe((obj) => {
-				let model = JSON.parse(obj["_body"]);
-				resolve(model);
-			});
-		});
 	}
 
 	setRequestStatusByUserIdAndDirection(request, status, direction) {

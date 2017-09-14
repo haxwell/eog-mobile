@@ -11,6 +11,8 @@ import { RequestsService } from '../../app/_services/requests.service';
 import { UserService } from '../../app/_services/user.service';
 import { RecommendationService } from '../../app/_services/recommendation.service';
 
+import Moment from 'moment'
+
 @Component({
   selector: 'page-search',
   templateUrl: 'search.html'
@@ -26,6 +28,8 @@ export class SearchPage {
 	userHasNecessaryRecommendationsCache = {};	
 	userHasSufficientPointsGivenRulesCache = {};
 	userHasAlreadyRequestedThisThingCache = {};
+	userIsPastRequestAgainDateCache = {};
+	archivedRequestsForThing = {};
 
 	constructor(public navCtrl: NavController, 
 				private _searchService: SearchService,
@@ -111,6 +115,20 @@ export class SearchPage {
 		});
 	}
 
+	setUserIsPastRequestAgainDateCache(thing) {
+		let self = this;
+		this._requestsService.getArchivedUserRequestsForThing(thing).then((data: Array<Object>) => {
+			if (data.length > 0) {
+				self.archivedRequestsForThing[thing["id"]] = data;
+				self.userIsPastRequestAgainDateCache[thing["id"]] = data.some((obj: Object) => {
+					let canRequestAgainDate = obj["canRequestAgainDate"];
+
+					return Moment(canRequestAgainDate) < Moment(new Date().getTime());
+				});
+			}
+		});
+	}
+
 	isRequestable(thing) {
 		if (this.userHasNecessaryRecommendationsCache[thing["id"]] === undefined) {
 			this.userHasNecessaryRecommendationsCache[thing["id"]] = null;
@@ -127,9 +145,15 @@ export class SearchPage {
 			this.setUserHasSufficientPointsGivenRules(thing);
 		}
 
+		if (this.userIsPastRequestAgainDateCache[thing["id"]] === undefined) {
+			this.userIsPastRequestAgainDateCache[thing["id"]] = null;
+			this.setUserIsPastRequestAgainDateCache(thing);
+		}
+
 		return 	(this.userHasNecessaryRecommendationsCache[thing["id"]] === true) &&
 				!(this.userHasAlreadyRequestedThisThingCache[thing["id"]] === true) &&
-				(this.userHasSufficientPointsGivenRulesCache[thing["id"]] === true);
+				(this.userHasSufficientPointsGivenRulesCache[thing["id"]] === true) &&
+				(this.userIsPastRequestAgainDateCache[thing["id"]] === true);
 	}
 
 	initRequirementsCache(thing) {
@@ -146,6 +170,11 @@ export class SearchPage {
 		if (this.userHasSufficientPointsGivenRulesCache[thing["id"]] === undefined) {
 			this.userHasSufficientPointsGivenRulesCache[thing["id"]] = null;
 			this.setUserHasSufficientPointsGivenRules(thing);
+		}
+
+		if (this.userIsPastRequestAgainDateCache[thing["id"]] === undefined) {
+			this.userIsPastRequestAgainDateCache[thing["id"]] = null;
+			this.setUserIsPastRequestAgainDateCache(thing);
 		}
 	}
 
@@ -165,12 +194,24 @@ export class SearchPage {
 			return "red";
 	}
 
+	getSufficientTimeIconColor(thing) {
+		this.initRequirementsCache(thing);
+		if (this.userIsPastRequestAgainDateCache[thing["id"]] === true)
+			return "green";
+		else
+			return "red";
+	}
+
 	getSufficientPointsIconColor(thing) {
 		this.initRequirementsCache(thing);
 		if (this.userHasSufficientPointsGivenRulesCache[thing["id"]] === true)
 			return "green";
 		else
 			return "red";
+	}
+
+	hasThingBeenPreviouslyRequested(thing) {
+		return this.archivedRequestsForThing[thing["id"]] !== undefined && this.archivedRequestsForThing[thing["id"]] !== null && this.archivedRequestsForThing[thing["id"]].length > 0;
 	}
 
 	areRecommendationsRequired(thing) {
@@ -191,6 +232,8 @@ export class SearchPage {
 		let self = this;
 		if (this.userHasAlreadyRequestedThisThingCache[_thing["id"]] === true) {
 			_msgs.push({type: 'alreadyRequested', msg: 'You have already requested this Thing.'});
+		} else if (this.userIsPastRequestAgainDateCache[_thing["id"]] === false) {
+			_msgs.push({type: 'timeRemaining', msg: 'The author set a time limit before you can request this Thing again. You still have time remaining.'});
 		} else {
 			if (this.userHasSufficientPointsGivenRulesCache[_thing["id"]] === false) {
 				this._pointsService.getCurrentAvailableUserPoints().then((data) => {

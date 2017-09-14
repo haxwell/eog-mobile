@@ -18,6 +18,7 @@
 		<ion-card-header>
 			<ion-icon [ngStyle]="{'color':getAlreadyRequestedIconColor(item)}" name="megaphone"> </ion-icon>
 			<ion-icon [ngStyle]="{'color':getSufficientPointsIconColor(item)}" name="pricetag"></ion-icon>
+			<ion-icon *ngIf="hasThingBeenPreviouslyRequested(item)" [ngStyle]="{'color':getSufficientTimeIconColor(item)}" name="clock"></ion-icon>
 			<ion-icon *ngIf="areRecommendationsRequired(item)" [ngStyle]="{'color':getNecessaryRecommendationsIconColor(item)}" name="people"></ion-icon>
 			<br/>
 			{{item.title}}
