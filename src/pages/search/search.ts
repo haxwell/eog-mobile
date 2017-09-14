@@ -114,7 +114,7 @@ export class SearchPage {
 	setUserHasAlreadyRequestedThisPrm(prm) {
 		let self = this;
 		this._requestsService.getModelForOutgoing().then((data: Array<Object>) => {
-			self.userHasAlreadyRequestedThisPrmCache[prm["id"]] = data.some((obj) => { return obj["prm"]["id"] === prm["id"]; });
+			self.userHasAlreadyRequestedThisPrmCache[prm["id"]] = data.some((obj) => { return obj["promise"]["id"] === prm["id"]; });
 		});
 	}
 
