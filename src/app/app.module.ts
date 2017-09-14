@@ -92,7 +92,7 @@ import { Constants } from '../_constants/constants';
     BrowserModule,
     HttpModule,
     LocalStorageModule.withConfig({
-        prefix: 'eog-app',
+        prefix: 'easyah-app',
         storageType: 'localStorage'
     }),
     IonicModule.forRoot(MyApp)
