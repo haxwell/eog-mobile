@@ -87,10 +87,20 @@ export class SearchPage {
 
 		self.loading.present();
 
-		this._searchService.searchThings(this.searchString).then((data) => {
+		this._searchService.searchThings(this.searchString).then((data: Array<Object>) => {
 			self.ngOnInit();
-			self.loading.dismiss();
-			self.resultList = data;
+
+			data.map((obj) => {
+				self._userService.getUser(obj["userId"]).then((user) => {
+					obj["directionallyOppositeUser"] = user;
+					delete obj["userId"];
+
+					if (!data.some((obj) => { return obj["userId"] != undefined; })) {
+						self.resultList = data;
+						self.loading.dismiss();
+					}
+				});
+			});
 		});
 	}
 

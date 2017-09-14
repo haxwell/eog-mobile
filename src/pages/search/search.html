@@ -1,4 +1,4 @@
-<ion-header>
+	<ion-header>
 	<ion-navbar>
 		<ion-title>
 			Search For Things
@@ -21,7 +21,9 @@
 			<ion-icon *ngIf="hasThingBeenPreviouslyRequested(item)" [ngStyle]="{'color':getSufficientTimeIconColor(item)}" name="clock"></ion-icon>
 			<ion-icon *ngIf="areRecommendationsRequired(item)" [ngStyle]="{'color':getNecessaryRecommendationsIconColor(item)}" name="people"></ion-icon>
 			<br/>
-			{{item.title}}
+			<b>{{item.title}}</b>
+			<br/>
+			{{item.directionallyOppositeUser.realname}}
 		</ion-card-header>
 		<ion-card-content>
 			{{item.description}}
