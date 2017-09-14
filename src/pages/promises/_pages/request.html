@@ -1,0 +1,33 @@
+<ion-header>
+	<ion-navbar>
+		<ion-title>
+			Make a Request
+		</ion-title>
+	</ion-navbar>
+</ion-header>
+
+<ion-content padding>
+	<ion-label>You are about to request a User do their Promise for you.</ion-label>
+	<ion-label><b>{{prm.title}}</b></ion-label>
+	<ion-label *ngIf="!getRequiredUserRecommendations()">This will require {{prm.requiredPointsQuantity}} points from you.</ion-label>
+	<ion-label *ngIf="getRequiredUserRecommendations()">This will require {{prm.requiredPointsQuantity}} points, and the following recommendations from you.</ion-label>
+	<span class="blockItem" *ngFor="let user of getRequiredUserRecommendations()">
+		{{user.realname}}
+	</span>
+	<hr/>
+	<ion-label>People make Promises because they want to help you with your Dream. A relevant Dream can motivate them to accept your request!</ion-label>
+	<ion-row>
+		<ion-label>Which of your Dreams do you want to associate with this request?</ion-label>
+	</ion-row>		
+	<ion-row>
+		<ion-select [(ngModel)]="selectedDreamId" >
+			<ion-option *ngFor="let dream of dreams" [value]="dream.id">{{dream.title}}</ion-option>
+		</ion-select>
+	</ion-row>		
+
+	<ion-row>
+		<button ion-button (click)="onCancelBtnTap($event)">Cancel</button>
+		<button ion-button [disabled]="!isSaveBtnEnabled()" (click)="onSaveBtnTap($event)">Save</button>
+	</ion-row>
+
+</ion-content>
