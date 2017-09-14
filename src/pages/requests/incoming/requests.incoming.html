@@ -19,7 +19,7 @@
 		</ion-card-header>
 		<ion-card-content *ngFor="let item of getPendingRequests()">
 			<ion-item>
-				Your promise: <b>{{item.thing.title}}</b><br/>
+				Your promise: <b>{{item.prm.title}}</b><br/>
 				Requested by: {{item.directionallyOppositeUser.realname}}<br/>
 				Their dream: {{item.dream.title}}<br/>
 				<button ion-button (click)="onViewContactInfoBtnTap(item)">Contact Info</button>
@@ -35,7 +35,7 @@
 		</ion-card-header>
 		<ion-card-content *ngFor="let item of getAcceptedRequests()">
 			<ion-item>
-				Your promise: <b>{{item.thing.title}}</b><br/>
+				Your promise: <b>{{item.prm.title}}</b><br/>
 				Requested by: {{item.directionallyOppositeUser.realname}}<br/>
 				Their dream: {{item.dream.title}}<br/>
 			</ion-item>
@@ -51,7 +51,7 @@
 		</ion-card-header>
 		<ion-card-content *ngFor="let item of getDeclinedRequests()">
 			<ion-item>
-				Your promise: <b>{{item.thing.title}}</b><br/>
+				Your promise: <b>{{item.prm.title}}</b><br/>
 				Requested by: {{item.directionallyOppositeUser.realname}}<br/>
 				Their dream: {{item.dream.title}}<br/>
 				Decline Reason: {{item.declinedReasonCode.text}}<br/>
@@ -66,7 +66,7 @@
 		</ion-card-header>
 		<ion-card-content *ngFor="let item of getCompletedPendingApprovalRequests()">
 			<ion-item>
-				Your promise: <b>{{item.thing.title}}</b><br/>
+				Your promise: <b>{{item.prm.title}}</b><br/>
 				Requested by: {{item.directionallyOppositeUser.realname}}<br/>
 				Their dream: {{item.dream.title}}<br/>
 			</ion-item>
@@ -83,7 +83,7 @@
 		</ion-card-header>
 		<ion-card-content *ngFor="let item of getDisputedCompletedRequests()">
 			<ion-item>
-				Your promise: <b>{{item.thing.title}}</b><br/>
+				Your promise: <b>{{item.prm.title}}</b><br/>
 				Requested by: {{item.directionallyOppositeUser.realname}}<br/>
 				Their dream: {{item.dream.title}}<br/>
 			</ion-item>

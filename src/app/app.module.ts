@@ -20,7 +20,7 @@ import { SearchPage } from '../pages/search/search';
 import { SearchUsersPage } from '../pages/searchUsers/searchUsers';
 import { SendPointPage } from '../pages/searchUsers/_pages/send.point.page';
 import { SendRecommendPage } from '../pages/searchUsers/_pages/send.recommend.page';
-import { RequestPage } from '../pages/things/_pages/request';
+import { RequestPage } from '../pages/promises/_pages/request';
 import { AcceptRequestPage } from '../pages/requests/incoming/_pages/accept.request';
 import { DeclineRequestPage } from '../pages/requests/incoming/_pages/decline.request';
 import { CancelRequestPage } from '../pages/requests/incoming/_pages/cancel.request';
@@ -32,11 +32,11 @@ import { CancelOutgoingRequestPage } from '../pages/requests/outgoing/_pages/can
 import { RequestContactInfoPage } from '../pages/requests/_pages/contact.info';
 import { DreamPage } from '../pages/dreams/dreams';
 import { DeleteDreamPage } from '../pages/dreams/_pages/delete.dream';
-import { ThingPage } from '../pages/things/things';
-import { DeleteThingPage } from '../pages/things/_pages/delete.thing';
+import { PrmPage } from '../pages/promises/promises';
+import { DeletePrmPage } from '../pages/promises/_pages/delete.prm';
 import { RequestsIncomingPage } from '../pages/requests/incoming/requests.incoming';
 import { RequestsOutgoingPage } from '../pages/requests/outgoing/requests.outgoing';
-import { RulePage } from '../pages/things/_pages/rule';
+import { RulePage } from '../pages/promises/_pages/rule';
 import { KeywordEntryPage } from '../pages/keyword.entry/keyword.entry';
 
 import { ApiService } from './_services/api.service';
@@ -52,7 +52,7 @@ import { DeclineReasonCodeService } from './_services/declined-reason-codes.serv
 import { ProfileService } from '../pages/profile/_services/profile.service';
 import { CameraService } from '../pages/profile/_services/camera.service';
 import { NotificationService } from '../pages/profile/_services/notification.service';
-import { ThingService } from '../pages/things/_services/thing.service';
+import { PrmService } from '../pages/promises/_services/prm.service';
 
 import { Constants } from '../_constants/constants';
 
@@ -66,8 +66,8 @@ import { Constants } from '../_constants/constants';
     ChoosePhotoSourcePage,
     DreamPage,
     DeleteDreamPage,
-    ThingPage,
-    DeleteThingPage,
+    PrmPage,
+    DeletePrmPage,
     RulePage,
     RequestsIncomingPage,
     RequestsOutgoingPage,
@@ -107,8 +107,8 @@ import { Constants } from '../_constants/constants';
     ChoosePhotoSourcePage,
     DreamPage,
     DeleteDreamPage,
-    ThingPage,
-    DeleteThingPage,
+    PrmPage,
+    DeletePrmPage,
     RulePage,
     RequestsIncomingPage,
     RequestsOutgoingPage,
@@ -140,7 +140,7 @@ import { Constants } from '../_constants/constants';
     PointsService,
     SearchService,
     DreamService,
-    ThingService,
+    PrmService,
     ProfileService,
     CameraService,
     RequestsService,

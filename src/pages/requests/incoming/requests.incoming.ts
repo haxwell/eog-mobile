@@ -49,9 +49,20 @@ export class RequestsIncomingPage {
 
 	ngOnInit() {
 		var self = this;
-		this._requestsService.getModelForIncoming().then((data) => {
-			self.model = data;
-			this.dirty = false;
+		this._requestsService.getModelForIncoming().then((data: Array<Object>) => {
+			// the data object has the property name set as promise.
+			//  so as not to be confusing, we need it on this side to read 'prm'
+			data.map((obj) => {
+				let l = obj["promise"];
+				delete obj["promise"];
+
+				obj["prm"] = l;
+
+				if (!data.some((obj) => { return obj["promise"] !== undefined; })) {
+					self.model = data;
+					self.dirty = false;
+				}
+			});
 		});
 	}
 

@@ -11,19 +11,19 @@ import { Constants } from '../../_constants/constants'
 @Injectable()
 export class RequestsService {
 	
-	archivedUserRequestsForThingPromiseCache = {};
+	archivedUserRequestsForPrmPromiseCache = {};
 
 	constructor(private _apiService: ApiService, 
 				private _userService: UserService, 
 				private _declineReasonCodeService: DeclineReasonCodeService,
 				private _constants: Constants) { }
 
-	saveNew(dream, thing) {
+	saveNew(dream, prm) {
 		return new Promise((resolve, reject) => {
 			let user = this._userService.getCurrentUser();
 			let url = environment.apiUrl + "/api/requests";
 
-			let data =	"requestingUserId=" + user["id"] + "&requestedThingId=" + thing["id"] + 
+			let data =	"requestingUserId=" + user["id"] + "&requestedPromiseId=" + prm["id"] + 
 						"&requestingDreamId=" + dream["id"];
 			
 			this._apiService.post(url, data).subscribe((obj) => {
@@ -33,20 +33,19 @@ export class RequestsService {
 		});
 	}
 
-	getArchivedUserRequestsForThing(thing) {
-		if (this.archivedUserRequestsForThingPromiseCache[thing["id"]] === undefined) {
-			this.archivedUserRequestsForThingPromiseCache[thing["id"]] = null;
-			this.initArchivedUserRequestsForThingPromiseCache(thing); 
+	getArchivedUserRequestsForPrm(prm) {if (this.archivedUserRequestsForPrmPromiseCache[prm["id"]] === undefined) {
+			this.archivedUserRequestsForPrmPromiseCache[prm["id"]] = null;
+			this.initArchivedUserRequestsForPrmPromiseCache(prm); 
 		}
 
-		return this.archivedUserRequestsForThingPromiseCache[thing["id"]];
+		return this.archivedUserRequestsForPrmPromiseCache[prm["id"]];
 	}
 
-	initArchivedUserRequestsForThingPromiseCache(thing) {
+	initArchivedUserRequestsForPrmPromiseCache(prm) {
 		let self = this;
-		self.archivedUserRequestsForThingPromiseCache[thing["id"]] = new Promise((resolve, reject) => {
+		self.archivedUserRequestsForPrmPromiseCache[prm["id"]] = new Promise((resolve, reject) => {
 			let user = this._userService.getCurrentUser();
-			let url = environment.apiUrl + "/api/user/" + user["id"] + "/requests/thing/" + thing["id"] + "/archived";
+			let url = environment.apiUrl + "/api/user/" + user["id"] + "/requests/promises/" + prm["id"] + "/archived";
 
 			this._apiService.get(url).subscribe((obj) => {
 				let model = JSON.parse(obj["_body"]);

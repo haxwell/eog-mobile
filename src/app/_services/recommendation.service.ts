@@ -39,19 +39,19 @@ export class RecommendationService {
 		return this.initPromise;
 	}
 
-	getUserHasNecessaryRecommendations(thing, request?) {
+	getUserHasNecessaryRecommendations(prm, request?) {
 		let self = this;
 
 		return new Promise((resolve, reject) => {
 			this.initPromise.then(() => {
 				let count = 0;
 
-				thing["requiredUserRecommendations"].map((obj) => {
+				prm["requiredUserRecommendations"].map((obj) => {
 					if (self.recommendationsIncoming.some((obj2) => { return obj2["escrowedRequestId"] === null && obj2["providingUserId"] === obj["requiredRecommendUserId"]; }))
 						count++;
 				});
 
-				resolve((count === thing["requiredUserRecommendations"].length));
+				resolve((count === prm["requiredUserRecommendations"].length));
 			});
 		})
 	}

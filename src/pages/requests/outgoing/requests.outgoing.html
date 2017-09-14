@@ -19,7 +19,7 @@
 		</ion-card-header>
 		<ion-card-content *ngFor="let item of getAcceptedRequests()">
 			<ion-item>
-				The promise: <b>{{item.thing.title}}</b><br/>
+				The promise: <b>{{item.prm.title}}</b><br/>
 				Promised by: {{item.directionallyOppositeUser.realname}}<br/>
 				Your dream: {{item.dream.title}}<br/>
 			</ion-item>
@@ -34,7 +34,7 @@
 		</ion-card-header>
 		<ion-card-content *ngFor="let item of getPendingRequests()">
 			<ion-item>
-				The promise: <b>{{item.thing.title}}</b><br/>
+				The promise: <b>{{item.prm.title}}</b><br/>
 				Promised by: {{item.directionallyOppositeUser.realname}}<br/>
 				Your dream: {{item.dream.title}}<br/>
 			</ion-item>
@@ -48,7 +48,7 @@
 		</ion-card-header>
 		<ion-card-content *ngFor="let item of getCompletedAwaitingApprovalRequests()">
 			<ion-item>
-				The promise: <b>{{item.thing.title}}</b><br/>
+				The promise: <b>{{item.prm.title}}</b><br/>
 				Promised by: {{item.directionallyOppositeUser.realname}}<br/>
 				Your dream: {{item.dream.title}}<br/>
 			</ion-item>
@@ -65,7 +65,7 @@
 		</ion-card-header>
 		<ion-card-content *ngFor="let item of getNotCompleteAwaitingResolution()">
 			<ion-item>
-				The promise: <b>{{item.thing.title}}</b><br/>
+				The promise: <b>{{item.prm.title}}</b><br/>
 				Promised by: {{item.directionallyOppositeUser.realname}}<br/>
 				Your dream: {{item.dream.title}}<br/>
 			</ion-item>
@@ -79,7 +79,7 @@
 		</ion-card-header>
 		<ion-card-content *ngFor="let item of getCancelledRequests()">
 			<ion-item>
-				The promise: <b>{{item.thing.title}}</b><br/>
+				The promise: <b>{{item.prm.title}}</b><br/>
 				Promised by: {{item.directionallyOppositeUser.realname}}<br/>
 				Your dream: {{item.dream.title}}<br/>
 			</ion-item>
@@ -93,7 +93,7 @@
 		</ion-card-header>
 		<ion-card-content *ngFor="let item of getDeclinedRequests()">
 			<ion-item>
-				The promise: <b>{{item.thing.title}}</b><br/>
+				The promise: <b>{{item.prm.title}}</b><br/>
 				Promised by: {{item.directionallyOppositeUser.realname}}<br/>
 				Your dream: {{item.dream.title}}<br/>
 				Decline Reason: {{item.declinedReasonCode.text}}<br/>

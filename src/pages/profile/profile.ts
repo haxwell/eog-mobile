@@ -6,7 +6,7 @@ import { LoadingController } from 'ionic-angular';
 import { ProfileService } from './_services/profile.service'
 import { NotificationService } from './_services/notification.service'
 
-import { ThingPage } from '../things/things'
+import { PrmPage } from '../promises/promises'
 import { DreamPage } from '../dreams/dreams'
 import { KeywordEntryPage } from '../keyword.entry/keyword.entry'
 import { ChoosePhotoSourcePage } from './_pages/choose-photo-source'
@@ -65,29 +65,29 @@ export class ProfilePage {
 		return this.readOnly;
 	}
 
-	thingAndDreamCallback = (_params) => {
+	PrmAndDreamCallback = (_params) => {
 		return new Promise((resolve, reject) => {
 			this.setDirty(_params === true);
 			resolve();
 		});
 	}
 
-	onNewThingBtnTap(evt) {
-		this.navCtrl.push(ThingPage, { thing: undefined, callback: this.thingAndDreamCallback });
+	onNewPromiseBtnTap(evt) {
+		this.navCtrl.push(PrmPage, { prm: undefined, callback: this.PrmAndDreamCallback });
 	}
 
-	onThingBtnTap(item) { 
+	onPromiseBtnTap(item) { 
 		if (!this.isReadOnly())
-			this.navCtrl.push(ThingPage, { thing: item, callback:  this.thingAndDreamCallback });
+			this.navCtrl.push(PrmPage, { prm: item, callback:  this.PrmAndDreamCallback });
 	}
 
 	onNewDreamBtnTap(evt) {
-		this.navCtrl.push(DreamPage, { dream: undefined, callback: this.thingAndDreamCallback });
+		this.navCtrl.push(DreamPage, { dream: undefined, callback: this.PrmAndDreamCallback });
 	}
 
 	onDreamBtnTap(item) { 
 		if (!this.isReadOnly())
-			this.navCtrl.push(DreamPage, { dream: item, callback: this.thingAndDreamCallback });
+			this.navCtrl.push(DreamPage, { dream: item, callback: this.PrmAndDreamCallback });
 	}
 
 	onIndividualKeywordPress(item) {
@@ -196,8 +196,8 @@ export class ProfilePage {
 		return this.model["dreams"] === undefined || this.model["dreams"].length === 0;
 	}
 
-	userHasNoThings() {
-		return this.model["things"] === undefined || this.model["things"].length === 0;
+	userHasNoPromises() {
+		return this.model["prms"] === undefined || this.model["prms"].length === 0;
 	}
 
 	userHasNoKeywords() {
@@ -206,6 +206,13 @@ export class ProfilePage {
 
 	userHasNoNotifications() { 
 		return this.model["notifications"] === undefined || this.model["notifications"].length ==0;
+	}
+
+	getNotifications() {
+		if (!this.model || !this.model["notifications"])
+			return [];
+		else
+			return this.model["notifications"];	
 	}
 
 	onNotificationPress(item) {
@@ -254,8 +261,8 @@ export class ProfilePage {
 		return (this.model["incomingRecommendations"] === undefined) ? "darkerWhileLoading" : "";
 	}
 
-	getThingsCardClass() {
-		return (this.model["things"] === undefined) ? "darkerWhileLoading" : "";
+	getPromisesCardClass() {
+		return (this.model["prms"] === undefined) ? "darkerWhileLoading" : "";
 	}
 
 	getDreamsCardClass() {

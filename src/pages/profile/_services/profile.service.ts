@@ -53,10 +53,10 @@ export class ProfileService {
 			model["dreams"].sort((a, b) => { let aText = a.title.toLowerCase(); let bText = b.title.toLowerCase(); if (aText > bText) return 1; else if (aText < bText) return -1; else return 0; })
 		});
 
-		url = environment.apiUrl + "/api/user/" + user["id"] + "/things";
-		this._apiService.get(url).subscribe((thingsObj) => {
-			model["things"] = JSON.parse(thingsObj["_body"]);
-			model["things"].sort((a, b) => { let aText = a.title.toLowerCase(); let bText = b.title.toLowerCase(); if (aText > bText) return 1; else if (aText < bText) return -1; else return 0; })
+		url = environment.apiUrl + "/api/user/" + user["id"] + "/promises";
+		this._apiService.get(url).subscribe((prmsObj) => {
+			model["prms"] = JSON.parse(prmsObj["_body"]);
+			model["prms"].sort((a, b) => { let aText = a.title.toLowerCase(); let bText = b.title.toLowerCase(); if (aText > bText) return 1; else if (aText < bText) return -1; else return 0; })
 		});
 
 		this._pointsService.getCurrentAvailableUserPoints().then((pts) => {

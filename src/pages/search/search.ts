@@ -3,7 +3,7 @@ import { NavController } from 'ionic-angular';
 import { Events } from 'ionic-angular';
 import { LoadingController } from 'ionic-angular';
 
-import { ThingPage } from '../things/things'
+import { PrmPage } from '../promises/promises'
 
 import { SearchService } from '../../app/_services/search.service';
 import { PointsService } from '../../app/_services/points.service';
@@ -27,9 +27,9 @@ export class SearchPage {
 
 	userHasNecessaryRecommendationsCache = {};	
 	userHasSufficientPointsGivenRulesCache = {};
-	userHasAlreadyRequestedThisThingCache = {};
+	userHasAlreadyRequestedThisPrmCache = {};
 	userIsPastRequestAgainDateCache = {};
-	archivedRequestsForThing = {};
+	archivedRequestsForPrm = {};
 
 	constructor(public navCtrl: NavController, 
 				private _searchService: SearchService,
@@ -58,7 +58,7 @@ export class SearchPage {
 
 		self.userHasSufficientPointsGivenRulesCache	= {};
 		self.userHasNecessaryRecommendationsCache = {};	
-		self.userHasAlreadyRequestedThisThingCache = {};
+		self.userHasAlreadyRequestedThisPrmCache = {};
 
 		this._recommendationService.init();
 		this._pointsService.init();
@@ -87,7 +87,7 @@ export class SearchPage {
 
 		self.loading.present();
 
-		this._searchService.searchThings(this.searchString).then((data: Array<Object>) => {
+		this._searchService.searchPrms(this.searchString).then((data: Array<Object>) => {
 			self.ngOnInit();
 
 			data.map((obj) => {
@@ -104,33 +104,33 @@ export class SearchPage {
 		});
 	}
 
-	setUserHasSufficientPointsGivenRules(thing) {
+	setUserHasSufficientPointsGivenRules(prm) {
 		let self = this;
 		this._pointsService.getCurrentAvailableUserPoints().then((data) => {
-			self.userHasSufficientPointsGivenRulesCache[thing["id"]] = (thing["requiredPointsQuantity"] <= data);
+			self.userHasSufficientPointsGivenRulesCache[prm["id"]] = (prm["requiredPointsQuantity"] <= data);
 		});
 	}
 
-	setUserHasAlreadyRequestedThisThing(thing) {
+	setUserHasAlreadyRequestedThisPrm(prm) {
 		let self = this;
 		this._requestsService.getModelForOutgoing().then((data: Array<Object>) => {
-			self.userHasAlreadyRequestedThisThingCache[thing["id"]] = data.some((obj) => { return obj["thing"]["id"] === thing["id"]; });
+			self.userHasAlreadyRequestedThisPrmCache[prm["id"]] = data.some((obj) => { return obj["prm"]["id"] === prm["id"]; });
 		});
 	}
 
-	setUserHasNecessaryRecommendations(thing) {
+	setUserHasNecessaryRecommendations(prm) {
 		let self = this;
-		this._recommendationService.getUserHasNecessaryRecommendations(thing).then((data) => {
-			self.userHasNecessaryRecommendationsCache[thing["id"]] = data;
+		this._recommendationService.getUserHasNecessaryRecommendations(prm).then((data) => {
+			self.userHasNecessaryRecommendationsCache[prm["id"]] = data;
 		});
 	}
 
-	setUserIsPastRequestAgainDateCache(thing) {
+	setUserIsPastRequestAgainDateCache(prm) {
 		let self = this;
-		this._requestsService.getArchivedUserRequestsForThing(thing).then((data: Array<Object>) => {
+		this._requestsService.getArchivedUserRequestsForPrm(prm).then((data: Array<Object>) => {
 			if (data.length > 0) {
-				self.archivedRequestsForThing[thing["id"]] = data;
-				self.userIsPastRequestAgainDateCache[thing["id"]] = data.some((obj: Object) => {
+				self.archivedRequestsForPrm[prm["id"]] = data;
+				self.userIsPastRequestAgainDateCache[prm["id"]] = data.some((obj: Object) => {
 					let canRequestAgainDate = obj["canRequestAgainDate"];
 
 					return Moment(canRequestAgainDate) < Moment(new Date().getTime());
@@ -139,96 +139,96 @@ export class SearchPage {
 		});
 	}
 
-	isRequestable(thing) {
-		if (this.userHasNecessaryRecommendationsCache[thing["id"]] === undefined) {
-			this.userHasNecessaryRecommendationsCache[thing["id"]] = null;
-			this.setUserHasNecessaryRecommendations(thing);
+	isRequestable(prm) {
+		if (this.userHasNecessaryRecommendationsCache[prm["id"]] === undefined) {
+			this.userHasNecessaryRecommendationsCache[prm["id"]] = null;
+			this.setUserHasNecessaryRecommendations(prm);
 		}
 
-		if (this.userHasAlreadyRequestedThisThingCache[thing["id"]] === undefined) {
-			this.userHasAlreadyRequestedThisThingCache[thing["id"]] = null;
-			this.setUserHasAlreadyRequestedThisThing(thing);
+		if (this.userHasAlreadyRequestedThisPrmCache[prm["id"]] === undefined) {
+			this.userHasAlreadyRequestedThisPrmCache[prm["id"]] = null;
+			this.setUserHasAlreadyRequestedThisPrm(prm);
 		}
 
-		if (this.userHasSufficientPointsGivenRulesCache[thing["id"]] === undefined) {
-			this.userHasSufficientPointsGivenRulesCache[thing["id"]] = null;
-			this.setUserHasSufficientPointsGivenRules(thing);
+		if (this.userHasSufficientPointsGivenRulesCache[prm["id"]] === undefined) {
+			this.userHasSufficientPointsGivenRulesCache[prm["id"]] = null;
+			this.setUserHasSufficientPointsGivenRules(prm);
 		}
 
-		if (this.userIsPastRequestAgainDateCache[thing["id"]] === undefined) {
-			this.userIsPastRequestAgainDateCache[thing["id"]] = null;
-			this.setUserIsPastRequestAgainDateCache(thing);
+		if (this.userIsPastRequestAgainDateCache[prm["id"]] === undefined) {
+			this.userIsPastRequestAgainDateCache[prm["id"]] = null;
+			this.setUserIsPastRequestAgainDateCache(prm);
 		}
 
-		return 	(this.userHasNecessaryRecommendationsCache[thing["id"]] === true) &&
-				!(this.userHasAlreadyRequestedThisThingCache[thing["id"]] === true) &&
-				(this.userHasSufficientPointsGivenRulesCache[thing["id"]] === true) &&
-				(this.userIsPastRequestAgainDateCache[thing["id"]] === true);
+		return 	(this.userHasNecessaryRecommendationsCache[prm["id"]] === true) &&
+				!(this.userHasAlreadyRequestedThisPrmCache[prm["id"]] === true) &&
+				(this.userHasSufficientPointsGivenRulesCache[prm["id"]] === true) &&
+				(this.userIsPastRequestAgainDateCache[prm["id"]] === true);
 	}
 
-	initRequirementsCache(thing) {
-		if (this.userHasNecessaryRecommendationsCache[thing["id"]] === undefined) {
-			this.userHasNecessaryRecommendationsCache[thing["id"]] = null;
-			this.setUserHasNecessaryRecommendations(thing);
+	initRequirementsCache(prm) {
+		if (this.userHasNecessaryRecommendationsCache[prm["id"]] === undefined) {
+			this.userHasNecessaryRecommendationsCache[prm["id"]] = null;
+			this.setUserHasNecessaryRecommendations(prm);
 		}
 
-		if (this.userHasAlreadyRequestedThisThingCache[thing["id"]] === undefined) {
-			this.userHasAlreadyRequestedThisThingCache[thing["id"]] = null;
-			this.setUserHasAlreadyRequestedThisThing(thing);
+		if (this.userHasAlreadyRequestedThisPrmCache[prm["id"]] === undefined) {
+			this.userHasAlreadyRequestedThisPrmCache[prm["id"]] = null;
+			this.setUserHasAlreadyRequestedThisPrm(prm);
 		}
 
-		if (this.userHasSufficientPointsGivenRulesCache[thing["id"]] === undefined) {
-			this.userHasSufficientPointsGivenRulesCache[thing["id"]] = null;
-			this.setUserHasSufficientPointsGivenRules(thing);
+		if (this.userHasSufficientPointsGivenRulesCache[prm["id"]] === undefined) {
+			this.userHasSufficientPointsGivenRulesCache[prm["id"]] = null;
+			this.setUserHasSufficientPointsGivenRules(prm);
 		}
 
-		if (this.userIsPastRequestAgainDateCache[thing["id"]] === undefined) {
-			this.userIsPastRequestAgainDateCache[thing["id"]] = null;
-			this.setUserIsPastRequestAgainDateCache(thing);
+		if (this.userIsPastRequestAgainDateCache[prm["id"]] === undefined) {
+			this.userIsPastRequestAgainDateCache[prm["id"]] = null;
+			this.setUserIsPastRequestAgainDateCache(prm);
 		}
 	}
 
-	getNecessaryRecommendationsIconColor(thing) {
-		this.initRequirementsCache(thing);
-		if (this.userHasNecessaryRecommendationsCache[thing["id"]] === true)
+	getNecessaryRecommendationsIconColor(prm) {
+		this.initRequirementsCache(prm);
+		if (this.userHasNecessaryRecommendationsCache[prm["id"]] === true)
 			return "green";
 		else
 			return "red";
 	}
 
-	getAlreadyRequestedIconColor(thing) {
-		this.initRequirementsCache(thing);
-		if (this.userHasAlreadyRequestedThisThingCache[thing["id"]] === false)
+	getAlreadyRequestedIconColor(prm) {
+		this.initRequirementsCache(prm);
+		if (this.userHasAlreadyRequestedThisPrmCache[prm["id"]] === false)
 			return "green";
 		else
 			return "red";
 	}
 
-	getSufficientTimeIconColor(thing) {
-		this.initRequirementsCache(thing);
-		if (this.userIsPastRequestAgainDateCache[thing["id"]] === true)
+	getSufficientTimeIconColor(prm) {
+		this.initRequirementsCache(prm);
+		if (this.userIsPastRequestAgainDateCache[prm["id"]] === true)
 			return "green";
 		else
 			return "red";
 	}
 
-	getSufficientPointsIconColor(thing) {
-		this.initRequirementsCache(thing);
-		if (this.userHasSufficientPointsGivenRulesCache[thing["id"]] === true)
+	getSufficientPointsIconColor(prm) {
+		this.initRequirementsCache(prm);
+		if (this.userHasSufficientPointsGivenRulesCache[prm["id"]] === true)
 			return "green";
 		else
 			return "red";
 	}
 
-	hasThingBeenPreviouslyRequested(thing) {
-		return this.archivedRequestsForThing[thing["id"]] !== undefined && this.archivedRequestsForThing[thing["id"]] !== null && this.archivedRequestsForThing[thing["id"]].length > 0;
+	hasPrmBeenPreviouslyRequested(prm) {
+		return this.archivedRequestsForPrm[prm["id"]] !== undefined && this.archivedRequestsForPrm[prm["id"]] !== null && this.archivedRequestsForPrm[prm["id"]].length > 0;
 	}
 
-	areRecommendationsRequired(thing) {
-		return (thing["requiredUserRecommendations"] && thing["requiredUserRecommendations"].length > 0);
+	areRecommendationsRequired(prm) {
+		return (prm["requiredUserRecommendations"] && prm["requiredUserRecommendations"].length > 0);
 	}
 
-	thingCallback = (_params) => {
+	prmCallback = (_params) => {
 		return new Promise((resolve, reject) => {
 			//this.onSearchBtnTap();
 			this.setDirty(true);
@@ -236,24 +236,24 @@ export class SearchPage {
 		});
 	}
 
-	showThingDetail(_thing) {
+	showPromiseDetail(_prm) {
 		let _msgs = [];
 
 		let self = this;
-		if (this.userHasAlreadyRequestedThisThingCache[_thing["id"]] === true) {
-			_msgs.push({type: 'alreadyRequested', msg: 'You have already requested this Thing.'});
-		} else if (this.userIsPastRequestAgainDateCache[_thing["id"]] === false) {
-			_msgs.push({type: 'timeRemaining', msg: 'The author set a time limit before you can request this Thing again. You still have time remaining.'});
+		if (this.userHasAlreadyRequestedThisPrmCache[_prm["id"]] === true) {
+			_msgs.push({type: 'alreadyRequested', msg: 'You have already requested this Promise.'});
+		} else if (this.userIsPastRequestAgainDateCache[_prm["id"]] === false) {
+			_msgs.push({type: 'timeRemaining', msg: 'The author set a time limit before you can request this Promise again. You still have time remaining.'});
 		} else {
-			if (this.userHasSufficientPointsGivenRulesCache[_thing["id"]] === false) {
+			if (this.userHasSufficientPointsGivenRulesCache[_prm["id"]] === false) {
 				this._pointsService.getCurrentAvailableUserPoints().then((data) => {
-					_msgs.push({type: 'points', msg: (_thing["requiredPointsQuantity"] - data) + ' more points'});
+					_msgs.push({type: 'points', msg: (_prm["requiredPointsQuantity"] - data) + ' more points'});
 				});
 			}
 
-			if (this.areRecommendationsRequired(_thing)) {
-				if (this.userHasNecessaryRecommendationsCache[_thing["id"]] === false) {
-					let tmpReqdRecs = _thing["requiredUserRecommendations"].slice();
+			if (this.areRecommendationsRequired(_prm)) {
+				if (this.userHasNecessaryRecommendationsCache[_prm["id"]] === false) {
+					let tmpReqdRecs = _prm["requiredUserRecommendations"].slice();
 					self._recommendationService.getIncomingRecommendations().then((list: Array<Object>) => {
 
 						// inefficient O(n2) algorithm.. but the lists should 
@@ -277,6 +277,6 @@ export class SearchPage {
 			}
 		}
 
-		this.navCtrl.push(ThingPage, { thing: _thing, readOnly: true, callback: self.thingCallback, requestable: this.isRequestable(_thing), requestMsgs: _msgs  });
+		this.navCtrl.push(PrmPage, { prm: _prm, readOnly: true, callback: self.prmCallback, requestable: this.isRequestable(_prm), requestMsgs: _msgs  });
 	}
 }

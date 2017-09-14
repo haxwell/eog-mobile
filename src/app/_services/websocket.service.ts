@@ -46,10 +46,19 @@ export class WebsocketService {
 
 	handle(data) {
 		if (data["request"] !== undefined) {
+			// do some API return value cleanup....
 			data["request"]["directionallyOppositeUser"] = Object.assign({}, data["directionallyOppositeUser"]);
 			delete data["directionallyOppositeUser"];
 
 			let request = data["request"];
+
+			// the data object has the property name set as promise.
+			//  so as not to be confusing, we need it on this side to read 'prm'
+				let l = request["promise"];
+				delete request["promise"];
+
+				request["prm"] = l;
+			// end cleanup
 
 			if (request["deliveringStatusId"] === this._constants.REQUEST_STATUS_PENDING && request["requestingStatusId"] === null) {
 				this.handleRequestReceived(data)
@@ -96,7 +105,7 @@ export class WebsocketService {
 		let request = data["request"];
 		let dou_realname = request["directionallyOppositeUser"]["realname"];
 
-		data["message"] = dou_realname + ' just requested you do your Thing, ' + request["thing"]["title"];
+		data["message"] = dou_realname + ' wants to take you up on your Promise, ' + request["prm"]["title"];
 
 		this.presentToast(data["message"]);
 		this._events.publish('request:received', data);
@@ -106,7 +115,7 @@ export class WebsocketService {
 		let request = data["request"];
 		let dou_realname = request["directionallyOppositeUser"]["realname"];
 
-		data["message"] = dou_realname + ' just accepted your request, ' + request["thing"]["title"];
+		data["message"] = dou_realname + ' just accepted your request, ' + request["prm"]["title"];
 
 		this.presentToast(data["message"]);
 		this._events.publish('request:accepted', data);
@@ -116,7 +125,7 @@ export class WebsocketService {
 		let request = data["request"];
 		let dou_realname = request["directionallyOppositeUser"]["realname"];
 
-		data["message"] = dou_realname + ' has declined your request, ' + request["thing"]["title"];
+		data["message"] = dou_realname + ' has declined your request, ' + request["prm"]["title"];
 
 		this.presentToast(data["message"]);
 		this._events.publish('request:declined', data);
@@ -126,7 +135,7 @@ export class WebsocketService {
 		let request = data["request"];
 		let dou_realname = request["directionallyOppositeUser"]["realname"];
 
-		data["message"] = dou_realname + ' just marked your request, ' + request["thing"]["title"] + ' as completed.';
+		data["message"] = dou_realname + ' just marked your request, ' + request["prm"]["title"] + ' as completed.';
 
 		this.presentToast(data["message"]);
 		this._events.publish('request:completed', data);
@@ -136,7 +145,7 @@ export class WebsocketService {
 		let request = data["request"];
 		let dou_realname = request["directionallyOppositeUser"]["realname"];
 
-		data["message"] = dou_realname + ' just cancelled your request, ' + request["thing"]["title"];
+		data["message"] = dou_realname + ' just cancelled your request, ' + request["prm"]["title"];
 
 		this.presentToast(data["message"]);
 		this._events.publish('request:cancelled', data);
@@ -146,7 +155,7 @@ export class WebsocketService {
 		let request = data["request"];
 		let dou_realname = request["directionallyOppositeUser"]["realname"];
 
-		data["message"] = dou_realname + ' approved your completion, and sent you ' + request["thing"]["requiredPointsQuantity"] + ' points for ' + request["thing"]["title"] + '.';
+		data["message"] = dou_realname + ' approved your completion, and sent you ' + request["prm"]["requiredPointsQuantity"] + ' points for ' + request["prm"]["title"] + '.';
 
 		this.presentToast(data["message"]);
 		this._events.publish('request:completedAndApproved', data);
@@ -156,7 +165,7 @@ export class WebsocketService {
 		let request = data["request"];
 		let dou_realname = request["directionallyOppositeUser"]["realname"];
 
-		data["message"] = dou_realname + ' disagrees that your Thing, ' + request["thing"]["title"] + ' was completed. Get in touch with them!';
+		data["message"] = dou_realname + ' disagrees that your Promise, ' + request["prm"]["title"] + ' was completed. Get in touch with them!';
 
 		this.presentToast(data["message"]);
 		this._events.publish('request:isInDispute', data);
@@ -166,7 +175,7 @@ export class WebsocketService {
 		let request = data["request"];
 		let dou_realname = request["directionallyOppositeUser"]["realname"];
 
-		data["message"] = dou_realname + ' deleted their thing, ' + request["thing"]["title"] + ', so your request was removed, too.';
+		data["message"] = dou_realname + ' deleted their Promise, ' + request["prm"]["title"] + ', so your request was removed, too.';
 
 		this.presentToast(data["message"]);
 		this._events.publish('request:deleted', data);

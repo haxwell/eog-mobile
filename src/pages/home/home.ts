@@ -32,7 +32,7 @@ export class HomePage {
     this.navCtrl.push(SearchUsersPage);
   }
 
-  onSearchForThingsBtnTap(event) {
+  onSearchForPromisesBtnTap(event) {
     this.navCtrl.push(SearchPage);
   }
 

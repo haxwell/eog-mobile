@@ -21,7 +21,7 @@
 			</ion-card-header>
 			<ion-card-content>
 				<ion-item *ngFor="let item of getDreamRequestsNotInProgress()">
-					User: {{item.directionallyOppositeUser.realname}} Thing: {{item.thing.title}}
+					User: {{item.directionallyOppositeUser.realname}} Promise: {{item.prm.title}}
 				</ion-item>
 			</ion-card-content>
 		</ion-card>
@@ -33,7 +33,7 @@
 			</ion-card-header>
 			<ion-card-content>
 				<ion-item *ngFor="let item of getDreamRequestsInProgress()">
-					User: {{item.directionallyOppositeUser.realname}} Thing: {{item.thing.title}}
+					User: {{item.directionallyOppositeUser.realname}} Promise: {{item.prm.title}}
 				</ion-item>
 			</ion-card-content>
 		</ion-card>

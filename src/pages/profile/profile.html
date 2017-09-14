@@ -119,20 +119,20 @@
 			</ion-card-content>
 		</ion-card>
 	</ion-row>	
-	<ion-row [class]="getThingsCardClass()">
+	<ion-row [class]="getPromisesCardClass()">
 		<ion-card>
 			<ion-card-header>
-				Things
-				<button *ngIf="!isReadOnly()" ion-button icon-only small color="danger" (click)="onNewThingBtnTap($event)"><ion-icon name="add"></ion-icon></button>				
+				Promises
+				<button *ngIf="!isReadOnly()" ion-button icon-only small color="danger" (click)="onNewPromiseBtnTap($event)"><ion-icon name="add"></ion-icon></button>				
 			</ion-card-header>
 			<ion-card-content>
-				<span *ngIf="userHasNoThings() && !isReadOnly()">
-					Got some thing you do well? List your thing here!
+				<span *ngIf="userHasNoPromises() && !isReadOnly()">
+					Got some thing you do well? Make a promise to do it!
 				</span>
-				<span *ngIf="userHasNoThings() && isReadOnly()">
-					This user has not added any Things yet!
+				<span *ngIf="userHasNoPromises() && isReadOnly()">
+					This user has not added any Promises yet!
 				</span>
-				<span class="blockItem" *ngFor="let item of model.things" (click)="onThingBtnTap(item)">
+				<span class="blockItem" *ngFor="let item of model.prms" (click)="onPromiseBtnTap(item)">
 					{{item.title}}
 				</span>
 			</ion-card-content>
@@ -150,7 +150,7 @@
 				<span *ngIf="userHasNoNotifications()">
 					No notifications.. go make something happen!
 				</span>
-				<span *ngFor="let item of model.notifications" (press)="onNotificationPress(item)">
+				<span *ngFor="let item of getNotifications()" (press)="onNotificationPress(item)">
 					<i>{{item.howLongAgo}}</i> - {{item.message}}<br/>
 				</span>
 			</ion-card-content>

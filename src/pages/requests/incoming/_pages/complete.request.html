@@ -7,11 +7,12 @@
 </ion-header>
 
 <ion-content padding>
-	<ion-label>You are about to mark a request to do your Thing as COMPLETELY done.</ion-label>
+	<ion-label>You are about to indicate you have fulfilled the following promise:</ion-label>
+	<hr/>
+	<ion-label><b>{{request.prm.title}}</b> for {{request.directionallyOppositeUser.realname}}</ion-label>
+	<br/>
 	<ion-label>The requesting user will have a chance to mark it COMPLETE, as well.</ion-label>
 	<ion-label>If they do mark it COMPLETE, you'll then get their points.</ion-label>
-	<hr/>
-	<ion-label><b>{{request.thing.title}}</b> for {{request.directionallyOppositeUser.realname}}</ion-label>
 
 	<ion-row>
 		<ion-label>Type the word complete, and then press the YES! button if you're sure.</ion-label>

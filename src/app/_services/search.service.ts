@@ -10,10 +10,10 @@ export class SearchService {
 	
 	constructor(private _apiService: ApiService, private _userService: UserService) { }
 
-	searchThings(qStr) {
+	searchPrms(qStr) {
 		return new Promise((resolve, reject) => {
 			let user = this._userService.getCurrentUser();
-			let url = environment.apiUrl + "/api/things?q=" + qStr;
+			let url = environment.apiUrl + "/api/promises?q=" + qStr;
 			this._apiService.get(url)
 			.subscribe((searchObj) => {
 				let rtn = JSON.parse(searchObj["_body"]);

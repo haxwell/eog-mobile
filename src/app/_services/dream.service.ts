@@ -26,8 +26,8 @@ export class DreamService {
 		return new Promise((resolve, reject) => {
 			let url = environment.apiUrl + "/api/dreams/" + dreamId; 
 			this._apiService.get(url)
-			.subscribe((thingObj) => {
-				resolve(JSON.parse(thingObj["_body"]));
+			.subscribe((data) => {
+				resolve(JSON.parse(data["_body"]));
 			});
 		});
 	}

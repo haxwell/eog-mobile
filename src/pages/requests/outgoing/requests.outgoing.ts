@@ -38,6 +38,10 @@ export class RequestsOutgoingPage {
 	}
 
 	replaceModelElement(request) {
+		if (this.model === undefined) {
+			console.log("The model is undefined, and an event was called. That shouldn't be.")
+			debugger;
+		}
 		let temp = this.model.filter((obj) => { return obj["id"] !== request["id"]; });
 		temp.push(request);
 		this.model = temp;
@@ -45,8 +49,21 @@ export class RequestsOutgoingPage {
 
 	ngOnInit() {
 		var self = this;
-		this._requestsService.getModelForOutgoing().then((data) => {
-			self.model = data;
+		this._requestsService.getModelForOutgoing().then((data: Array<Object>) => {
+			// the data object has the property name set as promise.
+			//  so as not to be confusing, we need it on this side to read 'prm'
+			if (data.length === 0)
+				self.model = data;
+			else data.map((obj) => {
+				let l = obj["promise"];
+				delete obj["promise"];
+
+				obj["prm"] = l;
+
+				if (!data.some((obj) => { return obj["promise"] !== undefined; })) {
+					self.model = data;
+				}
+			});
 		});
 	}
 
@@ -96,7 +113,7 @@ export class RequestsOutgoingPage {
 		let self = this;
 
 		if (this.model) {
-			let rtn = this.model.filter((obj) => { return obj["deliveringStatusId"] === self._constants.REQUEST_STATUS_COMPLETED && obj["requestingStatusId"] !== self._constants.REQUEST_STATUS_COMPLETED; });
+			let rtn = this.model.filter((obj) => { return obj["deliveringStatusId"] === self._constants.REQUEST_STATUS_COMPLETED && (obj["requestingStatusId"] !== self._constants.REQUEST_STATUS_COMPLETED && obj["requestingStatusId"] !== self._constants.REQUEST_STATUS_REQUESTOR_ACKNOWLEDGED); });
 			return rtn.length > 0 ? rtn : undefined			
 		}
 
