@@ -5,6 +5,8 @@ import { ApiService } from '../../../app/_services/api.service';
 
 import { environment } from '../../../_environments/environment';
 
+import Moment from 'moment'
+
 @Injectable()
 export class NotificationService {
 	
@@ -36,12 +38,7 @@ export class NotificationService {
 						this.notifications = JSON.parse(notificationsObj["_body"]);
 						
 						this.notifications.map((obj) => { 
-							var d = new Date();
-							var nowSeconds = Math.round(d.getTime() / 1000);
-							var thenSeconds = Math.round(obj["timestamp"] / 1000);
-							var diff = nowSeconds - thenSeconds;
-
-							obj["howLongAgo"] = self.getHowLongAgo(diff);
+							obj["howLongAgo"] = Moment(obj["timestamp"]).fromNow();
 						})
 
 						resolve(this.notifications);
@@ -54,31 +51,6 @@ export class NotificationService {
 		};
 
 		return rtn;
-	}
-
-	getHowLongAgo(seconds) {
-		if (seconds < 60)
-			return "Just Now";
-		else if (seconds < 90)
-			return "Just a minute ago..";
-		else if (seconds < 300)
-			return "A few minutes ago..";
-		else if (seconds < 3600)
-			return "Within the last hour..";
-		else if (seconds < (3600 * 3))
-			return "Within the last three hours..";
-		else if (seconds < (3600 * 9))
-			return "Within the last nine hours..";
-		else if (seconds < (3600 * 15))
-			return "Within the last fifteen hours..";
-		else if (seconds < (3600 * 24))
-			return "Within the last day..";
-		else if (seconds < (3600 * 24 * 3))
-			return "Within the last three days..";
-		else if (seconds < (3600 * 24 * 7))
-			return "Within the last week..";
-		else
-			return "Over a week ago";
 	}
 
 	delete(notification) {
