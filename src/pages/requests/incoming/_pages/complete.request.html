@@ -20,6 +20,16 @@
 	</ion-row>
 
 	<ion-row>
+		<ion-label>How much time should pass before this user can request this promise again?</ion-label>
+		<ion-item>
+			<ion-select [(ngModel)]="selectedRequestAgainDelayId" >
+				<ion-option *ngFor="let delay of requestAgainDelayCodes" [value]="delay.id">{{delay.text}}</ion-option>
+			</ion-select>
+		</ion-item>
+	</ion-row>
+
+
+	<ion-row>
 		<button ion-button (click)="onCancelBtnTap($event)">Sorry, no.. Cancel</button>
 		<button ion-button [disabled]="!isSaveBtnEnabled()" (click)="onSaveBtnTap($event)">YES!</button>
 	</ion-row>
