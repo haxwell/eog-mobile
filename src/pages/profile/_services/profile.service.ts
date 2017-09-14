@@ -36,7 +36,13 @@ export class ProfileService {
 		model["email"] = user["email"];
 		model["points"] = {"total" : 0, "available": 0};
 
-		let url = environment.apiUrl + "/api/user/" + user["id"] + "/profile/picture";
+		let url = environment.apiUrl + "/api/user/" + user["id"] + "/profile";
+		this._apiService.get(url).subscribe((data) => {
+			let obj = JSON.parse(data["_body"]);
+			model["allTimePointCount"] = obj[0]["allTimePointCount"];
+		});
+
+		url = environment.apiUrl + "/api/user/" + user["id"] + "/profile/picture";
 		this._apiService.get(url).subscribe((base64ImageData) => {
 			model["base64Image"] = base64ImageData["_body"];
 		});
