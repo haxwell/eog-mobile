@@ -3,7 +3,7 @@ import { NavController } from 'ionic-angular';
 import { ProfilePage } from '../profile/profile';
 import { SearchPage } from '../search/search';
 import { SearchUsersPage } from '../searchUsers/searchUsers';
-import { RequestsIncomingPage } from '../requests/incoming/requests.incoming';
+import { RequestsIncomingView } from '../../pages/common/requests-incoming/requests-incoming';
 import { RequestsOutgoingPage } from '../requests/outgoing/requests.outgoing';
 
 import { ProfileHeader } from '../../pages/common/profile-header/profile-header'
@@ -39,7 +39,7 @@ export class HomePage {
   }
 
   onIncomingReqBtnTap(event) {
-  	this.navCtrl.push(RequestsIncomingPage);
+  	//this.navCtrl.push(RequestsIncomingPage);
   }
 
   onOutgoingReqBtnTap(event) {

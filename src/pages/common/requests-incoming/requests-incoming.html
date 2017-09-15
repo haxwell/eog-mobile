@@ -1,0 +1,85 @@
+
+	<ion-card *ngIf="isRequestModelEmpty()">
+		<ion-card-content>
+			No one has made any requests of you. Yet!
+		</ion-card-content>
+	</ion-card>
+	<ion-card *ngIf="getPendingRequests() !== undefined">
+		<ion-card-header>
+			Pending<br/>
+			<i>These are requests that you have not yet acted on.</i>
+		</ion-card-header>
+		<ion-card-content *ngFor="let item of getPendingRequests()">
+			<ion-item>
+				Your promise: <b>{{item.prm.title}}</b><br/>
+				Requested by: {{item.directionallyOppositeUser.realname}}<br/>
+				Their dream: {{item.dream.title}}<br/>
+				<button ion-button (click)="onViewContactInfoBtnTap(item)">Contact Info</button>
+				<button ion-button (click)="onAcceptBtnTap(item)">Accept</button>
+				<button ion-button (click)="onDeclineBtnTap(item)">Decline</button>
+			</ion-item>
+		</ion-card-content>
+	</ion-card>
+	<ion-card *ngIf="getAcceptedRequests() !== undefined">
+		<ion-card-header>
+			Accepted<br/>
+			<i>These are requests you've committed to doing.</i>
+		</ion-card-header>
+		<ion-card-content *ngFor="let item of getAcceptedRequests()">
+			<ion-item>
+				Your promise: <b>{{item.prm.title}}</b><br/>
+				Requested by: {{item.directionallyOppositeUser.realname}}<br/>
+				Their dream: {{item.dream.title}}<br/>
+				<button ion-button (click)="onViewContactInfoBtnTap(item)">Contact Info</button>
+				<button ion-button (click)="onCompleteBtnTap(item)">Complete</button>
+				<button ion-button (click)="onUnableToCompleteBtnTap(item)">Cancel</button>
+			</ion-item>
+		</ion-card-content>
+	</ion-card>
+	<ion-card *ngIf="getDeclinedRequests() !== undefined">
+		<ion-card-header>
+			Declined<br/>
+			<i>These are requests that you have declined to do.</i>
+		</ion-card-header>
+		<ion-card-content *ngFor="let item of getDeclinedRequests()">
+			<ion-item>
+				Your promise: <b>{{item.prm.title}}</b><br/>
+				Requested by: {{item.directionallyOppositeUser.realname}}<br/>
+				Their dream: {{item.dream.title}}<br/>
+				Decline Reason: {{item.declinedReasonCode.text}}<br/>
+			</ion-item>
+		</ion-card-content>
+	</ion-card>
+	<ion-card *ngIf="getCompletedPendingApprovalRequests() !== undefined">
+		<ion-card-header>
+			Completed Pending Requestor Approval<br/>
+			<i>These are requests you've completed. We're waiting for the</i>
+			<i>other user to confirm that.</i>
+		</ion-card-header>
+		<ion-card-content *ngFor="let item of getCompletedPendingApprovalRequests()">
+			<ion-item>
+				Your promise: <b>{{item.prm.title}}</b><br/>
+				Requested by: {{item.directionallyOppositeUser.realname}}<br/>
+				Their dream: {{item.dream.title}}<br/>
+			</ion-item>
+			<button ion-button (click)="onViewContactInfoBtnTap(item)">Contact Info</button>
+		</ion-card-content>
+	</ion-card>
+	<ion-card *ngIf="getDisputedCompletedRequests() !== undefined">
+		<ion-card-header>
+			Disputed, Requestor Marked Not Complete<br/>
+			<i>These are requests you've marked completed, but the other user did not agree.</i>
+			<i>Please talk with them, and see if you can come to a resolution. If not, mark</i>
+			<i>the request complete again. You will receive half the agreed upon points, </i>
+			<i>and your history will show that this was a negative interaction. :(</i>
+		</ion-card-header>
+		<ion-card-content *ngFor="let item of getDisputedCompletedRequests()">
+			<ion-item>
+				Your promise: <b>{{item.prm.title}}</b><br/>
+				Requested by: {{item.directionallyOppositeUser.realname}}<br/>
+				Their dream: {{item.dream.title}}<br/>
+			</ion-item>
+			<button ion-button (click)="onViewContactInfoBtnTap(item)">Contact Info</button>
+			<button ion-button (click)="onCompleteBtnTap(item)">Complete</button>
+		</ion-card-content>
+	</ion-card>
