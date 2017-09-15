@@ -36,6 +36,7 @@ import { DeleteDreamPage } from '../pages/dreams/_pages/delete.dream';
 import { PrmPage } from '../pages/promises/promises';
 import { DeletePrmPage } from '../pages/promises/_pages/delete.prm';
 import { RequestsIncomingView } from '../pages/common/requests-incoming/requests-incoming';
+import { RequestsOutgoingView } from '../pages/common/requests-outgoing/requests-outgoing';
 import { RequestsIncomingPage } from '../pages/requests/incoming/requests.incoming';
 import { RequestsOutgoingPage } from '../pages/requests/outgoing/requests.outgoing';
 import { RulePage } from '../pages/promises/_pages/rule';
@@ -75,6 +76,7 @@ import { Constants } from '../_constants/constants';
     RequestsIncomingPage,
     RequestsIncomingView,    
     RequestsOutgoingPage,
+    RequestsOutgoingView,
     RequestPage,
     AcceptRequestPage,
     DeclineRequestPage,
@@ -118,6 +120,7 @@ import { Constants } from '../_constants/constants';
     RequestsIncomingPage,
     RequestsIncomingView,
     RequestsOutgoingPage,
+    RequestsOutgoingView,
     RequestPage,
     AcceptRequestPage,
     DeclineRequestPage,
