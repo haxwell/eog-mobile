@@ -6,6 +6,8 @@ import { SearchUsersPage } from '../searchUsers/searchUsers';
 import { RequestsIncomingPage } from '../requests/incoming/requests.incoming';
 import { RequestsOutgoingPage } from '../requests/outgoing/requests.outgoing';
 
+import { ProfileHeader } from '../../pages/common/profile-header/profile-header'
+
 import { UserService } from '../../app/_services/user.service'
 
 @Component({
@@ -42,6 +44,10 @@ export class HomePage {
 
   onOutgoingReqBtnTap(event) {
   	this.navCtrl.push(RequestsOutgoingPage);
+  }
+
+  getUser() {
+    return this.user;
   }
 
 }

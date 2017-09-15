@@ -3,15 +3,14 @@ import { NavController, ModalController, NavParams } from 'ionic-angular';
 import { Events } from 'ionic-angular';
 import { LoadingController } from 'ionic-angular';
 
-import { ProfileService } from './_services/profile.service'
+import { ProfileService } from '../../pages/common/_services/profile.service'
 import { NotificationService } from './_services/notification.service'
 
-import { ProfileHeader } from './profile-header'
+import { ProfileHeader } from '../../pages/common/profile-header/profile-header'
 
 import { PrmPage } from '../promises/promises'
 import { DreamPage } from '../dreams/dreams'
 import { KeywordEntryPage } from '../keyword.entry/keyword.entry'
-import { ChoosePhotoSourcePage } from './_pages/choose-photo-source'
 
 @Component({
   selector: 'page-profile',

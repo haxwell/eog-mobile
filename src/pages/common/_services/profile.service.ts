@@ -4,7 +4,7 @@ import { UserService } from '../../../app/_services/user.service';
 import { ApiService } from '../../../app/_services/api.service';
 import { PointsService } from '../../../app/_services/points.service';
 import { RecommendationService } from '../../../app/_services/recommendation.service';
-import { NotificationService } from './notification.service'
+import { NotificationService } from '../../../pages/profile/_services/notification.service'
 
 import { environment } from '../../../_environments/environment';
 
@@ -25,7 +25,7 @@ export class ProfileService {
 		this._pointsService.init();
 		this._notificationService.init();
 
-		modelCache[user["id"]] = undefined;
+		this.modelCache[user["id"]] = undefined;
 	}
 
 	getModel(user) {

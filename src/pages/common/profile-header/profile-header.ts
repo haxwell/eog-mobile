@@ -1,9 +1,9 @@
 import { Component, Input } from '@angular/core';
 import { ModalController, NavParams } from 'ionic-angular';
 
-import { ChoosePhotoSourcePage } from './_pages/choose-photo-source'
+import { ChoosePhotoSourcePage } from '../choose-photo-source/choose-photo-source'
 
-import { ProfileService } from './_services/profile.service'
+import { ProfileService } from '../_services/profile.service'
 
 @Component({
   selector: 'profile-header',
