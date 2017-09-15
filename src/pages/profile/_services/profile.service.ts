@@ -10,7 +10,9 @@ import { environment } from '../../../_environments/environment';
 
 @Injectable()
 export class ProfileService {
-	
+
+	modelCache = {};	
+
 	constructor(private _apiService: ApiService, 
 				private _userService: UserService, 
 				private _pointsService: PointsService,
@@ -18,15 +20,26 @@ export class ProfileService {
 				private _notificationService: NotificationService) { 
 
 				}
-	init() {
+	init(user) {
 		this._recommendationService.init();
 		this._pointsService.init();
 		this._notificationService.init();
+
+		modelCache[user["id"]] = undefined;
 	}
 
-	getModel(user, readOnly: boolean) {
+	getModel(user) {
+		if (this.modelCache[user["id"]] === undefined) {
+			this.modelCache[user["id"]] = {};
+			return this.initModel(user, this.modelCache[user["id"]]);
+		} else { 
+			return this.modelCache[user["id"]];
+		}
+	}
+
+	initModel(user, model) {
+
 		let self = this;
-		let model = {};
 
 		this._pointsService.init();
 		this._recommendationService.init();
@@ -83,7 +96,7 @@ export class ProfileService {
 			});
 		});
 
-		if (!readOnly) {
+		//if (!readOnly) {
 			this._recommendationService.getOutgoingRecommendations().then((obj) => {
 				model["outgoingRecommendations"] = obj;
 			});
@@ -91,7 +104,7 @@ export class ProfileService {
 			this._notificationService.get().then((obj) => {
 				model["notifications"] = obj;
 			});
-		}
+		//}
 
 		return model;
 	}
