@@ -17,36 +17,7 @@
 			Contact Info
 		</ion-card-header>
 		<ion-card-content>
-			<table>
-				<tr>
-					<td>
-					<ion-item *ngIf="isThumbnailImageAvailable()">
-							<ion-thumbnail item-start >
-								<img class="rotate90" [src]="getBase64ThumbnailImage()" alt="profile_image" (press)="onThumbnailPress($event)">
-							</ion-thumbnail>
-						</ion-item>
-					<ion-item *ngIf="!isThumbnailImageAvailable()">
-							<ion-thumbnail item-start >
-								<img src="assets/img/mushroom.jpg" (press)="onThumbnailPress($event)">
-							</ion-thumbnail>
-						</ion-item>
-					</td>
-					<td>
-						<ion-item>
-							<ion-label fixed>Name: </ion-label>
-							<ion-input type="text" placeholder="Name" [disabled]="isReadOnly()" (ionChange)="onNameChange()" [(ngModel)]="model.realname" #ctrl="ngModel" required></ion-input>		
-						</ion-item>
-					</td>
-				</tr>
-			</table>
-			<ion-item *ngIf="!isReadOnly()">
-				<ion-label fixed>Email: </ion-label>
-				<ion-input type="text" placeholder="you@domain.com" [disabled]="isReadOnly()" (ionChange)="onEmailChange()" [(ngModel)]="model.email" #ctrl="ngModel" required></ion-input>		
-			</ion-item>
-			<ion-item *ngIf="!isReadOnly()">
-				<ion-label fixed>Phone: </ion-label>
-				<ion-input type="text" placeholder="# " [disabled]="isReadOnly()" (ionChange)="onPhoneChange()" [(ngModel)]="model.phone" #ctrl="ngModel" required></ion-input>
-			</ion-item>
+			<profile-header [user]="getUser()" [readOnly]="isReadOnly()"></profile-header>
 		</ion-card-content>
 	</ion-card>
 	<ion-row [class]="getKeywordsCardClass()">

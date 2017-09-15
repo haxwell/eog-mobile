@@ -15,6 +15,7 @@ import { LoginPage } from '../pages/login/login';
 import { CreateAccountPage } from '../pages/login/_pages/create.account';
 import { HomePage } from '../pages/home/home';
 import { ProfilePage } from '../pages/profile/profile';
+import { ProfileHeader } from '../pages/profile/profile-header';
 import { ChoosePhotoSourcePage } from '../pages/profile/_pages/choose-photo-source';
 import { SearchPage } from '../pages/search/search';
 import { SearchUsersPage } from '../pages/searchUsers/searchUsers';
@@ -63,6 +64,7 @@ import { Constants } from '../_constants/constants';
     CreateAccountPage,
     HomePage,
     ProfilePage,
+    ProfileHeader,
     ChoosePhotoSourcePage,
     DreamPage,
     DeleteDreamPage,
@@ -104,6 +106,7 @@ import { Constants } from '../_constants/constants';
     CreateAccountPage,
     HomePage,
     ProfilePage,
+    ProfileHeader,
     ChoosePhotoSourcePage,
     DreamPage,
     DeleteDreamPage,

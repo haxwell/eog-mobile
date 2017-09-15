@@ -6,6 +6,8 @@ import { LoadingController } from 'ionic-angular';
 import { ProfileService } from './_services/profile.service'
 import { NotificationService } from './_services/notification.service'
 
+import { ProfileHeader } from './profile-header'
+
 import { PrmPage } from '../promises/promises'
 import { DreamPage } from '../dreams/dreams'
 import { KeywordEntryPage } from '../keyword.entry/keyword.entry'
@@ -49,8 +51,8 @@ export class ProfilePage {
 
 	ngOnInit() {
 		if (this.isDirty()) {
-			this._profileService.init();
-			this.model = this._profileService.getModel(this.user, this.readOnly);
+			this._profileService.init(this.user);
+			this.model = this._profileService.getModel(this.user);
 		}
 
 		this.setDirty(false);
@@ -143,37 +145,6 @@ export class ProfilePage {
 		})
 	}
 
-	isThumbnailImageAvailable() {
-		return this.model["base64Image"] !== undefined;
-	}
-
-	getBase64ThumbnailImage() {
-		if (this.model["base64Image"] === undefined)
-			return "assets/img/mushroom.jpg";
-		else if (this.model["base64Image"].length < 6)
-			return "assets/img/mushroom.jpg";
-		else
-			return 'data:image/jpeg;base64,' + this.model["base64Image"];
-	}
-
-	onThumbnailPress($event) {
-		if (!this.isReadOnly()) {
-			let self = this;
-			let modal = this.modalCtrl.create(ChoosePhotoSourcePage);
-			
-			modal.onDidDismiss((promise) => {
-				if (promise) {
-					promise.then((imageAsString) => { 
-						self.setDirty(true);
-						self.model["base64Image"] = imageAsString;
-					})
-				}
-			});
-			
-			modal.present();
-		}
-	}
-
 	isSaveBtnEnabled() {
 		return this.isDirty();
 	}
@@ -229,18 +200,6 @@ export class ProfilePage {
 		});
 	}
 
-	onNameChange() {
-		this.setDirty(true);
-	}
-
-	onEmailChange() {
-		this.setDirty(true);
-	}
-
-	onPhoneChange() {
-		this.setDirty(true);
-	}
-
 	isDirty() {
 		return this.dirty;
 	}
@@ -273,5 +232,7 @@ export class ProfilePage {
 		return (this.model["keywords"] === undefined) ? "darkerWhileLoading" : "";
 	}
 
-
+	getUser() {
+		return this.user;
+	}
 }
