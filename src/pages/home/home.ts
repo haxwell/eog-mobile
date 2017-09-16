@@ -37,19 +37,22 @@ export class HomePage {
             let rtn = {};
 
             self._searchService.searchPrms(query).then((data: Array<Object>) => {
-                data.map((obj) => {
+                
+                if (data === undefined || data.length === 0)
+                  rtn["prms"] = data;
+                else data.map((obj) => {
                     self._userService.getUser(obj["userId"]).then((user) => {
                         obj["directionallyOppositeUser"] = user;
                         delete obj["userId"];
 
                         if (!data.some((obj) => { return obj["userId"] != undefined; })) {
                           rtn["prms"] = data;
-
-                          if (rtn["users"] !== undefined)
-                              resolve(rtn);
                         }
                     });
                 });
+
+                if (rtn["users"] !== undefined)
+                    resolve(rtn);
             });
 
             self._searchService.searchUsers(query).then((data: Array<Object>) => {
@@ -63,13 +66,33 @@ export class HomePage {
   }
 
   executeQuery(evt) {
-      this.initializeItems(evt.target.value).then((data) => {
-          this.items = data;
-      });
+      if (evt.target.value.length > 2)
+          this.initializeItems(evt.target.value).then((data) => {
+              this.items = data;
+          });
   }
 
   getResults() {
+      let uList = this.items["users"] || [];
+      let pList = this.items["prms"] || [];
+
+      return pList.concat(uList);
+  }
+
+  arePromiseResultsAvailable() {
+      return this.items["prms"] !== undefined && this.items["prms"].length > 0;
+  }
+
+  areUserResultsAvailable() {
+      return this.items["users"] !== undefined && this.items["users"].length > 0;
+  }
+
+  getPromiseResults() {
       return this.items["prms"];
+  }
+
+  getUserResults() {
+      return this.items["users"];
   }
 
   isSearchFieldVisible() {
