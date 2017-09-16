@@ -17,6 +17,7 @@ import { UserService } from '../../app/_services/user.service'
 export class HomePage {
 
   user = undefined;
+  _isSearchFieldVisible = false;
 
   constructor(public navCtrl: NavController, private _userService: UserService) {
 
@@ -24,6 +25,18 @@ export class HomePage {
 
   ngOnInit() {
     this.user = this._userService.getCurrentUser();
+  }
+
+  isSearchFieldVisible() {
+    return this._isSearchFieldVisible;
+  }
+
+  onSearchBtnTap(event) {
+    this.setIsSearchFieldVisible(!this.isSearchFieldVisible());
+  }
+
+  setIsSearchFieldVisible(b) {
+    this._isSearchFieldVisible = b;
   }
 
   onProfileBtnTap(event) {

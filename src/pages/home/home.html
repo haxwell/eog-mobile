@@ -3,6 +3,8 @@
 		<ion-title>
 			Easyah
 		</ion-title>
+
+		<ion-icon item-end (click)="onSearchBtnTap($event)" name="search"></ion-icon>
 	</ion-navbar>
 </ion-header>
 
@@ -12,31 +14,21 @@
 			<ion-col>
 			</ion-col>
 			<ion-col col-6>
-				<ion-row>
-					<table>
-						<tr>
-							<td>
-								<button class="wideButton" ion-button (click)="onSearchForUsersBtnTap($event)">Search Users</button>
-							</td>
-							<td>
-								<button class="wideButton" ion-button (click)="onSearchForPromisesBtnTap($event)">Search Promises</button>
-							</td>
-						</tr>
-					</table>
-				</ion-row>
+				<button ion-button (click)="onSearchForUsersBtnTap($event)">Search Users</button>
+				<button ion-button (click)="onSearchForPromisesBtnTap($event)">Search Promises</button>
 				<ion-row>
 					<profile-header [user]="getUser()" [readOnly]="false"></profile-header>
 				</ion-row>
 				<ion-row>
-				Incoming Requests
-				<hr/>
+					<h2>Incoming Requests</h2>
+					<hr/>
 				</ion-row>
 				<ion-row>
 					<requests-incoming-view></requests-incoming-view>
 				</ion-row>
 				<ion-row>
-				Outgoing Requests
-				<hr/>
+					<h2>Outgoing Requests</h2>
+					<hr/>
 				</ion-row>
 				<ion-row>
 					<requests-outgoing-view></requests-outgoing-view>
@@ -44,18 +36,6 @@
 
 				<ion-row>
 					<button class="wideButton" ion-button (click)="onProfileBtnTap($event)">Profile</button>
-				</ion-row>
-				<ion-row>
-					<button class="wideButton" ion-button (click)="onSearchForUsersBtnTap($event)">Search For Users</button>
-				</ion-row>
-				<ion-row>
-					<button class="wideButton" ion-button (click)="onSearchForPromisesBtnTap($event)">Search Promises</button>
-				</ion-row>
-				<ion-row>
-					<button class="wideButton" ion-button (click)="onIncomingReqBtnTap($event)">Incoming Requests</button>
-				</ion-row>
-				<ion-row>
-					<button class="wideButton" ion-button (click)="onOutgoingReqBtnTap($event)">Outgoing Requests</button>
 				</ion-row>
 			</ion-col>
 			<ion-col>
