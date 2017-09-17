@@ -56,6 +56,7 @@ import { ProfileService } from '../pages/common/_services/profile.service';
 import { CameraService } from '../pages/common/_services/camera.service';
 import { NotificationService } from '../pages/profile/_services/notification.service';
 import { PrmService } from '../pages/promises/_services/prm.service';
+import { PrmQualityService } from './_services/prm-quality.service';
 
 import { Constants } from '../_constants/constants';
 
@@ -150,6 +151,7 @@ import { Constants } from '../_constants/constants';
     SearchService,
     DreamService,
     PrmService,
+    PrmQualityService,
     ProfileService,
     CameraService,
     RequestsService,

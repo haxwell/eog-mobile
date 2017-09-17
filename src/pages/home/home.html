@@ -8,10 +8,10 @@
 		<ion-item *ngIf="isSearchFieldVisible()" end>
 			<ion-searchbar (input)="executeQuery($event)"></ion-searchbar>
 			<ion-list>
-				<ion-item *ngFor="let item of getPromiseResults()">
+				<ion-item *ngFor="let item of getPromiseResults()" (click)="onPromiseResultTap(item)">
 					{{ item.title }}
 				</ion-item>
-				<ion-item *ngFor="let item of getUserResults()">
+				<ion-item *ngFor="let item of getUserResults()" (click)="onUserResultTap(item)">
 					{{ item.realname }}
 				</ion-item>
 			</ion-list>

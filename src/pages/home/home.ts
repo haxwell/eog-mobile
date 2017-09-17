@@ -95,6 +95,10 @@ export class HomePage {
       return this.items["users"];
   }
 
+  onPromiseResultTap(item) {
+      
+  }
+
   isSearchFieldVisible() {
     return this._isSearchFieldVisible;
   }
