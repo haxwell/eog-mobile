@@ -10,6 +10,9 @@ import { ProfileHeader } from '../../pages/common/profile-header/profile-header'
 
 import { UserService } from '../../app/_services/user.service'
 import { SearchService } from '../../app/_services/search.service'
+import { PrmQualityService } from '../../app/_services/prm-quality.service';
+
+import { Constants } from '../../_constants/constants';
 
 @Component({
     selector: 'page-home',
@@ -22,16 +25,24 @@ export class HomePage {
     _isSearchFieldVisible = false;
     items = {};
 
-    constructor(public navCtrl: NavController, private _userService: UserService, private _searchService: SearchService) {
+    constructor(public navCtrl: NavController, 
+                private _userService: UserService, 
+                private _searchService: SearchService, 
+                private _prmQualityService: PrmQualityService,
+                private _constants: Constants ) {
 
     }
 
     ngOnInit() {
         this.user = this._userService.getCurrentUser();
+
+        this._prmQualityService.init();
     }
 
-  initializeItems(query) {
+    initializeItems(query) {
         let self = this;
+
+        /* Return a promise which calls for both User and Prm results*/
 
         return new Promise((resolve, reject) => {
             let rtn = {};
@@ -41,6 +52,9 @@ export class HomePage {
                 if (data === undefined || data.length === 0)
                   rtn["prms"] = data;
                 else data.map((obj) => {
+                    
+                    /* Calculate who's the user on the other side.. */
+
                     self._userService.getUser(obj["userId"]).then((user) => {
                         obj["directionallyOppositeUser"] = user;
                         delete obj["userId"];
@@ -137,6 +151,42 @@ export class HomePage {
 
   getUser() {
     return this.user;
+  }
+
+  hasPrmBeenPreviouslyRequested(prm) {
+    return (this._prmQualityService.getQualityValue(prm, this._constants.FUNCTION_KEY_USER_HAS_PREVIOUSLY_REQUESTED_PRM) === true);
+  }
+
+  areRecommendationsRequired(prm) {
+    return (this._prmQualityService.getQualityValue(prm, this._constants.FUNCTION_KEY_PRM_REQUIRES_RECOMMENDATIONS) === true);  
+  }
+
+  getNecessaryRecommendationsIconColor(prm) {
+    if (this._prmQualityService.getQualityValue(prm, this._constants.FUNCTION_KEY_USER_HAS_NECESSARY_RECOMMENDATIONS) === true)
+      return "green";
+    else
+      return "red";
+  }
+
+  getAlreadyRequestedIconColor(prm) {
+    if (this._prmQualityService.getQualityValue(prm, this._constants.FUNCTION_KEY_USER_HAS_CURRENTLY_REQUESTED_PRM) === false)
+      return "green";
+    else
+      return "red";
+  }
+
+  getSufficientTimeIconColor(prm) {
+    if (this._prmQualityService.getQualityValue(prm, this._constants.FUNCTION_KEY_USER_IS_PAST_REQUEST_AGAIN_DATE) === true)
+      return "green";
+    else
+      return "red";
+  }
+
+  getSufficientPointsIconColor(prm) {
+    if (this._prmQualityService.getQualityValue(prm, this._constants.FUNCTION_KEY_USER_HAS_SUFFICIENT_POINTS) === true)
+      return "green";
+    else
+      return "red";
   }
 
 }

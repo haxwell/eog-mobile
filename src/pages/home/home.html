@@ -8,8 +8,12 @@
 		<ion-item *ngIf="isSearchFieldVisible()" end>
 			<ion-searchbar (input)="executeQuery($event)"></ion-searchbar>
 			<ion-list>
-				<ion-item *ngFor="let item of getPromiseResults()" (click)="onPromiseResultTap(item)">
-					{{ item.title }}
+				<ion-item *ngFor="let promise of getPromiseResults()" (click)="onPromiseResultTap(item)">
+					<ion-icon [ngStyle]="{'color':getAlreadyRequestedIconColor(promise)}" name="megaphone"> </ion-icon>
+					<ion-icon [ngStyle]="{'color':getSufficientPointsIconColor(promise)}" name="pricetag"></ion-icon>
+					<ion-icon *ngIf="hasPrmBeenPreviouslyRequested(promise)" [ngStyle]="{'color':getSufficientTimeIconColor(promise)}" name="clock"></ion-icon>
+					<ion-icon *ngIf="areRecommendationsRequired(promise)" [ngStyle]="{'color':getNecessaryRecommendationsIconColor(promise)}" name="people"></ion-icon>
+					{{ promise.title }}
 				</ion-item>
 				<ion-item *ngFor="let item of getUserResults()" (click)="onUserResultTap(item)">
 					{{ item.realname }}
