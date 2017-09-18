@@ -11,6 +11,7 @@ import { KeywordEntryPage } from '../keyword.entry/keyword.entry'
 import { PrmService } from './_services/prm.service'
 import { UserService } from '../../app/_services/user.service'
 import { PrmQualityService } from '../../app/_services/prm-quality.service';
+import { PrmDetailService } from '../../app/_services/prm-detail.service';
 import { Constants } from '../../_constants/constants';
 
 
@@ -35,6 +36,7 @@ export class PrmPage {
 				private modalCtrl: ModalController,
 				private _prmService: PrmService,
 				private _prmQualityService: PrmQualityService,
+				private _prmDetailService: PrmDetailService,
 				private _userService: UserService,
 				private loadingCtrl: LoadingController,
 				private _constants: Constants) {
@@ -48,9 +50,9 @@ export class PrmPage {
 			this.model = Object.assign({}, tmp);
 		}
 
-		this.requestMsgs = navParams.get('requestMsgs') || undefined;
+		this.requestMsgs = this._prmDetailService.getPrmDetailMessages(tmp);
 		this.readOnly = navParams.get('readOnly') || false;
-		this.callback = navParams.get('callback') || function() { };
+		this.callback = navParams.get('callback') || function() { return new Promise((resolve, reject) => { resolve(); }) };
 	}
 
 	ngOnInit() {

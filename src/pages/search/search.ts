@@ -144,6 +144,6 @@ export class SearchPage {
 	}
 
 	showPromiseDetail(prm) {
-		this.navCtrl.push(PrmPage, { prm: prm, readOnly: true, callback: this.prmCallback, requestMsgs: this._prmDetailService.getPrmDetailMessages(prm) });
+		this.navCtrl.push(PrmPage, { prm: prm, readOnly: true, callback: this.prmCallback });
 	}
 }

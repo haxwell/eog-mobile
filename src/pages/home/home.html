@@ -8,12 +8,12 @@
 		<ion-item *ngIf="isSearchFieldVisible()" end>
 			<ion-searchbar (input)="executeQuery($event)"></ion-searchbar>
 			<ion-list>
-				<ion-item *ngFor="let promise of getPromiseResults()" (click)="onPromiseResultTap(item)">
-					<ion-icon [ngStyle]="{'color':getAlreadyRequestedIconColor(promise)}" name="megaphone"> </ion-icon>
-					<ion-icon [ngStyle]="{'color':getSufficientPointsIconColor(promise)}" name="pricetag"></ion-icon>
-					<ion-icon *ngIf="hasPrmBeenPreviouslyRequested(promise)" [ngStyle]="{'color':getSufficientTimeIconColor(promise)}" name="clock"></ion-icon>
-					<ion-icon *ngIf="areRecommendationsRequired(promise)" [ngStyle]="{'color':getNecessaryRecommendationsIconColor(promise)}" name="people"></ion-icon>
-					{{ promise.title }}
+				<ion-item *ngFor="let prm of getPrmResults()" (click)="onPrmResultTap(prm)">
+					<ion-icon [ngStyle]="{'color':getAlreadyRequestedIconColor(prm)}" name="megaphone"> </ion-icon>
+					<ion-icon [ngStyle]="{'color':getSufficientPointsIconColor(prm)}" name="pricetag"></ion-icon>
+					<ion-icon *ngIf="hasPrmBeenPreviouslyRequested(prm)" [ngStyle]="{'color':getSufficientTimeIconColor(prm)}" name="clock"></ion-icon>
+					<ion-icon *ngIf="areRecommendationsRequired(prm)" [ngStyle]="{'color':getNecessaryRecommendationsIconColor(prm)}" name="people"></ion-icon>
+					{{ prm.title }}
 				</ion-item>
 				<ion-item *ngFor="let item of getUserResults()" (click)="onUserResultTap(item)">
 					{{ item.realname }}
@@ -37,7 +37,7 @@
 			</ion-col>
 			<ion-col col-6>
 				<button ion-button (click)="onSearchForUsersBtnTap($event)">Search Users</button>
-				<button ion-button (click)="onSearchForPromisesBtnTap($event)">Search Promises</button>
+				<button ion-button (click)="onSearchForPrmsBtnTap($event)">Search prms</button>
 				<ion-row>
 					<profile-header [user]="getUser()" [readOnly]="false"></profile-header>
 				</ion-row>

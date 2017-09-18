@@ -3,6 +3,7 @@ import { NavController } from 'ionic-angular';
 import { ProfilePage } from '../profile/profile';
 import { SearchPage } from '../search/search';
 import { SearchUsersPage } from '../searchUsers/searchUsers';
+import { PrmPage } from '../promises/promises'
 import { RequestsIncomingView } from '../../pages/common/requests-incoming/requests-incoming';
 import { RequestsOutgoingPage } from '../requests/outgoing/requests.outgoing';
 
@@ -93,7 +94,7 @@ export class HomePage {
       return pList.concat(uList);
   }
 
-  arePromiseResultsAvailable() {
+  arePrmResultsAvailable() {
       return this.items !== undefined && this.items["prms"] !== undefined && this.items["prms"].length > 0;
   }
 
@@ -101,8 +102,8 @@ export class HomePage {
       return this.items != undefined && this.items["users"] !== undefined && this.items["users"].length > 0;
   }
 
-  getPromiseResults() {
-      if (this.arePromiseResultsAvailable())
+  getPrmResults() {
+      if (this.arePrmResultsAvailable())
         return this.items["prms"];
       else
         return [];
@@ -115,8 +116,8 @@ export class HomePage {
           return [];
   }
 
-  onPromiseResultTap(item) {
-      
+  onPrmResultTap(_prm) {
+      this.navCtrl.push(PrmPage, { prm: _prm, readOnly: true });
   }
 
   isSearchFieldVisible() {
@@ -147,7 +148,7 @@ export class HomePage {
     this.navCtrl.push(SearchUsersPage);
   }
 
-  onSearchForPromisesBtnTap(event) {
+  onSearchForPrmsBtnTap(event) {
     this.navCtrl.push(SearchPage);
   }
 
