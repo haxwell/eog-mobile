@@ -47,6 +47,7 @@ export class PrmQualityService {
 	}
 
 	initPrmQualityCalculationFunctions() {
+		let self = this;
 		this.mapUserToPrmQualityResults = {};
 		this.mapPropertyKeyToCalcFunction = []; 
 				
@@ -116,17 +117,35 @@ export class PrmQualityService {
 			});
 
 		this.definePrmQualityCalculationFunction(
-			this._constants.FUNCTION_KEY_PRM_IS_REQUESTABLE, 
+			self._constants.FUNCTION_KEY_PRM_IS_REQUESTABLE, 
 			(prm) => {
 				return new Promise((resolve, reject) => {
-					resolve( 	(this.getQualityValue(prm, this._constants.FUNCTION_KEY_USER_HAS_NECESSARY_RECOMMENDATIONS) === true) &&
-							(!this.getQualityValue(prm, this._constants.FUNCTION_KEY_USER_HAS_CURRENTLY_REQUESTED_PRM) === true) && 
-							(this.getQualityValue(prm, this._constants.FUNCTION_KEY_USER_HAS_SUFFICIENT_POINTS) === true) && 
-							(this.getQualityValue(prm, this._constants.FUNCTION_KEY_USER_IS_PAST_REQUEST_AGAIN_DATE) === true || 
-								this.getQualityValue(prm, this._constants.FUNCTION_KEY_USER_IS_PAST_REQUEST_AGAIN_DATE) === null));
+					let calcFunc1: (Number) => Promise<Object> = 
+					self.getCalcFunction(this._constants.FUNCTION_KEY_USER_HAS_NECESSARY_RECOMMENDATIONS);
+
+					calcFunc1(prm).then((data1) => {
+						if (data1 === true) {
+							self.getCalcFunction(self._constants.FUNCTION_KEY_USER_HAS_SUFFICIENT_POINTS)(prm).then((data2) => {
+								if (data2 === true) {
+									self.getCalcFunction(self._constants.FUNCTION_KEY_USER_HAS_CURRENTLY_REQUESTED_PRM)(prm).then((data3) => {
+										if (data3 === false) {
+											self.getCalcFunction(self._constants.FUNCTION_KEY_USER_IS_PAST_REQUEST_AGAIN_DATE)(prm).then((data4) => {
+												if (data4 === true || data4 === null) {
+													resolve(true);
+												}
+											});
+										} else
+											resolve(false);
+									});
+								} else 
+									resolve(false);
+							});
+						}
+						else
+							resolve(false);
+					});
 				});
 			});
-
 	}
 
 	getQualityValuePromise(_prm, functionKey) {
@@ -141,9 +160,7 @@ export class PrmQualityService {
 		});
 
 		if (obj === undefined) {
-			let calcFunc: (Any) => Object = this.mapPropertyKeyToCalcFunction.find((propKeyToFunctionObj) => {
-				return (functionKey === propKeyToFunctionObj["property"]);
-			})["func"];
+			let calcFunc: (Any) => Object = this.getCalcFunction(functionKey);
 
 			obj = {prm: _prm, property: functionKey, value: calcFunc(_prm)};
 			this.mapUserToPrmQualityResults[user["id"]].push(obj);
@@ -152,6 +169,12 @@ export class PrmQualityService {
 		rtn = obj["value"];
 
 		return rtn;
+	}
+
+	getCalcFunction(functionKey) : (Any) => Promise<Object>  { /* 'Any' here is a Prm object */
+		return this.mapPropertyKeyToCalcFunction.find((propKeyToFunctionObj) => {
+				return (functionKey === propKeyToFunctionObj["property"]);
+			})["func"];
 	}
 
 	getQualityValue(_prm, functionKey) {

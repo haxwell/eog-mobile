@@ -184,7 +184,6 @@ export class SearchPage {
 			}
 		}
 
-		// TODO, don't pass the requestable attr.. get it in the PrmPage itself
-		this.navCtrl.push(PrmPage, { prm: _prm, readOnly: true, callback: self.prmCallback, requestable: this._prmQualityService.getQualityValue(_prm, this._constants.FUNCTION_KEY_PRM_IS_REQUESTABLE), requestMsgs: _msgs  });
+		this.navCtrl.push(PrmPage, { prm: _prm, readOnly: true, callback: self.prmCallback, requestMsgs: _msgs  });
 	}
 }

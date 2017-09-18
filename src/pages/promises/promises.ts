@@ -10,6 +10,9 @@ import { DeletePrmPage } from './_pages/delete.prm'
 import { KeywordEntryPage } from '../keyword.entry/keyword.entry'
 import { PrmService } from './_services/prm.service'
 import { UserService } from '../../app/_services/user.service'
+import { PrmQualityService } from '../../app/_services/prm-quality.service';
+import { Constants } from '../../_constants/constants';
+
 
 @Component({
   selector: 'page-prm-detail',
@@ -32,8 +35,10 @@ export class PrmPage {
 				navParams: NavParams, 
 				private modalCtrl: ModalController,
 				private _prmService: PrmService,
+				private _prmQualityService: PrmQualityService,
 				private _userService: UserService,
-				private loadingCtrl: LoadingController) {
+				private loadingCtrl: LoadingController,
+				private _constants: Constants) {
 
 		let tmp = navParams.get('prm');
 
@@ -44,7 +49,6 @@ export class PrmPage {
 			this.model = Object.assign({}, tmp);
 		}
 
-		this.requestable = navParams.get('requestable') || false;
 		this.requestMsgs = navParams.get('requestMsgs') || undefined;
 		this.readOnly = navParams.get('readOnly') || false;
 		this.callback = navParams.get('callback') || function() { };
@@ -137,7 +141,7 @@ export class PrmPage {
 	}
 
 	isRequestBtnVisible() {
-		return this.isReadOnly() && this.requestable;
+		return this.isReadOnly() && this._prmQualityService.getQualityValue(this.model, this._constants.FUNCTION_KEY_PRM_IS_REQUESTABLE);
 	}
 
 	requestCallback = (_params) => {
