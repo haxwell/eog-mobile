@@ -94,19 +94,25 @@ export class HomePage {
   }
 
   arePromiseResultsAvailable() {
-      return this.items["prms"] !== undefined && this.items["prms"].length > 0;
+      return this.items !== undefined && this.items["prms"] !== undefined && this.items["prms"].length > 0;
   }
 
   areUserResultsAvailable() {
-      return this.items["users"] !== undefined && this.items["users"].length > 0;
+      return this.items != undefined && this.items["users"] !== undefined && this.items["users"].length > 0;
   }
 
   getPromiseResults() {
-      return this.items["prms"];
+      if (this.arePromiseResultsAvailable())
+        return this.items["prms"];
+      else
+        return [];
   }
 
   getUserResults() {
-      return this.items["users"];
+      if (this.areUserResultsAvailable())
+          return this.items["users"];
+      else
+          return [];
   }
 
   onPromiseResultTap(item) {
@@ -123,6 +129,10 @@ export class HomePage {
 
   onSearchBtnTap(event) {
     this.setIsSearchFieldVisible(!this.isSearchFieldVisible());
+
+    if (!this.isSearchFieldVisible()) {
+      this.items = undefined;
+    }
   }
 
   setIsSearchFieldVisible(b) {
