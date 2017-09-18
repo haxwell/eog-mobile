@@ -4,6 +4,7 @@ import { NavController, NavParams, ViewController } from 'ionic-angular';
 
 import { RequestsService } 	from '../../../app/_services/requests.service';
 import { DreamService } 	from '../../../app/_services/dream.service'
+import { UserService } 		from '../../../app/_services/user.service'
 
 @Component({
   selector: 'page-search-request',
@@ -20,7 +21,8 @@ export class RequestPage {
 				public params: NavParams,
 				private viewCtrl: ViewController, 
 				private _requestsService: RequestsService,
-				private _dreamService: DreamService) {
+				private _dreamService: DreamService,
+				private _userService: UserService) {
 		this.prm = params.get('prm');
 		this.callback = params.get('callback') || undefined;
 	}
@@ -31,11 +33,26 @@ export class RequestPage {
 		})
 	}
 
+	requiredUserRecommendationsAsUserObjects = undefined;
 	getRequiredUserRecommendations() {
-		if (this.prm["requiredUserRecommendations"].length > 0)
-			return this.prm["requiredUserRecommendations"];
-		else
-			return undefined;
+		if (this.requiredUserRecommendationsAsUserObjects === undefined) {
+			this.requiredUserRecommendationsAsUserObjects = null;
+			this.initRequiredUserRecommendationsAsUserObjects();
+		}
+
+		return this.requiredUserRecommendationsAsUserObjects;
+	}
+
+	initRequiredUserRecommendationsAsUserObjects() {
+		let self = this;
+		self.prm["requiredUserRecommendations"].map((obj) => {
+			self._userService.getUser(obj["requiredRecommendUserId"]).then((user) => {
+				if (self.requiredUserRecommendationsAsUserObjects === null) 
+					self.requiredUserRecommendationsAsUserObjects = [];
+
+				self.requiredUserRecommendationsAsUserObjects.push(user);
+			})
+		})
 	}
 
 	isSaveBtnEnabled() {

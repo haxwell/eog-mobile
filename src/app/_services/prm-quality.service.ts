@@ -40,6 +40,10 @@ export class PrmQualityService {
 
 	init() {
 		this.initPrmQualityCalculationFunctions();
+
+		// TODO: do something a little more graceful than destory it all
+		this.mapp = {};
+		this.mapUserToPrmQualityResults = {};
 	}
 
 	definePrmQualityCalculationFunction(key, _func) {

@@ -27,7 +27,6 @@ export class PrmPage {
 	dirty = false;
 	readOnly = false;
 	requestMsgs = undefined;
-	requestable = false;
 	newKeywords = [];
 	loading = undefined;
 
@@ -55,17 +54,7 @@ export class PrmPage {
 	}
 
 	ngOnInit() {
-		let self = this;
-		let arr = [];
-		this.model["requiredUserRecommendations"].map((obj) => {
-			if (!obj.hasOwnProperty("roles")) {
-				self._userService.getUser(obj["requiredRecommendUserId"]).then((user) => {
-					arr.push(user);
-				});
-			}
-		});
 
-		this.model["requiredUserRecommendations"] = arr;
 	}
 
 	isReadOnly() {
