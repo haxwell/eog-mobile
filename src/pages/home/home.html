@@ -39,7 +39,7 @@
 				<button ion-button (click)="onSearchForUsersBtnTap($event)">Search Users</button>
 				<button ion-button (click)="onSearchForPrmsBtnTap($event)">Search prms</button>
 				<ion-row>
-					<profile-header [user]="getUser()" [readOnly]="false"></profile-header>
+					<profile-header [user]="getUser()" [readOnly]="true" (click)="onProfileBtnTap($event)"></profile-header>
 				</ion-row>
 				<ion-row>
 					<h2>Incoming Requests</h2>

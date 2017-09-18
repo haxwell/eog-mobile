@@ -21,11 +21,11 @@
 					</td>
 				</tr>
 			</table>
-			<ion-item *ngIf="!isReadOnly()">
+			<ion-item *ngIf="isCurrentUserOwnerOfThisProfile()">
 				<ion-label fixed>Email: </ion-label>
 				<ion-input type="text" placeholder="you@domain.com" [disabled]="isReadOnly()" (ionChange)="onEmailChange()" [(ngModel)]="user.email" #ctrl="ngModel" required></ion-input>		
 			</ion-item>
-			<ion-item *ngIf="!isReadOnly()">
+			<ion-item *ngIf="isCurrentUserOwnerOfThisProfile()">
 				<ion-label fixed>Phone: </ion-label>
 				<ion-input type="text" placeholder="# " [disabled]="isReadOnly()" (ionChange)="onPhoneChange()" [(ngModel)]="user.phone" #ctrl="ngModel" required></ion-input>
 			</ion-item>

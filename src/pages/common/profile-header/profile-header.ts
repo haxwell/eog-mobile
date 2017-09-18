@@ -3,6 +3,7 @@ import { ModalController, NavParams } from 'ionic-angular';
 
 import { ChoosePhotoSourcePage } from '../choose-photo-source/choose-photo-source'
 
+import { UserService } from '../../../app/_services/user.service'
 import { ProfileService } from '../_services/profile.service'
 
 @Component({
@@ -17,13 +18,17 @@ export class ProfileHeader {
 	@Input() user = undefined;
 	model = {};
 
-	constructor(navParams: NavParams, private modalCtrl: ModalController, private _profileService: ProfileService) {
+	constructor(navParams: NavParams, private modalCtrl: ModalController, private _profileService: ProfileService, private _userService: UserService) {
 		this.user = Object.assign({}, navParams.get('user'));
 		this.readOnly = navParams.get('readOnly') || false;
 	}
 
 	ngOnInit() {
 		this.model = this._profileService.getModel(this.user);
+	}
+
+	isCurrentUserOwnerOfThisProfile() {
+		return this._userService.getCurrentUser()["id"] === this.user["id"];
 	}
 
 	isReadOnly() {
