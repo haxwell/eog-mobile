@@ -12,65 +12,94 @@ export class RecommendationService {
 
 	recommendationsIncoming = undefined;
 	recommendationsOutgoing = undefined;
-	initPromise = undefined;
+	
+	incomingRecs = {};
+	outgoingRecs = {};
+	mapUserToArrayOfRecommendations = {};
 
 	init() {
-		this.initPromise = new Promise((resolve, reject) => {
-			let self = this;
-			let user = this._userService.getCurrentUser();
-			let url = environment.apiUrl + "/api/user/" + user["id"] + "/recommendations/incoming";
+		this.incomingRecs = {};
+		this.outgoingRecs = {};
+		this.mapUserToArrayOfRecommendations = {};
+	}
+
+	getInitializationPromiseObject(_user?) {
+		if (_user === undefined)
+			_user = this._userService.getCurrentUser();
+
+		if (this.mapUserToArrayOfRecommendations[_user["id"]] === undefined) {
+			this.mapUserToArrayOfRecommendations[_user["id"]] = null;
+			this.mapUserToArrayOfRecommendations[_user["id"]] = this.getPromiseWhichSetsArraysOfRecommendations(_user);
+		}
+
+		return this.mapUserToArrayOfRecommendations[_user["id"]];
+	}
+
+	getPromiseWhichSetsArraysOfRecommendations(_user) {
+		let self = this;
+		return new Promise((resolve, reject) => {
+			let url = environment.apiUrl + "/api/user/" + _user["id"] + "/recommendations/incoming";
 			let numTimesAPICallHasReturned = 0;
 
 			this._apiService.get(url).subscribe((data) => {
-				self.recommendationsIncoming = JSON.parse(data["_body"]);
+				self.incomingRecs[_user["id"]] = JSON.parse(data["_body"]);
+
 				if (++numTimesAPICallHasReturned >= 2)
 					resolve(true);
 			});
 
-			url = environment.apiUrl + "/api/user/" + user["id"] + "/recommendations/outgoing";
-
+			url = environment.apiUrl + "/api/user/" + _user["id"] + "/recommendations/outgoing";
 			this._apiService.get(url).subscribe((data) => {
-				self.recommendationsOutgoing = JSON.parse(data["_body"]);
+				self.outgoingRecs[_user["id"]] = JSON.parse(data["_body"]);
+
 				if (++numTimesAPICallHasReturned >= 2)
 					resolve(true);
 			});
 		});
-
-		return this.initPromise;
 	}
 
-	getUserHasNecessaryRecommendations(prm, request?) {
+	getUserHasNecessaryRecommendations(_prm, request?) {
 		let self = this;
 
 		return new Promise((resolve, reject) => {
-			this.initPromise.then(() => {
+			this.getInitializationPromiseObject().then(() => {
 				let count = 0;
 
-				prm["requiredUserRecommendations"].map((obj) => {
-					if (self.recommendationsIncoming.some((obj2) => { return obj2["escrowedRequestId"] === null && obj2["providingUserId"] === obj["requiredRecommendUserId"]; }))
-						count++;
-				});
+				self.getIncomingRecommendations().then((incomingRecommendations: Array<Object>) => {
+					_prm["requiredUserRecommendations"].map((obj) => {
+						if (incomingRecommendations.some((obj2) => { return obj2["escrowedRequestId"] === null && obj2["providingUserId"] === obj["requiredRecommendUserId"]; }))
+							count++;
+					});
 
-				resolve((count === prm["requiredUserRecommendations"].length));
+					resolve((count === _prm["requiredUserRecommendations"].length));							
+				});
 			});
 		})
 	}
 
-	getIncomingRecommendations() {
+	getIncomingRecommendations(_user?) {
 		let self = this;
+
+		if (_user === undefined)
+			_user = this._userService.getCurrentUser();
+
 		return new Promise((resolve, reject) => {
-			this.initPromise.then(() => {
-				resolve(self.recommendationsIncoming);
-			})
+			this.getInitializationPromiseObject(_user).then(() => {
+				resolve( self.incomingRecs[_user["id"]] );
+			});
 		});
 	}
 
-	getOutgoingRecommendations() {
+	getOutgoingRecommendations(_user?) {
 		let self = this;
+
+		if (_user === undefined)
+			_user = this._userService.getCurrentUser();
+
 		return new Promise((resolve, reject) => {
-			this.initPromise.then(() => {
-				resolve(self.recommendationsOutgoing);
-			})
+			this.getInitializationPromiseObject(_user).then(() => {
+				resolve( self.outgoingRecs[_user["id"]] );
+			});
 		});
 	}
 

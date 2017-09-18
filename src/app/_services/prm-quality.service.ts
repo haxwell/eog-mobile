@@ -54,7 +54,7 @@ export class PrmQualityService {
 		let self = this;
 		this.mapUserToPrmQualityResults = {};
 		this.mapPropertyKeyToCalcFunction = []; 
-				
+
 		this.definePrmQualityCalculationFunction(
 			this._constants.FUNCTION_KEY_USER_HAS_SUFFICIENT_POINTS, 
 			(prm) => {

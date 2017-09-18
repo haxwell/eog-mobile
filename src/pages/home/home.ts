@@ -120,6 +120,10 @@ export class HomePage {
       this.navCtrl.push(PrmPage, { prm: _prm, readOnly: true });
   }
 
+  onUserResultTap(_user) {
+      this.navCtrl.push(ProfilePage, { user: _user, readOnly: true });
+  }
+
   isSearchFieldVisible() {
     return this._isSearchFieldVisible;
   }
