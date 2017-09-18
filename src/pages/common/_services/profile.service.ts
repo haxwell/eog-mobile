@@ -52,7 +52,11 @@ export class ProfileService {
 		let url = environment.apiUrl + "/api/user/" + user["id"] + "/profile";
 		this._apiService.get(url).subscribe((data) => {
 			let obj = JSON.parse(data["_body"]);
-			model["allTimePointCount"] = obj[0]["allTimePointCount"];
+			
+			if (obj[0] === undefined)
+				model["allTimePointCount"] = 0;
+			else 
+				model["allTimePointCount"] = obj[0]["allTimePointCount"];
 		});
 
 		url = environment.apiUrl + "/api/user/" + user["id"] + "/profile/picture";
@@ -86,7 +90,7 @@ export class ProfileService {
 			model["points"]["total"] = pts;
 		});
 
-		this._recommendationService.getIncomingRecommendations().then((obj: Array<Object>) => {
+		this._recommendationService.getIncomingRecommendations(user).then((obj: Array<Object>) => {
 			model["incomingRecommendations"] = obj;
 			model["availableIncomingRecommendations"] = obj.filter((obj) => { return obj["escrowedRequestId"] === null });
 			model["availableIncomingRecommendations"].map((rec) => { 
