@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { NavController, Events } from 'ionic-angular';
 import { ProfilePage } from '../profile/profile';
 import { SearchPage } from '../search/search';
 import { SearchUsersPage } from '../searchUsers/searchUsers';
@@ -30,7 +30,8 @@ export class HomePage {
                 private _userService: UserService, 
                 private _searchService: SearchService, 
                 private _prmQualityService: PrmQualityService,
-                private _constants: Constants ) {
+                private _constants: Constants,
+                private _events: Events) {
 
     }
 
@@ -145,7 +146,7 @@ export class HomePage {
   }
 
   onProfileBtnTap(event) {
-  	this.navCtrl.push(ProfilePage, {user: this.user, readOnly: false});
+  	this.navCtrl.push(ProfilePage, {user: this._userService.getCurrentUser(), readOnly: false});
   }
 
   onSearchForUsersBtnTap(event) {

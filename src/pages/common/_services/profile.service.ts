@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Events } from 'ionic-angular';
 
 import { UserService } from '../../../app/_services/user.service';
 import { ApiService } from '../../../app/_services/api.service';
@@ -17,7 +18,8 @@ export class ProfileService {
 				private _userService: UserService, 
 				private _pointsService: PointsService,
 				private _recommendationService: RecommendationService,
-				private _notificationService: NotificationService) { 
+				private _notificationService: NotificationService,
+				private _events: Events) { 
 
 				}
 	init(user) {
@@ -144,9 +146,12 @@ export class ProfileService {
 				.subscribe((resp) => {
 					
 					// force refresh of current user in the userService
+					// TODO: Make the userService do this itself, perhaps with events.
 					self._userService.getUser(user["id"], true).then((userObj) => {
 						userObj["password"] = user["password"];
 						self._userService.setCurrentUser(userObj);
+
+						this._events.publish('profile:changedContactInfoWasSaved', model);
 
 						resolve(JSON.parse(resp["_body"]));					
 					});

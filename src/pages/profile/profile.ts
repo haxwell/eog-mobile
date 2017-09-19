@@ -46,6 +46,15 @@ export class ProfilePage {
 		this._events.subscribe('request:completed', func);
 		this._events.subscribe('request:completedAndApproved', func);
 		this._events.subscribe('request:cancelled', func);
+
+		let func2 = (data) => {
+			this.model["realname"] = data["realname"];
+			this.model["phone"] = data["phone"];
+			this.model["email"] = data["email"];
+
+			this.setDirty(true);
+		};
+		this._events.subscribe('profile:changedContactInfo', func2);
 	}
 
 	ngOnInit() {

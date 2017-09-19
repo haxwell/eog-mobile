@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Events } from 'ionic-angular';
 
 import { LocalStorageService } from 'angular-2-local-storage';
 
@@ -10,8 +11,17 @@ export class UserService {
 	promise = undefined;
 	users = {};
 	usersPromise = {};
+	isCurrentUserDirty = false;
 
-	constructor(private _apiService: ApiService, private _localStorageService: LocalStorageService) { }
+	constructor(private _apiService: ApiService, private _localStorageService: LocalStorageService, private _events: Events) {
+		this._events.subscribe('profile:changedContactInfoWasSaved', (newProfile) => { 
+			let curr = this.getCurrentUser();
+			this.getUser(curr["id"], true).then((user) => {
+				user["password"] = curr["password"]; // Something unsafe about that... hmmm.
+				this.setCurrentUser(user);
+			});
+		});
+	}
 
 	getUser(userId, force?: boolean) {
 		let self = this;

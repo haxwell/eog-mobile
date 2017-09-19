@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { ModalController, NavParams } from 'ionic-angular';
+import { Events } from 'ionic-angular';
 
 import { ChoosePhotoSourcePage } from '../choose-photo-source/choose-photo-source'
 
@@ -18,9 +19,19 @@ export class ProfileHeader {
 	@Input() user = undefined;
 	model = {};
 
-	constructor(navParams: NavParams, private modalCtrl: ModalController, private _profileService: ProfileService, private _userService: UserService) {
+	constructor(navParams: NavParams, private modalCtrl: ModalController, private _profileService: ProfileService, private _userService: UserService, private _events: Events) {
 		this.user = Object.assign({}, navParams.get('user'));
 		this.readOnly = navParams.get('readOnly') || false;
+
+		let self = this;
+		let func2 = (data) => {
+			self.model["realname"] = data["realname"];
+			self.model["phone"] = data["phone"];
+			self.model["email"] = data["email"];
+
+			self.setDirty(true);
+		};
+		self._events.subscribe('profile:changedContactInfoWasSaved', func2);
 	}
 
 	ngOnInit() {
@@ -28,7 +39,8 @@ export class ProfileHeader {
 	}
 
 	isCurrentUserOwnerOfThisProfile() {
-		return this._userService.getCurrentUser()["id"] === this.user["id"];
+		let rtn = this._userService.getCurrentUser()["id"] === this.user["id"];
+		return rtn;
 	}
 
 	isReadOnly() {
@@ -74,15 +86,21 @@ export class ProfileHeader {
 		}
 	}
 
-	onNameChange() {
+	onNameChange(event) {
+		this.model["realname"] = event._value;
+		this._events.publish('profile:changedContactInfo', this.model);
 		this.setDirty(true);
 	}
 
-	onEmailChange() {
+	onEmailChange(event) {
+		this.model["email"] = event._value;
+		this._events.publish('profile:changedContactInfo', this.model);
 		this.setDirty(true);
 	}
 
-	onPhoneChange() {
+	onPhoneChange(event) {
+		this.model["phone"] = event._value;
+		this._events.publish('profile:changedContactInfo', this.model);
 		this.setDirty(true);
 	}
 }
