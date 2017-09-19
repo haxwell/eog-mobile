@@ -70,7 +70,6 @@
 		</ion-card-content>
 	</ion-card>
 	<ion-row>
-		<button ion-button (click)="onCancelBtnTap($event)">Cancel</button>
 		<button ion-button [hidden]="!isDeleteBtnVisible()" color="danger" (click)="onDeleteBtnTap($event)">Delete</button>			
 		<button ion-button [hidden]="!isSaveBtnVisible()" [disabled]="!isSaveBtnEnabled()" (click)="onSaveBtnTap($event)">Save</button>
 		<button ion-button [hidden]="!isRequestBtnVisible()" (click)="onRequestBtnTap($event)">Request</button>

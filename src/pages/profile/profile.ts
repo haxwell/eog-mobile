@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { NavController, ModalController, NavParams } from 'ionic-angular';
 import { Events } from 'ionic-angular';
 import { LoadingController } from 'ionic-angular';
+import { AlertController } from 'ionic-angular';
 
 import { ProfileService } from '../../pages/common/_services/profile.service'
 import { NotificationService } from './_services/notification.service'
@@ -24,6 +25,7 @@ export class ProfilePage {
 	dirty = true;
 	readOnly = false;
 	loading = undefined;
+	isExiting = false;
 
 	constructor(public navCtrl: NavController,
 				navParams: NavParams, 
@@ -31,7 +33,8 @@ export class ProfilePage {
 				private _profileService: ProfileService,
 				private _notificationService: NotificationService,
 				private _events: Events,
-				private loadingCtrl: LoadingController) {
+				private loadingCtrl: LoadingController,
+				private alertCtrl: AlertController) {
 
 		this.user = Object.assign({}, navParams.get('user'));
 		this.readOnly = navParams.get('readOnly') || false;
@@ -69,6 +72,31 @@ export class ProfilePage {
 	ionViewWillEnter() {
 		if (this.isDirty()) 
 			this.ngOnInit();
+	}
+
+	ionViewCanLeave() {
+		if (this.isDirty()) {
+			let self = this;
+
+			let alert = this.alertCtrl.create({
+				title: 'Save Changes?',
+				message: 'Do you want to save your  profile changes?',
+				buttons: [
+					{
+						text: 'No', role: 'cancel', handler: () => {
+							// do nothing
+						},
+					}, {
+						text: 'Yes', handler: () => {
+							self.onSaveBtnTap();
+						},
+
+					}
+				]
+			});
+			self.isExiting = true;
+			alert.present();
+		}
 	}
 
 	isReadOnly() {
@@ -149,7 +177,9 @@ export class ProfilePage {
 
 		this._profileService.save(this.model).then(() => {
 			self.loading.dismiss();
-			self.navCtrl.pop();
+			
+			if (!self.isExiting)
+				self.navCtrl.pop();
 		})
 	}
 

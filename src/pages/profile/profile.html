@@ -8,8 +8,6 @@
 
 <ion-content padding>
 	<ion-row>
-		<button *ngIf="isReadOnly()" ion-button (click)="onCancelBtnTap($event)">Close</button>
-		<button *ngIf="!isReadOnly()" ion-button (click)="onCancelBtnTap($event)">Cancel</button>
 		<button ion-button [hidden]="isReadOnly()" [disabled]="!isSaveBtnEnabled()" (click)="onSaveBtnTap($event)">Save</button>
 	</ion-row>
 	<ion-card>
@@ -132,8 +130,6 @@
 		</ion-card>
 	</ion-row>	
 	<ion-row>
-		<button *ngIf="isReadOnly()" ion-button (click)="onCancelBtnTap($event)">Close</button>
-		<button *ngIf="!isReadOnly()" ion-button (click)="onCancelBtnTap($event)">Cancel</button>
 		<button ion-button [hidden]="isReadOnly()" [disabled]="!isSaveBtnEnabled()" (click)="onSaveBtnTap($event)">Save</button>
 	</ion-row>
 

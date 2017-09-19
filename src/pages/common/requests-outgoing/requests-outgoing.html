@@ -6,7 +6,7 @@
 	<ion-card *ngIf="getAcceptedRequests() !== undefined">
 		<ion-card-header>
 			Accepted<br/>
-			<i>These requests are accepted, and in-progress.</i>
+			<i>These requests you've made have been accepted, and are in-progress.</i>
 		</ion-card-header>
 		<ion-card-content *ngFor="let item of getAcceptedRequests()">
 			<ion-item>
@@ -21,7 +21,7 @@
 	<ion-card *ngIf="getPendingRequests() !== undefined">
 		<ion-card-header>
 			Pending<br/>
-			<i>We're waiting for other users to respond to these requests.</i>
+			<i>We're waiting for other users to respond to your requests.</i>
 		</ion-card-header>
 		<ion-card-content *ngFor="let item of getPendingRequests()">
 			<ion-item>
@@ -52,7 +52,7 @@
 	<ion-card *ngIf="getNotCompleteAwaitingResolution() !== undefined">
 		<ion-card-header>
 			Not Complete, Disputed, Awaiting Resolution<br/>
-			<i>You've indicated you don't think these tasks are completed.</i>
+			<i>You've indicated you don't think these promises were fulfilled.</i>
 			<i>Please talk with the other user, and lets get these resolved!</i>
 		</ion-card-header>
 		<ion-card-content *ngFor="let item of getNotCompleteAwaitingResolution()">
@@ -68,7 +68,7 @@
 	<ion-card *ngIf="getCancelledRequests() !== undefined">
 		<ion-card-header>
 			Cancelled<br/>
-			<i>These are requests you have cancelled.</i>
+			<i>These are requests you have made, but cancelled.</i>
 		</ion-card-header>
 		<ion-card-content *ngFor="let item of getCancelledRequests()">
 			<ion-item>
