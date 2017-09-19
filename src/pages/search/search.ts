@@ -8,7 +8,6 @@ import { PrmPage } from '../promises/promises'
 import { SearchService } from '../../app/_services/search.service';
 import { PointsService } from '../../app/_services/points.service';
 import { PrmQualityService } from '../../app/_services/prm-quality.service';
-import { PrmDetailService } from '../../app/_services/prm-detail.service';
 import { UserService } from '../../app/_services/user.service';
 import { RecommendationService } from '../../app/_services/recommendation.service';
 
@@ -32,7 +31,6 @@ export class SearchPage {
 				private _userService: UserService,
 				private _recommendationService: RecommendationService,
 				private _prmQualityService: PrmQualityService,
-				private _prmDetailService: PrmDetailService,
 				private loadingCtrl: LoadingController,
 				_events: Events,
 				private _constants: Constants) {
@@ -52,8 +50,6 @@ export class SearchPage {
 	}
 
 	ngOnInit() {
-		let self = this;
-
 		this._recommendationService.init();
 		this._pointsService.init();
 		this._prmQualityService.init();
