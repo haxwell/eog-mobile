@@ -92,6 +92,16 @@ export class ProfileService {
 			model["points"]["total"] = pts;
 		});
 
+		let currentUser = this._userService.getCurrentUser();
+		if (currentUser["id"] === user["id"])
+			model["currentUserCanSeeContactInfo"] = true;
+		else {
+			url = environment.apiUrl + "/api/user/" + user["id"] + "/requests/inprogress/user/" + currentUser["id"];
+			this._apiService.get(url).subscribe((prmsObj) => {
+				model["currentUserCanSeeContactInfo"] = JSON.parse(prmsObj["_body"]).length > 0;
+			});
+		}
+		
 		this._recommendationService.getIncomingRecommendations(user).then((obj: Array<Object>) => {
 			model["incomingRecommendations"] = obj;
 			model["availableIncomingRecommendations"] = obj.filter((obj) => { return obj["escrowedRequestId"] === null });

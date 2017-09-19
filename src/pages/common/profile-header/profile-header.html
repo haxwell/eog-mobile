@@ -16,7 +16,7 @@
 		<td>
 			<div *ngIf="isReadOnly()">
 				Name: {{model.realname}}<br/>
-				<span *ngIf="isCurrentUserOwnerOfThisProfile()">Email: {{model.email}}<br/>Phone: {{model.phone}}</span>
+				<span *ngIf="isCurrentUserAllowedToSeeContactInfo()">Email: {{model.email}}<br/>Phone: {{model.phone}}</span>
 
 			</div>
 			<div *ngIf="!isReadOnly()">
@@ -27,12 +27,12 @@
 						</ion-item>
 					</tr>
 					<tr>
-						<ion-item *ngIf="isCurrentUserOwnerOfThisProfile()">
+						<ion-item *ngIf="isCurrentUserAllowedToSeeContactInfo()">
 							<ion-input type="text" placeholder="you@domain.com" (ionChange)="onEmailChange($event)" [(ngModel)]="model.email" #ctrl="ngModel" required></ion-input>
 						</ion-item>
 					</tr>
 					<tr>
-						<ion-item *ngIf="isCurrentUserOwnerOfThisProfile()">
+						<ion-item *ngIf="isCurrentUserAllowedToSeeContactInfo()">
 							<ion-input type="text" placeholder="# " (ionChange)="onPhoneChange($event)" [(ngModel)]="model.phone" #ctrl="ngModel" required></ion-input>
 						</ion-item >
 					</tr>
