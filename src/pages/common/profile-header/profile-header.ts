@@ -38,9 +38,8 @@ export class ProfileHeader {
 		this.model = this._profileService.getModel(this.user);
 	}
 
-	isCurrentUserOwnerOfThisProfile() {
-		let rtn = this._userService.getCurrentUser()["id"] === this.user["id"];
-		return rtn;
+	isCurrentUserAllowedToSeeContactInfo() {
+		return this.model["currentUserCanSeeContactInfo"];
 	}
 
 	isReadOnly() {
