@@ -63,6 +63,11 @@ export class RequestsService {
 			self._apiService.get(url).subscribe((obj) => {
 				let arr = JSON.parse(obj["_body"]);
 
+				arr.forEach((request) => {
+					request["prm"] = Object.assign({}, request["promise"]);
+					delete request["promise"];					
+				});
+
 				self._declineReasonCodeService.getDeclineReasonCodes().then((drcs: Array<Object>) => {
 					arr.map((req) => { 
 						if (req["declinedReasonCode"] === null) {
