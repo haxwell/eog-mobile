@@ -4,7 +4,6 @@ import { Events } from 'ionic-angular';
 
 import { ChoosePhotoSourcePage } from '../choose-photo-source/choose-photo-source'
 
-import { UserService } from '../../../app/_services/user.service'
 import { ProfileService } from '../_services/profile.service'
 
 @Component({
@@ -19,7 +18,7 @@ export class ProfileHeader {
 	@Input() user = undefined;
 	model = {};
 
-	constructor(navParams: NavParams, private modalCtrl: ModalController, private _profileService: ProfileService, private _userService: UserService, private _events: Events) {
+	constructor(navParams: NavParams, private modalCtrl: ModalController, private _profileService: ProfileService, private _events: Events) {
 		this.user = Object.assign({}, navParams.get('user'));
 		this.readOnly = navParams.get('readOnly') || false;
 
@@ -75,8 +74,9 @@ export class ProfileHeader {
 			modal.onDidDismiss((promise) => {
 				if (promise) {
 					promise.then((imageAsString) => { 
-						self.setDirty(true);
 						self.model["base64Image"] = imageAsString;
+						self._events.publish('profile:changedContactInfo', self.model);
+						self.setDirty(true);						
 					})
 				}
 			});
