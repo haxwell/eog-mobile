@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { UserService } from './user.service';
 
 import { Constants } from '../../_constants/constants'
+import { GeneralQualityService } from './general-quality.service'
 
 @Injectable()
 
@@ -19,94 +20,25 @@ import { Constants } from '../../_constants/constants'
 	stored in memory. Updated as changes happen. etc. Carry on.
 */
 
-export class RequestQualityService {
+export class RequestQualityService extends GeneralQualityService {
 	
-	constructor(private _userService: UserService,
-				private _constants: Constants) {
+	constructor(protected _userService: UserService,
+				protected _constants: Constants) {
 
+		super(_userService, _constants);				
 	}
 
-	mapp = {}
-	mapUserToRequestQualityResults = {};
-	mapPropertyKeyToCalcFunction: Array<Object> = [];
+	getQualityValue(_domainObj, functionKey): any {
+		return super.getQualityValue(_domainObj, functionKey); // can I avoid doing this? Why isn't the parent method just called automagically?
+	}
 
 	init() {
-		this.initRequestQualityCalculationFunctions();
-
-		// TODO: do something a little more graceful than destory it all
-		this.mapp = {};
-		this.mapUserToRequestQualityResults = {};
-	}
-
-	initRequestQualityCalculationFunctions() {
 		let self = this;
-		self.mapUserToRequestQualityResults = {};
-		self.mapPropertyKeyToCalcFunction = []; 
-
-		self.defineRequestQualityCalculationFunction(
+		self.addQualityCalculationFunction(
 			self._constants.FUNCTION_KEY_REQUEST_IS_IN_PROGRESS, 
 			(request) => {
 					return request["deliveringStatusId"] === self._constants.REQUEST_STATUS_ACCEPTED;
 			});
-	}
-
-	getQualityValueResult(_request, functionKey) {
-		let rtn = undefined;
-		let user = this._userService.getCurrentUser();
-
-		if (this.mapUserToRequestQualityResults[user["id"]] === undefined) 
-			this.mapUserToRequestQualityResults[user["id"]] = [];
-
-		let obj = this.mapUserToRequestQualityResults[user["id"]].find((result) => {
-			return result["request"]["id"] === _request["id"] && result["property"] === functionKey; 
-		});
-
-		if (obj === undefined) {
-			let calcFunctionObject = this.getCalcFunctionObject(functionKey);
-			let calcFunc: (Any) => Object = calcFunctionObject["func"];
-
-			obj = {request: _request, property: functionKey, value: calcFunc(_request)};
-			this.mapUserToRequestQualityResults[user["id"]].push(obj);
-		}
-
-		rtn = obj["value"];
-
-		return rtn;
-	}
-
-	defineRequestQualityCalculationFunction(key, _func) {
-		this.mapPropertyKeyToCalcFunction.push({property: key, func: _func});
-	}
-
-	getCalcFunctionObject(functionKey) {
-		return this.mapPropertyKeyToCalcFunction.find((propKeyToFunctionObj) => {
-				return (functionKey === propKeyToFunctionObj["property"]);
-			});
-	}
-
-	getQualityValue(_request, functionKey) {
-		let user = this._userService.getCurrentUser();
-		if (this.mapp[user["id"]] === undefined) {
-			this.mapp[user["id"]] = [];
-		}
-
-		let obj = this.mapp[user["id"]].find((obj) => { return obj["request"]["id"] === _request["id"] && obj["property"] === functionKey; });
-
-		if (obj === undefined) {
-			let rtn = this.getQualityValueResult(_request, functionKey);
-
-			if ( typeof rtn.then == 'function' )
-				 rtn.then((data) => {
-					obj = {request: _request, property: functionKey, value: data};
-					this.mapp[user["id"]].push(obj);
-				});
-			else {
-				obj = {request: _request, property: functionKey, value: rtn};
-				this.mapp[user["id"]].push(obj);
-			}
-		}
-
-		return obj ? obj["value"] : undefined;
 	}
 
 }
