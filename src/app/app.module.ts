@@ -51,13 +51,13 @@ import { SearchService } from './_services/search.service';
 import { PointsService } from './_services/points.service';
 import { RecommendationService } from './_services/recommendation.service';
 import { RequestsService } from './_services/requests.service';
-import { RequestQualityService } from './_services/request-quality.service';
+import { RequestMetadataService } from './_services/request-metadata.service';
 import { DeclineReasonCodeService } from './_services/declined-reason-codes.service';
 import { ProfileService } from '../pages/common/_services/profile.service';
 import { CameraService } from '../pages/common/_services/camera.service';
 import { NotificationService } from '../pages/profile/_services/notification.service';
 import { PrmService } from '../pages/promises/_services/prm.service';
-import { PrmQualityService } from './_services/prm-quality.service';
+import { PrmMetadataService } from './_services/prm-metadata.service';
 import { PrmDetailService } from './_services/prm-detail.service';
 
 import { Constants } from '../_constants/constants';
@@ -153,12 +153,12 @@ import { Constants } from '../_constants/constants';
     SearchService,
     DreamService,
     PrmService,
-    PrmQualityService,
+    PrmMetadataService,
     PrmDetailService,
     ProfileService,
     CameraService,
     RequestsService,
-    RequestQualityService,
+    RequestMetadataService,
     DeclineReasonCodeService,    
     RecommendationService,
     NotificationService,

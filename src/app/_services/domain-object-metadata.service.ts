@@ -11,20 +11,19 @@ import {Observable} from 'rxjs/Observable';
 @Injectable()
 
 /*
-	This class contains a set of functions, that are keyed by constants. Each function takes a Request,
-	and returns something about it in relation to a user. So, if the user has sufficient points it will 
-	return true. If the user has requested it in the past, it may return false. Etc.
+	Provides metadata about a domain object, as it relates to another domain object, in this case, a user.
 
-	It works by having a list of functions, keyed by constants. Then an object keyed by User Id, which
-	contains a value that is the promise which will return the value of the function. Then a third list
-	contains a value that is the promise which will return the value of the function. Then a third list
-	which is the return value of the promise in the aforementioned list.
+	Metadata is provided by a function, which is associated with a unique key. When a call is made for that
+	bit of metadata in association with a given domain object, the function is called, and its return value
+	is returned to the caller.
 
-	I think this could be powerful, an object and a list of functions which return some attribute about it,
-	stored in memory. Updated as changes happen. etc. Carry on.
+	To implement, a service should extend this class. The extending class should initialize this class with
+	the functions that provide the metadata it uses. To do this, in the init() method, call addMetadataCalculationFunction(functionKey, func).
+
+	Then, to get a metadata value, call getMetadata(domainObject, functionKey).
 */
 
-export class GeneralQualityService {
+export class DomainObjectMetadataService {
 	
 	constructor(protected _userService: UserService,
 				protected _constants: Constants) {
@@ -32,27 +31,27 @@ export class GeneralQualityService {
 	}
 
 	mapp = {}
-	mapUserToQualityResults = {};
+	mapUserToMetadataResults = {};
 	mapPropertyKeyToCalcFunction: Array<Object> = [];
 
 	init() {
 		// TODO: do something a little more graceful than destory it all
 		this.mapp = {};
-		this.mapUserToQualityResults = {};
+		this.mapUserToMetadataResults = {};
 	}
 
-	addQualityCalculationFunction(functionKey, _func) {
+	addMetadataCalculationFunction(functionKey, _func) {
 		this.mapPropertyKeyToCalcFunction.push({property: functionKey, func: _func}); 
 	}
 
-	getQualityValueResult(_domainObj, functionKey): Object {
+	getMetadataValueResult(_domainObj, functionKey): Object {
 		let rtn = undefined;
 		let user = this._userService.getCurrentUser();
 
-		if (this.mapUserToQualityResults[user["id"]] === undefined) 
-			this.mapUserToQualityResults[user["id"]] = [];
+		if (this.mapUserToMetadataResults[user["id"]] === undefined) 
+			this.mapUserToMetadataResults[user["id"]] = [];
 
-		let obj = this.mapUserToQualityResults[user["id"]].find((result) => {
+		let obj = this.mapUserToMetadataResults[user["id"]].find((result) => {
 			return result["domainObj"]["id"] === _domainObj["id"] && result["property"] === functionKey; 
 		});
 
@@ -62,7 +61,7 @@ export class GeneralQualityService {
 			//if (calcFunctionObject["func"].hasOwnProperty('then'))
 
 			obj = {domainObj: _domainObj, property: functionKey, value: calcFunc(_domainObj)};
-			this.mapUserToQualityResults[user["id"]].push(obj);
+			this.mapUserToMetadataResults[user["id"]].push(obj);
 		}
 
 		rtn = obj["value"];
@@ -76,7 +75,7 @@ export class GeneralQualityService {
 			});
 	}
 
-	getQualityValue(_domainObj, functionKey) {
+	getMetadataValue(_domainObj, functionKey) {
 		let user = this._userService.getCurrentUser();
 		if (this.mapp[user["id"]] === undefined) {
 			this.mapp[user["id"]] = [];
@@ -85,7 +84,7 @@ export class GeneralQualityService {
 		let obj = this.mapp[user["id"]].find((obj) => { return obj["domainObj"]["id"] === _domainObj["id"] && obj["property"] === functionKey; });
 
 		if (obj === undefined) {
-			let rtn : any = this.getQualityValueResult(_domainObj, functionKey);
+			let rtn : any = this.getMetadataValueResult(_domainObj, functionKey);
 
 			if ( typeof rtn.then == 'function' )
 				 rtn.then((data) => {

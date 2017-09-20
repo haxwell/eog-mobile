@@ -10,7 +10,7 @@ import { DeletePrmPage } from './_pages/delete.prm'
 import { KeywordEntryPage } from '../keyword.entry/keyword.entry'
 import { PrmService } from './_services/prm.service'
 import { UserService } from '../../app/_services/user.service'
-import { PrmQualityService } from '../../app/_services/prm-quality.service';
+import { PrmMetadataService } from '../../app/_services/prm-metadata.service';
 import { PrmDetailService } from '../../app/_services/prm-detail.service';
 import { Constants } from '../../_constants/constants';
 
@@ -35,7 +35,7 @@ export class PrmPage {
 				navParams: NavParams, 
 				private modalCtrl: ModalController,
 				private _prmService: PrmService,
-				private _prmQualityService: PrmQualityService,
+				private _prmMetadataService: PrmMetadataService,
 				private _prmDetailService: PrmDetailService,
 				private _userService: UserService,
 				private loadingCtrl: LoadingController,
@@ -132,7 +132,7 @@ export class PrmPage {
 	}
 
 	isRequestBtnVisible() {
-		return this.isReadOnly() && this._prmQualityService.getQualityValue(this.model, this._constants.FUNCTION_KEY_PRM_IS_REQUESTABLE);
+		return this.isReadOnly() && this._prmMetadataService.getMetadataValue(this.model, this._constants.FUNCTION_KEY_PRM_IS_REQUESTABLE);
 	}
 
 	requestCallback = (_params) => {

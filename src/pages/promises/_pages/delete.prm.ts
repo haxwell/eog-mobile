@@ -4,7 +4,7 @@ import { NavController, NavParams, ViewController, Events } from 'ionic-angular'
 
 import { PrmService } 	from '../_services/prm.service';
 import { RequestsService } 	from '../../../app/_services/requests.service';
-import { RequestQualityService } 	from '../../../app/_services/request-quality.service';
+import { RequestMetadataService } 	from '../../../app/_services/request-metadata.service';
 
 import { Constants } from '../../../_constants/constants';
 
@@ -13,12 +13,6 @@ import { Constants } from '../../../_constants/constants';
   templateUrl: 'delete.prm.html'
 })
 export class DeletePrmPage {
-
-	REQUEST_STATUS_DECLINED = 2;	
-	REQUEST_STATUS_ACCEPTED = 3;
-	REQUEST_STATUS_COMPLETED = 4;
-	REQUEST_STATUS_CANCELLED = 5;	
-	REQUEST_STATUS_NOT_COMPLETED = 6;		
 
 	prm = undefined;
 	prmRequests = undefined;
@@ -31,7 +25,7 @@ export class DeletePrmPage {
 				private viewCtrl: ViewController, 
 				private _prmService: PrmService,
 				private _requestsService: RequestsService,
-				private _requestQualityService: RequestQualityService,
+				private _requestMetadataService: RequestMetadataService,
 				private _events: Events,
 				private _constants: Constants
 				) {
@@ -41,7 +35,7 @@ export class DeletePrmPage {
 	ngOnInit() {
 		let self = this;
 
-		self._requestQualityService.init();
+		self._requestMetadataService.init();
 
 		// get all the requests
 		this._requestsService.getModelForIncoming().then((model: Array<Object>) => {
@@ -51,7 +45,7 @@ export class DeletePrmPage {
 
 			// sort them according to whether they are in progress
 			self.prmRequests.forEach((request) => {
-				if (self._requestQualityService.getQualityValue(request, self._constants.FUNCTION_KEY_REQUEST_IS_IN_PROGRESS)) {
+				if (self._requestMetadataService.getMetadataValue(request, self._constants.FUNCTION_KEY_REQUEST_IS_IN_PROGRESS)) {
 					if (self.prmRequestsInProgress === undefined)
 						self.prmRequestsInProgress = [];
 

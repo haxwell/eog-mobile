@@ -11,7 +11,7 @@ import { ProfileHeader } from '../../pages/common/profile-header/profile-header'
 
 import { UserService } from '../../app/_services/user.service'
 import { SearchService } from '../../app/_services/search.service'
-import { PrmQualityService } from '../../app/_services/prm-quality.service';
+import { PrmMetadataService } from '../../app/_services/prm-metadata.service';
 
 import { Constants } from '../../_constants/constants';
 
@@ -29,7 +29,7 @@ export class HomePage {
     constructor(public navCtrl: NavController, 
                 private _userService: UserService, 
                 private _searchService: SearchService, 
-                private _prmQualityService: PrmQualityService,
+                private _prmMetadataService: PrmMetadataService,
                 private _constants: Constants,
                 private _events: Events) {
 
@@ -38,7 +38,7 @@ export class HomePage {
     ngOnInit() {
         this.user = this._userService.getCurrentUser();
 
-        this._prmQualityService.init();
+        this._prmMetadataService.init();
     }
 
     initializeItems(query) {
@@ -170,36 +170,36 @@ export class HomePage {
   }
 
   hasPrmBeenPreviouslyRequested(prm) {
-    return (this._prmQualityService.getQualityValue(prm, this._constants.FUNCTION_KEY_USER_HAS_PREVIOUSLY_REQUESTED_PRM) === true);
+    return (this._prmMetadataService.getMetadataValue(prm, this._constants.FUNCTION_KEY_USER_HAS_PREVIOUSLY_REQUESTED_PRM) === true);
   }
 
   areRecommendationsRequired(prm) {
-    return (this._prmQualityService.getQualityValue(prm, this._constants.FUNCTION_KEY_PRM_REQUIRES_RECOMMENDATIONS) === true);  
+    return (this._prmMetadataService.getMetadataValue(prm, this._constants.FUNCTION_KEY_PRM_REQUIRES_RECOMMENDATIONS) === true);  
   }
 
   getNecessaryRecommendationsIconColor(prm) {
-    if (this._prmQualityService.getQualityValue(prm, this._constants.FUNCTION_KEY_USER_HAS_NECESSARY_RECOMMENDATIONS) === true)
+    if (this._prmMetadataService.getMetadataValue(prm, this._constants.FUNCTION_KEY_USER_HAS_NECESSARY_RECOMMENDATIONS) === true)
       return "green";
     else
       return "red";
   }
 
   getAlreadyRequestedIconColor(prm) {
-    if (this._prmQualityService.getQualityValue(prm, this._constants.FUNCTION_KEY_USER_HAS_CURRENTLY_REQUESTED_PRM) === false)
+    if (this._prmMetadataService.getMetadataValue(prm, this._constants.FUNCTION_KEY_USER_HAS_CURRENTLY_REQUESTED_PRM) === false)
       return "green";
     else
       return "red";
   }
 
   getSufficientTimeIconColor(prm) {
-    if (this._prmQualityService.getQualityValue(prm, this._constants.FUNCTION_KEY_USER_IS_PAST_REQUEST_AGAIN_DATE) === true)
+    if (this._prmMetadataService.getMetadataValue(prm, this._constants.FUNCTION_KEY_USER_IS_PAST_REQUEST_AGAIN_DATE) === true)
       return "green";
     else
       return "red";
   }
 
   getSufficientPointsIconColor(prm) {
-    if (this._prmQualityService.getQualityValue(prm, this._constants.FUNCTION_KEY_USER_HAS_SUFFICIENT_POINTS) === true)
+    if (this._prmMetadataService.getMetadataValue(prm, this._constants.FUNCTION_KEY_USER_HAS_SUFFICIENT_POINTS) === true)
       return "green";
     else
       return "red";

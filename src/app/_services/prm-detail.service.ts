@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { PrmQualityService } from './prm-quality.service';
+import { PrmMetadataService } from './prm-metadata.service';
 import { PointsService } from './points.service';
 import { RecommendationService } from './recommendation.service';
 import { UserService } from './user.service';
@@ -10,7 +10,7 @@ import { Constants } from '../../_constants/constants';
 @Injectable()
 export class PrmDetailService {
 	
-	constructor(private _prmQualityService: PrmQualityService,
+	constructor(private _prmMetadataService: PrmMetadataService,
 				private _pointsService: PointsService,
 				private _recommendationService: RecommendationService,
 				private _userService: UserService,
@@ -22,19 +22,19 @@ export class PrmDetailService {
 		let _msgs = [];
 
 		let self = this;
-		if (this._prmQualityService.getQualityValue(_prm, this._constants.FUNCTION_KEY_USER_HAS_CURRENTLY_REQUESTED_PRM)) {
+		if (this._prmMetadataService.getMetadataValue(_prm, this._constants.FUNCTION_KEY_USER_HAS_CURRENTLY_REQUESTED_PRM)) {
 			_msgs.push({type: 'alreadyRequested', msg: 'You have already requested this Promise.'});
-		} else if (this._prmQualityService.getQualityValue(_prm, this._constants.FUNCTION_KEY_USER_IS_PAST_REQUEST_AGAIN_DATE) === false ) {
+		} else if (this._prmMetadataService.getMetadataValue(_prm, this._constants.FUNCTION_KEY_USER_IS_PAST_REQUEST_AGAIN_DATE) === false ) {
 			_msgs.push({type: 'timeRemaining', msg: 'The author set a time limit before you can request this Promise again. You still have time remaining.'});
 		} else {
-			if (this._prmQualityService.getQualityValue(_prm, this._constants.FUNCTION_KEY_USER_HAS_SUFFICIENT_POINTS) === false) {
+			if (this._prmMetadataService.getMetadataValue(_prm, this._constants.FUNCTION_KEY_USER_HAS_SUFFICIENT_POINTS) === false) {
 				this._pointsService.getCurrentAvailableUserPoints().then((data) => {
 					_msgs.push({type: 'points', msg: (_prm["requiredPointsQuantity"] - data) + ' more points'});
 				});
 			}
 
-			if (this._prmQualityService.getQualityValue(_prm, this._constants.FUNCTION_KEY_PRM_REQUIRES_RECOMMENDATIONS)) {
-				if (this._prmQualityService.getQualityValue(_prm, this._constants.FUNCTION_KEY_USER_HAS_NECESSARY_RECOMMENDATIONS) === false) {
+			if (this._prmMetadataService.getMetadataValue(_prm, this._constants.FUNCTION_KEY_PRM_REQUIRES_RECOMMENDATIONS)) {
+				if (this._prmMetadataService.getMetadataValue(_prm, this._constants.FUNCTION_KEY_USER_HAS_NECESSARY_RECOMMENDATIONS) === false) {
 					let tmpReqdRecs = _prm["requiredUserRecommendations"].slice();
 					self._recommendationService.getIncomingRecommendations().then((list: Array<Object>) => {
 
