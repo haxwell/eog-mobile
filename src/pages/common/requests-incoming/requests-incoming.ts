@@ -53,12 +53,7 @@ export class RequestsIncomingView {
 			// the data object has the property name set as promise.
 			//  so as not to be confusing, we need it on this side to read 'prm'
 			data.map((obj) => {
-				let l = obj["promise"];
-				delete obj["promise"];
-
-				obj["prm"] = l;
-
-				if (!data.some((obj) => { return obj["promise"] !== undefined; })) {
+				if (!data.some((obj) => { return obj["prm"] === undefined; })) {
 					self.model = data;
 					self.dirty = false;
 				}
@@ -122,6 +117,7 @@ export class RequestsIncomingView {
 	filterModelByDeliveringStatus(status) {
 		if (this.model) {
 			let rtn = this.model.filter((obj) => { return obj["deliveringStatusId"] === status; });
+			rtn.forEach((request) => { console.log(JSON.stringify(request["prm"])); });
 			return rtn.length > 0 ? rtn : undefined
 		}
 		else

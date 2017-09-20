@@ -45,21 +45,8 @@ export class RequestsOutgoingView {
 	ngOnInit() {
 		var self = this;
 		this._requestsService.getModelForOutgoing().then((data: Array<Object>) => {
-			// the data object has the property name set as promise.
-			//  so as not to be confusing, we need it on this side to read 'prm'
-			if (data.length === 0)
 				self.model = data;
-			else data.map((obj) => {
-				let l = obj["promise"];
-				delete obj["promise"];
-
-				obj["prm"] = l;
-
-				if (!data.some((obj) => { return obj["promise"] !== undefined; })) {
-					self.model = data;
-				}
 			});
-		});
 	}
 
 	isRequestModelEmpty() {
