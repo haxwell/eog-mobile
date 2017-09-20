@@ -33,29 +33,21 @@
 <ion-content padding>
 	<ion-grid>
 		<ion-row>
-			<ion-col>
-			</ion-col>
-			<ion-col col-6>
-				<ion-row>
-					<ion-card>
-						<profile-header [user]="getUser()" [readOnly]="true" (click)="onProfileBtnTap($event)"></profile-header>
-					</ion-card>
-				</ion-row>
-				<ion-row>
-					<span class="homeHeader">Incoming Requests</span>
-				</ion-row>
-				<ion-row>
-					<requests-incoming-view [ngStyle]="{'width':'100%'}" ></requests-incoming-view>
-				</ion-row>
-				<ion-row>
-					<span class="homeHeader">Outgoing Requests</span>
-				</ion-row>
-				<ion-row>
-					<requests-outgoing-view [ngStyle]="{'width':'100%'}"></requests-outgoing-view>
-				</ion-row>
-			</ion-col>
-			<ion-col>
-			</ion-col>
+			<ion-card>
+				<profile-header [user]="getUser()" [readOnly]="true" (click)="onProfileBtnTap($event)"></profile-header>
+			</ion-card>
+		</ion-row>
+		<ion-row>
+			<span class="homeHeader">Incoming Requests</span>
+		</ion-row>
+		<ion-row>
+			<requests-incoming-view [ngStyle]="{'width':'100%'}" ></requests-incoming-view>
+		</ion-row>
+		<ion-row>
+			<span class="homeHeader">Outgoing Requests</span>
+		</ion-row>
+		<ion-row>
+			<requests-outgoing-view [ngStyle]="{'width':'100%'}"></requests-outgoing-view>
 		</ion-row>
 	</ion-grid>
 </ion-content>
