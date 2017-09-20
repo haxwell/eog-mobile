@@ -51,6 +51,7 @@ import { SearchService } from './_services/search.service';
 import { PointsService } from './_services/points.service';
 import { RecommendationService } from './_services/recommendation.service';
 import { RequestsService } from './_services/requests.service';
+import { RequestQualityService } from './_services/request-quality.service';
 import { DeclineReasonCodeService } from './_services/declined-reason-codes.service';
 import { ProfileService } from '../pages/common/_services/profile.service';
 import { CameraService } from '../pages/common/_services/camera.service';
@@ -157,6 +158,7 @@ import { Constants } from '../_constants/constants';
     ProfileService,
     CameraService,
     RequestsService,
+    RequestQualityService,
     DeclineReasonCodeService,    
     RecommendationService,
     NotificationService,

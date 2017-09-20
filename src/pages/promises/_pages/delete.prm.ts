@@ -1,9 +1,12 @@
 import { Component } from '@angular/core';
 
-import { NavController, NavParams, ViewController } from 'ionic-angular';
+import { NavController, NavParams, ViewController, Events } from 'ionic-angular';
 
 import { PrmService } 	from '../_services/prm.service';
 import { RequestsService } 	from '../../../app/_services/requests.service';
+import { RequestQualityService } 	from '../../../app/_services/request-quality.service';
+
+import { Constants } from '../../../_constants/constants';
 
 @Component({
   selector: 'page-prm-detail-delete',
@@ -27,25 +30,40 @@ export class DeletePrmPage {
 				public params: NavParams,
 				private viewCtrl: ViewController, 
 				private _prmService: PrmService,
-				private _requestsService: RequestsService) {
+				private _requestsService: RequestsService,
+				private _requestQualityService: RequestQualityService,
+				private _events: Events,
+				private _constants: Constants
+				) {
 		this.prm = params.get('prm');
 	}
 
 	ngOnInit() {
 		let self = this;
 
+		self._requestQualityService.init();
+
+		// get all the requests
 		this._requestsService.getModelForIncoming().then((model: Array<Object>) => {
-			// get all the requests for this prm
+			// then, for all that are for this prm
 			self.prmRequests = model.filter((obj) => {
 				return obj["prm"]["id"] === self.prm["id"]; });
 
-			// create another list with all the requests for this prm that are in progress
-			self.prmRequestsInProgress = self.prmRequests.filter((obj) => { 
-				return obj["deliveringStatusId"] === self.REQUEST_STATUS_ACCEPTED; });
+			// sort them according to whether they are in progress
+			self.prmRequests.forEach((request) => {
+				if (self._requestQualityService.getQualityValue(request, self._constants.FUNCTION_KEY_REQUEST_IS_IN_PROGRESS)) {
+					if (self.prmRequestsInProgress === undefined)
+						self.prmRequestsInProgress = [];
 
-			// a third list for all the requests for this prm that are not in progress
-			self.prmRequestsNotInProgress = self.prmRequests.filter((obj) => {
-				return self.prmRequestsInProgress.some((obj2) => { return obj2["id"] !== obj["id"]; }); 
+					self.prmRequestsInProgress.push(request);
+				}
+				else {
+					if (self.prmRequestsNotInProgress === undefined)
+						self.prmRequestsNotInProgress = [];
+
+					self.prmRequestsNotInProgress.push(request);
+				}
+
 			});
 
 			self.isInitialized = true;
@@ -73,8 +91,10 @@ export class DeletePrmPage {
 	}
 
 	onDeleteBtnTap(evt) {
-		this._prmService.delete(this.prm).then(() => {
-			this.viewCtrl.dismiss(true);
+		let self = this;
+		self._prmService.delete(self.prm).then(() => {
+			self._events.publish('prm:deleted', self.prm);
+			self.viewCtrl.dismiss(true);
 		})
 	}
 

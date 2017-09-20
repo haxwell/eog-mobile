@@ -4,6 +4,7 @@ import { ToastController } from 'ionic-angular';
 import { Events } from 'ionic-angular';
 
 import { UserService } from '../../app/_services/user.service';
+import { RequestsService } from '../../app/_services/requests.service';
 
 import { Constants } from '../../_constants/constants';
 import { environment } from '../../_environments/environment';
@@ -16,6 +17,7 @@ export class WebsocketService {
 	client = undefined;
 
 	constructor(private _userService: UserService,
+				private _requestsService: RequestsService,
 				private toastCtrl: ToastController,
 				private _constants: Constants,
 				public _events: Events) { 
@@ -50,15 +52,7 @@ export class WebsocketService {
 			data["request"]["directionallyOppositeUser"] = Object.assign({}, data["directionallyOppositeUser"]);
 			delete data["directionallyOppositeUser"];
 
-			let request = data["request"];
-
-			// the data object has the property name set as promise.
-			//  so as not to be confusing, we need it on this side to read 'prm'
-				let l = request["promise"];
-				delete request["promise"];
-
-				request["prm"] = l;
-			// end cleanup
+			let request = this._requestsService.changePromiseAttributeToPrm(data["request"]); 
 
 			if (request["deliveringStatusId"] === this._constants.REQUEST_STATUS_PENDING && request["requestingStatusId"] === null) {
 				this.handleRequestReceived(data)

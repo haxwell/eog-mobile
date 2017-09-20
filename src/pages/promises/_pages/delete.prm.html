@@ -12,7 +12,7 @@
 	</ion-row>
 
 	<ion-row *ngIf="isPrmAttachedToARequestNotInProgress() || isPrmAttachedToAnInProgressRequest()">
-		<ion-label>People have asked to take you up on a Promise...</ion-label>
+		<ion-label>People have asked to take you up on this Promise...</ion-label>
 	</ion-row>
 	<ion-row *ngIf="isPrmAttachedToARequestNotInProgress()">
 		<ion-card>
@@ -20,8 +20,8 @@
 				You have not yet accepted these requests. If you delete this Promise, these requests will be cancelled.
 			</ion-card-header>
 			<ion-card-content>
-				<ion-item *ngFor="let prm of getPrmRequestsNotInProgress()">
-					User: {{item.directionallyOppositeUser.realname}} Dream: {{item.dream.title}}
+				<ion-item *ngFor="let req of getPrmRequestsNotInProgress()">
+					User: {{req.directionallyOppositeUser.realname}} Dream: {{req.dream.title}}
 				</ion-item>
 			</ion-card-content>
 		</ion-card>
@@ -32,8 +32,8 @@
 				These requests are in progress. You will need to resolve these before deleting this Promise.
 			</ion-card-header>
 			<ion-card-content>
-				<ion-item *ngFor="let item of getPrmRequestsInProgress()">
-					User: {{item.directionallyOppositeUser.realname}} Dream: {{item.dream.title}}
+				<ion-item *ngFor="let req of getPrmRequestsInProgress()">
+					User: {{req.directionallyOppositeUser.realname}} Dream: {{req.dream.title}}
 				</ion-item>
 			</ion-card-content>
 		</ion-card>

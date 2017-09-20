@@ -71,7 +71,7 @@ export class PrmQualityService {
 				return new Promise((resolve, reject) => {
 					// TODO: This method will be renamed getOutgoingRequestsForCurrentUser()
 					this._requestsService.getModelForOutgoing().then((data: Array<Object>) => {
-						resolve(data.some((obj) => { return obj["promise"]["id"] === prm["id"]; }));
+						resolve(data.some((obj) => { return obj["prm"]["id"] === prm["id"]; }));
 					});
 				})
 			});
