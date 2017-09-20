@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 
-import { UserService } from './user.service';
+import { UserService } from './user.service'
 import { PointsService } from './points.service'
 import { RecommendationService } from './recommendation.service'
 import { RequestsService } from './requests.service'
+import { GeneralQualityService } from './general-quality.service'
 
 import { Constants } from '../../_constants/constants'
 
@@ -24,38 +25,24 @@ import Moment from 'moment'
 	stored in memory. Updated as changes happen. etc. Carry on.
 */
 
-export class PrmQualityService {
+export class PrmQualityService extends GeneralQualityService {
 	
-	constructor(private _userService: UserService,
-				private _pointsService: PointsService,
-				private _recommendationService: RecommendationService,
-				private _requestsService: RequestsService,
-				private _constants: Constants) {
+	constructor(protected _pointsService: PointsService,
+				protected _recommendationService: RecommendationService,
+				protected _requestsService: RequestsService,
+				protected _userService: UserService,
+				protected _constants: Constants) {
 
+		super(_userService, _constants);
 	}
 
-	mapp = {}
-	mapUserToPrmQualityResults = {};
-	mapPropertyKeyToCalcFunction: Array<Object> = [];
+	getQualityValue(_domainObj, functionKey): any {
+		return super.getQualityValue(_domainObj, functionKey); // can I avoid doing this? Why isn't the parent method just called automagically?
+	}
 
 	init() {
-		this.initPrmQualityCalculationFunctions();
-
-		// TODO: do something a little more graceful than destory it all
-		this.mapp = {};
-		this.mapUserToPrmQualityResults = {};
-	}
-
-	definePrmQualityCalculationFunction(key, _func) {
-		this.mapPropertyKeyToCalcFunction.push({property: key, func: _func});
-	}
-
-	initPrmQualityCalculationFunctions() {
 		let self = this;
-		this.mapUserToPrmQualityResults = {};
-		this.mapPropertyKeyToCalcFunction = []; 
-
-		this.definePrmQualityCalculationFunction(
+		this.addQualityCalculationFunction(
 			this._constants.FUNCTION_KEY_USER_HAS_SUFFICIENT_POINTS, 
 			(prm) => {
 				return new Promise((resolve, reject) => {
@@ -65,7 +52,7 @@ export class PrmQualityService {
 				})
 			}); 
 
-		this.definePrmQualityCalculationFunction(
+		this.addQualityCalculationFunction(
 			this._constants.FUNCTION_KEY_USER_HAS_CURRENTLY_REQUESTED_PRM, 
 			(prm) => {
 				return new Promise((resolve, reject) => {
@@ -76,7 +63,7 @@ export class PrmQualityService {
 				})
 			});
 
-		this.definePrmQualityCalculationFunction(
+		this.addQualityCalculationFunction(
 			this._constants.FUNCTION_KEY_USER_HAS_NECESSARY_RECOMMENDATIONS, 
 			(prm) => {
 				return new Promise((resolve, reject) => {
@@ -86,7 +73,7 @@ export class PrmQualityService {
 				})
 			});
 
-		this.definePrmQualityCalculationFunction(
+		this.addQualityCalculationFunction(
 			this._constants.FUNCTION_KEY_USER_IS_PAST_REQUEST_AGAIN_DATE, 
 			(prm) => {
 				return new Promise((resolve, reject) => {
@@ -102,7 +89,7 @@ export class PrmQualityService {
 				})
 			});
 
-		this.definePrmQualityCalculationFunction(
+		this.addQualityCalculationFunction(
 			this._constants.FUNCTION_KEY_USER_HAS_PREVIOUSLY_REQUESTED_PRM, 
 			(prm) => {
 				return new Promise((resolve, reject) => {
@@ -112,7 +99,7 @@ export class PrmQualityService {
 				})
 			});
 
-		this.definePrmQualityCalculationFunction(
+		this.addQualityCalculationFunction(
 			this._constants.FUNCTION_KEY_PRM_REQUIRES_RECOMMENDATIONS, 
 			(prm) => {
 				return new Promise((resolve, reject) => {
@@ -120,20 +107,20 @@ export class PrmQualityService {
 				});
 			});
 
-		this.definePrmQualityCalculationFunction(
+		this.addQualityCalculationFunction(
 			self._constants.FUNCTION_KEY_PRM_IS_REQUESTABLE, 
 			(prm) => {
 				return new Promise((resolve, reject) => {
 					let calcFunc1: (Number) => Promise<Object> = 
-					self.getCalcFunction(this._constants.FUNCTION_KEY_USER_HAS_NECESSARY_RECOMMENDATIONS);
+						self.getCalcFunctionObject(this._constants.FUNCTION_KEY_USER_HAS_NECESSARY_RECOMMENDATIONS)["func"];
 
 					calcFunc1(prm).then((data1) => {
 						if (data1 === true) {
-							self.getCalcFunction(self._constants.FUNCTION_KEY_USER_HAS_SUFFICIENT_POINTS)(prm).then((data2) => {
+							self.getCalcFunctionObject(self._constants.FUNCTION_KEY_USER_HAS_SUFFICIENT_POINTS)["func"](prm).then((data2) => {
 								if (data2 === true) {
-									self.getCalcFunction(self._constants.FUNCTION_KEY_USER_HAS_CURRENTLY_REQUESTED_PRM)(prm).then((data3) => {
+									self.getCalcFunctionObject(self._constants.FUNCTION_KEY_USER_HAS_CURRENTLY_REQUESTED_PRM)["func"](prm).then((data3) => {
 										if (data3 === false) {
-											self.getCalcFunction(self._constants.FUNCTION_KEY_USER_IS_PAST_REQUEST_AGAIN_DATE)(prm).then((data4) => {
+											self.getCalcFunctionObject(self._constants.FUNCTION_KEY_USER_IS_PAST_REQUEST_AGAIN_DATE)["func"](prm).then((data4) => {
 												if (data4 === true || data4 === null) {
 													resolve(true);
 												}
@@ -150,52 +137,6 @@ export class PrmQualityService {
 					});
 				});
 			});
-	}
 
-	getQualityValuePromise(_prm, functionKey) {
-		let rtn = undefined;
-		let user = this._userService.getCurrentUser();
-
-		if (this.mapUserToPrmQualityResults[user["id"]] === undefined) 
-			this.mapUserToPrmQualityResults[user["id"]] = [];
-
-		let obj = this.mapUserToPrmQualityResults[user["id"]].find((result) => {
-			return result["prm"]["id"] === _prm["id"] && result["property"] === functionKey; 
-		});
-
-		if (obj === undefined) {
-			let calcFunc: (Any) => Object = this.getCalcFunction(functionKey);
-
-			obj = {prm: _prm, property: functionKey, value: calcFunc(_prm)};
-			this.mapUserToPrmQualityResults[user["id"]].push(obj);
-		}
-
-		rtn = obj["value"];
-
-		return rtn;
-	}
-
-	getCalcFunction(functionKey) : (Any) => Promise<Object>  { /* 'Any' here is a Prm object */
-		return this.mapPropertyKeyToCalcFunction.find((propKeyToFunctionObj) => {
-				return (functionKey === propKeyToFunctionObj["property"]);
-			})["func"];
-	}
-
-	getQualityValue(_prm, functionKey) {
-		let user = this._userService.getCurrentUser();
-		if (this.mapp[user["id"]] === undefined) {
-			this.mapp[user["id"]] = [];
-		}
-
-		let obj = this.mapp[user["id"]].find((obj) => { return obj["prm"]["id"] === _prm["id"] && obj["property"] === functionKey; });
-
-		if (obj === undefined) {
-			this.getQualityValuePromise(_prm, functionKey).then((data) => {
-				obj = {prm: _prm, property: functionKey, value: data};
-				this.mapp[user["id"]].push(obj);
-			});
-		}
-
-		return obj ? obj["value"] : undefined;
 	}
 }
