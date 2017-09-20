@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 
-import { UserService } from './user.service';
 import { ApiService } from './api.service';
 
 import { environment } from '../../_environments/environment';
@@ -12,8 +11,7 @@ export class DeclineReasonCodeService {
 	declineReasonCodes: Array<Object>
 	promise = undefined;
 	
-	constructor(private _apiService: ApiService, 
-				private _userService: UserService) { 
+	constructor(private _apiService: ApiService) { 
 
 	}
 

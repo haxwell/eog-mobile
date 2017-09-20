@@ -1,20 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 
-import { UserService } from '../../../app/_services/user.service';
-import { ApiService } from '../../../app/_services/api.service';
-
-import { environment } from '../../../_environments/environment';
-
-
 @Injectable()
 export class CameraService {
 	
 	base64Image: string = undefined;
 	
-	constructor(private _apiService: ApiService, 
-				private _userService: UserService,
-				private _camera: Camera) { 
+	constructor(private _camera: Camera) { 
 
 	}
 
