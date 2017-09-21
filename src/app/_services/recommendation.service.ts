@@ -1,14 +1,18 @@
 import { Injectable } from '@angular/core';
 
+import { Events } from 'ionic-angular';
+
 import { UserService } from './user.service';
 import { ApiService } from './api.service';
 
 import { environment } from '../../_environments/environment';
 
+
+
 @Injectable()
 export class RecommendationService { 
 	
-	constructor(private _apiService: ApiService, private _userService: UserService) { }
+	constructor(private _apiService: ApiService, private _userService: UserService, private _events: Events) { }
 
 	recommendationsIncoming = undefined;
 	recommendationsOutgoing = undefined;
@@ -104,17 +108,20 @@ export class RecommendationService {
 	}
 
 	sendARecommendationToAUser(receivingUserId) {
+		let self = this;
 		return new Promise((resolve, reject) => {
-			let user = this._userService.getCurrentUser();
+			let user = self._userService.getCurrentUser();
 			let url = environment.apiUrl + "/api/user/" + receivingUserId + "/recommendations/receive";
 			let data = "sendingUserId=" + user["id"];
-			this._apiService.post(url, data)
+			self._apiService.post(url, data)
 			.subscribe((obj) => {
+				self._events.publish('recommendation:sent', {receivingUserId: receivingUserId})
 				resolve(JSON.parse(obj["_body"]));
 			});
 		});
 	}
 
+	// TODO: Does it make sense to move this to the metadataService? If so, what type stuff stays in this service?
 	isCurrentUserAbleToSendARecommendationTo(receivingUserId) {
 		return new Promise((resolve, reject) => {
 			let user = this._userService.getCurrentUser();
