@@ -35,9 +35,21 @@ export class DomainObjectMetadataService {
 	mapPropertyKeyToCalcFunction: Array<Object> = [];
 
 	init() {
-		// TODO: do something a little more graceful than destory it all
 		this.mapp = {};
 		this.mapUserToMetadataResults = {};
+	}
+
+	markDirty(params) {
+		let user = params["user"] || this._userService.getCurrentUser()
+		let domainObject = params["domainObject"];
+		
+		if (domainObject !== undefined && this.mapUserToMetadataResults[user["id"]] !== undefined ) {
+			let filteredMap = this.mapUserToMetadataResults[user["id"]].filter((result) => { return result["domainObj"]["id"] !== domainObject["id"]; });
+			this.mapUserToMetadataResults[user["id"]] = filteredMap;
+
+			filteredMap = this.mapp[user["id"]].filter((result) => { return result["domainObj"]["id"] !== domainObject["id"]; });
+			this.mapp[user["id"]] = filteredMap;
+		}
 	}
 
 	addMetadataCalculationFunction(functionKey, _func) {
@@ -45,6 +57,11 @@ export class DomainObjectMetadataService {
 	}
 
 	getMetadataValueResult(_domainObj, functionKey): Object {
+		if (_domainObj === undefined) {
+			console.log("ERROR: _domainObj cannot be undefined.");
+			return undefined; // TODO Handle this error better
+		}
+
 		let rtn = undefined;
 		let user = this._userService.getCurrentUser();
 
@@ -76,6 +93,11 @@ export class DomainObjectMetadataService {
 	}
 
 	getMetadataValue(_domainObj, functionKey) {
+		if (this.mapPropertyKeyToCalcFunction.length === 0) {
+			console.log("ERROR: MetadataService not initialized.");
+			return undefined; // TODO: handle this error better
+		}
+
 		let user = this._userService.getCurrentUser();
 		if (this.mapp[user["id"]] === undefined) {
 			this.mapp[user["id"]] = [];
@@ -89,11 +111,27 @@ export class DomainObjectMetadataService {
 			if ( typeof rtn.then == 'function' )
 				 rtn.then((data) => {
 					obj = {domainObj: _domainObj, property: functionKey, value: data};
-					this.mapp[user["id"]].push(obj);
+					
+					let oldObj = this.mapp[user["id"]].find((o) => { 
+						return o["domainObj"]["id"] === _domainObj["id"] && o["property"] === functionKey; 
+					})
+
+					if (oldObj !== undefined)
+						oldObj["value"] = data;
+					else
+						this.mapp[user["id"]].push(obj);
 				});
 			else {
 				obj = {domainObj: _domainObj, property: functionKey, value: rtn};
-				this.mapp[user["id"]].push(obj);
+
+				let oldObj = this.mapp[user["id"]].find((o) => { 
+					return o["domainObj"]["id"] === _domainObj["id"] && o["property"] === functionKey; 
+				})
+
+				if (oldObj !== undefined)
+					oldObj["value"] = rtn;
+				else
+					this.mapp[user["id"]].push(obj);
 			}
 		}
 
