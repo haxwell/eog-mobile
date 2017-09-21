@@ -6,12 +6,17 @@ import { AlertController } from 'ionic-angular';
 
 import { ProfileService } from '../../pages/common/_services/profile.service'
 import { NotificationService } from './_services/notification.service'
+import { UserMetadataService } from '../../app/_services/user-metadata.service'
+import { RecommendationService } from '../../app/_services/recommendation.service'
+import { PointsService } from '../../app/_services/points.service'
 
 import { ProfileHeader } from '../../pages/common/profile-header/profile-header'
 
 import { PrmPage } from '../promises/promises'
 import { DreamPage } from '../dreams/dreams'
 import { KeywordEntryPage } from '../keyword.entry/keyword.entry'
+
+import { Constants } from '../../_constants/constants'
 
 @Component({
   selector: 'page-profile',
@@ -32,9 +37,13 @@ export class ProfilePage {
 				public modalCtrl: ModalController,
 				private _profileService: ProfileService,
 				private _notificationService: NotificationService,
+				private _userMetadataService: UserMetadataService,
+				private _recommendationService: RecommendationService,
+				private _pointsService: PointsService,
 				private _events: Events,
 				private loadingCtrl: LoadingController,
-				private alertCtrl: AlertController) {
+				private alertCtrl: AlertController,
+				private _constants: Constants) {
 
 		this.user = Object.assign({}, navParams.get('user'));
 		this.readOnly = navParams.get('readOnly') || false;
@@ -58,6 +67,8 @@ export class ProfilePage {
 			this.setDirty(true);
 		};
 		this._events.subscribe('profile:changedContactInfo', func2);
+
+		this._userMetadataService.init();
 	}
 
 	ngOnInit() {
@@ -126,6 +137,22 @@ export class ProfilePage {
 	onDreamBtnTap(item) { 
 		if (!this.isReadOnly())
 			this.navCtrl.push(DreamPage, { dream: item, callback: this.PrmAndDreamCallback });
+	}
+
+	onSendRecommendationBtnTap() {
+		this._recommendationService.sendARecommendationToAUser(this.user["id"]);
+	}
+
+	onSendPointBtnTap() {
+		this._pointsService.sendAPointToAUser(this.user["id"]);
+	}
+
+	isSendRecommendBtnAvailable() {
+		return this._userMetadataService.getMetadataValue(this.user, this._constants.FUNCTION_KEY_CAN_SEND_RECOMMENDATION_TO_USER);
+	}
+
+	isSendPointBtnAvailable() {
+		return this._userMetadataService.getMetadataValue(this.user, this._constants.FUNCTION_KEY_CAN_SEND_POINT_TO_USER);
 	}
 
 	onIndividualKeywordPress(item) {

@@ -15,6 +15,10 @@
 			<profile-header [user]="getUser()" [readOnly]="isReadOnly()"></profile-header>
 		</ion-card-content>
 	</ion-card>
+	<ion-row *ngIf="isReadOnly()">
+		<button ion-button [disabled]="!isSendPointBtnAvailable()" (click)="onSendPointBtnTap($event)">Send Point</button>
+		<button ion-button [disabled]="!isSendRecommendBtnAvailable()" (click)="onSendRecommendationBtnTap($event)">Send Recommendation</button>
+	</ion-row>
 	<ion-row [class]="getKeywordsCardClass()">
 		<ion-card>
 			<ion-card-header>
