@@ -46,6 +46,7 @@ import { ApiService } from './_services/api.service';
 import { WebsocketService } from './_services/websocket.service';
 import { PushMessagingService } from './_services/push.messaging.service';
 import { UserService } from './_services/user.service';
+import { UserMetadataService } from './_services/user-metadata.service';
 import { DreamService } from './_services/dream.service';
 import { SearchService } from './_services/search.service';
 import { PointsService } from './_services/points.service';
@@ -149,6 +150,7 @@ import { Constants } from '../_constants/constants';
     Camera,
     ApiService,
     UserService,
+    UserMetadataService,
     PointsService,
     SearchService,
     DreamService,

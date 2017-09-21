@@ -8,9 +8,12 @@ import { SendRecommendPage } from './_pages/send.recommend.page'
 import { ProfilePage } from '../../pages/profile/profile'
 
 import { UserService } from '../../app/_services/user.service';
-import { SearchService } from '../../app/_services/search.service';
-import { PointsService } from '../../app/_services/points.service';
 import { RecommendationService } from '../../app/_services/recommendation.service';
+import { PointsService } from '../../app/_services/points.service';
+import { UserMetadataService } from '../../app/_services/user-metadata.service';
+import { SearchService } from '../../app/_services/search.service';
+
+import { Constants } from '../../_constants/constants'
 
 @Component({
   selector: 'page-search-users',
@@ -28,10 +31,12 @@ export class SearchUsersPage {
 
 	constructor(public navCtrl: NavController, 
 				private _searchService: SearchService,
+				private _userMetadataService: UserMetadataService,
+				private _userService: UserService,
 				private modalCtrl: ModalController,
 				private _pointsService: PointsService,
 				private _recommendationService: RecommendationService,
-				private _userService: UserService,
+				private _constants: Constants,
 				private loadingCtrl: LoadingController) {
 
 	}
@@ -84,42 +89,16 @@ export class SearchUsersPage {
 		});
 	}
 
-	setPointable(user) {
-		let self = this;
-		this._pointsService.isCurrentUserAbleToSendAPointTo(user["id"]).then((bool) => {
-			self.isPointableObj[user["id"]] = bool;
-		});
-	}
-
 	isPointable(user) {
-		let hasOwnPropertyForGivenUserId = this.isPointableObj[user["id"]] !== undefined;
-		if (!hasOwnPropertyForGivenUserId) {
-			this.isPointableObj[user["id"]] = null;
-			this.setPointable(user);
-		}
-
-		return hasOwnPropertyForGivenUserId && this.isPointableObj[user["id"]] === true;
+		return this._userMetadataService.getMetadataValue(user, this._constants.FUNCTION_KEY_CAN_SEND_POINT_TO_USER);
 	}
 
 	getSendPointColor(user) {
 		return this.isPointable(user) ? "green" : "red";
 	}
 
-	setRecommendable(user) {
-		let self = this;
-		this._recommendationService.isCurrentUserAbleToSendARecommendationTo(user["id"]).then((bool) => {
-			self.isRecommendableObj[user["id"]] = bool;
-		});
-	}
-
 	isRecommendable(user) {
-		let hasOwnPropertyForGivenUserId = this.isRecommendableObj[user["id"]] !== undefined;
-		if (!hasOwnPropertyForGivenUserId) {
-			this.isRecommendableObj[user["id"]] = null;
-			this.setRecommendable(user);
-		}
-
-		return hasOwnPropertyForGivenUserId && this.isRecommendableObj[user["id"]] === true;
+		return this._userMetadataService.getMetadataValue(user, this._constants.FUNCTION_KEY_CAN_SEND_RECOMMENDATION_TO_USER);
 	}
 
 	getSendRecommendColor(user) {
