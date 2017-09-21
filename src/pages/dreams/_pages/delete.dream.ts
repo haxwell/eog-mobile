@@ -34,7 +34,7 @@ export class DeleteDreamPage {
 	ngOnInit() {
 		let self = this;
 
-		this._requestsService.getModelForOutgoing().then((model: Array<Object>) => {
+		this._requestsService.getOutgoingRequestsForCurrentUser().then((model: Array<Object>) => {
 			// get all the requests for this dream
 			self.dreamRequests = model.filter((obj) => {
 				return obj["dream"]["id"] === self.dream["id"]; });

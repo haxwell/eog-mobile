@@ -45,7 +45,7 @@ export class RequestsOutgoingPage {
 
 	ngOnInit() {
 		var self = this;
-		this._requestsService.getModelForOutgoing().then((data: Array<Object>) => {
+		this._requestsService.getOutgoingRequestsForCurrentUser().then((data: Array<Object>) => {
 			// the data object has the property name set as promise.
 			//  so as not to be confusing, we need it on this side to read 'prm'
 			if (data.length === 0)

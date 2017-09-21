@@ -49,7 +49,7 @@ export class RequestsIncomingPage {
 
 	ngOnInit() {
 		var self = this;
-		this._requestsService.getModelForIncoming().then((data: Array<Object>) => {
+		this._requestsService.getIncomingRequestsForCurrentUser().then((data: Array<Object>) => {
 			// the data object has the property name set as promise.
 			//  so as not to be confusing, we need it on this side to read 'prm'
 			data.map((obj) => {

@@ -42,8 +42,7 @@ export class PrmMetadataService extends DomainObjectMetadataService {
 			this._constants.FUNCTION_KEY_USER_HAS_CURRENTLY_REQUESTED_PRM, 
 			(prm) => {
 				return new Promise((resolve, reject) => {
-					// TODO: This method will be renamed getOutgoingRequestsForCurrentUser()
-					this._requestsService.getModelForOutgoing().then((data: Array<Object>) => {
+					this._requestsService.getOutgoingRequestsForCurrentUser().then((data: Array<Object>) => {
 						resolve(data.some((obj) => { return obj["prm"]["id"] === prm["id"]; }));
 					});
 				})

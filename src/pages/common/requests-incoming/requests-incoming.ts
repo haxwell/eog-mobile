@@ -53,7 +53,7 @@ export class RequestsIncomingView {
 
 	ngOnInit() {
 		var self = this;
-		this._requestsService.getModelForIncoming().then((data: Array<Object>) => {
+		this._requestsService.getIncomingRequestsForCurrentUser().then((data: Array<Object>) => {
 			
 					self.model = data;
 					self.dirty = false;

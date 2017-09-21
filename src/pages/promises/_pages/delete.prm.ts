@@ -38,7 +38,7 @@ export class DeletePrmPage {
 		self._requestMetadataService.init();
 
 		// get all the requests
-		this._requestsService.getModelForIncoming().then((model: Array<Object>) => {
+		this._requestsService.getIncomingRequestsForCurrentUser().then((model: Array<Object>) => {
 			// then, for all that are for this prm
 			self.prmRequests = model.filter((obj) => {
 				return obj["prm"]["id"] === self.prm["id"]; });

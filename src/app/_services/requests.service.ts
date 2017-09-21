@@ -92,13 +92,11 @@ export class RequestsService {
 		return request;
 	}
 
-	// TODO: Rename to getIncomingRequestsForCurrentUser()
-	getModelForIncoming() {
+	getIncomingRequestsForCurrentUser() {
 		return (this.getModel(this._constants.INCOMING));
 	}
 
-	// TODO: Rename to getOutgoingRequestsForCurrentUser()
-	getModelForOutgoing() {
+	getOutgoingRequestsForCurrentUser() {
 		return (this.getModel(this._constants.OUTGOING));
 	}
 

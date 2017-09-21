@@ -44,7 +44,7 @@ export class RequestsOutgoingView {
 
 	ngOnInit() {
 		var self = this;
-		this._requestsService.getModelForOutgoing().then((data: Array<Object>) => {
+		this._requestsService.getOutgoingRequestsForCurrentUser().then((data: Array<Object>) => {
 				self.model = data;
 			});
 	}
