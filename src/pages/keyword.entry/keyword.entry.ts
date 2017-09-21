@@ -27,6 +27,8 @@ export class KeywordEntryPage {
 		});
 		tmp2 = tmp2.filter((obj) => { return obj != undefined && obj.length > 0 });
 		this.viewCtrl.dismiss(tmp2);
+
+		return tmp2;
 	}
 
 	onCancelBtnTap(evt) {

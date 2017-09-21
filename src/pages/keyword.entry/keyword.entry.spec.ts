@@ -47,4 +47,21 @@ describe('KeywordEntryPage Component', () => {
     expect(component.isSaveBtnEnabled()).toBe(false);
   });
 
+  it('should break down a comma delimited string correctly', () => {
+    component.keywordString = "testing,1,2,3";
+    expect(component.keywordString).toBe("testing,1,2,3");
+    expect(component.onSaveBtnTap(null)).toContain("2");
+    expect(component.onSaveBtnTap(null)).toContain("1");
+  });
+
+  it('should break down a single-value string correctly', () => {
+    component.keywordString = "testing1.2.3";
+    expect(component.keywordString).toBe("testing1.2.3");
+    expect(component.onSaveBtnTap(null)).toContain("testing1.2.3");
+
+    component.keywordString = "testing1 2 3";
+    expect(component.keywordString).toBe("testing1 2 3");
+    expect(component.onSaveBtnTap(null)).toContain("testing1 2 3");
+  });
+
 });
