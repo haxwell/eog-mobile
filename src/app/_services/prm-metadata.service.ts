@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 
+import { Events } from 'ionic-angular'
+
 import { UserService } from './user.service'
 import { PointsService } from './points.service'
 import { RecommendationService } from './recommendation.service'
@@ -17,13 +19,30 @@ export class PrmMetadataService extends DomainObjectMetadataService {
 				protected _recommendationService: RecommendationService,
 				protected _requestsService: RequestsService,
 				protected _userService: UserService,
-				protected _constants: Constants) {
+				protected _constants: Constants,
+				private _events: Events) {
 
 		super(_userService, _constants);
+
+		this._events.subscribe('request:saved', (request) => {
+			this._recommendationService.init();
+			this._pointsService.init();
+		});
 	}
 
 	getMetadataValue(_domainObj, functionKey): any {
 		return super.getMetadataValue(_domainObj, functionKey); // can I avoid doing this? Why isn't the parent method just called automagically?
+	}
+
+	// TODO, the User object needs to be a type, so that I can have two methods here. markDirty(domainObject), and markDirty(User, domainObject)
+	//  without the type, it can't tell, if one parameter is dropped, which method to call. Knowing that the first param was a User, I think would
+	//  help.
+	markDirty(params) {
+		return super.markDirty(params); // can I avoid doing this? Why isn't the parent method just called automagically?
+	}
+
+	reset() {
+		super.init();
 	}
 
 	init() {

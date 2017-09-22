@@ -30,6 +30,7 @@ export class RequestsOutgoingView {
 			this.replaceModelElement(data["request"]);
 		};
 
+		_events.subscribe('request:saved', func);
 		_events.subscribe('request:accepted', func);
 		_events.subscribe('request:declined', func);
 		_events.subscribe('request:completed', func);
@@ -38,8 +39,16 @@ export class RequestsOutgoingView {
 
 	replaceModelElement(request) {
 		let temp = this.model.filter((obj) => { return obj["id"] !== request["id"]; });
-		temp.push(request);
+		temp.push(this.changePromiseAttributeToPrm(request));
 		this.model = temp;
+	}
+
+	// hack
+	changePromiseAttributeToPrm(request) {
+		request["prm"] = Object.assign({}, request["promise"]);
+		delete request["promise"];					
+
+		return request;
 	}
 
 	ngOnInit() {

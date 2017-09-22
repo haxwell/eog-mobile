@@ -12,6 +12,8 @@ export class CreateAccountPage {
 
 	user = {email: '', name: '', password: ''};
 
+	referralEmailAddress = '';
+
 	constructor(public navCtrl: NavController, 
 				public params: NavParams,
 				private _userService: UserService) {

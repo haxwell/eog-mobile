@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Events } from 'ionic-angular';
 
 import { UserService } from './user.service';
 import { ApiService } from './api.service';
@@ -16,7 +17,11 @@ export class RequestsService {
 	constructor(private _apiService: ApiService, 
 				private _userService: UserService, 
 				private _declineReasonCodeService: DeclineReasonCodeService,
-				private _constants: Constants) { }
+				private _constants: Constants,
+				private _events: Events) {
+
+
+	}
 
 	saveNew(dream, prm) {
 		return new Promise((resolve, reject) => {
@@ -28,6 +33,7 @@ export class RequestsService {
 			
 			this._apiService.post(url, data).subscribe((obj) => {
 				let model = JSON.parse(obj["_body"]);
+				this._events.publish('request:saved', {request: model});
 				resolve(model);
 			});
 		});

@@ -5,7 +5,6 @@ import { SearchPage } from '../search/search';
 import { SearchUsersPage } from '../searchUsers/searchUsers';
 import { PrmPage } from '../promises/promises'
 import { RequestsIncomingView } from '../../pages/common/requests-incoming/requests-incoming';
-import { RequestsOutgoingPage } from '../requests/outgoing/requests.outgoing';
 
 import { ProfileHeader } from '../../pages/common/profile-header/profile-header'
 
@@ -33,11 +32,15 @@ export class HomePage {
                 private _constants: Constants,
                 private _events: Events) {
 
+        this._events.subscribe('request:saved', (request) => {
+            this.ngOnInit();
+        });
     }
 
     ngOnInit() {
         this.user = this._userService.getCurrentUser();
 
+        this._prmMetadataService.reset();
         this._prmMetadataService.init();
     }
 
@@ -159,10 +162,6 @@ export class HomePage {
 
   onIncomingReqBtnTap(event) {
   	//this.navCtrl.push(RequestsIncomingPage);
-  }
-
-  onOutgoingReqBtnTap(event) {
-  	this.navCtrl.push(RequestsOutgoingPage);
   }
 
   getUser() {
