@@ -38,7 +38,7 @@ export class UserMetadataService extends DomainObjectMetadataService {
 	}
 
 	// TODO, the User object needs to be a type, so that I can have two methods here. markDirty(domainObject), and markDirty(User, domainObject)
-	//  without the type, it can't tell if one parameter is dropper, which method to call. Knowing that the first param was a User, I think would
+	//  without the type, it can't tell, if one parameter is dropped, which method to call. Knowing that the first param was a User, I think would
 	//  help.
 	markDirty(params) {
 		return super.markDirty(params); // can I avoid doing this? Why isn't the parent method just called automagically?
