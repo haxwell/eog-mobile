@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Events } from 'ionic-angular';
 
+import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
+import { File } from '@ionic-native/file'
+
 import { UserService } from '../../../app/_services/user.service';
 import { ApiService } from '../../../app/_services/api.service';
 import { PointsService } from '../../../app/_services/points.service';
@@ -19,9 +22,14 @@ export class ProfileService {
 				private _pointsService: PointsService,
 				private _recommendationService: RecommendationService,
 				private _notificationService: NotificationService,
-				private _events: Events) { 
+				private _events: Events,
+				private transfer: FileTransfer,
+				private file: File) { 
 
 				}
+
+	
+
 	init(user) {
 		this._recommendationService.init();
 		this._pointsService.init();
@@ -61,10 +69,25 @@ export class ProfileService {
 				model["allTimePointCount"] = obj[0]["allTimePointCount"];
 		});
 
-		url = environment.apiUrl + "/api/user/" + user["id"] + "/profile/picture";
-		this._apiService.get(url).subscribe((base64ImageData) => {
-			model["base64Image"] = base64ImageData["_body"];
-		});
+		if (user["imageFileURI"] === undefined) {
+			url = environment.apiUrl + "/api/user/" + user["id"] + "/profile/picture";
+			const fileTransfer: FileTransferObject = this.transfer.create();
+
+			console.log("image download about to initiate....");
+			fileTransfer.download(url, this.file.dataDirectory + "eogAppProfilePic" + user["id"]).then((entry) => {
+			    debugger;
+			    user["imageFileURI"] = this.file.dataDirectory + "eogAppProfilePic" + user["id"];
+			    console.log('download complete: ' + entry.toURL());
+	  		}, (error) => {
+	    		// handle error
+	    		console.log(error);
+	  		});
+  		}
+
+//		url = environment.apiUrl + "/api/user/" + user["id"] + "/profile/picture";
+//		this._apiService.get(url).subscribe((base64ImageData) => {
+//			model["base64Image"] = base64ImageData["_body"];
+//		});
 
 		url = environment.apiUrl + "/api/user/" + user["id"] + "/keywords";
 		this._apiService.get(url).subscribe((keywordsObj) => {
@@ -151,10 +174,20 @@ export class ProfileService {
 
 				// TODO: Check to see that this photo changed before making the API call
 
-				url = environment.apiUrl + "/api/user/" + user["id"] + "/profile/picture";
-				self._apiService.post(url, profileImageData)
-				.subscribe((resp) => {
-					
+				let options: FileUploadOptions = {
+				     fileKey: 'file',
+				     fileName: model["imageFileURI"], // TODO: parse for filename
+				     headers: {}
+				}
+
+				console.log("image upload about to initiate....");
+				const fileTransfer: FileTransferObject = this.transfer.create();
+  				fileTransfer.upload(model["imageFileURI"], environment.apiUrl + "/api/user/" + user["id"] + "/profile/picture", options)
+				   .then((data) => {
+				     // success
+				     console.log("image upload succeeded");
+				     console.log(data);
+
 					// force refresh of current user in the userService
 					// TODO: Make the userService do this itself, perhaps with events.
 					self._userService.getUser(user["id"], true).then((userObj) => {
@@ -165,7 +198,11 @@ export class ProfileService {
 
 						resolve(JSON.parse(resp["_body"]));					
 					});
-				});
+
+				   }, (err) => {
+				     // error
+				     console.log(err);
+				   });
 			});
 		});
 	}

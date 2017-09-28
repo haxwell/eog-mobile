@@ -89,4 +89,6 @@
     <plugin name="phonegap-plugin-push" spec="^1.10.5">
         <variable name="SENDER_ID" value="386608926885" />
     </plugin>
+    <plugin name="cordova-plugin-file-transfer" spec="^1.6.3" />
+    <plugin name="cordova-plugin-file" spec="^4.3.3" />
 </widget>
