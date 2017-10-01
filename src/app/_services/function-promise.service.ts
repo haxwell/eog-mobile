@@ -34,7 +34,7 @@ export class FunctionPromiseService {
 		let func = this.funcs[funcKey];
 
 		if (func !== undefined) {
-			this.results[resultKey] = func();
+			this.results[resultKey] = func(resultKey);
 		}
 
 		return this.results[resultKey];
