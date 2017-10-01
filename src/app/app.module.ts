@@ -50,6 +50,8 @@ import { UserMetadataService } from './_services/user-metadata.service';
 import { DreamService } from './_services/dream.service';
 import { SearchService } from './_services/search.service';
 import { PointsService } from './_services/points.service';
+import { FunctionPromiseService } from './_services/function-promise.service';
+import { ProfilePictureService } from './_services/profile-picture.service';
 import { RecommendationService } from './_services/recommendation.service';
 import { RequestsService } from './_services/requests.service';
 import { RequestMetadataService } from './_services/request-metadata.service';
@@ -150,6 +152,8 @@ import { Constants } from '../_constants/constants';
     UserService,
     UserMetadataService,
     PointsService,
+    FunctionPromiseService,
+    ProfilePictureService,
     SearchService,
     DreamService,
     PrmService,

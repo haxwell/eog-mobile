@@ -9,7 +9,6 @@ import { RulePage } from './_pages/rule'
 import { DeletePrmPage } from './_pages/delete.prm'
 import { KeywordEntryPage } from '../keyword.entry/keyword.entry'
 import { PrmService } from './_services/prm.service'
-import { UserService } from '../../app/_services/user.service'
 import { PrmMetadataService } from '../../app/_services/prm-metadata.service';
 import { PrmDetailService } from '../../app/_services/prm-detail.service';
 import { Constants } from '../../_constants/constants';
@@ -37,7 +36,6 @@ export class PrmPage {
 				private _prmService: PrmService,
 				private _prmMetadataService: PrmMetadataService,
 				private _prmDetailService: PrmDetailService,
-				private _userService: UserService,
 				private loadingCtrl: LoadingController,
 				private _constants: Constants) {
 

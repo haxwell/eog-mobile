@@ -60,7 +60,7 @@ export class CameraService {
 			const options: CameraOptions = {
 			 	mediaType: self._camera.MediaType.PICTURE,
 			 	sourceType: self._camera.PictureSourceType.PHOTOLIBRARY,
-			 	destinationType: self._camera.DestinationType.DATA_URL
+			 	destinationType: self._camera.DestinationType.FILE_URI
 			}
 
 			self._camera.getPicture(options).then((imageData) => {

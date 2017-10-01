@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 
 import { Events } from 'ionic-angular';
 import { Platform, AlertController } from 'ionic-angular';
-import { Push, PushObject, PushOptions } from '@ionic-native/push';
+import { Push } from '@ionic-native/push';
+//import { PushObject, PushOptions } from '@ionic-native/push';
 
 import { UserService } from '../../app/_services/user.service';
 import { ApiService } from '../../app/_services/api.service';
@@ -33,7 +34,7 @@ export class PushMessagingService {
 	      android: { senderID: '386608926885' }
 	    };
 
-	    const pushObject: PushObject = this.push.init(options);
+	    const pushObject = this.push.init(options);
 
 	    let self = this;
 	    pushObject.on('registration').subscribe((data: any) => {
