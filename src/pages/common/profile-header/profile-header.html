@@ -4,7 +4,7 @@
 		<td>
 			<ion-item *ngIf="isThumbnailImageAvailable()">
 				<ion-thumbnail item-start >
-					<img class="rotate90" [src]="getBase64ThumbnailImage()" alt="profile_image" (press)="onThumbnailPress($event)">
+					<img class="rotate90" [src]="getThumbnailImage()" alt="profile_image" (press)="onThumbnailPress($event)">
 				</ion-thumbnail>
 			</ion-item>
 			<ion-item *ngIf="!isThumbnailImageAvailable()">

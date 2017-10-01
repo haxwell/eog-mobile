@@ -5,6 +5,7 @@ import { Camera, CameraOptions } from '@ionic-native/camera';
 export class CameraService {
 	
 	base64Image: string = undefined;
+	imageFileURI: string = undefined;
 	
 	constructor(private _camera: Camera) { 
 
@@ -21,12 +22,9 @@ export class CameraService {
 			console.log("onThumbnailPress() called");
 			const options: CameraOptions = {
 			 	quality: 100,
-			 	destinationType: self
-			 	._camera.DestinationType.DATA_URL,
-			 	encodingType: self
-			 	._camera.EncodingType.JPEG,
-			 	mediaType: self
-			 	._camera.MediaType.PICTURE
+			 	destinationType: self._camera.DestinationType.FILE_URI,
+			 	encodingType: self._camera.EncodingType.JPEG,
+			 	mediaType: self._camera.MediaType.PICTURE
 			}
 
 			self._camera.getPicture(options).then((imageData) => {
@@ -34,6 +32,9 @@ export class CameraService {
 			 	if (self.isBase64(imageData)) {
 			 		self.base64Image = imageData;
 			 		resolve(self.base64Image);
+			 	} if (self.isFileURI(imageData)) {
+			 		self.imageFileURI = imageData;
+			 		resolve(self.imageFileURI);
 			 	} else {
 			 		// Handle error
 			 	}
@@ -41,6 +42,10 @@ export class CameraService {
 			 	// Handle error
 			});
 		})
+	}
+
+	isFileURI(data) {
+		return (typeof(data) == 'string') && (data.startsWith("file:///"));
 	}
 
 	isBase64(data) {

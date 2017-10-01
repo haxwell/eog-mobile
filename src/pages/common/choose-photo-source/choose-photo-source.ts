@@ -11,7 +11,7 @@ import { CameraService } from '../_services/camera.service';
 
 export class ChoosePhotoSourcePage {
 
-	imageAsString: string = undefined;
+	imageFileURI: string = undefined;
 
 	constructor(private viewCtrl: ViewController, private cameraService: CameraService) {
 
@@ -19,28 +19,24 @@ export class ChoosePhotoSourcePage {
 
 	onCameraBtnTap(evt) {
 		let self = this;
-		self.imageAsString = undefined;
+		self.imageFileURI = undefined;
 		
 		self.viewCtrl.dismiss(new Promise((resolve, reject) => {
-			self.cameraService.takePicture().then((imgAsString: string) => { 
-				self.imageAsString = imgAsString; 
-				resolve(imgAsString); 
+			self.cameraService.takePicture().then((imageFileURI: string) => { 
+				self.imageFileURI = imageFileURI; 
+				resolve(imageFileURI); 
 			});
 		}));
 	}
 
-	getImageAsString() {
-		return this.imageAsString;
-	}
-
 	onGalleryBtnTap(evt) {
 		let self = this;
-		self.imageAsString = undefined;
+		self.imageFileURI = undefined;
 
 		self.viewCtrl.dismiss(new Promise((resolve, reject) => {
-			self.cameraService.loadGalleryPicture().then((imgAsString: string) => { 
-				self.imageAsString = imgAsString; 
-				resolve(imgAsString); 
+			self.cameraService.loadGalleryPicture().then((imageFileURI: string) => { 
+				self.imageFileURI = imageFileURI; 
+				resolve(imageFileURI); 
 			});
 		}));
 	}

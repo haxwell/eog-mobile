@@ -9,6 +9,8 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import { Push } from '@ionic-native/push';
 import { Camera } from '@ionic-native/camera';
+import { FileTransfer } from '@ionic-native/file-transfer'
+import { File } from '@ionic-native/file'
 
 import { MyApp } from './app.component';
 import { LoginPage } from '../pages/login/login';
@@ -37,8 +39,6 @@ import { PrmPage } from '../pages/promises/promises';
 import { DeletePrmPage } from '../pages/promises/_pages/delete.prm';
 import { RequestsIncomingView } from '../pages/common/requests-incoming/requests-incoming';
 import { RequestsOutgoingView } from '../pages/common/requests-outgoing/requests-outgoing';
-import { RequestsIncomingPage } from '../pages/requests/incoming/requests.incoming';
-import { RequestsOutgoingPage } from '../pages/requests/outgoing/requests.outgoing';
 import { RulePage } from '../pages/promises/_pages/rule';
 import { KeywordEntryPage } from '../pages/keyword.entry/keyword.entry';
 
@@ -77,9 +77,7 @@ import { Constants } from '../_constants/constants';
     PrmPage,
     DeletePrmPage,
     RulePage,
-    RequestsIncomingPage,
     RequestsIncomingView,    
-    RequestsOutgoingPage,
     RequestsOutgoingView,
     RequestPage,
     AcceptRequestPage,
@@ -121,9 +119,7 @@ import { Constants } from '../_constants/constants';
     PrmPage,
     DeletePrmPage,
     RulePage,
-    RequestsIncomingPage,
     RequestsIncomingView,
-    RequestsOutgoingPage,
     RequestsOutgoingView,
     RequestPage,
     AcceptRequestPage,
@@ -148,6 +144,8 @@ import { Constants } from '../_constants/constants';
     SplashScreen,
     Push, 
     Camera,
+    File,
+    FileTransfer,
     ApiService,
     UserService,
     UserMetadataService,

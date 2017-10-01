@@ -28,6 +28,8 @@ export class ProfileHeader {
 			self.model["phone"] = data["phone"];
 			self.model["email"] = data["email"];
 
+			self.model = this._profileService.getModel(this.user);			
+
 			self.setDirty(true);
 		};
 		self._events.subscribe('profile:changedContactInfoWasSaved', func2);
@@ -54,16 +56,16 @@ export class ProfileHeader {
 	}
 
 	isThumbnailImageAvailable() {
-		return this.model["base64Image"] !== undefined;
+		return this.model["imageFileURI"] !== undefined;
 	}
 
-	getBase64ThumbnailImage() {
-		if (this.model["base64Image"] === undefined)
+	getThumbnailImage() {
+		if (this.model["imageFileURI"] === undefined)
 			return "assets/img/mushroom.jpg";
-		else if (this.model["base64Image"].length < 6)
-			return "assets/img/mushroom.jpg";
+//		else if (this.model["base64Image"].length < 6)
+//			return "assets/img/mushroom.jpg";
 		else
-			return 'data:image/jpeg;base64,' + this.model["base64Image"];
+			return this.model["imageFileURI"];
 	}
 
 	onThumbnailPress($event) {
@@ -73,8 +75,8 @@ export class ProfileHeader {
 			
 			modal.onDidDismiss((promise) => {
 				if (promise) {
-					promise.then((imageAsString) => { 
-						self.model["base64Image"] = imageAsString;
+					promise.then((imageFileURI) => { 
+						self.model["imageFileURI"] = imageFileURI;
 						self._events.publish('profile:changedContactInfo', self.model);
 						self.setDirty(true);						
 					})
