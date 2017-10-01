@@ -29,7 +29,7 @@ export class PushMessagingService {
 	      return;
 	    }
 
-	    const options: PushOptions = { 
+	    const options = { 
 	      android: { senderID: '386608926885' }
 	    };
 
