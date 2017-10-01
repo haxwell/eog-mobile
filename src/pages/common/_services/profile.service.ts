@@ -1,12 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Events } from 'ionic-angular';
 
-import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
-import { File } from '@ionic-native/file'
-
 import { UserService } from '../../../app/_services/user.service';
 import { ApiService } from '../../../app/_services/api.service';
 import { PointsService } from '../../../app/_services/points.service';
+import { ProfilePictureService } from '../../../app/_services/profile-picture.service';
 import { RecommendationService } from '../../../app/_services/recommendation.service';
 import { NotificationService } from '../../../pages/profile/_services/notification.service'
 
@@ -15,16 +13,15 @@ import { environment } from '../../../_environments/environment';
 @Injectable()
 export class ProfileService {
 
-	modelCache = {};	
+	modelCache = {};
 
 	constructor(private _apiService: ApiService, 
 				private _userService: UserService, 
 				private _pointsService: PointsService,
 				private _recommendationService: RecommendationService,
 				private _notificationService: NotificationService,
-				private _events: Events,
-				private transfer: FileTransfer,
-				private file: File) { 
+				private _profilePictureService: ProfilePictureService,
+				private _events: Events) {
 
 				}
 
@@ -34,6 +31,8 @@ export class ProfileService {
 		this._recommendationService.init();
 		this._pointsService.init();
 		this._notificationService.init();
+		debugger; // when is this called? cause I don't want to download the picture again if it hasn't changed
+		this._profilePictureService.reset(user["id"]);
 
 		this.modelCache[user["id"]] = undefined;
 	}
@@ -53,6 +52,7 @@ export class ProfileService {
 
 		this._pointsService.init();
 		this._recommendationService.init();
+		this._profilePictureService.init()
 
 		model["realname"] = user["realname"];
 		model["phone"] = user["phone"];
@@ -69,25 +69,11 @@ export class ProfileService {
 				model["allTimePointCount"] = obj[0]["allTimePointCount"];
 		});
 
-		if (user["imageFileURI"] === undefined) {
-			url = environment.apiUrl + "/api/user/" + user["id"] + "/profile/picture";
-			const fileTransfer: FileTransferObject = this.transfer.create();
-
-			console.log("image download about to initiate....");
-			fileTransfer.download(url, this.file.dataDirectory + "eogAppProfilePic" + user["id"]).then((entry) => {
-			    debugger;
-			    user["imageFileURI"] = this.file.dataDirectory + "eogAppProfilePic" + user["id"];
-			    console.log('download complete: ' + entry.toURL());
-	  		}, (error) => {
-	    		// handle error
-	    		console.log(error);
-	  		});
+		if (model["imageFileURI"] === undefined) {
+			this._profilePictureService.get(user["id"]).then((filename) => {
+				model["imageFileURI"] = filename;
+			})
   		}
-
-//		url = environment.apiUrl + "/api/user/" + user["id"] + "/profile/picture";
-//		this._apiService.get(url).subscribe((base64ImageData) => {
-//			model["base64Image"] = base64ImageData["_body"];
-//		});
 
 		url = environment.apiUrl + "/api/user/" + user["id"] + "/keywords";
 		this._apiService.get(url).subscribe((keywordsObj) => {
@@ -160,7 +146,7 @@ export class ProfileService {
 		tmp["email"] = model["email"];
 		tmp["keywords"] = model["keywords"];
 
-		let profileImageData = this.JSON_to_URLEncoded({base64ImageData: model["base64Image"]}, undefined, undefined);
+		//let profileImageData = this.JSON_to_URLEncoded({base64ImageData: model["base64Image"]}, undefined, undefined);
 
 		let data = this.JSON_to_URLEncoded(tmp, undefined, undefined);
 		console.log(data);
@@ -172,22 +158,7 @@ export class ProfileService {
 			.subscribe((resp) => {
 				console.log(JSON.parse(resp["_body"]));
 
-				// TODO: Check to see that this photo changed before making the API call
-
-				let options: FileUploadOptions = {
-				     fileKey: 'file',
-				     fileName: model["imageFileURI"], // TODO: parse for filename
-				     headers: {}
-				}
-
-				console.log("image upload about to initiate....");
-				const fileTransfer: FileTransferObject = this.transfer.create();
-  				fileTransfer.upload(model["imageFileURI"], environment.apiUrl + "/api/user/" + user["id"] + "/profile/picture", options)
-				   .then((data) => {
-				     // success
-				     console.log("image upload succeeded");
-				     console.log(data);
-
+				let userUpdateFunc = () => {
 					// force refresh of current user in the userService
 					// TODO: Make the userService do this itself, perhaps with events.
 					self._userService.getUser(user["id"], true).then((userObj) => {
@@ -198,11 +169,14 @@ export class ProfileService {
 
 						resolve(JSON.parse(resp["_body"]));					
 					});
+				}
 
-				   }, (err) => {
-				     // error
-				     console.log(err);
-				   });
+				if (model["isPhotoChanged"] === true) {
+					this._profilePictureService.save(user["id"], model["imageFileURI"]).then((data) => {
+						userUpdateFunc();
+					});
+				} else
+					userUpdateFunc();
 			});
 		});
 	}

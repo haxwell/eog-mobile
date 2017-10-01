@@ -33,6 +33,12 @@ export class ProfileHeader {
 			self.setDirty(true);
 		};
 		self._events.subscribe('profile:changedContactInfoWasSaved', func2);
+
+		let func3 = (filepath) => {
+			self.model["isPhotoChanged"] = true;
+		};
+
+		self._events.subscribe('profile:changedProfileImage', func3);
 	}
 
 	ngOnInit() {
@@ -62,8 +68,6 @@ export class ProfileHeader {
 	getThumbnailImage() {
 		if (this.model["imageFileURI"] === undefined)
 			return "assets/img/mushroom.jpg";
-//		else if (this.model["base64Image"].length < 6)
-//			return "assets/img/mushroom.jpg";
 		else
 			return this.model["imageFileURI"];
 	}
@@ -76,8 +80,9 @@ export class ProfileHeader {
 			modal.onDidDismiss((promise) => {
 				if (promise) {
 					promise.then((imageFileURI) => { 
+						debugger; // verify we DO NOT come through here on Cancels with no photo changes
 						self.model["imageFileURI"] = imageFileURI;
-						self._events.publish('profile:changedContactInfo', self.model);
+						self._events.publish('profile:changedProfileImage', self.model["imageFileURI"]);
 						self.setDirty(true);						
 					})
 				}
