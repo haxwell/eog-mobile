@@ -32,21 +32,36 @@ export class ProfilePictureService {
 		// We don't put the SET functionality in the framework because it will not be repeatedly called 
 		//  by Angular; only once when the profile is saved.
 
-		this._functionPromiseService.initFunc(this._constants.FUNCTION_KEY_PROFILE_PICTURE_GET, (id) => {
-			return new Promise((resolve, reject) => {
-				let url = environment.apiUrl + "/api/user/" + id + "/profile/picture";
-				const fileTransfer: FileTransferObject = this.transfer.create();
+		let self = this;
+		self._functionPromiseService.initFunc(self._constants.FUNCTION_KEY_PROFILE_PICTURE_GET, (id) => {
+			let rtn = new Promise((resolve, reject) => {
+				
+				let foo = self.file.checkFile(self.file.cacheDirectory, "eogAppProfilePic" + id);
+				foo.then((isFileExists) => {
+					if (isFileExists) {
+						resolve(self.file.cacheDirectory + "eogAppProfilePic" + id);
+					} 
+				}).catch(e => { 
 
-				console.log("image download about to initiate....");
-				fileTransfer.download(url, this.file.dataDirectory + "eogAppProfilePic" + id).then((entry) => {
-				    resolve(this.file.dataDirectory + "eogAppProfilePic" + id);
-				    console.log('download complete: ' + entry.toURL());
-		  		}, (error) => {
-		    		// handle error
-		    		console.log(error);
-		    		reject();
-		  		});
-			})
+					let url = environment.apiUrl + "/api/user/" + id + "/profile/picture";
+					const fileTransfer: FileTransferObject = self.transfer.create();
+
+					console.log("image download about to initiate....");
+					fileTransfer.download(url, self.file.cacheDirectory + "eogAppProfilePic" + id).then((entry) => {
+					    resolve(self.file.cacheDirectory + "eogAppProfilePic" + id);
+					    console.log('download complete: ' + entry.toURL());
+			  		}, (error) => {
+			    		// handle error
+			    		console.log(error);
+			    		reject();
+			  		});
+
+				});
+
+
+			});
+
+			return rtn;
 		});
 	}
 
