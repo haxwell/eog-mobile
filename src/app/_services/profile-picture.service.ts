@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
 import { File } from '@ionic-native/file'
 
+import { ApiService } from './api.service'
 import { FunctionPromiseService } from './function-promise.service';
 
 import { Constants } from '../../_constants/constants';
@@ -14,7 +15,8 @@ export class ProfilePictureService {
 
 	_functionPromiseService = new FunctionPromiseService();
 
-	constructor(private _constants: Constants,
+	constructor(private _apiService: ApiService,
+				private _constants: Constants,
 				private transfer: FileTransfer,
 				private file: File) { 
 
@@ -29,8 +31,8 @@ export class ProfilePictureService {
 		//  (and new API call) each time, unless we figured a way to save the original promise.
 		//  which is what this is. part of, anyway.
 
-		// We don't put the SET functionality in the framework because it will not be repeatedly called 
-		//  by Angular; only once when the profile is saved.
+		// We don't put the SET/DELETE functionality in the framework because it will not be repeatedly called 
+		//  by Angular; only once when the button is pushed.
 
 		let self = this;
 		self._functionPromiseService.initFunc(self._constants.FUNCTION_KEY_PROFILE_PICTURE_GET, (id) => {
@@ -39,25 +41,34 @@ export class ProfilePictureService {
 				let foo = self.file.checkFile(self.file.cacheDirectory, "eogAppProfilePic" + id);
 				foo.then((isFileExists) => {
 					if (isFileExists) {
+						console.log("THE GET FUNC: image already exists on phone. returning its path")
 						resolve(self.file.cacheDirectory + "eogAppProfilePic" + id);
 					} 
 				}).catch(e => { 
 
-					let url = environment.apiUrl + "/api/user/" + id + "/profile/picture";
-					const fileTransfer: FileTransferObject = self.transfer.create();
+					console.log("THE GET FUNC: image does not already exist on phone.")
 
-					console.log("image download about to initiate....");
-					fileTransfer.download(url, self.file.cacheDirectory + "eogAppProfilePic" + id).then((entry) => {
-					    resolve(self.file.cacheDirectory + "eogAppProfilePic" + id);
-					    console.log('download complete: ' + entry.toURL());
-			  		}, (error) => {
-			    		// handle error
-			    		console.log(error);
-			    		reject();
-			  		});
+				    let url = environment.apiUrl + "/api/user/" + id + "/profile/picture/isFound";
+				    this._apiService.get(url).subscribe((isFound) => {
+				    	if (isFound["_body"] == "true") {
+							url = environment.apiUrl + "/api/user/" + id + "/profile/picture";
+							const fileTransfer: FileTransferObject = self.transfer.create();
 
+							console.log("image download about to initiate....");
+							fileTransfer.download(url, self.file.cacheDirectory + "eogAppProfilePic" + id).then((entry) => {
+							    resolve(self.file.cacheDirectory + "eogAppProfilePic" + id);
+							    console.log('download complete: ' + entry.toURL());
+					  		}, (error) => {
+					    		// handle error
+					    		console.log(error);
+					    		reject();
+					  		});
+
+				    	} else {
+							resolve(undefined);
+				    	}
+				    });
 				});
-
 
 			});
 
@@ -71,6 +82,16 @@ export class ProfilePictureService {
 
 	get(userId) {
 		return this._functionPromiseService.get(userId, this._constants.FUNCTION_KEY_PROFILE_PICTURE_GET);
+	}
+
+	delete(userId) {
+		console.log("PPS: userId " + userId +" returning promis which calls API to delete profile picture.");
+		return new Promise((resolve, reject) => {
+			let url = environment.apiUrl + "/api/user/" + userId + "/profile/picture";
+			this._apiService.delete(url).subscribe((data) => {
+				resolve(data);
+			})
+		});
 	}
 
 	save(userId, filename) {
