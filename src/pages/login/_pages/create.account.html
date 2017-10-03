@@ -18,19 +18,24 @@
 					<br/>
 				</ion-row>		
 				<ion-item>
-					<ion-input type="text" placeholder="Real Name" [(ngModel)]="user.realname" #ctrl="ngModel" required></ion-input>
+					<ion-label color="primary" stacked>Real Name</ion-label>
+					<ion-input type="text" [(ngModel)]="user.realname" #ctrl="ngModel" required></ion-input>
 				</ion-item>
 				<ion-item>
-					<ion-input type="text" placeholder="Email Address" [(ngModel)]="user.email" #ctrl="ngModel" required></ion-input>
+					<ion-label color="primary" stacked>Email Address</ion-label>					
+					<ion-input type="text" [(ngModel)]="user.email" #ctrl="ngModel" required></ion-input>
 				</ion-item>
 				<ion-item>
-					<ion-input type="text" placeholder="Username" [(ngModel)]="user.name" #ctrl="ngModel" required></ion-input>
+					<ion-label color="primary" stacked>Username</ion-label>					
+					<ion-input type="text" [(ngModel)]="user.name" #ctrl="ngModel" required></ion-input>
 				</ion-item>
 				<ion-item>
-					<ion-input type="text" placeholder="Password" [(ngModel)]="user.password" #ctrl="ngModel" required></ion-input>
+					<ion-label color="primary" stacked>Password (at least six chars long)</ion-label>
+					<ion-input type="password" [(ngModel)]="user.password" #ctrl="ngModel" required></ion-input>
 				</ion-item>
 				<ion-item>
-					<ion-input type="text" placeholder="Who referred you?" [(ngModel)]="referralEmailAddress" #ctrl="ngModel" required></ion-input>
+					<ion-label color="primary" stacked>Username that referred you? (Optional)</ion-label>					
+					<ion-input type="text" [(ngModel)]="referringUsername" #ctrl="ngModel" required></ion-input>
 				</ion-item>
 				<ion-row>
 					<button ion-button (click)="onCancelBtnTap($event)">Cancel</button>
