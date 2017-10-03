@@ -81,6 +81,10 @@ export class UserService {
 			"&phone="+user.phone+
 			"&realname="+user.realname;
 
+		if (user.referringUsername !== undefined) {
+			data += "&referringUsername="+user.referringUsername;
+		}
+
 		self.promise = new Promise(
 			(resolve, reject) => {
 				this._apiService.post(url, data).subscribe(
