@@ -12,7 +12,7 @@ export class CreateAccountPage {
 
 	user = {email: '', name: '', password: ''};
 
-	referralEmailAddress = '';
+	referringUsername = '';
 
 	constructor(public navCtrl: NavController, 
 				public params: NavParams,
@@ -25,6 +25,11 @@ export class CreateAccountPage {
 	}
 
 	onSaveBtnTap(evt) {
+		if (this.referringUsername !== undefined && this.referringUsername.length > 0)
+			this.user["referringUsername"] = this.referringUsername;
+		else
+			delete this.user["referringUsername"];
+
 		this._userService.save(this.user).then((data) => {
 			this.navCtrl.pop();
 		});
