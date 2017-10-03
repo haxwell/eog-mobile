@@ -35,7 +35,7 @@ export class ProfileHeader {
 		self._events.subscribe('profile:changedContactInfoWasSaved', func2);
 
 		let func3 = (filepath) => {
-			self.model["isPhotoChanged"] = true;
+			self.model["imageFileURI"] = filepath;
 		};
 
 		self._events.subscribe('profile:changedProfileImage', func3);
@@ -75,12 +75,12 @@ export class ProfileHeader {
 	onThumbnailPress($event) {
 		if (!this.isReadOnly()) {
 			let self = this;
-			let modal = this.modalCtrl.create(ChoosePhotoSourcePage);
+			let modal = this.modalCtrl.create(ChoosePhotoSourcePage, {userId: this.user["id"]});
 			
 			modal.onDidDismiss((promise) => {
 				if (promise) {
 					promise.then((imageFileURI) => { 
-						debugger; // verify we DO NOT come through here on Cancels with no photo changes
+						console.log("setting profile header model to [" + imageFileURI + "], and throwing profile:changedProfileImage event");
 						self.model["imageFileURI"] = imageFileURI;
 						self._events.publish('profile:changedProfileImage', self.model["imageFileURI"]);
 						self.setDirty(true);						

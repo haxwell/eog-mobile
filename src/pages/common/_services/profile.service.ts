@@ -31,7 +31,6 @@ export class ProfileService {
 		this._recommendationService.init();
 		this._pointsService.init();
 		this._notificationService.init();
-		debugger; // when is this called? cause I don't want to download the picture again if it hasn't changed
 		this._profilePictureService.reset(user["id"]);
 
 		this.modelCache[user["id"]] = undefined;
