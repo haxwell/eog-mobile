@@ -75,13 +75,16 @@ export class ProfileHeader {
 	onThumbnailPress($event) {
 		if (!this.isReadOnly()) {
 			let self = this;
-			let modal = this.modalCtrl.create(ChoosePhotoSourcePage, {userId: this.user["id"]});
+			let modal = this.modalCtrl.create(ChoosePhotoSourcePage, {userId: this.user["id"], fileURI: this.model["imageFileURI"], fileSource: this.model["imageFileSource"]});
 			
 			modal.onDidDismiss((promise) => {
 				if (promise) {
-					promise.then((imageFileURI) => { 
-						console.log("setting profile header model to [" + imageFileURI + "], and throwing profile:changedProfileImage event");
-						self.model["imageFileURI"] = imageFileURI;
+					promise.then((uriAndSource) => { 
+						console.log("setting profile header model to [" + uriAndSource["imageFileURI"] + "], and throwing profile:changedProfileImage event");
+						
+						self.model["imageFileURI"] = uriAndSource["imageFileURI"];
+						self.model["imageFileSource"] = uriAndSource["imageFileSource"];
+
 						self._events.publish('profile:changedProfileImage', self.model["imageFileURI"]);
 						self.setDirty(true);						
 					})

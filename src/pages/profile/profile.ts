@@ -68,6 +68,13 @@ export class ProfilePage {
 		};
 		this._events.subscribe('profile:changedContactInfo', func2);
 
+		let func3 = (data) => {
+			this.model["isPhotoChanged"] = true;
+
+			this.setDirty(true);
+		};
+		this._events.subscribe('profile:changedProfileImage', func3);
+
 		this._userMetadataService.init();
 	}
 

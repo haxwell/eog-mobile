@@ -70,6 +70,7 @@ export class ProfileService {
 
 		if (model["imageFileURI"] === undefined) {
 			this._profilePictureService.get(user["id"]).then((filename) => {
+				model["imageFileSource"] = 'eog';
 				model["imageFileURI"] = filename;
 			})
   		}
@@ -170,6 +171,10 @@ export class ProfileService {
 					});
 				}
 
+				// TODO: Would be better if this was checking the original imageFileURI, with the new
+				//  current imageFileURI, and seeing if they are different. Then rather than some other
+				//  code having to know to indicate the photo changed, it can just update the imageFileURI,
+				//  like its the only code in the world that cares. la la la..
 				if (model["isPhotoChanged"] === true) {
 					this._profilePictureService.save(user["id"], model["imageFileURI"]).then((data) => {
 						userUpdateFunc();
