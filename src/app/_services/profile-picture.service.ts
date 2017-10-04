@@ -41,12 +41,12 @@ export class ProfilePictureService {
 				let foo = self.file.checkFile(self.file.cacheDirectory, "eogAppProfilePic" + id);
 				foo.then((isFileExists) => {
 					if (isFileExists) {
-						console.log("THE GET FUNC: image already exists on phone. returning its path")
+						console.log("THE GET FUNC: image already exists on phone. returning its path as " + self.file.cacheDirectory + "eogAppProfilePic" + id)
 						resolve(self.file.cacheDirectory + "eogAppProfilePic" + id);
 					} 
 				}).catch(e => { 
 
-					console.log("THE GET FUNC: image does not already exist on phone.")
+					console.log("THE GET FUNC: image does not already exist on phone. Not found at " + self.file.cacheDirectory + "eogAppProfilePic" + id)
 
 				    let url = environment.apiUrl + "/api/user/" + id + "/profile/picture/isFound";
 				    this._apiService.get(url).subscribe((isFound) => {
@@ -65,6 +65,7 @@ export class ProfilePictureService {
 					  		});
 
 				    	} else {
+				    		console.log("THE GET FUNC: API does not have an image for " + id + ". Returning undefined.")
 							resolve(undefined);
 				    	}
 				    });
@@ -96,27 +97,31 @@ export class ProfilePictureService {
 
 	save(userId, filename) {
 		return new Promise((resolve, reject) => {
-			console.log("image upload about to initiate....");
-			const fileTransfer: FileTransferObject = this.transfer.create();
+			if (filename !== undefined) {
+				console.log("image upload about to initiate....");
+				const fileTransfer: FileTransferObject = this.transfer.create();
 
-			let options: FileUploadOptions = {
-			     fileKey: 'file',
-			     fileName: filename, 
-			     headers: {}
+				let options: FileUploadOptions = {
+				     fileKey: 'file',
+				     fileName: filename, 
+				     headers: {}
+				}
+
+				fileTransfer.upload(filename, environment.apiUrl + "/api/user/" + userId + "/profile/picture", options)
+				   .then((data) => {
+				     // success
+				     console.log("image upload succeeded");
+				     console.log(data);
+
+				     resolve(data);
+				   }, (err) => {
+				     // error
+				     console.log(err);
+				     reject();
+				   });
+			} else {
+				resolve(undefined);
 			}
-
-			fileTransfer.upload(filename, environment.apiUrl + "/api/user/" + userId + "/profile/picture", options)
-			   .then((data) => {
-			     // success
-			     console.log("image upload succeeded");
-			     console.log(data);
-
-			     resolve(data);
-			   }, (err) => {
-			     // error
-			     console.log(err);
-			     reject();
-			   });
 		});
 	}
 }
