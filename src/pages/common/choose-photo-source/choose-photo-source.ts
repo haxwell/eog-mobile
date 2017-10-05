@@ -104,6 +104,7 @@ export class ChoosePhotoSourcePage {
 									});
 								} else {
 									console.log("Call to profilePictureService to DELETE photo for "+self.userId+" successful! Image was from phone's gallery, so did not try to remove it.");
+									resolve(undefined);
 								}
 
 							});

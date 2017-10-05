@@ -33,12 +33,6 @@ export class ProfileHeader {
 			self.setDirty(true);
 		};
 		self._events.subscribe('profile:changedContactInfoWasSaved', func2);
-
-		let func3 = (filepath) => {
-			self.model["imageFileURI"] = filepath;
-		};
-
-		self._events.subscribe('profile:changedProfileImage', func3);
 	}
 
 	ngOnInit() {
@@ -80,6 +74,10 @@ export class ProfileHeader {
 			modal.onDidDismiss((promise) => {
 				if (promise) {
 					promise.then((uriAndSource) => { 
+						if (uriAndSource === undefined) {
+							uriAndSource = {};
+						}
+
 						console.log("setting profile header model to [" + uriAndSource["imageFileURI"] + "], and throwing profile:changedProfileImage event");
 						
 						self.model["imageFileURI"] = uriAndSource["imageFileURI"];
