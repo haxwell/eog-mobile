@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "386608926885",
+    "firebase_url": "https://eog-api.firebaseio.com",
+    "project_id": "eog-api",
+    "storage_bucket": "eog-api.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:386608926885:android:3ec6bfed99a11fb7",
+        "android_client_info": {
+          "package_name": "io.ionic.starter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "386608926885-4jieclkg0q32uadufnahnrq695ksl171.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAU6gzLfgOYtMHvDchXFLSTuamR9kMnBSA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,2 @@
+copy the google-services.json to ./platforms/android
+search for 'com.deletethis' and change it to 'io.ionic.starter'
