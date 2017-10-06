@@ -113,7 +113,23 @@ export class ProfilePictureService {
 				     console.log("image upload succeeded");
 				     console.log(data);
 
-				     resolve(data);
+					let lastSlash = filename.lastIndexOf('/');
+					let lastQuestionMark = filename.lastIndexOf('?');
+
+					if (lastQuestionMark === -1) 
+						lastQuestionMark = filename.length;
+
+				     this.file.copyFile(filename.substring(0,lastSlash+1), // path
+				     					filename.substring(lastSlash+1, lastQuestionMark), // relative filename
+				     					this.file.cacheDirectory, // to path
+				     					"eogAppProfilePic" + userId // to relative filename
+				     					).then(() => {
+				     	resolve(data);
+				     }).catch(e => { 
+				     	console.log(e);
+				     	reject();
+				     });
+
 				   }, (err) => {
 				     // error
 				     console.log(err);
