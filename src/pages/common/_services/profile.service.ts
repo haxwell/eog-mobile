@@ -172,14 +172,18 @@ export class ProfileService {
 					});
 				}
 
-				if (model["imageFileURI_OriginalValue"] != model["imageFileURI"]) {
-					this._profilePictureService.save(user["id"], model["imageFileURI"]).then((data) => {
+				if (self.isProfileImageChanged(model)) {
+					self._profilePictureService.save(user["id"], model["imageFileURI"]).then((data) => {
 						userUpdateFunc();
 					});
 				} else
 					userUpdateFunc();
 			});
 		});
+	}
+
+	isProfileImageChanged(model) {
+		return model["imageFileURI_OriginalValue"] != model["imageFileURI"];
 	}
 
 	JSON_to_URLEncoded(element,key,list){
