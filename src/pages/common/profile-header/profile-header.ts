@@ -16,7 +16,6 @@ export class ProfileHeader {
 	@Input() readOnly = false;
 	dirty = false;
 	@Input() user = undefined;
-	model = {};
 
 	constructor(navParams: NavParams, private modalCtrl: ModalController, private _profileService: ProfileService, private _events: Events) {
 		this.user = Object.assign({}, navParams.get('user'));
@@ -24,11 +23,11 @@ export class ProfileHeader {
 
 		let self = this;
 		let func2 = (data) => {
-			self.model["realname"] = data["realname"];
-			self.model["phone"] = data["phone"];
-			self.model["email"] = data["email"];
+			let model = this._profileService.getModel(this.user);
 
-			self.model = this._profileService.getModel(this.user);			
+			model["realname"] = data["realname"];
+			model["phone"] = data["phone"];
+			model["email"] = data["email"];
 
 			self.setDirty(true);
 		};
@@ -36,11 +35,16 @@ export class ProfileHeader {
 	}
 
 	ngOnInit() {
-		this.model = this._profileService.getModel(this.user);
+
+	}
+
+	ionViewWillEnter() {
+		if (this.isDirty()) 
+			this.ngOnInit();
 	}
 
 	isCurrentUserAllowedToSeeContactInfo() {
-		return this.model["currentUserCanSeeContactInfo"];
+		return this._profileService.getModel(this.user)["currentUserCanSeeContactInfo"];
 	}
 
 	isReadOnly() {
@@ -56,20 +60,25 @@ export class ProfileHeader {
 	}
 
 	isThumbnailImageAvailable() {
-		return this.model["imageFileURI"] !== undefined;
+		return this._profileService.getModel(this.user)["imageFileURI"] !== undefined;
 	}
 
 	getThumbnailImage() {
-		if (this.model["imageFileURI"] === undefined)
+		if (this._profileService.getModel(this.user)["imageFileURI"] === undefined)
 			return "assets/img/mushroom.jpg";
 		else
-			return this.model["imageFileURI"];
+
+			// WILO: Is this being called when we go from Profile to Home? If so, is this a different model?
+			//  why is the picture not changing?
+
+			return this._profileService.getModel(this.user)["imageFileURI"];
 	}
 
 	onThumbnailPress($event) {
 		if (!this.isReadOnly()) {
 			let self = this;
-			let modal = this.modalCtrl.create(ChoosePhotoSourcePage, {userId: this.user["id"], fileURI: this.model["imageFileURI"], fileSource: this.model["imageFileSource"]});
+			let model = this._profileService.getModel(this.user);
+			let modal = this.modalCtrl.create(ChoosePhotoSourcePage, {userId: this.user["id"], fileURI: model["imageFileURI"], fileSource: model["imageFileSource"]});
 			
 			modal.onDidDismiss((promise) => {
 				if (promise) {
@@ -80,10 +89,11 @@ export class ProfileHeader {
 
 						console.log("setting profile header model to [" + uriAndSource["imageFileURI"] + "], and throwing profile:changedProfileImage event");
 						
-						self.model["imageFileURI"] = uriAndSource["imageFileURI"];
-						self.model["imageFileSource"] = uriAndSource["imageFileSource"];
+						let model = this._profileService.getModel(this.user);
+						model["imageFileURI"] = uriAndSource["imageFileURI"];
+						model["imageFileSource"] = uriAndSource["imageFileSource"];
 
-						self._events.publish('profile:changedProfileImage', self.model["imageFileURI"]);
+						self._events.publish('profile:changedProfileImage', model["imageFileURI"]);
 						self.setDirty(true);						
 					})
 				}
@@ -93,21 +103,27 @@ export class ProfileHeader {
 		}
 	}
 
-	onNameChange(event) {
-		this.model["realname"] = event._value;
-		this._events.publish('profile:changedContactInfo', this.model);
+	setChangedAttr(key, value) {
+		let model = this._profileService.getModel(this.user);
+		model[key] = value;
+		this._events.publish('profile:changedContactInfo', model);
 		this.setDirty(true);
+	}
+
+	onNameChange(event) {
+		this.setChangedAttr("realname", event._value);
 	}
 
 	onEmailChange(event) {
-		this.model["email"] = event._value;
-		this._events.publish('profile:changedContactInfo', this.model);
-		this.setDirty(true);
+		this.setChangedAttr("email", event._value);
 	}
 
 	onPhoneChange(event) {
-		this.model["phone"] = event._value;
-		this._events.publish('profile:changedContactInfo', this.model);
-		this.setDirty(true);
+		this.setChangedAttr("phone", event._value);	
+	}
+
+	getModelAttr(key) {
+		let model = this._profileService.getModel(this.user) || {};
+		return model[key];
 	}
 }

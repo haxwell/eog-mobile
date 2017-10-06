@@ -15,25 +15,24 @@
 		</td>
 		<td>
 			<div *ngIf="isReadOnly()">
-				Name: {{model.realname}}<br/>
-				<span *ngIf="isCurrentUserAllowedToSeeContactInfo()">Email: {{model.email}}<br/>Phone: {{model.phone}}</span>
-
+				Name: {{getModelAttr('realname')}}<br/>
+				<span *ngIf="isCurrentUserAllowedToSeeContactInfo()">Email: {{getModelAttr('email')}}<br/>Phone: {{getModelAttr('phone')}}</span>
 			</div>
 			<div *ngIf="!isReadOnly()">
 				<table>
 					<tr>
 						<ion-item>
-							<ion-input type="text" placeholder="Name" (ionChange)="onNameChange($event)" [(ngModel)]="model.realname" #ctrl="ngModel" required></ion-input>		
+							<ion-input type="text" placeholder="Name" (ionChange)="onNameChange($event)" [value]="getModelAttr('realname')" required></ion-input>
 						</ion-item>
 					</tr>
 					<tr>
 						<ion-item *ngIf="isCurrentUserAllowedToSeeContactInfo()">
-							<ion-input type="text" placeholder="you@domain.com" (ionChange)="onEmailChange($event)" [(ngModel)]="model.email" #ctrl="ngModel" required></ion-input>
+							<ion-input type="text" placeholder="you@domain.com" (ionChange)="onEmailChange($event)" [value]="getModelAttr('email')" required></ion-input>
 						</ion-item>
 					</tr>
 					<tr>
 						<ion-item *ngIf="isCurrentUserAllowedToSeeContactInfo()">
-							<ion-input type="text" placeholder="# " (ionChange)="onPhoneChange($event)" [(ngModel)]="model.phone" #ctrl="ngModel" required></ion-input>
+							<ion-input type="text" placeholder="# " (ionChange)="onPhoneChange($event)" [value]="getModelAttr('phone')" required></ion-input>
 						</ion-item >
 					</tr>
 
