@@ -10,6 +10,9 @@ import { SearchService } from '../../../app/_services/search.service';
 export class RulePage {
 	searchString: string = '';
 	searchResultListCountString: string = undefined;
+	origSearchResultSize = 0;
+	origSearchResultsAlreadyRequiredCount = 0;
+
 	pointsQuantity: number = 0;
 	requiredUserRecommendations: Array<Object> = undefined;
 	searchResultList: Array<Object> = [];
@@ -31,16 +34,26 @@ export class RulePage {
 		let self = this;
 		this._searchService.searchUsers(this.searchString).then((data: Array<Object>) => {
 			self.searchResultList = data;
+			self.origSearchResultSize = data.length;
+			self.origSearchResultsAlreadyRequiredCount = 0;
+
 			let tmp = self.searchResultList.filter((obj) => { 
 				return !self.requiredUserRecommendations.some(
-					(obj2) => { return obj["id"] === obj2["id"]; }
+					(obj2) => { return obj["id"] === obj2["requiredRecommendUserId"]; }
 				) 
 			});
-			let count = self.searchResultList.length - tmp.length;
-			self.searchResultList = tmp;
-			self.searchResultListCountString = data.length + " matches found. ";
-			if (count > 0) self.searchResultListCountString += count + " already required.";
+
+			self.origSearchResultsAlreadyRequiredCount = self.origSearchResultSize - tmp.length;
+			self.searchResultList = tmp;			
+
+			self.updateSearchResultListCountString();
 		});
+	}
+
+	updateSearchResultListCountString() {
+		this.searchResultListCountString = this.origSearchResultSize + " matches found. ";
+		if (this.origSearchResultsAlreadyRequiredCount > 0)
+			this.searchResultListCountString += this.origSearchResultsAlreadyRequiredCount + " already required.";
 	}
 
 	getSearchResultListCountString() {
@@ -60,14 +73,19 @@ export class RulePage {
 	}
 
 	onIndividualSearchResultTap(item) {
-		this.requiredUserRecommendations.push(item);
+		this.requiredUserRecommendations.push({id: -1, requiredRecommendUserId: item["id"], userObj: item});
 		this.searchResultList = this.searchResultList.filter((obj) => { return obj["id"] !== item["id"]; });
 
-		if (this.searchResultList.length === 0) this.searchResultListCountString === undefined;
+		this.origSearchResultsAlreadyRequiredCount++;
+		this.updateSearchResultListCountString();
 	}
 
 	onIndividualRequiredUserPress(item) {
-		this.requiredUserRecommendations = this.requiredUserRecommendations.filter((obj) => { return obj["id"] !== item["id"]; });
+		this.requiredUserRecommendations = this.requiredUserRecommendations.filter((obj) => { return obj["userObj"]["id"] !== item["userObj"]["id"]; });
+		this.searchResultList.push(item["userObj"]);
+
+		this.origSearchResultsAlreadyRequiredCount--;
+		this.updateSearchResultListCountString();		
 	}
 
 	getSearchResultList() {

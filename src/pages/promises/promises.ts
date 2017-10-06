@@ -11,6 +11,7 @@ import { KeywordEntryPage } from '../keyword.entry/keyword.entry'
 import { PrmService } from './_services/prm.service'
 import { PrmMetadataService } from '../../app/_services/prm-metadata.service';
 import { PrmDetailService } from '../../app/_services/prm-detail.service';
+import { UserService } from '../../app/_services/user.service';
 import { Constants } from '../../_constants/constants';
 
 
@@ -36,6 +37,7 @@ export class PrmPage {
 				private _prmService: PrmService,
 				private _prmMetadataService: PrmMetadataService,
 				private _prmDetailService: PrmDetailService,
+				private _userService: UserService,
 				private loadingCtrl: LoadingController,
 				private _constants: Constants) {
 
@@ -46,6 +48,14 @@ export class PrmPage {
 			this.new = true;
 		} else {
 			this.model = Object.assign({}, tmp);
+		}
+
+		if (this.areRecommendationsRequired(this.model)) {
+			this.model["requiredUserRecommendations"].forEach((rec) => {
+				this._userService.getUser(rec["requiredRecommendUserId"]).then((user) => {
+					rec["userObj"] = user;
+				})
+			});
 		}
 
 		this.requestMsgs = this._prmDetailService.getPrmDetailMessages(tmp);
@@ -232,8 +242,12 @@ export class PrmPage {
 		this.navCtrl.pop();
 	}
 
-	getRequiredUsers() {
-		return this.model["requiredUserRecommendations"]; 
+	getRequiredUserRecommendations() {
+		if (this.model["requiredUserRecommendations"] !== undefined && !this.model["requiredUserRecommendations"].some((rec) => { return rec["userObj"] === undefined; })) {
+			return this.model["requiredUserRecommendations"];
+		} else {
+			return [];
+		}
 	}
 
 	getRequiredPointsQuantity() {

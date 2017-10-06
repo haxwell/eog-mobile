@@ -22,8 +22,8 @@
 						<ion-label class="recommendationLabel">Required recommendations</ion-label>
 					</td>
 					<td>
-						<span class="blockItem" *ngFor="let user of requiredUserRecommendations" (press)="onIndividualRequiredUserPress(user)">
-							{{user.realname}}
+						<span class="blockItem" *ngFor="let rec of requiredUserRecommendations" (press)="onIndividualRequiredUserPress(rec)">
+							{{rec.userObj.realname}}
 						</span>
 					</td>
 				</tr>

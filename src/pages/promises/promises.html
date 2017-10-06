@@ -35,23 +35,24 @@
 	<ion-card>
 		<ion-card-content>
 			<ion-item>
-				Title: 
-				<ion-input type="text" placeholder="Title" [disabled]="isReadOnly()" (ionChange)="handleTitleChange($event)" [(ngModel)]="model.title" #ctrl="ngModel" required></ion-input>
+				<ion-label color="primary" stacked>Title: </ion-label>
+				<ion-input type="text" placeholder="Teach a skill..." [disabled]="isReadOnly()" (ionChange)="handleTitleChange($event)" [(ngModel)]="model.title" #ctrl="ngModel" required></ion-input>
 			</ion-item>
 			<ion-item>
-				Description: 
-				<ion-input type="text" placeholder="Description" [disabled]="isReadOnly()" (ionChange)="handleDescriptionChange($event)" [(ngModel)]="model.description" #ctrl="ngModel" required></ion-input>
+				<ion-label color="primary" stacked>Description: </ion-label>
+				<ion-textarea rows="5" placeholder="I can do XYZ and I will teach..." [disabled]="isReadOnly()" (ionChange)="handleDescriptionChange($event)" [(ngModel)]="model.description" #ctrl="ngModel" required></ion-textarea>
 			</ion-item>
 			<ion-item>
 				Rules
 				<button ion-button icon-only small color="danger" [hidden]="isReadOnly()" (click)="onNewRuleBtnTap($event)"><ion-icon name="add"></ion-icon></button><br/>
-				<i>Required Points:  </i> {{getRequiredPointsQuantity()}}<br/>
+				<i>This promise requires {{getRequiredPointsQuantity()}} points<br/></i>
 				<div *ngIf="areRecommendationsRequired()">
-					<i>Required Recommendations:</i><br/>
-					<span *ngFor="let user of getRequiredUsers()">
-						{{user.realname}}<br/>
+					<i>and the following recommendations: </i><br/>
+					<span class="blockItem" *ngFor="let rec of getRequiredUserRecommendations()">
+						{{rec.userObj.realname}}<br/>
 					</span>
 				</div>
+
 			</ion-item>
 		</ion-card-content>
 	</ion-card>
