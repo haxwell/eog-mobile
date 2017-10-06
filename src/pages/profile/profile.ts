@@ -69,9 +69,7 @@ export class ProfilePage {
 		this._events.subscribe('profile:changedContactInfo', func2);
 
 		let func3 = (data) => {
-			this.model["isPhotoChanged"] = true;
-
-			this.setDirty(true);
+			this.setDirty(data !== undefined); // if this data from the changedProfileImage event is undefined, we consider that !dirty.
 		};
 		this._events.subscribe('profile:changedProfileImage', func3);
 
@@ -96,9 +94,16 @@ export class ProfilePage {
 		if (this.isDirty()) {
 			let self = this;
 
+			let msg = "";
+
+			if (this._profileService.isProfileImageChanged(this.model))
+				msg = "You changed your profile picture. Uploading it could take a long while. You got a minute (or ten)?";
+			else
+				msg = "Do you want to save your profile changes?";
+
 			let alert = this.alertCtrl.create({
 				title: 'Save Changes?',
-				message: 'Do you want to save your  profile changes?',
+				message: msg,
 				buttons: [
 					{
 						text: 'No', role: 'cancel', handler: () => {
@@ -204,7 +209,9 @@ export class ProfilePage {
 	onSaveBtnTap() {
 		let self = this;
 		self.loading = self.loadingCtrl.create({
-			content: 'Please wait...'
+			content: this._profileService.isProfileImageChanged(this.model) ?
+					'Please wait... Uploading as fast as your data connection will allow..' :
+					'Please wait...'
 		})
 
 		self.loading.present();
