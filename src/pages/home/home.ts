@@ -5,10 +5,6 @@ import { SearchPage } from '../search/search';
 import { SearchUsersPage } from '../searchUsers/searchUsers';
 import { PrmPage } from '../promises/promises'
 
-//import { RequestsIncomingView } from '../../pages/common/requests-incoming/requests-incoming';
-//
-//import { ProfileHeader } from '../../pages/common/profile-header/profile-header'
-
 import { UserService } from '../../app/_services/user.service'
 import { SearchService } from '../../app/_services/search.service'
 import { PrmMetadataService } from '../../app/_services/prm-metadata.service';
