@@ -7,17 +7,16 @@
 </ion-header>
 
 <ion-content padding>
-	<ion-row>
-		<ion-label>You are about to CANCEL a request.</ion-label>
-		<ion-row *ngIf="isRequestAccepted()"> 
-			<ion-label>{{request.directionallyOppositeUser.realname}} has already accepted your request.</ion-label><br/>
-			<ion-label>They may have committed time and resources to doing this for you.</ion-label><br/>
-			<ion-label>This cancellation will be included in your history, it will be public,</ion-label><br/>
-			<ion-label>and they will get the agreed upon-points!</ion-label><br/>
-		</ion-row>
+	<ion-label>You are about to CANCEL a request.</ion-label>
+	<div *ngIf="isRequestAccepted()"> 
 		<br/>
-		<ion-label>{{request.title}}</ion-label>
-	</ion-row>		
+		{{request.directionallyOppositeUser.realname}} has already accepted your request.<br/>
+		They may have committed time and resources to doing this for you.<br/><br/>
+		This cancellation will be included in your (public!) history,<br/>
+		and they will get the agreed upon-points!<br/>
+	</div>
+	<br/>
+	<ion-label>{{request.title}}</ion-label>
 
 	<ion-row *ngIf="isRequestAccepted()"> 
 		<ion-label>Type the word cancel, and then press the YES! button if you're sure.</ion-label>
