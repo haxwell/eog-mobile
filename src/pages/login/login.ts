@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController, LoadingController } from 'ionic-angular';
+import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { HomePage } from '../home/home';
 import { CreateAccountPage } from './_pages/create.account'
@@ -21,8 +22,13 @@ export class LoginPage {
               private _userService: UserService,
               private _websocketService: WebsocketService,
               private _pushMessagingService: PushMessagingService,
-              private loadingCtrl: LoadingController) {
+              private loadingCtrl: LoadingController,
+              private splashScreen: SplashScreen) {
 
+  }
+
+  ionViewWillEnter() {
+      this.splashScreen.hide();
   }
 
   onLoginBtnTap(event) {

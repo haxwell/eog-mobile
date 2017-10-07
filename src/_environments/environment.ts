@@ -5,6 +5,7 @@
 
 export const domainInfo = {
   domain: '165.227.109.239',
+  //domain: 'localhost',
   port: '8080'
 };
 
