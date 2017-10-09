@@ -57,8 +57,7 @@
 		<ion-card-header>
 			<hr class="yellow"/>
 			<!-- Completed Pending Requestor Approval<br/> -->
-			<i>These are requests you've completed. We're waiting for the</i>
-			<i>other user to confirm that.</i>
+			<i>These are promises you've marked fulfilled. We're waiting for the other user to confirm that.</i>
 		</ion-card-header>
 		<ion-card-content *ngFor="let item of getCompletedPendingApprovalRequests()">
 			<ion-item>
@@ -73,9 +72,9 @@
 		<ion-card-header>
 			<hr class="red"/>
 			<!-- Disputed, Requestor Marked Not Complete<br/> -->
-			<i>These are requests you've marked completed, but the other user did not agree.</i>
+			<i>These are promises you've marked fulfilled, but the other user did not agree.</i>
 			<i>Please talk with them, and see if you can come to a resolution. If not, mark</i>
-			<i>the request complete again. You will receive half the agreed upon points, </i>
+			<i>the promise fulfilled again. You will receive half the agreed upon points, </i>
 			<i>and your history will show that this was a negative interaction. :(</i>
 		</ion-card-header>
 		<ion-card-content *ngFor="let item of getDisputedCompletedRequests()">
