@@ -119,10 +119,12 @@ export class HomePage {
 
   onPrmResultTap(_prm) {
       this.navCtrl.push(PrmPage, { prm: _prm, readOnly: true });
+      this.setIsSearchFieldVisible(false);
   }
 
   onUserResultTap(_user) {
       this.navCtrl.push(ProfilePage, { user: _user, readOnly: true });
+      this.setIsSearchFieldVisible(false);
   }
 
   isSearchFieldVisible() {
@@ -135,14 +137,14 @@ export class HomePage {
 
   onSearchBtnTap(event) {
     this.setIsSearchFieldVisible(!this.isSearchFieldVisible());
-
-    if (!this.isSearchFieldVisible()) {
-      this.items = undefined;
-    }
   }
 
   setIsSearchFieldVisible(b) {
     this._isSearchFieldVisible = b;
+
+    if (!this.isSearchFieldVisible()) {
+      this.items = undefined;
+    }
   }
 
   onProfileBtnTap(event) {
