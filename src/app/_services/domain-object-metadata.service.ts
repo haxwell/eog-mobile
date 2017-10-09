@@ -103,12 +103,15 @@ export class DomainObjectMetadataService {
 			this.mapp[user["id"]] = [];
 		}
 
-		let obj = this.mapp[user["id"]].find((obj) => { return obj["domainObj"]["id"] === _domainObj["id"] && obj["property"] === functionKey; });
+		let obj = this.mapp[user["id"]].find((obj) => { 
+			return 	(obj["domainObj"] === undefined && _domainObj === undefined) || 
+					(obj["domainObj"]["id"] === _domainObj["id"] && obj["property"] === functionKey); 
+		});
 
 		if (obj === undefined) {
 			let rtn : any = this.getMetadataValueResult(_domainObj, functionKey);
 
-			if ( typeof rtn.then == 'function' )
+			if ( rtn !== undefined && typeof rtn.then == 'function' )
 				 rtn.then((data) => {
 					obj = {domainObj: _domainObj, property: functionKey, value: data};
 					
