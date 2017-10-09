@@ -1,7 +1,10 @@
 <ion-header>
 	<ion-navbar>
-		<ion-title>
-			Promise Detail
+		<ion-title *ngIf="isNewObject()">
+			Create New Promise
+		</ion-title>
+		<ion-title *ngIf="!isNewObject()">
+			Edit Your Promise
 		</ion-title>
 	</ion-navbar>
 </ion-header>

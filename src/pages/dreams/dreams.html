@@ -1,7 +1,10 @@
 <ion-header>
 	<ion-navbar>
-		<ion-title>
-			Dream Detail
+		<ion-title *ngIf="isNewObject()">
+			Create New Dream
+		</ion-title>
+		<ion-title *ngIf="!isNewObject()">
+			Edit Your Dream
 		</ion-title>
 	</ion-navbar>
 </ion-header>
