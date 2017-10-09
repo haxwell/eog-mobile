@@ -168,26 +168,18 @@ export class ProfilePage {
 	}
 
 	onIndividualKeywordPress(item) {
-		if (!this.isReadOnly()) {
-			this.model["keywords"] = this.model["keywords"].filter((obj) => {
-				return obj["text"] !== item["text"];
-			});
-
-			this.setDirty(true);
-		}
+		return this.onModifyKeywordBtnTap(item);
 	}
 
-	onAddKeywordBtnTap(evt) {
+	onModifyKeywordBtnTap(evt) {
 		if (!this.isReadOnly()) {
 			let self = this;
-			let modal = this.modalCtrl.create(KeywordEntryPage);
+			let modal = this.modalCtrl.create(KeywordEntryPage, {keywordArray: self.model["keywords"]});
 			
 			modal.onDidDismiss((data: Array<Object>) => { 
 				if (data) {
-					data.map((obj) => {
-						self.setDirty(true);
-						self.model["keywords"].push({id: undefined, text: obj}); 
-					});
+					self.setDirty(true);
+					self.model["keywords"] = data;
 					self.model["keywords"].sort((a, b) => { 
 						let aText = a.text.toLowerCase(); 
 						let bText = b.text.toLowerCase(); 

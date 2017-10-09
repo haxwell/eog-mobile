@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { ViewController } from 'ionic-angular';
+import { ViewController, NavParams } from 'ionic-angular';
 
 @Component({
   selector: 'page-keyword-entry',
@@ -8,24 +8,74 @@ import { ViewController } from 'ionic-angular';
 })
 export class KeywordEntryPage {
 
-	keywordString: string = undefined;
+	newKeywordsString: string = '';
+	keywordArray = undefined;
+	dirty = false;
 
-	constructor(private viewCtrl: ViewController) {
+	constructor(private viewCtrl: ViewController,
+				navParams: NavParams) {
+		this.keywordArray = navParams.get('keywordArray').slice();
+	}
 
+	isDirty() {
+		return this.dirty === true;
+	}
+
+	setDirty(b) {
+		this.dirty = b;
+	}
+
+	getKeywordArray() {
+		return this.keywordArray;
+	}
+
+	userHasNoKeywords() {
+		return this.keywordArray.length === 0;
+	}
+
+	isAddBtnEnabled() {
+		return this.newKeywordsString.length > 0;
 	}
 
 	isSaveBtnEnabled() {
-		return this.keywordString !== undefined && this.keywordString.length > 1;
+		return this.isDirty();
+	}
+
+	onAddKeywordFieldChange(evt) {
+		this.newKeywordsString = evt._value;
+	}
+
+	getAddKeywordFieldValue() {
+		return this.newKeywordsString;
+	}
+
+	onIndividualKeywordPress(item) {
+		this.keywordArray = this.keywordArray.filter((obj) => {
+			return obj["text"] !== item["text"];
+		});
+
+		this.setDirty(true);
+	}
+
+	onAddBtnTap() {
+		let tmp = this.newKeywordsString.split(',');
+
+		tmp.forEach((obj) => {
+			this.keywordArray.push({id: -1, text: obj});
+		})
+
+		this.newKeywordsString = '';
+
+		this.setDirty(true);
 	}
 
 	onSaveBtnTap(evt) {
-		let tmp = this.keywordString.split(',');
+		let tmp = this.keywordArray;
 		let tmp2 = [];
 		tmp.map((obj) => { 
-			if (!tmp2.some((obj2) => { return obj2 === obj; }))
+			if (!tmp2.some((obj2) => { return obj2["text"].toLowerCase() === obj["text"].toLowerCase(); }))
 				tmp2.push(obj);
 		});
-		tmp2 = tmp2.filter((obj) => { return obj != undefined && obj.length > 0 });
 		this.viewCtrl.dismiss(tmp2);
 
 		return tmp2;

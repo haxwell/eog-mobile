@@ -23,7 +23,7 @@
 		<ion-card>
 			<ion-card-header>
 				Profile Keywords
-				<button *ngIf="!isReadOnly()" ion-button icon-only small color="danger" (click)="onAddKeywordBtnTap($event)"><ion-icon name="add"></ion-icon></button>								
+				<button *ngIf="!isReadOnly()" ion-button icon-only small color="danger" (click)="onModifyKeywordBtnTap($event)"><ion-icon name="add"></ion-icon></button>								
 			</ion-card-header>
 			<ion-card-content>
 				<span *ngIf="userHasNoKeywords() && !isReadOnly">

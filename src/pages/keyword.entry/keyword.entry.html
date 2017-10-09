@@ -7,11 +7,28 @@
 </ion-header>
 
 <ion-content padding>
-	<ion-label>Enter a list of keywords</ion-label>
-	<ion-label>Separate multiple words,with,commas (for example).</ion-label>
+	<ion-row>
+		<ion-card>
+			<ion-card-header>
+				Keywords (press and hold to delete)
+			</ion-card-header>
+			<ion-card-content>
+				<span *ngIf="userHasNoKeywords()">
+					This are no keywords defined yet.
+				</span>
+				<span class="blockItem" *ngFor="let item of getKeywordArray()" (press)="onIndividualKeywordPress(item)">
+					{{item.text}}
+				</span>
+			</ion-card-content>
+		</ion-card>
+	</ion-row>	
+
+	<ion-label>Enter new keywords</ion-label>
+	<ion-label>Separate multiple keywords,with,commas (for example).</ion-label>
 
 	<ion-row>
-		<ion-input type="text" placeholder="..words.." [(ngModel)]="keywordString" #ctrl="ngModel" required></ion-input>
+		<ion-input type="text" placeholder="..words.." (ionChange)="onAddKeywordFieldChange($event)" [value]="getAddKeywordFieldValue()" required></ion-input>
+		<button ion-button [disabled]="!isAddBtnEnabled()" (click)="onAddBtnTap($event)">Add</button>
 	</ion-row>
 
 	<ion-row>
