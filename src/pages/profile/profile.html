@@ -65,12 +65,12 @@
 				Recommendations
 			</ion-card-header>
 			<ion-card-content>
-				<div *ngIf="getAvailableIncomingRecommendations()">
+				<div *ngIf="areIncomingRecommendationsAvailable()">
 					<span class="blockItem" *ngFor="let item of getAvailableIncomingRecommendations()">
 						{{getRealName(item)}}
 					</span>
 				</div>
-				<span *ngIf="!getAvailableIncomingRecommendations()">No Available Recommendations</span>				
+				<span *ngIf="!areIncomingRecommendationsAvailable()">No Available Recommendations</span>				
 			</ion-card-content>
 		</ion-card>
 	</ion-row>	

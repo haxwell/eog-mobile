@@ -72,6 +72,10 @@ export class RulePage {
 		return this.pointsQuantity > 0;
 	}
 
+	hasRequiredRecommendations() {
+		return this.requiredUserRecommendations.length > 0;
+	}
+
 	onIndividualSearchResultTap(item) {
 		this.requiredUserRecommendations.push({id: -1, requiredRecommendUserId: item["id"], userObj: item});
 		this.searchResultList = this.searchResultList.filter((obj) => { return obj["id"] !== item["id"]; });

@@ -7,10 +7,7 @@
 </ion-header>
 
 <ion-content padding>
-	<ion-label>A Rule describes the conditions you set that another user (the Requestor) must meet before they can take you up on your Promise.
-		You must set a number of points that the user must have. If you wish, you can say the user must have
-		been given  recommendation by a specific other user. If the Requestor does not have sufficient points, or the
-		required recommendations, they will not be able to send you a request for this Promise.</ion-label>		
+	<ion-label>Rules are lists of things another user must have <i>before</i> they can ask you to fulfill your promise. You must require at least one point, but you could require a recommendation, and many points, if you'd like.</ion-label>
 		<ion-row>
 			<ion-label>Required points</ion-label>
 			<ion-input type="number" placeholder="quantity" max="10000" [(ngModel)]="pointsQuantity" #ctrl="ngModel" required></ion-input>
@@ -21,9 +18,14 @@
 					<td>
 						<ion-label class="recommendationLabel">Required recommendations</ion-label>
 					</td>
-					<td>
+					<td *ngIf="hasRequiredRecommendations()">
 						<span class="blockItem" *ngFor="let rec of requiredUserRecommendations" (press)="onIndividualRequiredUserPress(rec)">
 							{{rec.userObj.realname}}
+						</span>
+					</td>
+					<td *ngIf="!hasRequiredRecommendations()">
+						<span >
+							No recommendations required.
 						</span>
 					</td>
 				</tr>
@@ -31,7 +33,7 @@
 		</ion-row>
 		<hr/>
 		<ion-row>
-			<ion-input type="text" placeholder="Search for a user's name" (ionChange)="handleSearchStringChange($event)" [(ngModel)]="searchString" #ctrl="ngModel" required></ion-input>
+			<ion-input type="text" placeholder="To require a recommend, search a user name" (ionChange)="handleSearchStringChange($event)" [(ngModel)]="searchString" #ctrl="ngModel" required></ion-input>
 			<button ion-button icon-only [disabled]="!isSearchBtnEnabled()" (click)="onSearchUserBtnTap($event)">
 				<ion-icon name="search"></ion-icon>
 			</button>

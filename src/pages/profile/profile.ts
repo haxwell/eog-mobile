@@ -220,6 +220,10 @@ export class ProfilePage {
 		return this.isDirty();
 	}
 
+	areIncomingRecommendationsAvailable() {
+		return this.model["availableIncomingRecommendations"] !== undefined && this.model["availableIncomingRecommendations"].length > 0;
+	}
+
 	getAvailableIncomingRecommendations() {
 		return this.model["availableIncomingRecommendations"];
 	}
