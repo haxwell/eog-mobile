@@ -104,8 +104,7 @@ export class DomainObjectMetadataService {
 		}
 
 		let obj = this.mapp[user["id"]].find((obj) => { 
-			return 	(obj["domainObj"] === undefined && _domainObj === undefined) || 
-					(obj["domainObj"]["id"] === _domainObj["id"] && obj["property"] === functionKey); 
+			return (obj["domainObj"]["id"] === _domainObj["id"] && obj["property"] === functionKey); 
 		});
 
 		if (obj === undefined) {
