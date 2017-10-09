@@ -2,7 +2,7 @@
 	<ion-navbar [hideBackButton]="isSearchFieldVisible()">
 
 		<ion-title *ngIf="!isSearchFieldVisible()" end>
-			Easyah
+			<img src="assets/img/logo.jpg">
 		</ion-title>
 
 		<ion-item *ngIf="isSearchFieldVisible()" end>
@@ -38,13 +38,13 @@
 			</ion-card>
 		</ion-row>
 		<ion-row>
-			<span class="homeHeader">Incoming Requests</span>
+			<span class="requestSectionHeader">Incoming Requests</span>
 		</ion-row>
 		<ion-row>
 			<requests-incoming-view [ngStyle]="{'width':'100%'}" ></requests-incoming-view>
 		</ion-row>
 		<ion-row>
-			<span class="homeHeader">Outgoing Requests</span>
+			<span class="requestSectionHeader">Outgoing Requests</span>
 		</ion-row>
 		<ion-row>
 			<requests-outgoing-view [ngStyle]="{'width':'100%'}"></requests-outgoing-view>
