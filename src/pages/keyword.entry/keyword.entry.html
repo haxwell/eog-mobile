@@ -14,7 +14,7 @@
 			</ion-card-header>
 			<ion-card-content>
 				<span *ngIf="userHasNoKeywords()">
-					This are no keywords defined yet.
+					There are no keywords defined yet.
 				</span>
 				<span class="blockItem" *ngFor="let item of getKeywordArray()" (press)="onIndividualKeywordPress(item)">
 					{{item.text}}
@@ -23,11 +23,10 @@
 		</ion-card>
 	</ion-row>	
 
-	<ion-label>Enter new keywords</ion-label>
-	<ion-label>Separate multiple keywords,with,commas (for example).</ion-label>
+	<ion-label>Enter new keywords. Separate multiple keywords,with,commas (for example).</ion-label>
 
 	<ion-row>
-		<ion-input type="text" placeholder="..words.." (ionChange)="onAddKeywordFieldChange($event)" [value]="getAddKeywordFieldValue()" required></ion-input>
+		<ion-input type="text" placeholder="..type..words..press..add" (ionChange)="onAddKeywordFieldChange($event)" [value]="getAddKeywordFieldValue()" required></ion-input>
 		<button ion-button [disabled]="!isAddBtnEnabled()" (click)="onAddBtnTap($event)">Add</button>
 	</ion-row>
 

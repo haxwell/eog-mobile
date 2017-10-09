@@ -77,22 +77,16 @@ export class DreamPage {
 	}
 
 	onIndividualKeywordPress(item) {
-		this.model["keywords"] = this.model["keywords"].filter((obj) => {
-			return obj["text"] !== item["text"];
-		});
-
-		this.setDirty(true);
+		return this.onAddKeywordBtnTap(item);
 	}
 
 	onAddKeywordBtnTap(evt) {
 		let self = this;
-		let modal = this.modalCtrl.create(KeywordEntryPage, {keywordModel: self.newKeywords});
+		let modal = this.modalCtrl.create(KeywordEntryPage, { keywordArray: self.model["keywords"] });
 		modal.onDidDismiss((data: Array<Object>) => { 
 			if (data) {
-				data.map((obj) => { 
-					self.setDirty(true); 
-					self.model["keywords"].push({id: undefined, text: obj}); 
-				})
+				self.setDirty(true); 
+				self.model["keywords"] = data;
 			}
 		});
 		modal.present();
