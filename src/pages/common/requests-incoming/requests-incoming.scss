@@ -3,3 +3,22 @@ ion-card-header {
    max-width: none !important;
    width: 100%;
 }
+
+	hr {
+		height:3px;
+	}
+
+	hr.green {
+		color: green;
+		background-color: green;
+	}
+
+	hr.yellow {
+		color: yellow;
+		background-color: yellow;
+	}
+
+	hr.red {
+		color: red;
+		background-color: red;
+	}

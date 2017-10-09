@@ -6,7 +6,8 @@
 	</ion-card>
 	<ion-card *ngIf="getPendingRequests() !== undefined">
 		<ion-card-header>
-			Pending<br/>
+			<hr class="yellow"/>
+			<!-- Pending<br/> -->
 			<i>To accept, or decline a promise request; that is your question.</i>
 		</ion-card-header>
 		<ion-card-content *ngFor="let item of getPendingRequests()">
@@ -22,7 +23,8 @@
 	</ion-card>
 	<ion-card *ngIf="getAcceptedRequests() !== undefined">
 		<ion-card-header>
-			Accepted<br/>
+			<hr class="green"/>
+			<!-- Accepted<br/> -->
 			<i>These are requests you've committed to doing.</i>
 		</ion-card-header>
 		<ion-card-content *ngFor="let item of getAcceptedRequests()">
@@ -38,7 +40,8 @@
 	</ion-card>
 	<ion-card *ngIf="getDeclinedRequests() !== undefined">
 		<ion-card-header>
-			Declined<br/>
+			<hr class="red"/>
+			<!-- Declined<br/> -->
 			<i>These are requests that you have declined to do.</i>
 		</ion-card-header>
 		<ion-card-content *ngFor="let item of getDeclinedRequests()">
@@ -52,7 +55,8 @@
 	</ion-card>
 	<ion-card *ngIf="getCompletedPendingApprovalRequests() !== undefined">
 		<ion-card-header>
-			Completed Pending Requestor Approval<br/>
+			<hr class="yellow"/>
+			<!-- Completed Pending Requestor Approval<br/> -->
 			<i>These are requests you've completed. We're waiting for the</i>
 			<i>other user to confirm that.</i>
 		</ion-card-header>
@@ -61,13 +65,14 @@
 				Your promise: <b>{{item.prm.title}}</b><br/>
 				Requested by: {{item.directionallyOppositeUser.realname}}<br/>
 				Their dream: {{item.dream.title}}<br/>
+				<button ion-button (click)="onViewContactInfoBtnTap(item)">Contact Info</button>
 			</ion-item>
-			<button ion-button (click)="onViewContactInfoBtnTap(item)">Contact Info</button>
 		</ion-card-content>
 	</ion-card>
 	<ion-card *ngIf="getDisputedCompletedRequests() !== undefined">
 		<ion-card-header>
-			Disputed, Requestor Marked Not Complete<br/>
+			<hr class="red"/>
+			<!-- Disputed, Requestor Marked Not Complete<br/> -->
 			<i>These are requests you've marked completed, but the other user did not agree.</i>
 			<i>Please talk with them, and see if you can come to a resolution. If not, mark</i>
 			<i>the request complete again. You will receive half the agreed upon points, </i>
@@ -78,8 +83,8 @@
 				Your promise: <b>{{item.prm.title}}</b><br/>
 				Requested by: {{item.directionallyOppositeUser.realname}}<br/>
 				Their dream: {{item.dream.title}}<br/>
+				<button ion-button (click)="onViewContactInfoBtnTap(item)">Contact Info</button>
+				<button ion-button (click)="onCompleteBtnTap(item)">Complete</button>
 			</ion-item>
-			<button ion-button (click)="onViewContactInfoBtnTap(item)">Contact Info</button>
-			<button ion-button (click)="onCompleteBtnTap(item)">Complete</button>
 		</ion-card-content>
 	</ion-card>
