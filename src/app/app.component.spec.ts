@@ -4,22 +4,22 @@ import { IonicModule, Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
-import { MyApp } from './app.component';
+import { EasyahApp } from './app.component';
 import {
   PlatformMock,
   StatusBarMock,
   SplashScreenMock
 } from '../../test-config/mocks-ionic';
 
-describe('MyApp Component', () => {
+describe('EasyahApp Component', () => {
   let fixture;
   let component;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [MyApp],
+      declarations: [EasyahApp],
       imports: [
-        IonicModule.forRoot(MyApp)
+        IonicModule.forRoot(EasyahApp)
       ],
       providers: [
         { provide: StatusBar, useClass: StatusBarMock },
@@ -30,12 +30,12 @@ describe('MyApp Component', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(MyApp);
+    fixture = TestBed.createComponent(EasyahApp);
     component = fixture.componentInstance;
   });
 
   it('should be created', () => {
-    expect(component instanceof MyApp).toBe(true);
+    expect(component instanceof EasyahApp).toBe(true);
   });
 
 });

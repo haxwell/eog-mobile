@@ -12,7 +12,7 @@ import { Camera } from '@ionic-native/camera';
 import { FileTransfer } from '@ionic-native/file-transfer'
 import { File } from '@ionic-native/file'
 
-import { MyApp } from './app.component';
+import { EasyahApp } from './app.component';
 import { LoginPage } from '../pages/login/login';
 import { CreateAccountPage } from '../pages/login/_pages/create.account';
 import { HomePage } from '../pages/home/home';
@@ -67,7 +67,7 @@ import { Constants } from '../_constants/constants';
 
 @NgModule({
   declarations: [
-    MyApp,
+    EasyahApp,
     LoginPage,
     CreateAccountPage,
     HomePage,
@@ -105,11 +105,11 @@ import { Constants } from '../_constants/constants';
         prefix: 'easyah-app',
         storageType: 'localStorage'
     }),
-    IonicModule.forRoot(MyApp)
+    IonicModule.forRoot(EasyahApp)
   ],
   bootstrap: [IonicApp],
   entryComponents: [
-    MyApp,
+    EasyahApp,
     LoginPage,
     CreateAccountPage,
     HomePage,
