@@ -61,12 +61,13 @@ export class KeywordEntryPage {
 		let tmp = this.newKeywordsString.split(',');
 
 		tmp.forEach((obj) => {
-			this.keywordArray.push({id: -1, text: obj});
+			if (obj.length > 0) {
+				this.setDirty(true);
+				this.keywordArray.push({id: -1, text: obj});
+			}
 		})
 
 		this.newKeywordsString = '';
-
-		this.setDirty(true);
 	}
 
 	onSaveBtnTap(evt) {
