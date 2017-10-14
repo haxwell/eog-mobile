@@ -70,19 +70,59 @@ export class UserService {
 		return self.promise;
 	}
 
-	save(user) {
+	//
+	// We call an api, to send a code to a phone number.
+	sendCodeToPhoneNumber(phoneNumber) {
+		let self = this;
+		let url = environment.apiUrl + "/api/sendNewUserChallengeCodeToPhoneNumber";
+
+		// assume phoneNumber looks like '3035551212'
+		let data = "phoneNumber=" + "1" + phoneNumber;
+
+		this._apiService.post(url, data).subscribe(() => { 
+			console.log("Just requested new user challenge code be sent to " + "1" + phoneNumber);
+		});
+	}
+
+	isAValidNewUserCreateCode(phoneNumber, code) {
+		let data = "code=" + code + "&phoneNumber=" + "1" + phoneNumber;
+		let url = environment.apiUrl + "/api/isAValidNewUserCreateCode";
+
+		return new Promise(
+			(resolve, reject) => {
+				this._apiService.post(url, data).subscribe(
+					(b) => { 
+					 	resolve(b);
+					 });
+			});
+	}
+
+	save(user, code) {
 		let self = this;
 		let url = environment.apiUrl + "/api/users";
 
-		let data = 
-			"username="+user.name+
-			"&password="+user.password+
-			"&email="+user.email+
-			"&phone="+user.phone+
-			"&realname="+user.realname;
+		let data = '';
 
-		if (user.referringUsername !== undefined) {
+		if (user.name && user.password) {
+			data += "username="+user.name+
+					"&password="+user.password;
+		}
+
+		if (user.email)
+			data += "&email="+user.email;
+
+		if (user.phone)
+			data += "&phone="+user.phone;
+
+		if (user.realname)
+			data += "&realname="+user.realname;
+
+		if (user.referringUsername) {
 			data += "&referringUsername="+user.referringUsername;
+		}
+
+		if (code !== undefined) {
+			data += "&newUserRegistrationCode=" + code;
 		}
 
 		self.promise = new Promise(
