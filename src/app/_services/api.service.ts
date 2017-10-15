@@ -38,6 +38,12 @@ export class ApiService {
 	    let password: string = user["password"];
 
 		let headers: Headers = this.getHeaders(username, password);
+	    return this._http.post(url, data, {headers: headers});
+	}
+
+	postUnsecuredAPI(url: string, data: string) {
+		let headers: Headers = new Headers(); // TO ANSWER: Why do we use new here, but inject the others?
+		headers.append("Content-Type", "application/x-www-form-urlencoded");
 
 	    return this._http.post(url, data, {headers: headers});
 	}

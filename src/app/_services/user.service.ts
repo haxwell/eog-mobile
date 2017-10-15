@@ -79,7 +79,7 @@ export class UserService {
 		// assume phoneNumber looks like '3035551212'
 		let data = "phoneNumber=" + "1" + phoneNumber;
 
-		this._apiService.post(url, data).subscribe(() => { 
+		this._apiService.postUnsecuredAPI(url, data).subscribe(() => { 
 			console.log("Just requested new user challenge code be sent to " + "1" + phoneNumber);
 		});
 	}
@@ -90,7 +90,7 @@ export class UserService {
 
 		return new Promise(
 			(resolve, reject) => {
-				this._apiService.post(url, data).subscribe(
+				this._apiService.postUnsecuredAPI(url, data).subscribe(
 					(b) => { 
 					 	resolve(b);
 					 });
@@ -127,7 +127,7 @@ export class UserService {
 
 		self.promise = new Promise(
 			(resolve, reject) => {
-				this._apiService.post(url, data).subscribe(
+				this._apiService.postUnsecuredAPI(url, data).subscribe(
 					(userId) => { 
 						console.log("Credentials Saved! " + JSON.stringify(data));
 						resolve(JSON.parse(userId["_body"]));
@@ -155,5 +155,26 @@ export class UserService {
 
 			return self.thumbnailPromises[user["id"]];
 		}
+	}
+
+	setShowTutorialOnLogin(b) {
+		let url = environment.apiUrl + "/api/user/" + this.getCurrentUser()["id"] + "/preferences/showTutorialOnLogin";
+		let data = "value=" + (b === true);
+
+		return new Promise((resolve, reject) => {
+			this._apiService.post(url, data).subscribe(
+				(val) => { resolve(val); }
+			)
+		});
+	}
+
+	getShowTutorialOnLogin() {
+		let url = environment.apiUrl + "/api/user/" + this.getCurrentUser()["id"] + "/preferences/showTutorialOnLogin";
+
+		return new Promise((resolve, reject) => {
+			this._apiService.get(url).subscribe(
+				(val) => { resolve(val["_body"] === '' || val["_body"] === 'true' ); }
+			)
+		});
 	}
 }

@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
-import { NavController, Events } from 'ionic-angular';
+import { NavController, Events, ModalController } from 'ionic-angular';
 import { ProfilePage } from '../profile/profile';
 import { SearchPage } from '../search/search';
 import { SearchUsersPage } from '../searchUsers/searchUsers';
 import { PrmPage } from '../promises/promises'
+import { TutorialPage } from '../tutorial/tutorial'
 
 import { UserService } from '../../app/_services/user.service'
 import { SearchService } from '../../app/_services/search.service'
@@ -21,8 +22,10 @@ export class HomePage {
     searchPhrase = undefined;
     _isSearchFieldVisible = false;
     items = {};
+    showTutorialPromise = undefined;
 
-    constructor(public navCtrl: NavController, 
+    constructor(public navCtrl: NavController,
+                private _modalCtrl: ModalController, 
                 private _userService: UserService, 
                 private _searchService: SearchService, 
                 private _prmMetadataService: PrmMetadataService,
@@ -36,9 +39,29 @@ export class HomePage {
 
     ngOnInit() {
         this.user = this._userService.getCurrentUser();
+        this.showTutorialPromise = this._userService.getShowTutorialOnLogin();
 
         this._prmMetadataService.reset();
         this._prmMetadataService.init();
+    }
+
+    ionViewWillEnter() {
+        let self = this;
+        if (self.showTutorialPromise !== undefined) {
+            self.showTutorialPromise.then((b) => {
+                if (b === true) {
+                    let modal = self._modalCtrl.create(TutorialPage, { });
+                  
+                    modal.onDidDismiss((data: Array<Object>) => { 
+                      if (data) {
+
+                      }
+                    });
+
+                    modal.present();
+                }
+            });
+        }
     }
 
     initializeItems(query) {

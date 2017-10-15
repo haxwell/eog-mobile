@@ -14,6 +14,7 @@ import { File } from '@ionic-native/file'
 
 import { EasyahApp } from './app.component';
 import { LoginPage } from '../pages/login/login';
+import { TutorialPage } from '../pages/tutorial/tutorial';
 import { CreateAccountPage } from '../pages/login/_pages/create.account';
 import { HomePage } from '../pages/home/home';
 import { ProfilePage } from '../pages/profile/profile';
@@ -71,6 +72,7 @@ import { Constants } from '../_constants/constants';
     LoginPage,
     CreateAccountPage,
     HomePage,
+    TutorialPage,
     ProfilePage,
     ProfileHeader,
     ChoosePhotoSourcePage,
@@ -113,6 +115,7 @@ import { Constants } from '../_constants/constants';
     LoginPage,
     CreateAccountPage,
     HomePage,
+    TutorialPage,
     ProfilePage,
     ProfileHeader,
     ChoosePhotoSourcePage,
