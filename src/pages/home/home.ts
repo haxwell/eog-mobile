@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { NavController, Events, ModalController } from 'ionic-angular';
+import { Component, ViewChild } from '@angular/core';
+import { NavController, Navbar, Events, ModalController, AlertController } from 'ionic-angular';
 import { ProfilePage } from '../profile/profile';
 import { SearchPage } from '../search/search';
 import { SearchUsersPage } from '../searchUsers/searchUsers';
@@ -18,6 +18,8 @@ import { Constants } from '../../_constants/constants';
 })
 export class HomePage {
 
+    @ViewChild(Navbar) navBar: Navbar;
+
     user = undefined;
     searchPhrase = undefined;
     _isSearchFieldVisible = false;
@@ -26,6 +28,7 @@ export class HomePage {
 
     constructor(public navCtrl: NavController,
                 private _modalCtrl: ModalController, 
+                private _alertCtrl: AlertController,
                 private _userService: UserService, 
                 private _searchService: SearchService, 
                 private _prmMetadataService: PrmMetadataService,
@@ -61,6 +64,27 @@ export class HomePage {
                     modal.present();
                 }
             });
+        }
+
+        self.navBar.backButtonClick = () => {
+
+          let alert = self._alertCtrl.create({
+              title: 'Log out?',
+              message: 'Do you want to log out?',
+              buttons: [
+                {
+                  text: 'No', role: 'cancel', handler: () => {
+                    // do nothing
+                },
+                }, {
+                  text: 'Yes', handler: () => {
+                      self.navCtrl.pop();
+                  }
+                }
+              ]
+            });
+
+          alert.present();
         }
     }
 
