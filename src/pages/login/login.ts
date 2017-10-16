@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, LoadingController } from 'ionic-angular';
+import { NavController, LoadingController, AlertController } from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { HomePage } from '../home/home';
@@ -19,6 +19,7 @@ export class LoginPage {
   loading = undefined;
   
   constructor(public navCtrl: NavController,
+              private _alertCtrl: AlertController,
               private _userService: UserService,
               private _websocketService: WebsocketService,
               private _pushMessagingService: PushMessagingService,
@@ -54,6 +55,19 @@ export class LoginPage {
       
       self.loading.dismiss();
       this.navCtrl.push(HomePage);
+    }, 
+    (err) => {
+        self.loading.dismiss();
+        let okAlert = self._alertCtrl.create({
+                title: 'Sad face..',
+                subTitle: "Bad username/password!",
+                buttons: [{
+                  text: 'OK',
+                  handler: () => { }
+                }]
+              })
+
+        okAlert.present();
     });
   }
 

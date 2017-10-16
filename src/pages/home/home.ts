@@ -50,15 +50,13 @@ export class HomePage {
 
     ionViewWillEnter() {
         let self = this;
-        if (self.showTutorialPromise !== undefined) {
+        if (self.showTutorialPromise !== undefined && self._userService.getTutorialHasBeenShown() !== true) {
             self.showTutorialPromise.then((b) => {
                 if (b === true) {
                     let modal = self._modalCtrl.create(TutorialPage, { });
                   
-                    modal.onDidDismiss((data: Array<Object>) => { 
-                      if (data) {
-
-                      }
+                    modal.onDidDismiss((data) => { 
+                      self._userService.setTutorialHasBeenShown(true);
                     });
 
                     modal.present();

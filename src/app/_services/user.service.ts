@@ -12,6 +12,7 @@ export class UserService {
 	users = {};
 	usersPromise = {};
 	isCurrentUserDirty = false;
+	tutorialHasBeenShown = undefined;
 
 	constructor(private _apiService: ApiService, private _localStorageService: LocalStorageService, private _events: Events) {
 		this._events.subscribe('profile:changedContactInfoWasSaved', (newProfile) => { 
@@ -54,6 +55,14 @@ export class UserService {
 		this._localStorageService.set('user', user);
 	}
 
+	getTutorialHasBeenShown() {
+		return this.tutorialHasBeenShown;
+	}
+
+	setTutorialHasBeenShown(b) {
+		this.tutorialHasBeenShown = b;
+	}
+
 	verifyAndLoginUser(username, password) {
 		let self = this;
 		let url = environment.apiUrl + "/api/verifyCredentials";
@@ -64,6 +73,8 @@ export class UserService {
 					(userObj) => { 
 						console.log("Credentials Valid!");
 						resolve(JSON.parse(userObj["_body"]));
+					 }, (err) => {
+					 	reject(err);
 					 });
 			});
 
