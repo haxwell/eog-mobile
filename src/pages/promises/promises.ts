@@ -58,7 +58,9 @@ export class PrmPage {
 			});
 		}
 
-		this.requestMsgs = this._prmDetailService.getPrmDetailMessages(tmp);
+		if (tmp["userId"] !== this._userService.getCurrentUser()["id"] )
+			this.requestMsgs = this._prmDetailService.getPrmDetailMessages(tmp);
+
 		this.readOnly = navParams.get('readOnly') || false;
 		this.callback = navParams.get('callback') || function() { return new Promise((resolve, reject) => { resolve(); }) };
 	}
@@ -190,7 +192,8 @@ export class PrmPage {
 	}
 
 	onIndividualKeywordPress(item) {
-		return this.onAddKeywordBtnTap(item);
+		if (!this.isReadOnly())
+			return this.onAddKeywordBtnTap(item);
 	}
 
 	onAddKeywordBtnTap(evt) {

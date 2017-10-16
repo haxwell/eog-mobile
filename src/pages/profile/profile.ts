@@ -138,8 +138,7 @@ export class ProfilePage {
 	}
 
 	onPromiseBtnTap(item) { 
-		if (!this.isReadOnly())
-			this.navCtrl.push(PrmPage, { prm: item, callback:  this.PrmAndDreamCallback });
+		this.navCtrl.push(PrmPage, { prm: item, callback:  this.PrmAndDreamCallback, readOnly: this.isReadOnly() });
 	}
 
 	onNewDreamBtnTap(evt) {

@@ -26,10 +26,10 @@
 				<button *ngIf="!isReadOnly()" ion-button icon-only small color="danger" (click)="onModifyKeywordBtnTap($event)"><ion-icon name="add"></ion-icon></button>								
 			</ion-card-header>
 			<ion-card-content>
-				<span *ngIf="userHasNoKeywords() && !isReadOnly">
+				<span *ngIf="userHasNoKeywords() && !isReadOnly()">
 					Keywords are descriptive words and phrases. Add some to describe you!
 				</span>
-				<span *ngIf="userHasNoKeywords() && isReadOnly">
+				<span *ngIf="userHasNoKeywords() && isReadOnly()">
 					This user has not defined any keywords yet.
 				</span>
 				<span class="blockItem" *ngFor="let item of model.keywords" (press)="onIndividualKeywordPress(item)">

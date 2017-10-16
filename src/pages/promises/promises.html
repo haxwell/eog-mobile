@@ -3,9 +3,12 @@
 		<ion-title *ngIf="isNewObject()">
 			Create New Promise
 		</ion-title>
-		<ion-title *ngIf="!isNewObject()">
+		<ion-title *ngIf="!isNewObject() && !isReadOnly()">
 			Edit Your Promise
 		</ion-title>
+		<ion-title *ngIf="!isNewObject() && isReadOnly()">
+			Promise Detail
+		</ion-title>		
 	</ion-navbar>
 </ion-header>
 
@@ -48,9 +51,9 @@
 			<ion-item>
 				Rules
 				<button ion-button icon-only small color="danger" [hidden]="isReadOnly()" (click)="onNewRuleBtnTap($event)"><ion-icon name="add"></ion-icon></button><br/>
-				<i>This promise requires {{getRequiredPointsQuantity()}} points<br/></i>
+				<i>This promise requires {{getRequiredPointsQuantity()}} points</i>
 				<div *ngIf="areRecommendationsRequired()">
-					<i>and the following recommendations: </i><br/>
+					<i> and the following recommendations: </i><br/>
 					<span class="blockItem" *ngFor="let rec of getRequiredUserRecommendations()">
 						{{rec.userObj.realname}}<br/>
 					</span>
