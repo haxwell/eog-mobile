@@ -28,6 +28,7 @@ export class TutorialPage {
 
 	onDoNotShowAgainBtnTap() {
 		this._userService.setShowTutorialOnLogin(false);
+		this.viewCtrl.dismiss();
 	}
 
 	isCurrentStep(n) {
