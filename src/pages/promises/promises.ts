@@ -58,7 +58,7 @@ export class PrmPage {
 			});
 		}
 
-		if (tmp["userId"] !== this._userService.getCurrentUser()["id"] )
+		if (tmp !== undefined && tmp["userId"] !== this._userService.getCurrentUser()["id"] )
 			this.requestMsgs = this._prmDetailService.getPrmDetailMessages(tmp);
 
 		this.readOnly = navParams.get('readOnly') || false;
