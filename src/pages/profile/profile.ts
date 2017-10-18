@@ -10,8 +10,6 @@ import { UserMetadataService } from '../../app/_services/user-metadata.service'
 import { RecommendationService } from '../../app/_services/recommendation.service'
 import { PointsService } from '../../app/_services/points.service'
 
-//import { ProfileHeader } from '../../pages/common/profile-header/profile-header'
-
 import { PrmPage } from '../promises/promises'
 import { DreamPage } from '../dreams/dreams'
 import { KeywordEntryPage } from '../keyword.entry/keyword.entry'
