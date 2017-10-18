@@ -14,6 +14,7 @@ import { PrmDetailService } from '../../app/_services/prm-detail.service';
 import { UserService } from '../../app/_services/user.service';
 import { Constants } from '../../_constants/constants';
 
+import Moment from 'moment'
 
 @Component({
   selector: 'page-prm-detail',
@@ -43,11 +44,14 @@ export class PrmPage {
 
 		let tmp = navParams.get('prm');
 
+		this.model = tmp || this._prmService.getDefaultModel();
+
 		if (tmp === undefined) {
-			this.model = this._prmService.getDefaultModel();
 			this.new = true;
 		} else {
-			this.model = Object.assign({}, tmp);
+			this._prmService.setPrmMetadata(tmp).then((prm) => {
+				this.setModel(Object.assign({}, prm));
+			});
 		}
 
 		if (this.areRecommendationsRequired(this.model)) {
@@ -67,6 +71,10 @@ export class PrmPage {
 
 	ngOnInit() {
 
+	}
+
+	setModel(m) {
+		this.model = m;
 	}
 
 	isReadOnly() {
@@ -142,7 +150,7 @@ export class PrmPage {
 	}
 
 	isRequestBtnVisible() {
-		return this.isReadOnly() && this._prmMetadataService.getMetadataValue(this.model, this._constants.FUNCTION_KEY_PRM_IS_REQUESTABLE);
+		return !this.isNewObject() && this.isReadOnly() && this._prmMetadataService.getMetadataValue(this.model, this._constants.FUNCTION_KEY_PRM_IS_REQUESTABLE);
 	}
 
 	requestCallback = (_params) => {
@@ -251,5 +259,26 @@ export class PrmPage {
 
 	areRecommendationsRequired(prm) {
 		return (this.model["requiredUserRecommendations"] && this.model["requiredUserRecommendations"].length > 0);
+	}
+
+	getFirstFulfilledText() {
+		if (this.model["fulfillment_dates"] !== undefined && this.model["fulfillment_dates"].length > 0) 
+			return Moment(this.model["fulfillment_dates"][0]).fromNow();
+		else
+			return "-- never --";
+	}
+
+	getNumberOfComplaints() {
+		if (this.model["num_of_complaints"] !== undefined) 
+			return this.model["num_of_complaints"];
+		else
+			return "--";
+	}
+
+	getTotalPointsEarned() {
+		if (this.model["total_points_earned"] !== undefined) 
+			return this.model["total_points_earned"];
+		else
+			return "--";
 	}
 }

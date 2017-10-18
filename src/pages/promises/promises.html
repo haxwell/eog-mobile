@@ -76,6 +76,12 @@
 			</span>
 		</ion-card-content>
 	</ion-card>
+	<ion-card>
+		<ion-card-content>
+			<span>First Fulfilled: {{getFirstFulfilledText()}} / Total Points Earned: {{getTotalPointsEarned()}} / Total Complaints: {{getNumberOfComplaints()}}</span>
+		</ion-card-content>
+	</ion-card>
+
 	<ion-row>
 		<button ion-button [hidden]="!isDeleteBtnVisible()" color="danger" (click)="onDeleteBtnTap($event)">Delete</button>			
 		<button ion-button [hidden]="!isSaveBtnVisible()" [disabled]="!isSaveBtnEnabled()" (click)="onSaveBtnTap($event)">Save</button>

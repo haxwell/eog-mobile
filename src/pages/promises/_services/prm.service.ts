@@ -34,6 +34,44 @@ export class PrmService {
 		});
 	}
 
+	setPrmMetadata(prm) {
+
+		// TODO:
+		// There's a piece of the framework here.. An object which takes tuples of apiURLs,domainObjects, and DO-property-names
+		// Perhaps it takes the domain object, then apiURL and DO property name pairs. Then returns a promise which will have
+		// set the properties to the results of all the API calls when it resolves. So I don't have to check each property in each
+		//  method here. I've done this pattern (checking each) in other places too.
+
+		return new Promise((resolve, reject) => {
+			let url = environment.apiUrl + "/api/promises/" + prm["id"] + "/fulfillment-dates"; 
+			this._apiService.get(url)
+			.subscribe((data) => {
+				prm["fulfillment_dates"] = JSON.parse(data["_body"]);
+				if (prm["fulfillment_dates"] !== undefined && prm["num_of_complaints"] !== undefined && prm["total_points_earned"] !== undefined) {
+					resolve(prm);
+				}
+			});
+
+			url = environment.apiUrl + "/api/promises/" + prm["id"] + "/complaint-count"; 
+			this._apiService.get(url)
+			.subscribe((data) => {
+				prm["num_of_complaints"] = JSON.parse(data["_body"]);
+				if (prm["fulfillment_dates"] !== undefined && prm["num_of_complaints"] !== undefined && prm["total_points_earned"] !== undefined) {
+					resolve(prm);
+				}
+			});
+
+			url = environment.apiUrl + "/api/promises/" + prm["id"] + "/total-points-earned"; 
+			this._apiService.get(url)
+			.subscribe((data) => {
+				prm["total_points_earned"] = JSON.parse(data["_body"]);
+				if (prm["fulfillment_dates"] !== undefined && prm["num_of_complaints"] !== undefined && prm["total_points_earned"] !== undefined) {
+					resolve(prm);
+				}
+			});
+		});
+	}
+
 	save(model) {
 		let data = this.JSON_to_URLEncoded(model, undefined, undefined);
 		console.log(data);
