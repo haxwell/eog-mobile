@@ -30,60 +30,102 @@ export class DomainObjectMetadataService {
 
 	}
 
-	mapp = {}
-	mapUserToMetadataResults = {};
+	mapUserIdToCachedCalculationResultObjects = {}
+	mapUserIdToInProgressCalculationObjects = {};
 	mapPropertyKeyToCalcFunction: Array<Object> = [];
 
 	init() {
-		this.mapp = {};
-		this.mapUserToMetadataResults = {};
-	}
-
-	markDirty(params) {
-		let user = params["user"] || this._userService.getCurrentUser()
-		let domainObject = params["domainObject"];
-		
-		if (domainObject !== undefined && this.mapUserToMetadataResults[user["id"]] !== undefined ) {
-			let filteredMap = this.mapUserToMetadataResults[user["id"]].filter((result) => { return result["domainObj"]["id"] !== domainObject["id"]; });
-			this.mapUserToMetadataResults[user["id"]] = filteredMap;
-
-			filteredMap = this.mapp[user["id"]].filter((result) => { return result["domainObj"]["id"] !== domainObject["id"]; });
-			this.mapp[user["id"]] = filteredMap;
-		}
+		this.mapUserIdToCachedCalculationResultObjects = {};
+		this.mapUserIdToInProgressCalculationObjects = {};
 	}
 
 	addMetadataCalculationFunction(functionKey, _func) {
 		this.mapPropertyKeyToCalcFunction.push({property: functionKey, func: _func}); 
 	}
 
-	getMetadataValueResult(_domainObj, functionKey): Object {
-		if (_domainObj === undefined) {
-			console.log("ERROR: _domainObj cannot be undefined.");
+	getMetadataValue(_domainObject, functionKey) {
+		let self = this;
+		if (this.mapPropertyKeyToCalcFunction.length === 0) {
+			console.log("ERROR: MetadataService not initialized.");
+			return undefined; // TODO: handle this error better
+		}
+
+		let user = self._userService.getCurrentUser();
+		if (self.mapUserIdToCachedCalculationResultObjects[user["id"]] === undefined) {
+			self.mapUserIdToCachedCalculationResultObjects[user["id"]] = [];
+		}
+
+		// get the calculated value we saved the last time we came through here
+		let obj = self.mapUserIdToCachedCalculationResultObjects[user["id"]].find((obj) => { 
+			return self.isObjectTheResultOfTheGivenDomainObjectAndFunctionKey(obj, _domainObject, functionKey);
+		});
+
+		// check if this calculated value from the last time has expired.. if so, refresh it.
+		let time = new Date().getTime();
+		if (obj != undefined && obj["expirationTime"] < time) {
+			let coll = self.mapUserIdToCachedCalculationResultObjects[user["id"]].filter((obj) => {
+				return !self.isObjectTheResultOfTheGivenDomainObjectAndFunctionKey(obj, _domainObject, functionKey);
+			})
+
+			self.mapUserIdToCachedCalculationResultObjects[user["id"]] = coll;
+			obj = undefined;
+		}
+
+		// if there is no calculated value from the last time
+		if (obj === undefined) {
+
+			// then do the calculation
+			let mvr : any = this.getMetadataValueResult(_domainObject, functionKey);
+
+			// the result of the calculation will be either a Javascript Promise...
+			if ( mvr !== undefined && typeof mvr.then == 'function' )
+				 mvr.then((data) => {
+				 	self.setValueForCachedCalculationResultObject(user, data, _domainObject, functionKey);
+				});
+			else { // the result of the calculation is an actual value, or object.
+				self.setValueForCachedCalculationResultObject(user, mvr, _domainObject, functionKey);
+			}
+		}
+
+		// return the calculated value from last time, or undefined.
+		return (obj === undefined ? undefined : obj["value"]);
+	}
+
+	getMetadataValueResult(_domainObject, functionKey): Object {
+		let self = this;
+		if (_domainObject === undefined) {
+			console.log("ERROR: _domainObject cannot be undefined.");
 			return undefined; // TODO Handle this error better
 		}
 
-		let rtn = undefined;
-		let user = this._userService.getCurrentUser();
+		let user = self._userService.getCurrentUser();
+		if (self.mapUserIdToInProgressCalculationObjects[user["id"]] === undefined) 
+			self.mapUserIdToInProgressCalculationObjects[user["id"]] = [];
 
-		if (this.mapUserToMetadataResults[user["id"]] === undefined) 
-			this.mapUserToMetadataResults[user["id"]] = [];
-
-		let obj = this.mapUserToMetadataResults[user["id"]].find((result) => {
-			return result["domainObj"]["id"] === _domainObj["id"] && result["property"] === functionKey; 
+		let obj = self.mapUserIdToInProgressCalculationObjects[user["id"]].find((result) => {
+			return self.isObjectTheResultOfTheGivenDomainObjectAndFunctionKey(result, _domainObject, functionKey);
 		});
 
-		if (obj === undefined) {
-			let calcFunctionObject = this.getCalcFunctionObject(functionKey);
-			let calcFunc: (Any) => Observable<any> = calcFunctionObject["func"];
-			//if (calcFunctionObject["func"].hasOwnProperty('then'))
+		// check if this calculated value from the last time has expired.. if so, refresh it.
+		let time = new Date().getTime();
+		if (obj != undefined && obj["expirationTime"] < time) {
+			let coll = self.mapUserIdToInProgressCalculationObjects[user["id"]].filter((obj) => {
+				return !self.isObjectTheResultOfTheGivenDomainObjectAndFunctionKey(obj, _domainObject, functionKey);
+			})
 
-			obj = {domainObj: _domainObj, property: functionKey, value: calcFunc(_domainObj)};
-			this.mapUserToMetadataResults[user["id"]].push(obj);
+			self.mapUserIdToInProgressCalculationObjects[user["id"]] = coll;
+			obj = undefined;
 		}
 
-		rtn = obj["value"];
+		if (obj === undefined) {
+			let calcFunctionObject = self.getCalcFunctionObject(functionKey);
+			let calcFunc: (Any) => Observable<any> = calcFunctionObject["func"];
 
-		return rtn;
+			obj = self.createDomainObjectMetadataCalculationObject(calcFunc(_domainObject), _domainObject, functionKey );
+			self.mapUserIdToInProgressCalculationObjects[user["id"]].push(obj);
+		}
+
+		return obj["value"];
 	}
 
 	getCalcFunctionObject(functionKey) {
@@ -92,53 +134,43 @@ export class DomainObjectMetadataService {
 			});
 	}
 
-	getMetadataValue(_domainObj, functionKey) {
-		if (this.mapPropertyKeyToCalcFunction.length === 0) {
-			console.log("ERROR: MetadataService not initialized.");
-			return undefined; // TODO: handle this error better
-		}
-
-		let user = this._userService.getCurrentUser();
-		if (this.mapp[user["id"]] === undefined) {
-			this.mapp[user["id"]] = [];
-		}
-
-		let obj = this.mapp[user["id"]].find((obj) => { 
-			return (obj["domainObj"]["id"] === _domainObj["id"] && obj["property"] === functionKey); 
-		});
-
-		if (obj === undefined) {
-			let rtn : any = this.getMetadataValueResult(_domainObj, functionKey);
-
-			if ( rtn !== undefined && typeof rtn.then == 'function' )
-				 rtn.then((data) => {
-					obj = {domainObj: _domainObj, property: functionKey, value: data};
-					
-					let oldObj = this.mapp[user["id"]].find((o) => { 
-						return o["domainObj"]["id"] === _domainObj["id"] && o["property"] === functionKey; 
-					})
-
-					if (oldObj !== undefined)
-						oldObj["value"] = data;
-					else
-						this.mapp[user["id"]].push(obj);
-				});
-			else {
-				obj = {domainObj: _domainObj, property: functionKey, value: rtn};
-
-				let oldObj = this.mapp[user["id"]].find((o) => { 
-					return o["domainObj"]["id"] === _domainObj["id"] && o["property"] === functionKey; 
-				})
-
-				if (oldObj !== undefined)
-					oldObj["value"] = rtn;
-				else
-					this.mapp[user["id"]].push(obj);
-			}
-		}
-
-		return obj ? obj["value"] : undefined;
+	createDomainObjectMetadataCalculationObject(val, _domainObject, functionKey) {
+		return {domainObject: _domainObject, property: functionKey, value: val, expirationTime: new Date().getTime() + 15000};
 	}
 
+	isObjectTheResultOfTheGivenDomainObjectAndFunctionKey(calculationResultObject, domainObject, functionKey) {
+		return 	calculationResultObject["domainObject"]["id"] === domainObject["id"] &&
+				calculationResultObject["property"] === functionKey; 	
+	}
+
+	setValueForCachedCalculationResultObject(user, data, _domainObject, functionKey) {
+		let self = this;
+		
+		let currentlyCachedCalculationResultObject = 
+			self.mapUserIdToCachedCalculationResultObjects[user["id"]].find((o) => { 
+				return self.isObjectTheResultOfTheGivenDomainObjectAndFunctionKey(o, _domainObject, functionKey);
+			})
+
+		if (currentlyCachedCalculationResultObject !== undefined) {
+			currentlyCachedCalculationResultObject["value"] = data;
+		}
+		else {
+			let obj = self.createDomainObjectMetadataCalculationObject(data, _domainObject, functionKey);
+			self.mapUserIdToCachedCalculationResultObjects[user["id"]].push(obj);
+		}
+	}
+
+	markDirty(params) {
+		let user = params["user"] || this._userService.getCurrentUser()
+		let domainObject = params["domainObject"];
+		
+		if (domainObject !== undefined && this.mapUserIdToInProgressCalculationObjects[user["id"]] !== undefined ) {
+			let filteredMap = this.mapUserIdToInProgressCalculationObjects[user["id"]].filter((result) => { return result["domainObject"]["id"] !== domainObject["id"]; });
+			this.mapUserIdToInProgressCalculationObjects[user["id"]] = filteredMap;
+
+			filteredMap = this.mapUserIdToCachedCalculationResultObjects[user["id"]].filter((result) => { return result["domainObject"]["id"] !== domainObject["id"]; });
+			this.mapUserIdToCachedCalculationResultObjects[user["id"]] = filteredMap;
+		}
+	}
 }
 
