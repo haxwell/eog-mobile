@@ -39,16 +39,8 @@ export class RequestsOutgoingView {
 
 	replaceModelElement(request) {
 		let temp = this.model.filter((obj) => { return obj["id"] !== request["id"]; });
-		temp.push(this.changePromiseAttributeToPrm(request));
+		temp.push(request);
 		this.model = temp;
-	}
-
-	// hack
-	changePromiseAttributeToPrm(request) {
-		request["prm"] = Object.assign({}, request["promise"]);
-		delete request["promise"];					
-
-		return request;
 	}
 
 	ngOnInit() {
