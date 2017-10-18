@@ -62,7 +62,7 @@ export class RecommendationService {
 		});
 	}
 
-	getUserHasNecessaryRecommendations(_prm, request?) {
+	getUserHasNecessaryRecommendations(_prm) {
 		let self = this;
 
 		return new Promise((resolve, reject) => {
