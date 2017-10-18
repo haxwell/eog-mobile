@@ -39,7 +39,9 @@ export class RequestsService {
 		});
 	}
 
-	getArchivedUserRequestsForPrm(prm) {if (this.archivedUserRequestsForPrmPromiseCache[prm["id"]] === undefined) {
+	getArchivedUserRequestsForPrm(prm) {
+
+		if (this.archivedUserRequestsForPrmPromiseCache[prm["id"]] === undefined) {
 			this.archivedUserRequestsForPrmPromiseCache[prm["id"]] = null;
 			this.initArchivedUserRequestsForPrmPromiseCache(prm); 
 		}
