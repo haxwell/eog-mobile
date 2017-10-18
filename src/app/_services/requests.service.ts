@@ -80,7 +80,7 @@ export class RequestsService {
 						if (req["declinedReasonCode"] === null) {
 							req["declinedReasonCode"] = {id: undefined, text: undefined};
 						} else {
-							let drc = drcs.find((obj) => { return req["declinedReasonCode"] });
+							let drc = drcs.find((obj) => { return obj["id"] === req["declinedReasonCode"] });
 							req["declinedReasonCode"] = {id: drc["id"], text: drc["text"]};
 						}
 					});

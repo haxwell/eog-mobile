@@ -5,6 +5,7 @@ import { Events } from 'ionic-angular';
 
 import { UserService } from '../../app/_services/user.service';
 import { RequestsService } from '../../app/_services/requests.service';
+import { DeclineReasonCodeService } from '../../app/_services/declined-reason-codes.service';
 
 import { Constants } from '../../_constants/constants';
 import { environment } from '../../_environments/environment';
@@ -18,6 +19,7 @@ export class WebsocketService {
 
 	constructor(private _userService: UserService,
 				private _requestsService: RequestsService,
+				private _declineReasonCodeService: DeclineReasonCodeService,
 				private toastCtrl: ToastController,
 				private _constants: Constants,
 				public _events: Events) { 
@@ -119,7 +121,16 @@ export class WebsocketService {
 		let request = data["request"];
 		let dou_realname = request["directionallyOppositeUser"]["realname"];
 
-		data["message"] = dou_realname + ' has declined your request, ' + request["prm"]["title"];
+		this._declineReasonCodeService.getDeclineReasonCodes().then((drcs: Array<Object>) => {
+			if (request["declinedReasonCode"] === null) {
+				request["declinedReasonCode"] = {id: undefined, text: undefined};
+			} else {
+				let drc = drcs.find((obj) => { return obj["id"] === request["declinedReasonCode"] });
+				request["declinedReasonCode"] = {id: drc["id"], text: drc["text"]};
+			}
+		});
+
+		data["message"] = dou_realname + ' has declined your request, ' + request["prm"]["title"] + ".";
 
 		this.presentToast(data["message"]);
 		this._events.publish('request:declined', data);
