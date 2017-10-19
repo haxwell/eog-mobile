@@ -1,7 +1,10 @@
 <ion-header>
 	<ion-navbar>
-		<ion-title>
-			Profile
+		<ion-title *ngIf="isReadOnly()">
+			View Another's Profile
+		</ion-title>
+		<ion-title *ngIf="!isReadOnly()">
+			Edit Your Profile
 		</ion-title>
 	</ion-navbar>
 </ion-header>
