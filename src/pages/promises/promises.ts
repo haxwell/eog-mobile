@@ -54,6 +54,12 @@ export class PrmPage {
 			});
 		}
 
+        let getUserPromise = this._userService.getUser(this.model["userId"]);
+        getUserPromise.then((user) => {
+            this.model["directionallyOppositeUser"] = user;
+            delete this.model["userId"];
+        });
+
 		if (this.areRecommendationsRequired(this.model)) {
 			this.model["requiredUserRecommendations"].forEach((rec) => {
 				this._userService.getUser(rec["requiredRecommendUserId"]).then((user) => {
