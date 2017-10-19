@@ -102,18 +102,22 @@ export class HomePage {
                     
                     /* Calculate who's the user on the other side.. */
 
-                    self._userService.getUser(obj["userId"]).then((user) => {
+                    let getUserPromise = self._userService.getUser(obj["userId"]);
+                    getUserPromise.then((user) => {
                         obj["directionallyOppositeUser"] = user;
                         delete obj["userId"];
 
+                        // if there are no prms with a valid userId property.. (cause we're deleting them..)
                         if (!data.some((obj) => { return obj["userId"] != undefined; })) {
+                          
+                          // then we're done setting DOU on each promise..
                           rtn["prms"] = data;
+
+                          if (rtn["users"] !== undefined)
+                              resolve(rtn);
                         }
                     });
                 });
-
-                if (rtn["users"] !== undefined)
-                    resolve(rtn);
             });
 
             self._searchService.searchUsers(query).then((data: Array<Object>) => {
