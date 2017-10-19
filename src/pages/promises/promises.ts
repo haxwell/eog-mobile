@@ -129,6 +129,10 @@ export class PrmPage {
 		return this.requestMsgs !== undefined && this.requestMsgs.some((obj) => { return obj["type"] === "timeRemaining"});
 	}
 
+	getPrmOwnerName() {
+		return this.model["directionallyOppositeUser"] !== undefined ? this.model["directionallyOppositeUser"]["realname"] : "";
+	}
+
 	getRequestMessages() {
 		return this.requestMsgs;
 	}
