@@ -31,9 +31,10 @@ export class RequestsService {
 			let data =	"requestingUserId=" + user["id"] + "&requestedPromiseId=" + prm["id"] + 
 						"&requestingDreamId=" + dream["id"];
 			
-			this._apiService.post(url, data).subscribe((obj) => {
-				let model = JSON.parse(obj["_body"]);
-				this._events.publish('request:saved', {request: model});
+			let self = this;
+			self._apiService.post(url, data).subscribe((obj) => {
+				let model = self.changePromiseAttributeToPrm( JSON.parse(obj["_body"]) );
+				self._events.publish('request:saved', {request: model});
 				resolve(model);
 			});
 		});
