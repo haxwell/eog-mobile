@@ -32,6 +32,7 @@ import { CompleteRequestPage } from '../pages/requests/incoming/_pages/complete.
 import { SecondCompleteRequestPage } from '../pages/requests/incoming/_pages/second.complete.request';
 import { CompleteOutgoingRequestPage } from '../pages/requests/outgoing/_pages/complete.request';
 import { NotCompleteOutgoingRequestPage } from '../pages/requests/outgoing/_pages/not.complete.request';
+import { PermanentlyDismissUnresolvedRequestPage } from '../pages/requests/outgoing/_pages/permanently-dismiss-unresolved-request';
 import { CancelOutgoingRequestPage } from '../pages/requests/outgoing/_pages/cancel.request';
 import { RequestContactInfoPage } from '../pages/requests/_pages/contact.info';
 import { DreamPage } from '../pages/dreams/dreams';
@@ -91,6 +92,7 @@ import { Constants } from '../_constants/constants';
     SecondCompleteRequestPage,
     CompleteOutgoingRequestPage,
     NotCompleteOutgoingRequestPage,
+    PermanentlyDismissUnresolvedRequestPage,
     CancelOutgoingRequestPage,
     RequestContactInfoPage,
     SearchPage,
@@ -134,6 +136,7 @@ import { Constants } from '../_constants/constants';
     SecondCompleteRequestPage,
     CompleteOutgoingRequestPage,
     NotCompleteOutgoingRequestPage,
+    PermanentlyDismissUnresolvedRequestPage,
     CancelOutgoingRequestPage,
     RequestContactInfoPage,
     SearchPage,

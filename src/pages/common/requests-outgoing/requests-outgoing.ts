@@ -3,6 +3,7 @@ import { NavController } from 'ionic-angular';
 import { ModalController } from 'ionic-angular';
 import { Events } from 'ionic-angular';
 
+import { PermanentlyDismissUnresolvedRequestPage } from '../../../pages/requests/outgoing/_pages/permanently-dismiss-unresolved-request'
 import { NotCompleteOutgoingRequestPage } from '../../../pages/requests/outgoing/_pages/not.complete.request'
 import { CompleteOutgoingRequestPage } from '../../../pages/requests/outgoing/_pages/complete.request'
 import { CancelOutgoingRequestPage } from '../../../pages/requests/outgoing/_pages/cancel.request'
@@ -155,6 +156,13 @@ export class RequestsOutgoingView {
 	onViewContactInfoBtnTap(item) {
 		let modal = this.modalCtrl.create(ProfilePage, {user: item["directionallyOppositeUser"], readOnly: true});
 		modal.onDidDismiss(data => {  });
+		modal.present();
+	}
+
+	onPermanentlyDismissBtnTap(item) {
+		let self = this;
+		let modal = this.modalCtrl.create(PermanentlyDismissUnresolvedRequestPage, {request: item});
+		modal.onDidDismiss(data => { self.ngOnInit() });
 		modal.present();
 	}
 }

@@ -39,6 +39,7 @@ export class RequestsIncomingView {
 		_events.subscribe('request:cancelled', func);
 		_events.subscribe('request:completedAndApproved', func);
 		_events.subscribe('request:isInDispute', func);
+		_events.subscribe('request:inamicablyResolved', func);
 
 		_events.subscribe('prm:deleted', () => { 
 			this.ngOnInit(); 
@@ -71,6 +72,9 @@ export class RequestsIncomingView {
 					});
 			len -= this.getNumberOfMatchingElements((obj) => { 
 						return obj["deliveringStatusId"] === this._constants.REQUEST_STATUS_COMPLETED && obj["requestingStatusId"] === this._constants.REQUEST_STATUS_COMPLETED;
+					});
+			len -= this.getNumberOfMatchingElements((obj) => { 
+						return obj["deliveringStatusId"] === this._constants.REQUEST_STATUS_RESOLVED_BUT_DISPUTED && obj["requestingStatusId"] === this._constants.REQUEST_STATUS_NOT_COMPLETED;
 					});
 
 			rtn = len <= 0;

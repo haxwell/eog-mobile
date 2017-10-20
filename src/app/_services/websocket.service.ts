@@ -70,7 +70,11 @@ export class WebsocketService {
 				this.handleRequestCompletedAndApproved(data); 
 			} else if (request["deliveringStatusId"] === this._constants.REQUEST_STATUS_COMPLETED && request["requestingStatusId"] === this._constants.REQUEST_STATUS_NOT_COMPLETED) {
 				this.handleRequestIsInDispute(data); 
-			} else if (request["deliveringStatusId"] === this._constants.REQUEST_STATUS_DELETED) {
+			} else if (request["deliveringStatusId"] === this._constants.REQUEST_STATUS_RESOLVED_BUT_DISPUTED && request["requestingStatusId"] === this._constants.REQUEST_STATUS_NOT_COMPLETED) {
+				this.handleRequestWasInamicablyResolved(data);
+			}
+
+			else if (request["deliveringStatusId"] === this._constants.REQUEST_STATUS_DELETED) {
 				this.handleRequestDeleted(data); 
 			}
 		} else if (data["recommendation"] !== undefined) {
@@ -174,6 +178,16 @@ export class WebsocketService {
 
 		this.presentToast(data["message"]);
 		this._events.publish('request:isInDispute', data);
+	}
+
+	handleRequestWasInamicablyResolved(data) {
+		let request = data["request"];
+		let dou_realname = request["directionallyOppositeUser"]["realname"];
+
+		data["message"] = dou_realname + ' inamicably resolved the request, ' + request["prm"]["title"] + '. You got ' + request["requiredPointsQuantity"] / 2 + ' points.';
+
+		this.presentToast(data["message"]);
+		this._events.publish('request:inamicablyResolved', data);
 	}
 
 	handleRequestDeleted(data) {

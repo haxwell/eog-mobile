@@ -1,0 +1,21 @@
+<ion-header>
+	<ion-navbar>
+		<ion-title>
+			Dismiss an Unresolved Request
+		</ion-title>
+	</ion-navbar>
+</ion-header>
+
+<ion-content padding>
+	<ion-label>Dang it! Sorry for this bad experience.</ion-label>
+
+	<ion-label>Click YES! to permanently dismiss this request from your screen.</ion-label>
+
+	<ion-label>Do note, that half the agreed upon points will go to the other user.</ion-label>
+
+	<ion-row>
+		<button ion-button (click)="onCancelBtnTap($event)">Sorry, no.. Cancel</button>
+		<button ion-button (click)="onSaveBtnTap($event)">YES!</button>
+	</ion-row>
+
+</ion-content>
