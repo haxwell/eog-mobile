@@ -45,19 +45,20 @@ export class DeletePrmPage {
 
 			// sort them according to whether they are in progress
 			self.prmRequests.forEach((request) => {
-				if (self._requestMetadataService.getMetadataValue(request, self._constants.FUNCTION_KEY_REQUEST_IS_IN_PROGRESS)) {
-					if (self.prmRequestsInProgress === undefined)
-						self.prmRequestsInProgress = [];
+				self._requestMetadataService.getMetadataValue(request, self._constants.FUNCTION_KEY_REQUEST_IS_IN_PROGRESS).then((bool) => {
+					if (bool) {
+						if (self.prmRequestsInProgress === undefined)
+							self.prmRequestsInProgress = [];
 
-					self.prmRequestsInProgress.push(request);
-				}
-				else {
-					if (self.prmRequestsNotInProgress === undefined)
-						self.prmRequestsNotInProgress = [];
+						self.prmRequestsInProgress.push(request);
+					}
+					else {
+						if (self.prmRequestsNotInProgress === undefined)
+							self.prmRequestsNotInProgress = [];
 
-					self.prmRequestsNotInProgress.push(request);
-				}
-
+						self.prmRequestsNotInProgress.push(request);
+					}
+				})
 			});
 
 			self.isInitialized = true;
