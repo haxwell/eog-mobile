@@ -31,6 +31,7 @@ export class PrmPage {
 	requestMsgs = undefined;
 	newKeywords = [];
 	loading = undefined;
+	_isRequestBtnVisible = undefined;
 
 	constructor(public navCtrl: NavController, 
 				navParams: NavParams, 
@@ -54,11 +55,13 @@ export class PrmPage {
 			});
 		}
 
-        let getUserPromise = this._userService.getUser(this.model["userId"]);
-        getUserPromise.then((user) => {
-            this.model["directionallyOppositeUser"] = user;
-            delete this.model["userId"];
-        });
+        if (this.model["directionallyOppositeUser"] === undefined) {
+	        let getUserPromise = this._userService.getUser(this.model["userId"]);
+	        getUserPromise.then((user) => {
+	            this.model["directionallyOppositeUser"] = user;
+	            delete this.model["userId"];
+	        });
+        }
 
 		if (this.areRecommendationsRequired(this.model)) {
 			this.model["requiredUserRecommendations"].forEach((rec) => {
@@ -76,7 +79,10 @@ export class PrmPage {
 	}
 
 	ngOnInit() {
-
+		let self = this;
+		return self._prmMetadataService.getMetadataValue(self.model, self._constants.FUNCTION_KEY_PRM_IS_REQUESTABLE).then((bool) => { 
+			self._isRequestBtnVisible = bool && !self.isNewObject() && self.isReadOnly();
+		});
 	}
 
 	setModel(m) {
@@ -160,7 +166,7 @@ export class PrmPage {
 	}
 
 	isRequestBtnVisible() {
-		return !this.isNewObject() && this.isReadOnly() && this._prmMetadataService.getMetadataValue(this.model, this._constants.FUNCTION_KEY_PRM_IS_REQUESTABLE);
+		return this._isRequestBtnVisible;
 	}
 
 	requestCallback = (_params) => {

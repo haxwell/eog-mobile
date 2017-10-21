@@ -31,7 +31,8 @@ export class PrmMetadataService extends DomainObjectMetadataService {
 	}
 
 	getMetadataValue(_domainObj, functionKey): any {
-		return super.getMetadataValue(_domainObj, functionKey); // can I avoid doing this? Why isn't the parent method just called automagically?
+		let rtn = super.getMetadataValue(_domainObj, functionKey); // can I avoid doing this? Why isn't the parent method just called automagically?
+		return rtn;
 	}
 
 	// TODO, the User object needs to be a type, so that I can have two methods here. markDirty(domainObject), and markDirty(User, domainObject)
@@ -62,7 +63,8 @@ export class PrmMetadataService extends DomainObjectMetadataService {
 			(prm) => {
 				return new Promise((resolve, reject) => {
 					this._requestsService.getOutgoingRequestsForCurrentUser().then((data: Array<Object>) => {
-						resolve(data.some((obj) => { return obj["prm"]["id"] === prm["id"]; }));
+						let rsv = data.some((obj) => { return obj["prm"]["id"] === prm["id"]; });
+						resolve(rsv);
 					});
 				})
 			});

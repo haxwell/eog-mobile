@@ -74,21 +74,28 @@ export class DomainObjectMetadataService {
 		// if there is no calculated value from the last time
 		if (obj === undefined) {
 
-			// then do the calculation
-			let mvr : any = this.getMetadataValueResult(_domainObject, functionKey);
+			let rtn = new Promise((resolve, reject) => {
 
-			// the result of the calculation will be either a Javascript Promise...
-			if ( mvr !== undefined && typeof mvr.then == 'function' )
-				 mvr.then((data) => {
-				 	self.setValueForCachedCalculationResultObject(user, data, _domainObject, functionKey);
-				});
-			else { // the result of the calculation is an actual value, or object.
-				self.setValueForCachedCalculationResultObject(user, mvr, _domainObject, functionKey);
-			}
+				// then do the calculation
+				let mvr : any = this.getMetadataValueResult(_domainObject, functionKey);
+
+				// the result of the calculation will be either a Javascript Promise...
+				if ( mvr !== undefined && typeof mvr.then == 'function' )
+					 mvr.then((data) => {
+					 	self.setValueForCachedCalculationResultObject(user, data, _domainObject, functionKey);
+					 	resolve(data);
+					});
+				else { // the result of the calculation is an actual value, or object.
+					self.setValueForCachedCalculationResultObject(user, mvr, _domainObject, functionKey);
+					resolve(mvr);
+				}
+			});
+
+			return rtn;
 		}
 
-		// return the calculated value from last time, or undefined.
-		return (obj === undefined ? undefined : obj["value"]);
+		// return the calculated value from last time
+		return new Promise((resolve, reject) => { resolve(obj["value"]); });
 	}
 
 	getMetadataValueResult(_domainObject, functionKey): Object {
