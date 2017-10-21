@@ -63,7 +63,7 @@
         "@types/node": "^8.0.28",
         "angular2-template-loader": "^0.6.2",
         "html-loader": "^0.5.1",
-        "ionic": "3.13.0",
+        "ionic": "3.13.2",
         "ionic-mocks": "^1.0.1",
         "istanbul-instrumenter-loader": "^3.0.0",
         "jasmine": "^2.8.0",
