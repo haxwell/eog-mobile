@@ -25,6 +25,7 @@ export class HomePage {
     _isSearchFieldVisible = false;
     items = {};
     showTutorialPromise = undefined;
+    _mapPrmIdToMetadataValue = {};
 
     constructor(public navCtrl: NavController,
                 private _modalCtrl: ModalController, 
@@ -46,6 +47,8 @@ export class HomePage {
 
         this._prmMetadataService.reset();
         this._prmMetadataService.init();
+
+        this._mapPrmIdToMetadataValue = {};
     }
 
     ionViewWillEnter() {
@@ -216,40 +219,43 @@ export class HomePage {
     return this.user;
   }
 
+  getMetadataValue(prm, functionKey, rtnFunction) {
+      if (this._mapPrmIdToMetadataValue[prm["id"]] === undefined)
+          this._mapPrmIdToMetadataValue[prm["id"]] = [];
+
+      if (this._mapPrmIdToMetadataValue[prm["id"]][functionKey] === undefined) {
+          this._mapPrmIdToMetadataValue[prm["id"]][functionKey] = null;
+
+          this._prmMetadataService.getMetadataValue(prm, functionKey).then((bool) => {
+              this._mapPrmIdToMetadataValue[prm["id"]][functionKey] = bool;
+          })
+      }
+
+      return rtnFunction(this._mapPrmIdToMetadataValue[prm["id"]][functionKey]);
+  }
+
   hasPrmBeenPreviouslyRequested(prm) {
-    return (this._prmMetadataService.getMetadataValue(prm, this._constants.FUNCTION_KEY_USER_HAS_PREVIOUSLY_REQUESTED_PRM) === true);
+      return this.getMetadataValue(prm, this._constants.FUNCTION_KEY_USER_HAS_PREVIOUSLY_REQUESTED_PRM, (rtn) => { return rtn === true;} );
   }
 
   areRecommendationsRequired(prm) {
-    return (this._prmMetadataService.getMetadataValue(prm, this._constants.FUNCTION_KEY_PRM_REQUIRES_RECOMMENDATIONS) === true);  
+      return this.getMetadataValue(prm, this._constants.FUNCTION_KEY_PRM_REQUIRES_RECOMMENDATIONS, (rtn) => { return rtn === true;} );
   }
 
   getNecessaryRecommendationsIconColor(prm) {
-    if (this._prmMetadataService.getMetadataValue(prm, this._constants.FUNCTION_KEY_USER_HAS_NECESSARY_RECOMMENDATIONS) === true)
-      return "green";
-    else
-      return "red";
+      return this.getMetadataValue(prm, this._constants.FUNCTION_KEY_USER_HAS_NECESSARY_RECOMMENDATIONS, (rtn) => { return rtn === true ? "green" : "red";} );
   }
 
   getAlreadyRequestedIconColor(prm) {
-    if (this._prmMetadataService.getMetadataValue(prm, this._constants.FUNCTION_KEY_USER_HAS_CURRENTLY_REQUESTED_PRM) === false)
-      return "green";
-    else
-      return "red";
+      return this.getMetadataValue(prm, this._constants.FUNCTION_KEY_USER_HAS_CURRENTLY_REQUESTED_PRM, (rtn) => { return rtn === true ? "red" : "green";} );      
   }
 
   getSufficientTimeIconColor(prm) {
-    if (this._prmMetadataService.getMetadataValue(prm, this._constants.FUNCTION_KEY_USER_IS_PAST_REQUEST_AGAIN_DATE) === true)
-      return "green";
-    else
-      return "red";
+      return this.getMetadataValue(prm, this._constants.FUNCTION_KEY_USER_IS_PAST_REQUEST_AGAIN_DATE, (rtn) => { return rtn === true ? "green" : "red";} );      
   }
 
   getSufficientPointsIconColor(prm) {
-    if (this._prmMetadataService.getMetadataValue(prm, this._constants.FUNCTION_KEY_USER_HAS_SUFFICIENT_POINTS) === true)
-      return "green";
-    else
-      return "red";
+      return this.getMetadataValue(prm, this._constants.FUNCTION_KEY_USER_HAS_SUFFICIENT_POINTS, (rtn) => { return rtn === true ? "green" : "red";} );      
   }
 
 }
