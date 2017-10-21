@@ -30,6 +30,9 @@ export class ProfilePage {
 	loading = undefined;
 	isExiting = false;
 
+	_currentUserCanSendRecommendationToProfileUser = undefined;
+	_currentUserCanSendPointToProfileUser = undefined;
+
 	constructor(public navCtrl: NavController,
 				navParams: NavParams, 
 				public modalCtrl: ModalController,
@@ -81,6 +84,14 @@ export class ProfilePage {
 		}
 
 		this.setDirty(false);
+
+		this._userMetadataService.getMetadataValue(this.user, this._constants.FUNCTION_KEY_CAN_SEND_RECOMMENDATION_TO_USER).then((bool) => {
+			this._currentUserCanSendRecommendationToProfileUser = bool;
+		})
+
+		this._userMetadataService.getMetadataValue(this.user, this._constants.FUNCTION_KEY_CAN_SEND_POINT_TO_USER).then((bool) => {
+			this._currentUserCanSendPointToProfileUser = bool;
+		})
 	}
 
 	ionViewWillEnter() {
@@ -157,11 +168,11 @@ export class ProfilePage {
 	}
 
 	isSendRecommendBtnAvailable() {
-		return this._userMetadataService.getMetadataValue(this.user, this._constants.FUNCTION_KEY_CAN_SEND_RECOMMENDATION_TO_USER);
+		return this._currentUserCanSendRecommendationToProfileUser;
 	}
 
 	isSendPointBtnAvailable() {
-		return this._userMetadataService.getMetadataValue(this.user, this._constants.FUNCTION_KEY_CAN_SEND_POINT_TO_USER);
+		return this._currentUserCanSendPointToProfileUser;
 	}
 
 	onIndividualKeywordPress(item) {
