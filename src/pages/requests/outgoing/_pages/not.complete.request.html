@@ -1,23 +1,26 @@
 <ion-header>
 	<ion-navbar>
 		<ion-title>
-			Complete a Request
+			Mark Request Not Complete
 		</ion-title>
 	</ion-navbar>
 </ion-header>
 
 <ion-content padding>
-		<ion-label>You are about to indicate that you are NOT satisfied with a request someone did for you.</ion-label>
-		<ion-label>If you ARE satisfied, click Cancel below.</ion-label>
-		<br/>
-		<ion-label>{{request.title}}</ion-label>
-		<br/>
-		<ion-label>The spirit of this app is that you work it out amicably. So, if you mark</ion-label>
-		<ion-label>this incomplete, the other use will have the chance to weigh in one final</ion-label>
-		<ion-label>time. If they still say they did it, then this request will be closed, and</ion-label>
-		<ion-label>you will get half the points you put up, and they will get half. Also, a</ion-label>
-		<ion-label>negative interaction will be included in your public histories, so really try to</ion-label>
-		<ion-label>work this out!</ion-label>
+	<ion-label>You are about to indicate that you are NOT satisfied with a request someone did for you.</ion-label>
+	<ion-label>If you ARE satisfied, click Cancel below.</ion-label>
+	<ion-label>{{request.prm.title}}</ion-label>
+	
+	<ion-label>
+		Easyah is meant to bring folks together. We realize sometimes, to say the least, that's not meant to be.
+		Still, communication is the key. Take some time to reach out to the other user, and see if this can be 
+		worked out to everyone's satisfaction. <br/><br/>
+
+		If you still now want to mark this incomplete, the other user will have the chance to weigh in one final
+		time. If they still want to mark their side complete, then this request will be closed, and they will 
+		receive half of the points you've put up.<br/><br/>For quality assurance and training purposes, this li'l mishap may
+		be written to a database, so really try to work this out!
+	</ion-label>
 
 	<ion-row>
 		<ion-label>If you really want to mark this request incomplete,</ion-label>

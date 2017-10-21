@@ -19,21 +19,6 @@
 			</ion-item>
 		</ion-card-content>
 	</ion-card>
-	<ion-card *ngIf="getPendingRequests() !== undefined">
-		<ion-card-header>
-			<hr class="yellow"/>
-			<!-- Pending<br/> -->
-			<i>We're waiting for other users to respond to these requests you've made.</i>
-		</ion-card-header>
-		<ion-card-content *ngFor="let item of getPendingRequests()">
-			<ion-item>
-				The promise: <b>{{item.prm.title}}</b><br/>
-				Promised by: {{item.directionallyOppositeUser.realname}}<br/>
-				Your dream: {{item.dream.title}}<br/>
-				<button ion-button (click)="onCancelBtnTap(item)">Cancel</button>				
-			</ion-item>
-		</ion-card-content>
-	</ion-card>
 	<ion-card *ngIf="getCompletedAwaitingApprovalRequests() !== undefined">
 		<ion-card-header>
 			<hr class="yellow"/>
@@ -49,6 +34,21 @@
 				<button ion-button (click)="onCompleteBtnTap(item)">Complete</button>
 				<button ion-button (click)="onNotCompleteBtnTap(item)">Not Complete</button>
 
+			</ion-item>
+		</ion-card-content>
+	</ion-card>
+	<ion-card *ngIf="getPendingRequests() !== undefined">
+		<ion-card-header>
+			<hr class="yellow"/>
+			<!-- Pending<br/> -->
+			<i>We're waiting for other users to respond to these requests you've made.</i>
+		</ion-card-header>
+		<ion-card-content *ngFor="let item of getPendingRequests()">
+			<ion-item>
+				The promise: <b>{{item.prm.title}}</b><br/>
+				Promised by: {{item.directionallyOppositeUser.realname}}<br/>
+				Your dream: {{item.dream.title}}<br/>
+				<button ion-button (click)="onCancelBtnTap(item)">Cancel</button>				
 			</ion-item>
 		</ion-card-content>
 	</ion-card>
