@@ -55,10 +55,9 @@ export class RequestsIncomingView {
 	ngOnInit() {
 		var self = this;
 		this._requestsService.getIncomingRequestsForCurrentUser().then((data: Array<Object>) => {
-			
-					self.model = data;
-					self.dirty = false;
-			});
+			self.model = data;
+			self.dirty = false;
+		});
 	};
 
 	isRequestModelEmpty() {
