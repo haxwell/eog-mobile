@@ -62,10 +62,14 @@ export class PrmMetadataService extends DomainObjectMetadataService {
 			this._constants.FUNCTION_KEY_USER_HAS_CURRENTLY_REQUESTED_PRM, 
 			(prm) => {
 				return new Promise((resolve, reject) => {
-					this._requestsService.getOutgoingRequestsForCurrentUser().then((data: Array<Object>) => {
-						let rsv = data.some((obj) => { return obj["prm"]["id"] === prm["id"]; });
-						resolve(rsv);
-					});
+					if (prm["id"] === undefined)
+						resolve(false);
+					else {
+						this._requestsService.getOutgoingRequestsForCurrentUser().then((data: Array<Object>) => {
+							let rsv = data.some((obj) => { return obj["prm"]["id"] === prm["id"]; });
+							resolve(rsv);
+						});
+					}
 				})
 			});
 
@@ -83,15 +87,19 @@ export class PrmMetadataService extends DomainObjectMetadataService {
 			this._constants.FUNCTION_KEY_USER_IS_PAST_REQUEST_AGAIN_DATE, 
 			(prm) => {
 				return new Promise((resolve, reject) => {
-					this._requestsService.getArchivedUserRequestsForPrm(prm).then((archivedRequests: Array<Object>) => {
-						if (archivedRequests.length > 0) {
-							resolve(archivedRequests.some((request) => {
-								let canRequestAgainDate = request["canRequestAgainDate"];
-								return (Moment(canRequestAgainDate) < Moment(new Date().getTime()));
-								}));
-						} else
-							resolve(null); // there is no PAST_REQUEST_AGAIN_DATE for this prm and user
-					});
+					if (prm["id"] === undefined)
+						resolve(null);
+					else {
+						this._requestsService.getArchivedUserRequestsForPrm(prm).then((archivedRequests: Array<Object>) => {
+							if (archivedRequests.length > 0) {
+								resolve(archivedRequests.some((request) => {
+									let canRequestAgainDate = request["canRequestAgainDate"];
+									return (Moment(canRequestAgainDate) < Moment(new Date().getTime()));
+									}));
+							} else
+								resolve(null); // there is no PAST_REQUEST_AGAIN_DATE for this prm and user
+						});
+					}
 				})
 			});
 
@@ -99,9 +107,13 @@ export class PrmMetadataService extends DomainObjectMetadataService {
 			this._constants.FUNCTION_KEY_USER_HAS_PREVIOUSLY_REQUESTED_PRM, 
 			(prm) => {
 				return new Promise((resolve, reject) => {
-					this._requestsService.getArchivedUserRequestsForPrm(prm).then((data: Array<Object>) => {
-						resolve(data.length > 0);
-					});
+					if (prm["id"] === undefined)
+						resolve(false);
+					else {					
+						this._requestsService.getArchivedUserRequestsForPrm(prm).then((data: Array<Object>) => {
+							resolve(data.length > 0);
+						});
+					}
 				})
 			});
 
