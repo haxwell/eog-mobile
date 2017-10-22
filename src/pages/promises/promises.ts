@@ -55,12 +55,13 @@ export class PrmPage {
 			});
 		}
 
-        if (this.model["directionallyOppositeUser"] === undefined) {
-	        let getUserPromise = this._userService.getUser(this.model["userId"]);
-	        getUserPromise.then((user) => {
-	            this.model["directionallyOppositeUser"] = user;
-	            delete this.model["userId"];
-	        });
+        if (this.model["userId"] !== this._userService.getCurrentUser()["id"] && 
+        	this.model["directionallyOppositeUser"] === undefined) {
+		        let getUserPromise = this._userService.getUser(this.model["userId"]);
+		        getUserPromise.then((user) => {
+		            this.model["directionallyOppositeUser"] = user;
+		            delete this.model["userId"];
+		        });
         }
 
 		if (this.areRecommendationsRequired(this.model)) {
