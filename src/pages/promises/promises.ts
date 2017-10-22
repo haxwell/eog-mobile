@@ -55,6 +55,8 @@ export class PrmPage {
 			});
 		}
 
+		this.model["keywords"].sort((a, b) => { let aText = a.text.toLowerCase(); let bText = b.text.toLowerCase(); if (aText > bText) return 1; else if (aText < bText) return -1; else return 0; })
+
         if (this.model["userId"] !== this._userService.getCurrentUser()["id"] && 
         	this.model["directionallyOppositeUser"] === undefined) {
 		        let getUserPromise = this._userService.getUser(this.model["userId"]);
@@ -229,6 +231,7 @@ export class PrmPage {
 				if (data) {
 					self.setDirty(true); 
 					self.model["keywords"] = data;
+					self.model["keywords"].sort((a, b) => { let aText = a.text.toLowerCase(); let bText = b.text.toLowerCase(); if (aText > bText) return 1; else if (aText < bText) return -1; else return 0; })
 				} 
 			}
 		);
