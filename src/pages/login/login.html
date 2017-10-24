@@ -9,19 +9,15 @@
 <ion-content padding>
 	<ion-grid>
 		<ion-row>
-			<ion-col>
-			</ion-col>
-			<ion-col col-6>
+			<ion-col >
 				<ion-label color="primary" stacked>Username</ion-label>
-				<ion-input type="text" placeholder="Username" [(ngModel)]="user.name" #ctrl="ngModel" required></ion-input>
+				<ion-input type="text" [(ngModel)]="user.name" #ctrl="ngModel" required></ion-input>
 
 				<ion-label color="primary" stacked>Password</ion-label>
-				<ion-input type="password" placeholder="Password" [(ngModel)]="user.password" #ctrl="ngModel" required></ion-input>
+				<ion-input type="password" [(ngModel)]="user.password" #ctrl="ngModel" required></ion-input>
 
 				<button class="wideButton" ion-button (click)="onLoginBtnTap($event)">Login</button>
 				<button class="wideButton" ion-button (click)="onCreateAccountBtnTap($event)">Create Account</button>	
-			</ion-col>
-			<ion-col>
 			</ion-col>
 		</ion-row>
 	</ion-grid>
