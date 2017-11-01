@@ -26,7 +26,7 @@ export class KeywordEntryPage {
 	}
 
 	getKeywordArray() {
-		return this.keywordArray;
+		return this.keywordArray || [];
 	}
 
 	userHasNoKeywords() {

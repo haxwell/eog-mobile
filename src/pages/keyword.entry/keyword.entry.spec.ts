@@ -1,40 +1,49 @@
 import { async, TestBed } from '@angular/core/testing';
-import { IonicModule, Platform } from 'ionic-angular';
-import { ViewController } from 'ionic-angular';
+import { IonicModule } from 'ionic-angular';
+import { ViewController, NavParams } from 'ionic-angular';
 
-import { StatusBar } from '@ionic-native/status-bar';
-import { SplashScreen } from '@ionic-native/splash-screen';
+//import { StatusBar } from '@ionic-native/status-bar';
+//import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { KeywordEntryPage } from './keyword.entry';
 import {
-  PlatformMock,
-  SplashScreenMock,
+//  PlatformMock,
+//  SplashScreenMock,
+  NavParamsMock,
   ViewControllerMock
 } from '../../../test-config/mocks-ionic';
 
-import { StatusBarMock } from 'ionic-mocks'
+//import { StatusBarMock } from 'ionic-mocks'
 
 describe('KeywordEntryPage Component', () => {
   let fixture;
   let component;
 
   beforeEach(async(() => {
+    NavParamsMock.setParams('keywordArray', []);
+
     TestBed.configureTestingModule({
       declarations: [KeywordEntryPage],
       imports: [
         IonicModule.forRoot(KeywordEntryPage)
       ],
       providers: [
-        { provide: StatusBar, useClass: StatusBarMock },
-        { provide: SplashScreen, useClass: SplashScreenMock },
-        { provide: Platform, useClass: PlatformMock },
-        { provide: ViewController, useClass: ViewControllerMock }
+//        { provide: StatusBar, useClass: StatusBarMock },
+//        { provide: SplashScreen, useClass: SplashScreenMock },
+//        { provide: Platform, useClass: PlatformMock },
+        { provide: ViewController, useClass: ViewControllerMock },
+        { provide: NavParams, useClass: NavParamsMock }        
       ]
     })
   }));
 
   beforeEach(() => {
+
+    // TODO: test passing in a set of keywords
+
     fixture = TestBed.createComponent(KeywordEntryPage);
+    fixture.detectChanges();
+
     component = fixture.componentInstance;
   });
 
@@ -43,25 +52,84 @@ describe('KeywordEntryPage Component', () => {
   });
 
   it('should not have save button enabled', () => {
-    expect(component.keywordString).toBe(undefined);
+    expect(component.getKeywordArray().length).toEqual(0);
     expect(component.isSaveBtnEnabled()).toBe(false);
   });
 
-  it('should break down a comma delimited string correctly', () => {
-    component.keywordString = "testing,1,2,3";
-    expect(component.keywordString).toBe("testing,1,2,3");
-    expect(component.onSaveBtnTap(null)).toContain("2");
-    expect(component.onSaveBtnTap(null)).toContain("1");
+  it('should not have add button enabled', () => {
+    expect(component.getKeywordArray().length).toEqual(0);
+    expect(component.getAddKeywordFieldValue()).toBe('');
+    expect(component.isAddBtnEnabled()).toBe(false);
   });
 
-  it('should break down a single-value string correctly', () => {
-    component.keywordString = "testing1.2.3";
-    expect(component.keywordString).toBe("testing1.2.3");
-    expect(component.onSaveBtnTap(null)).toContain("testing1.2.3");
+  it('should enable the add button when theres yet to be submitted text', () => {
+    component.newKeywordsString = 'testing,1,2,3';
 
-    component.keywordString = "testing1 2 3";
-    expect(component.keywordString).toBe("testing1 2 3");
-    expect(component.onSaveBtnTap(null)).toContain("testing1 2 3");
+    expect(component.getKeywordArray().length).toEqual(0);
+    expect(component.getAddKeywordFieldValue()).toBe('testing,1,2,3');
+
+    expect(component.isAddBtnEnabled()).toBe(true);
+  });
+
+  it('should add newly typed keywords as only keywords when keywords is empty, as in an initial state', () => {
+    component.newKeywordsString = 'testing,1,2,3';
+
+    expect(component.getKeywordArray().length).toEqual(0);
+    expect(component.getAddKeywordFieldValue()).toBe('testing,1,2,3');
+
+    component.onAddBtnTap();
+
+    expect(component.getKeywordArray()).toContain({id: -1, text: '2'});
+    expect(component.getKeywordArray()).toContain({id: -1, text: 'testing'});
+    expect(component.getKeywordArray().length).toEqual(4);
+    expect(component.getAddKeywordFieldValue()).toBe('');
+    expect(component.isAddBtnEnabled()).toBe(false);
+  });
+
+  it('should add newly typed keywords as only keywords when keywords is empty, as in an initial state', () => {
+    component.getKeywordArray().push({id: -1, text: 'foo'});
+    component.newKeywordsString = 'testing,1,2,3';
+
+    expect(component.getKeywordArray().length).toEqual(1);
+    expect(component.getAddKeywordFieldValue()).toBe('testing,1,2,3');
+
+    component.onAddBtnTap();
+
+    expect(component.getKeywordArray()).toContain({id: -1, text: '2'});
+    expect(component.getKeywordArray()).toContain({id: -1, text: 'testing'});
+    expect(component.getKeywordArray()).toContain({id: -1, text: 'foo'});    
+    expect(component.getKeywordArray().length).toEqual(5);
+    expect(component.getAddKeywordFieldValue()).toBe('');
+    expect(component.isAddBtnEnabled()).toBe(false);
+  });
+
+  it('should not have save button enabled', () => {
+    expect(component.getKeywordArray().length).toEqual(0);
+    expect(component.isSaveBtnEnabled()).toBe(false);
+  });
+
+  it('should not have keywords already', () => {
+    expect(component.userHasNoKeywords()).toBe(true);
+  });
+
+  it('should break down a single-value string delimited by periods correctly', () => {
+    component.newKeywordsString = "testing1.2.3";
+    expect(component.getAddKeywordFieldValue()).toBe('testing1.2.3');
+
+    component.onAddBtnTap();
+
+    expect(component.getKeywordArray()).toContain({id: -1, text: 'testing1.2.3'});
+    expect(component.getKeywordArray().length).toEqual(1);
+  });
+
+  it('should break down a single-value string delimited by spaces correctly', () => {
+    component.newKeywordsString = "testing1 2 3";
+    expect(component.getAddKeywordFieldValue()).toBe('testing1 2 3');
+
+    component.onAddBtnTap();
+
+    expect(component.getKeywordArray()).toContain({id: -1, text: 'testing1 2 3'});
+    expect(component.getKeywordArray().length).toEqual(1);
   });
 
 });

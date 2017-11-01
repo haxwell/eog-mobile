@@ -12,6 +12,8 @@ export class ViewControllerMock {
     public writeReady: wrReadyMock;
     public readReady: wrReadyMock;
 
+    public unsubscribe(): any { return 0; };
+
     constructor() {
       this.writeReady = new wrReadyMock();
       this.readReady = new wrReadyMock();
@@ -132,4 +134,19 @@ export class NavMock {
 
 export class DeepLinkerMock {
 
+}
+
+export class NavParamsMock {
+  static returnParams: any = {};
+
+  public get(key): any {
+    if (NavParamsMock.returnParams[key]) {
+       return NavParamsMock.returnParams[key];
+    }
+    return 'No Params of ' + key + ' was supplied. Use NavParamsMock.setParams('+ key + ',value) to set it.';
+  }
+
+  static setParams(key,value){
+    NavParamsMock.returnParams[key] = value;
+  }
 }
