@@ -1,6 +1,11 @@
 import { NgModule, Component } from '@angular/core';
-
 import { DomainObjectMetadataService } from './domain-object-metadata.service';
+
+
+// The point of this module is to provide an instance of the DomainObjectMetadataService
+//  for use in testing.
+
+
 
 @Component({
   selector: 'domainobjectmetadataservicecomponent',
