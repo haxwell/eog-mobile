@@ -2,18 +2,11 @@ import { async, TestBed } from '@angular/core/testing';
 import { IonicModule } from 'ionic-angular';
 import { ViewController, NavParams } from 'ionic-angular';
 
-//import { StatusBar } from '@ionic-native/status-bar';
-//import { SplashScreen } from '@ionic-native/splash-screen';
-
 import { KeywordEntryPage } from './keyword.entry';
 import {
-//  PlatformMock,
-//  SplashScreenMock,
   NavParamsMock,
   ViewControllerMock
 } from '../../../test-config/mocks-ionic';
-
-//import { StatusBarMock } from 'ionic-mocks'
 
 describe('KeywordEntryPage Component', () => {
   let fixture;
@@ -28,9 +21,6 @@ describe('KeywordEntryPage Component', () => {
         IonicModule.forRoot(KeywordEntryPage)
       ],
       providers: [
-//        { provide: StatusBar, useClass: StatusBarMock },
-//        { provide: SplashScreen, useClass: SplashScreenMock },
-//        { provide: Platform, useClass: PlatformMock },
         { provide: ViewController, useClass: ViewControllerMock },
         { provide: NavParams, useClass: NavParamsMock }        
       ]
