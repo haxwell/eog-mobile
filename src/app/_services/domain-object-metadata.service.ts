@@ -30,6 +30,8 @@ export class DomainObjectMetadataService {
 
 	}
 
+	cachedValueValidityDuration = 15000;
+	
 	mapUserIdToCachedCalculationResultObjects = {}
 	mapUserIdToInProgressCalculationObjects = {};
 	mapPropertyKeyToCalcFunction: Array<Object> = [];
@@ -48,6 +50,11 @@ export class DomainObjectMetadataService {
 		if (this.mapPropertyKeyToCalcFunction.length === 0) {
 			console.log("ERROR: MetadataService not initialized.");
 			return undefined; // TODO: handle this error better
+		}
+
+		if (!this.mapPropertyKeyToCalcFunction.some((obj) => { return obj["property"] === functionKey; })) {
+			console.log("ERROR: Called MetadataService for a function key which is not defined.");
+			return undefined;
 		}
 
 		let user = self._userService.getCurrentUser();
@@ -141,8 +148,12 @@ export class DomainObjectMetadataService {
 			});
 	}
 
+	setCachedValueValidityDuration(millis) {
+		this.cachedValueValidityDuration = millis;
+	}
+
 	createDomainObjectMetadataCalculationObject(val, _domainObject, functionKey) {
-		return {domainObject: _domainObject, property: functionKey, value: val, expirationTime: new Date().getTime() + 15000};
+		return {domainObject: _domainObject, property: functionKey, value: val, expirationTime: new Date().getTime() + this.cachedValueValidityDuration};
 	}
 
 	isObjectTheResultOfTheGivenDomainObjectAndFunctionKey(calculationResultObject, domainObject, functionKey) {
