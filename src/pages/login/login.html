@@ -1,15 +1,8 @@
-<ion-header>
-	<ion-navbar>
-		<ion-title>
-			<img src="assets/img/logo.jpg">
-		</ion-title>
-	</ion-navbar>
-</ion-header>
-
 <ion-content padding>
 	<ion-grid>
 		<ion-row>
 			<ion-col >
+				<img id="login-logo-img" src="assets/img/logo.jpg">
 				<ion-label color="primary" stacked>Username</ion-label>
 				<ion-input type="text" [(ngModel)]="user.name" #ctrl="ngModel" required></ion-input>
 
