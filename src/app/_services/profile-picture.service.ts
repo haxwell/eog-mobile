@@ -82,11 +82,12 @@ export class ProfilePictureService {
 	}
 
 	get(userId) {
+		console.log("PPS: Making call to FPS to get Promise containing the URL for the profile photo of user " + userId);
 		return this._functionPromiseService.get(userId, this._constants.FUNCTION_KEY_PROFILE_PICTURE_GET);
 	}
 
 	delete(userId) {
-		console.log("PPS: userId " + userId +" returning promis which calls API to delete profile picture.");
+		console.log("PPS: userId " + userId +" returning promise which calls API to delete profile picture.");
 		return new Promise((resolve, reject) => {
 			let url = environment.apiUrl + "/api/user/" + userId + "/profile/picture";
 			this._apiService.delete(url).subscribe((data) => {
