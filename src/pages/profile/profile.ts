@@ -4,6 +4,8 @@ import { Events } from 'ionic-angular';
 import { LoadingController } from 'ionic-angular';
 import { AlertController } from 'ionic-angular';
 
+import { File } from '@ionic-native/file'
+
 import { ProfileService } from '../../pages/common/_services/profile.service'
 import { NotificationService } from './_services/notification.service'
 import { UserMetadataService } from '../../app/_services/user-metadata.service'
@@ -44,7 +46,8 @@ export class ProfilePage {
 				private _events: Events,
 				private loadingCtrl: LoadingController,
 				private alertCtrl: AlertController,
-				private _constants: Constants) {
+				private _constants: Constants,
+				private _file: File) {
 
 		this.user = Object.assign({}, navParams.get('user'));
 		this.readOnly = navParams.get('readOnly') || false;
@@ -116,19 +119,44 @@ export class ProfilePage {
 				buttons: [
 					{
 						text: 'No', role: 'cancel', handler: () => {
-							// do nothing
+							if (this._profileService.isProfileImageChanged(this.model)) {
+								
+								// TODO: the call to .removeFile here, and the one in the process of onSaveBtnTap()
+								//  are both the same. They should be a service method somewhere.
+
+								let lastSlash = self.model["imageFileURI"].lastIndexOf('/');
+								let path = self.model["imageFileURI"].substring(0,lastSlash+1);
+								let filename = self.model["imageFileURI"].substring(lastSlash+1);
+
+								self._file.removeFile(path, filename).then((data) => {
+									console.log("User set new profile image, but said don't save it when exiting the profile page. Image was from camera or the eog api, so it was removed from phone.");
+									
+									self.setDirty(false);
+									
+									self.model["imageFileURI_OriginalValue"] = self.model["imageFileURI"];
+									self.model["imageFileURI"] = undefined;
+									
+									if (!self.isExiting)
+										self.navCtrl.pop();
+								});
+
+							}
+
 						},
 					}, {
 						text: 'Yes', handler: () => {
+							self.setDirty(false);
 							self.onSaveBtnTap();
 						},
 
 					}
 				]
 			});
-			self.isExiting = true;
+			//self.isExiting = true;
 			alert.present();
 		}
+
+		return !this.isDirty();
 	}
 
 	isReadOnly() {
