@@ -26,6 +26,8 @@ export class HomePage {
     items = {};
     showTutorialPromise = undefined;
     _mapPrmIdToMetadataValue = {};
+    isVerifyLogoutAlertVisible = false;
+    isHomePageVisible = true;
 
     constructor(public navCtrl: NavController,
                 private _modalCtrl: ModalController, 
@@ -35,6 +37,8 @@ export class HomePage {
                 private _prmMetadataService: PrmMetadataService,
                 private _constants: Constants,
                 private _events: Events) {
+
+        this._events.subscribe('hardwareBackButtonPressed', () => { this.verifyLogout(); });
 
         this._events.subscribe('request:saved', (request) => {
             this.ngOnInit();
@@ -67,26 +71,37 @@ export class HomePage {
             });
         }
 
-        self.navBar.backButtonClick = () => {
+        self.navBar.backButtonClick = () => { self.verifyLogout(); };
 
-          let alert = self._alertCtrl.create({
-              title: 'Log out?',
-              message: 'Do you want to log out?',
-              buttons: [
-                {
-                  text: 'No', role: 'cancel', handler: () => {
-                    // do nothing
-                },
-                }, {
-                  text: 'Yes', handler: () => {
-                      self.navCtrl.pop();
-                  }
-                }
-              ]
-            });
+        this.isHomePageVisible = true;
+    }
 
-          alert.present();
-        }
+    ionViewDidLeave() {
+        this.isHomePageVisible = false;
+    }
+
+    verifyLogout() {
+
+      if (this.isHomePageVisible) {
+        let self = this;
+        let alert = self._alertCtrl.create({
+          title: 'Log out?',
+          message: 'Do you want to log out?',
+          buttons: [
+            {
+              text: 'No', role: 'cancel', handler: () => {
+                // do nothing
+            },
+            }, {
+                text: 'Yes', handler: () => {
+                  self.navCtrl.pop();
+              }
+            }
+          ]
+        });
+
+        alert.present();
+      }
     }
 
     initializeItems(query) {

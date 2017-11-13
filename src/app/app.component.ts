@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { Platform } from 'ionic-angular';
+import { Platform, Events } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 
 import { LoginPage } from '../pages/login/login';
@@ -11,8 +11,13 @@ import { LoginPage } from '../pages/login/login';
 export class EasyahApp {
   rootPage:any = LoginPage;
 
-  constructor(platform: Platform, 
+  constructor(platform: Platform,
+              _events: Events, 
               statusBar: StatusBar) {
+
+    platform.registerBackButtonAction(() => {
+        _events.publish("hardwareBackButtonPressed", { });
+    });
     
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
