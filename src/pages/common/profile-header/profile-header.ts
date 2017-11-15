@@ -2,6 +2,8 @@ import { Component, Input } from '@angular/core';
 import { ModalController, NavParams } from 'ionic-angular';
 import { Events } from 'ionic-angular';
 
+import { File } from '@ionic-native/file'
+
 import { ChoosePhotoSourcePage } from '../choose-photo-source/choose-photo-source'
 
 import { ProfileService } from '../_services/profile.service'
@@ -17,7 +19,11 @@ export class ProfileHeader {
 	dirty = false;
 	@Input() user = undefined;
 
-	constructor(navParams: NavParams, private modalCtrl: ModalController, private _profileService: ProfileService, private _events: Events) {
+	constructor(navParams: NavParams, 
+				private modalCtrl: ModalController, 
+				private _profileService: ProfileService, 
+				private _events: Events,
+				private _file: File) {
 		this.user = Object.assign({}, navParams.get('user'));
 		this.readOnly = navParams.get('readOnly') || false;
 
@@ -87,15 +93,37 @@ export class ProfileHeader {
 							uriAndSource = {};
 						}
 
-						console.log("setting profile header model to [" + uriAndSource["imageFileURI"] + "], and throwing profile:changedProfileImage event");
-						
 						let model = this._profileService.getModel(this.user);
-						model["imageFileURI"] = uriAndSource["imageFileURI"];
-						model["imageFileSource"] = uriAndSource["imageFileSource"];
 
-						self._events.publish('profile:changedProfileImage', model["imageFileURI"]);
-						self.setDirty(true);						
-					})
+						if (model["imageFileURI"] !== undefined) {
+							let lastSlash = model["imageFileURI"].lastIndexOf('/');
+							let path = model["imageFileURI"].substring(0,lastSlash+1);
+							let filename = model["imageFileURI"].substring(lastSlash+1);
+
+							self._file.removeFile(path, filename).then((data) => {
+								this._profileService.setMostProbableProfilePhotoPath(uriAndSource["imageFileURI"]);
+
+								console.log("User saved a new profile image. [" + model["imageFileURI"] + "] is no longer the image to use, so it has been removed." );
+								console.log("setting profile header model to [" + uriAndSource["imageFileURI"] + "], and throwing profile:changedProfileImage event");
+
+								model["imageFileURI"] = uriAndSource["imageFileURI"];
+								model["imageFileSource"] = uriAndSource["imageFileSource"];
+
+								self._events.publish('profile:changedProfileImage', model["imageFileURI"]);
+								self.setDirty(true);						
+							})
+						} else {
+							console.log("no previous image to delete, so skipping that step...")
+							console.log("setting profile header model to [" + uriAndSource["imageFileURI"] + "], and throwing profile:changedProfileImage event");
+
+							model["imageFileURI"] = uriAndSource["imageFileURI"];
+							model["imageFileSource"] = uriAndSource["imageFileSource"];
+
+							self._events.publish('profile:changedProfileImage', model["imageFileURI"]);
+							self.setDirty(true);						
+						}
+
+					});
 				}
 			});
 			

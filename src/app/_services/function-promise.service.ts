@@ -27,7 +27,7 @@ export class FunctionPromiseService {
 		this.funcs[funcKey] = func;
 	}
 
-	get(resultKey, funcKey) {
+	get(resultKey, funcKey, data) {
 		if (this.results[resultKey] !== undefined) {
 			console.log("FPS: resultKey " + resultKey +" already had results. Returning.");
 			return this.results[resultKey];
@@ -37,7 +37,7 @@ export class FunctionPromiseService {
 
 		if (func !== undefined) {
 			console.log("FPS: resultKey " + resultKey +" calling the func, and saving its result.");
-			this.results[resultKey] = func(resultKey);
+			this.results[resultKey] = func(resultKey, data);
 		}
 
 		console.log("FPS: resultKey " + resultKey +" returning the result.");

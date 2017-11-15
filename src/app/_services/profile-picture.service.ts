@@ -35,18 +35,21 @@ export class ProfilePictureService {
 		//  by Angular; only once when the button is pushed.
 
 		let self = this;
-		self._functionPromiseService.initFunc(self._constants.FUNCTION_KEY_PROFILE_PICTURE_GET, (id) => {
+		self._functionPromiseService.initFunc(self._constants.FUNCTION_KEY_PROFILE_PICTURE_GET, (id, photoPath) => {
 			let rtn = new Promise((resolve, reject) => {
-				
-				let foo = self.file.checkFile(self.file.cacheDirectory, "eogAppProfilePic" + id);
-				foo.then((isFileExists) => {
+
+				let lastSlash = photoPath.lastIndexOf('/');
+				let path = photoPath.substring(0,lastSlash+1);
+				let filename = photoPath.substring(lastSlash+1);
+
+				self.file.checkFile(path, filename).then((isFileExists) => {
 					if (isFileExists) {
-						console.log("THE GET FUNC: image already exists on phone. returning its path as " + self.file.cacheDirectory + "eogAppProfilePic" + id)
-						resolve(self.file.cacheDirectory + "eogAppProfilePic" + id);
+						console.log("THE GET FUNC: image already exists on phone. returning its path as " + path + filename)
+						resolve(path + filename);
 					} 
 				}).catch(e => { 
 
-					console.log("THE GET FUNC: image does not already exist on phone. Not found at " + self.file.cacheDirectory + "eogAppProfilePic" + id)
+					console.log("THE GET FUNC: image does not already exist on phone. Not found at " + path + filename)
 
 				    let url = environment.apiUrl + "/api/user/" + id + "/profile/picture/isFound";
 				    this._apiService.get(url).subscribe((isFound) => {
@@ -55,8 +58,8 @@ export class ProfilePictureService {
 							const fileTransfer: FileTransferObject = self.transfer.create();
 
 							console.log("image download about to initiate....");
-							fileTransfer.download(url, self.file.cacheDirectory + "eogAppProfilePic" + id).then((entry) => {
-							    resolve(self.file.cacheDirectory + "eogAppProfilePic" + id);
+							fileTransfer.download(url, path + filename).then((entry) => {
+							    resolve(path + filename);
 							    console.log('download complete: ' + entry.toURL());
 					  		}, (error) => {
 					    		// handle error
@@ -74,16 +77,16 @@ export class ProfilePictureService {
 			});
 
 			return rtn;
-		});
+		});	
 	}
 
 	reset(userId) {
 		return this._functionPromiseService.reset(userId);
 	}
 
-	get(userId) {
+	get(userId, data) {
 		console.log("PPS: Making call to FPS to get Promise containing the URL for the profile photo of user " + userId);
-		return this._functionPromiseService.get(userId, this._constants.FUNCTION_KEY_PROFILE_PICTURE_GET);
+		return this._functionPromiseService.get(userId, this._constants.FUNCTION_KEY_PROFILE_PICTURE_GET, data);
 	}
 
 	delete(userId) {
