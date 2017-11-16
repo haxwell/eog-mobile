@@ -14,7 +14,7 @@ import { environment } from '../../../_environments/environment';
 export class ProfileService {
 
 	modelCache = {};
-	mostProbableProfilePhotoPath = "file:///data/data/io.ionic.starter/cache/eogAppProfilePic1";
+	mostProbableProfilePhotoPath = "file:///data/data/io.easyah.mobileapp/cache/eogAppProfilePic";
 
 	constructor(private _apiService: ApiService, 
 				private _userService: UserService, 
@@ -68,7 +68,7 @@ export class ProfileService {
 		});
 
 		if (model["imageFileURI"] === undefined) {
-			this._profilePictureService.get(user["id"], this.getMostProbableProfilePhotoPath()).then((filename) => {
+			this._profilePictureService.get(user["id"], this.getMostProbableProfilePhotoPath() + user["id"]).then((filename) => {
 				model["imageFileSource"] = 'eog';
 				model["imageFileURI"] = filename;
 				model["imageFileURI_OriginalValue"] = filename;
