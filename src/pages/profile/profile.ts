@@ -88,13 +88,8 @@ export class ProfilePage {
 
 		this.setDirty(false);
 
-		this._userMetadataService.getMetadataValue(this.user, this._constants.FUNCTION_KEY_CAN_SEND_RECOMMENDATION_TO_USER).then((bool) => {
-			this._currentUserCanSendRecommendationToProfileUser = bool;
-		})
-
-		this._userMetadataService.getMetadataValue(this.user, this._constants.FUNCTION_KEY_CAN_SEND_POINT_TO_USER).then((bool) => {
-			this._currentUserCanSendPointToProfileUser = bool;
-		})
+		this.setCurrentUserCanSendPointToProfileUser();
+		this.setCurrentUserCanSendRecommendationToProfileUser();
 	}
 
 	ionViewWillEnter() {
@@ -188,11 +183,17 @@ export class ProfilePage {
 	}
 
 	onSendRecommendationBtnTap() {
-		this._recommendationService.sendARecommendationToAUser(this.user["id"]);
+		let self = this;
+		self._recommendationService.sendARecommendationToAUser(this.user["id"]).then((data) => {
+			self.setCurrentUserCanSendRecommendationToProfileUser();
+		})
 	}
 
 	onSendPointBtnTap() {
-		this._pointsService.sendAPointToAUser(this.user["id"]);
+		let self = this;
+		self._pointsService.sendAPointToAUser(this.user["id"]).then((data) => {
+			self.setCurrentUserCanSendPointToProfileUser();
+		});
 	}
 
 	isSendRecommendBtnAvailable() {
@@ -345,5 +346,17 @@ export class ProfilePage {
 
 	getUser() {
 		return this.user;
+	}
+
+	setCurrentUserCanSendPointToProfileUser() {
+		this._userMetadataService.getMetadataValue(this.user, this._constants.FUNCTION_KEY_CAN_SEND_POINT_TO_USER).then((bool) => {
+			this._currentUserCanSendPointToProfileUser = bool;
+		})
+	}
+
+	setCurrentUserCanSendRecommendationToProfileUser() {
+		this._userMetadataService.getMetadataValue(this.user, this._constants.FUNCTION_KEY_CAN_SEND_RECOMMENDATION_TO_USER).then((bool) => {
+			this._currentUserCanSendRecommendationToProfileUser = bool;
+		})
 	}
 }
