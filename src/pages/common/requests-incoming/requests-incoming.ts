@@ -166,9 +166,7 @@ export class RequestsIncomingView {
 	}
 
 	onViewContactInfoBtnTap(item) {
-		let modal = this.modalCtrl.create(ProfilePage, {user: item["directionallyOppositeUser"], readOnly: true});
-		modal.onDidDismiss(data => {  });
-		modal.present();
+		this.navCtrl.push(ProfilePage, { user: item["directionallyOppositeUser"], readOnly: true });
 	}
 
 	getNumberOfMatchingElements(func) {
