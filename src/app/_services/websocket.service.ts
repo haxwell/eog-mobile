@@ -35,7 +35,10 @@ export class WebsocketService {
 
 		self.client = Stomp.client('ws://' + environment.domainPort + '/notifications');
 		
-		self.client.connect(user["name"], user["password"], () => { 
+		let lowercaseUserName: String = user["name"];
+		lowercaseUserName = lowercaseUserName.toLowerCase();
+
+		self.client.connect(lowercaseUserName, user["password"], () => { 
 			console.log("STOMP client connected.");
 			self.client.subscribe("/user/queue/message", (data) => {
 				console.log(data);
@@ -211,7 +214,7 @@ export class WebsocketService {
 	}
 
 	handlePointsReceived(data) {
-		let points = data["request"];
+		let points = data["points"];
 		let dou_realname = points["directionallyOppositeUser"]["realname"];
 
 		data["message"] = "You just received a point from " + dou_realname;
