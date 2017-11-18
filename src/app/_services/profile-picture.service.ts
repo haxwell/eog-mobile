@@ -44,31 +44,23 @@ export class ProfilePictureService {
 
 				self.file.checkFile(path, filename).then((isFileExists) => {
 					if (isFileExists) {
-						console.log("THE GET FUNC: image already exists on phone. returning its path as " + path + filename)
 						resolve(path + filename);
 					} 
 				}).catch(e => { 
-
-					console.log("THE GET FUNC: image does not already exist on phone. Not found at " + path + filename)
-
 				    let url = environment.apiUrl + "/api/user/" + id + "/profile/picture/isFound";
 				    this._apiService.get(url).subscribe((isFound) => {
 				    	if (isFound["_body"] == "true") {
 							url = environment.apiUrl + "/api/user/" + id + "/profile/picture";
 							const fileTransfer: FileTransferObject = self.transfer.create();
 
-							console.log("image download about to initiate....");
 							fileTransfer.download(url, path + filename).then((entry) => {
 							    resolve(path + filename);
-							    console.log('download complete: ' + entry.toURL());
 					  		}, (error) => {
 					    		// handle error
-					    		console.log(error);
 					    		reject();
 					  		});
 
 				    	} else {
-				    		console.log("THE GET FUNC: API does not have an image for " + id + ". Returning undefined.")
 							resolve(undefined);
 				    	}
 				    });
@@ -85,12 +77,10 @@ export class ProfilePictureService {
 	}
 
 	get(userId, data) {
-		console.log("PPS: Making call to FPS to get Promise containing the URL for the profile photo of user " + userId);
 		return this._functionPromiseService.get(userId, this._constants.FUNCTION_KEY_PROFILE_PICTURE_GET, data);
 	}
 
 	delete(userId) {
-		console.log("PPS: userId " + userId +" returning promise which calls API to delete profile picture.");
 		return new Promise((resolve, reject) => {
 			let url = environment.apiUrl + "/api/user/" + userId + "/profile/picture";
 			this._apiService.delete(url).subscribe((data) => {
@@ -102,7 +92,6 @@ export class ProfilePictureService {
 	save(userId, filename) {
 		return new Promise((resolve, reject) => {
 			if (filename !== undefined) {
-				console.log("image upload about to initiate....");
 				const fileTransfer: FileTransferObject = this.transfer.create();
 
 				let options: FileUploadOptions = {
@@ -114,9 +103,6 @@ export class ProfilePictureService {
 				fileTransfer.upload(filename, environment.apiUrl + "/api/user/" + userId + "/profile/picture", options)
 				   .then((data) => {
 				     // success
-				     console.log("image upload succeeded");
-				     console.log(data);
-
 					let lastSlash = filename.lastIndexOf('/');
 					let lastQuestionMark = filename.lastIndexOf('?');
 
@@ -130,7 +116,6 @@ export class ProfilePictureService {
 				     					).then(() => {
 				     	resolve(data);
 				     }).catch(e => { 
-				     	console.log(e);
 				     	reject();
 				     });
 
