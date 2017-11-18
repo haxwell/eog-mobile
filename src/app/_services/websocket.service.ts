@@ -167,7 +167,7 @@ export class WebsocketService {
 		let request = data["request"];
 		let dou_realname = request["directionallyOppositeUser"]["realname"];
 
-		data["message"] = dou_realname + ' approved your completion, and sent you ' + request["prm"]["requiredPointsQuantity"] + ' points for ' + request["prm"]["title"] + '.';
+		data["message"] = dou_realname + ' approved your completion, and sent you ' + data["pointsSent"] + ' points for ' + request["prm"]["title"] + '.';
 
 		this.presentToast(data["message"]);
 		this._events.publish('request:completedAndApproved', data);
@@ -187,7 +187,7 @@ export class WebsocketService {
 		let request = data["request"];
 		let dou_realname = request["directionallyOppositeUser"]["realname"];
 
-		data["message"] = dou_realname + ' inamicably resolved the request, ' + request["prm"]["title"] + '. You got ' + request["requiredPointsQuantity"] / 2 + ' points.';
+		data["message"] = dou_realname + ' inamicably resolved the request, ' + request["prm"]["title"] + '. You got ' + data["pointsSent"] + ' points.';
 
 		this.presentToast(data["message"]);
 		this._events.publish('request:inamicablyResolved', data);
