@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="io.easyah.mobileapp" version="0.0.2" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="io.easyah.mobileapp" version="0.0.4" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Easyah</name>
     <description>Pay-It-Forward meets Craigslist and Meetup.</description>
     <author email="johnathan@jj-ccs.com" href="">Johnathan E. James</author>
@@ -89,6 +89,6 @@
     <plugin name="cordova-plugin-whitelist" spec="^1.3.3" />
     <plugin name="ionic-plugin-keyboard" spec="^2.2.1" />
     <plugin name="phonegap-plugin-push" spec="^2.1.0">
-        <variable name="SENDER_ID" value="386608926885" />
+        <variable name="FCM_VERSION" value="11.0.1" />
     </plugin>
 </widget>

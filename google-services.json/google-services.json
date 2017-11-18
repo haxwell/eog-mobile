@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:386608926885:android:3ec6bfed99a11fb7",
         "android_client_info": {
-          "package_name": "org.easyah.mobileapp"
+          "package_name": "io.easyah.mobileapp"
         }
       },
       "oauth_client": [
