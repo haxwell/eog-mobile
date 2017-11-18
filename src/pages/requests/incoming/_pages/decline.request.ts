@@ -37,6 +37,7 @@ export class DeclineRequestPage {
 		url = environment.apiUrl + "/api/requestAgainDelayCodes";
 		this._apiService.get(url).subscribe((data) => {
 			self.requestAgainDelayCodes = JSON.parse(data["_body"]);
+			self.selectedRequestAgainDelayId = self.requestAgainDelayCodes.find((obj) => { return obj["milliseconds"] === 1;})["id"];
 		})
 	}
 
