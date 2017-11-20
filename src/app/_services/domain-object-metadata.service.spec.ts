@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { IonicModule } from 'ionic-angular';
+//import { IonicModule } from 'ionic-angular';
 
 import { DomainObjectMetadataServiceComponent } from './domain-object-metadata.service.component';
 import { DomainObjectMetadataService } from './domain-object-metadata.service';
@@ -66,8 +66,8 @@ describe('DomainObjectMetadata Service', () => {
     let functionKey = "funcKey";
 
   	service.addMetadataCalculationFunction(functionKey, (domainObject) => {
-		return new Promise((resolve, reject) => { domainObject["text"] += "happy"; resolve(domainObject); });
-	});
+		    return new Promise((resolve, reject) => { domainObject["text"] += "happy"; resolve(domainObject); });
+	  });
 
     let oldValue = domainObject1["text"];
     let prm = service.getMetadataValue(domainObject1, functionKey);
@@ -77,7 +77,8 @@ describe('DomainObjectMetadata Service', () => {
   })
 
   let _func1 = (len, func) => {
-	    let service = component.getService();
+	    // given
+      let service = component.getService();
 
 	    let spy = jasmine.createSpy("foo");
 	    let functionKey = "funcKey";
@@ -86,14 +87,13 @@ describe('DomainObjectMetadata Service', () => {
 	  	service.setCachedValueValidityDuration(len);
 	  	expect(spy.calls.count()).toEqual(0);
 
-	    let oldValue = domainObject1["text"];
-	    let promise = service.getMetadataValue(domainObject1, functionKey);
+	    // when
+      service.getMetadataValue(domainObject1, functionKey);
 
-	    let time = new Date().getTime();
-
+	    // then
 	    // wait, then execute our function
 	    setTimeout(() => {
-	    	let promise = service.getMetadataValue(domainObject1, functionKey);
+	    	service.getMetadataValue(domainObject1, functionKey);
 	    	func(spy);
 	    }, 2000);
 	}

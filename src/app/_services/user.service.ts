@@ -84,7 +84,6 @@ export class UserService {
 	//
 	// We call an api, to send a code to a phone number.
 	sendCodeToPhoneNumber(phoneNumber) {
-		let self = this;
 		let url = environment.apiUrl + "/api/sendNewUserChallengeCodeToPhoneNumber";
 
 		// assume phoneNumber looks like '3035551212'
