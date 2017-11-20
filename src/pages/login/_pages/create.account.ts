@@ -145,7 +145,7 @@ export class CreateAccountPage {
 
 								let okAlert = self._alertCtrl.create({
 		            				title: 'Alright!',
-		            				subTitle: "Account Created. Click OK to sign in.",
+		            				subTitle: "Account Created.\n\nu: " + self.user["name"] + "\np: ..." + self.user["password"].substring(self.user["password"].length - 3) + "\n\nClick OK to sign in.",
 		            				buttons: [{
 		            					text: 'OK',
 		            					handler: () => {
