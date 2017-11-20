@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 
+import { LoadingController } from 'ionic-angular';
 import { NavController, NavParams, AlertController } from 'ionic-angular';
 
 import { UserService } from '../../../app/_services/user.service';
@@ -11,12 +12,14 @@ import { UserService } from '../../../app/_services/user.service';
 export class CreateAccountPage {
 
 	user = {realname: '', email: '', name: '', password: '', phone: ''};
+	loading = undefined;
 
 	referringUsername = '';
 	codeAlreadySent = false;
 
 	constructor(public navCtrl: NavController, 
 				private _alertCtrl: AlertController,
+				private _loadingCtrl: LoadingController,
 				public params: NavParams,
 				private _userService: UserService) {
 
@@ -116,7 +119,7 @@ export class CreateAccountPage {
 	        text: 'Cancel',
 	        role: 'cancel'
 	      }, {
-	      	text: 'Resend',
+	      	text: 'Send Txt Again',
 	      	handler: () => {
 				self._userService.sendCodeToPhoneNumber(self.user["phone"]);
 				self.codeAlreadySent = true;
@@ -125,6 +128,12 @@ export class CreateAccountPage {
 	        text: 'Got it!',
 	        handler: (data) => {
 	            if (data.code !== undefined && data.code.length > 0) {
+	            	self.loading = self._loadingCtrl.create({
+	            		content: 'Please wait...'
+	            	});
+
+	            	self.loading.present();
+
 	            	self._userService.isAValidNewUserCreateCode(self.user["phone"], data.code).then((b) => {
 	            		if (b["_body"] === 'true') {
 							if (self.referringUsername !== undefined && self.referringUsername.length > 0)
@@ -141,6 +150,7 @@ export class CreateAccountPage {
 		            					text: 'OK',
 		            					handler: () => {
 											self.codeAlreadySent = false;
+											self.loading.dismiss();
 											self.navCtrl.pop();
 		            					}
 		            				}]
@@ -155,7 +165,7 @@ export class CreateAccountPage {
 	            				buttons: [{
 	            					text: 'Grr.',
 	            					handler: () => {
-										self.navCtrl.pop();
+	            						self.loading.dismiss();
 	            					}
 	            				}]
 	            			})
