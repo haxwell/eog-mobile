@@ -35,8 +35,6 @@ import { NotCompleteOutgoingRequestPage } from '../pages/requests/outgoing/_page
 import { PermanentlyDismissUnresolvedRequestPage } from '../pages/requests/outgoing/_pages/permanently-dismiss-unresolved-request';
 import { CancelOutgoingRequestPage } from '../pages/requests/outgoing/_pages/cancel.request';
 import { RequestContactInfoPage } from '../pages/requests/_pages/contact.info';
-import { DreamPage } from '../pages/dreams/dreams';
-import { DeleteDreamPage } from '../pages/dreams/_pages/delete.dream';
 import { PrmPage } from '../pages/promises/promises';
 import { DeletePrmPage } from '../pages/promises/_pages/delete.prm';
 import { RequestsIncomingView } from '../pages/common/requests-incoming/requests-incoming';
@@ -49,7 +47,6 @@ import { WebsocketService } from './_services/websocket.service';
 import { PushMessagingService } from './_services/push.messaging.service';
 import { UserService } from './_services/user.service';
 import { UserMetadataService } from './_services/user-metadata.service';
-import { DreamService } from './_services/dream.service';
 import { SearchService } from './_services/search.service';
 import { PointsService } from './_services/points.service';
 import { FunctionPromiseService } from './_services/function-promise.service';
@@ -77,8 +74,6 @@ import { Constants } from '../_constants/constants';
     ProfilePage,
     ProfileHeader,
     ChoosePhotoSourcePage,
-    DreamPage,
-    DeleteDreamPage,
     PrmPage,
     DeletePrmPage,
     RulePage,
@@ -121,8 +116,6 @@ import { Constants } from '../_constants/constants';
     ProfilePage,
     ProfileHeader,
     ChoosePhotoSourcePage,
-    DreamPage,
-    DeleteDreamPage,
     PrmPage,
     DeletePrmPage,
     RulePage,
@@ -161,7 +154,6 @@ import { Constants } from '../_constants/constants';
     FunctionPromiseService,
     ProfilePictureService,
     SearchService,
-    DreamService,
     PrmService,
     PrmMetadataService,
     PrmDetailService,
