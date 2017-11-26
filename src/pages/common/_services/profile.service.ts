@@ -81,12 +81,6 @@ export class ProfileService {
 			model["keywords"].sort((a, b) => { let aText = a.text.toLowerCase(); let bText = b.text.toLowerCase(); if (aText > bText) return 1; else if (aText < bText) return -1; else return 0; })
 		});
 
-		url = environment.apiUrl + "/api/user/" + user["id"] + "/dreams";
-		this._apiService.get(url).subscribe((dreamsObj) => {
-			model["dreams"] = JSON.parse(dreamsObj["_body"]);
-			model["dreams"].sort((a, b) => { let aText = a.title.toLowerCase(); let bText = b.title.toLowerCase(); if (aText > bText) return 1; else if (aText < bText) return -1; else return 0; })
-		});
-
 		url = environment.apiUrl + "/api/user/" + user["id"] + "/promises";
 		this._apiService.get(url).subscribe((prmsObj) => {
 			model["prms"] = JSON.parse(prmsObj["_body"]);
