@@ -77,25 +77,6 @@
 			</ion-card-content>
 		</ion-card>
 	</ion-row>	
-	<ion-row [class]="getDreamsCardClass()">
-		<ion-card>
-			<ion-card-header>
-				Dreams
-				<button *ngIf="!isReadOnly()" ion-button icon-only small color="danger" (click)="onNewDreamBtnTap($event)"><ion-icon name="add"></ion-icon></button>
-			</ion-card-header>
-			<ion-card-content>
-				<span *ngIf="userHasNoDreams() && !isReadOnly()">
-					Where do you see yourself tomorrow? Add a dream here!
-				</span>
-				<span *ngIf="userHasNoDreams() && isReadOnly()">
-					This user has not added any dreams yet!
-				</span>
-				<span class="blockItem" *ngFor="let item of model.dreams" (click)="onDreamBtnTap(item)">
-					{{item.title}}
-				</span>
-			</ion-card-content>
-		</ion-card>
-	</ion-row>	
 	<ion-row [class]="getPromisesCardClass()">
 		<ion-card>
 			<ion-card-header>

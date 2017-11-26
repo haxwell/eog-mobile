@@ -13,7 +13,6 @@ import { RecommendationService } from '../../app/_services/recommendation.servic
 import { PointsService } from '../../app/_services/points.service'
 
 import { PrmPage } from '../promises/promises'
-import { DreamPage } from '../dreams/dreams'
 import { KeywordEntryPage } from '../keyword.entry/keyword.entry'
 
 import { Constants } from '../../_constants/constants'
@@ -158,7 +157,7 @@ export class ProfilePage {
 		return this.readOnly;
 	}
 
-	PrmAndDreamCallback = (_params) => {
+	PrmCallback = (_params) => {
 		return new Promise((resolve, reject) => {
 			this.setDirty(_params === true);
 			resolve();
@@ -166,20 +165,11 @@ export class ProfilePage {
 	}
 
 	onNewPromiseBtnTap(evt) {
-		this.navCtrl.push(PrmPage, { prm: undefined, callback: this.PrmAndDreamCallback });
+		this.navCtrl.push(PrmPage, { prm: undefined, callback: this.PrmCallback });
 	}
 
 	onPromiseBtnTap(item) { 
-		this.navCtrl.push(PrmPage, { prm: item, callback:  this.PrmAndDreamCallback, readOnly: this.isReadOnly() });
-	}
-
-	onNewDreamBtnTap(evt) {
-		this.navCtrl.push(DreamPage, { dream: undefined, callback: this.PrmAndDreamCallback });
-	}
-
-	onDreamBtnTap(item) { 
-		if (!this.isReadOnly())
-			this.navCtrl.push(DreamPage, { dream: item, callback: this.PrmAndDreamCallback });
+		this.navCtrl.push(PrmPage, { prm: item, callback:  this.PrmCallback, readOnly: this.isReadOnly() });
 	}
 
 	onSendRecommendationBtnTap() {
@@ -275,10 +265,6 @@ export class ProfilePage {
 		return rtn
 	}
 
-	userHasNoDreams() {
-		return this.model["dreams"] === undefined || this.model["dreams"].length === 0;
-	}
-
 	userHasNoPromises() {
 		return this.model["prms"] === undefined || this.model["prms"].length === 0;
 	}
@@ -334,10 +320,6 @@ export class ProfilePage {
 
 	getPromisesCardClass() {
 		return (this.model["prms"] === undefined) ? "darkerWhileLoading" : "";
-	}
-
-	getDreamsCardClass() {
-		return (this.model["dreams"] === undefined) ? "darkerWhileLoading" : "";
 	}
 
 	getKeywordsCardClass() {
