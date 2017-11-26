@@ -61,10 +61,10 @@ export class ProfileService {
 		this._apiService.get(url).subscribe((data) => {
 			let obj = JSON.parse(data["_body"]);
 			
-			if (obj[0] === undefined)
-				model["allTimePointCount"] = 0;
-			else 
-				model["allTimePointCount"] = obj[0]["allTimePointCount"];
+			model["allTimePointCount"] = obj["allTimePointCount"];
+
+			model["keywords"] = obj["keywords"];
+			model["keywords"].sort((a, b) => { let aText = a.text.toLowerCase(); let bText = b.text.toLowerCase(); if (aText > bText) return 1; else if (aText < bText) return -1; else return 0; })
 		});
 
 		if (model["imageFileURI"] === undefined) {
@@ -74,12 +74,6 @@ export class ProfileService {
 				model["imageFileURI_OriginalValue"] = filename;
 			})
   		}
-
-		url = environment.apiUrl + "/api/user/" + user["id"] + "/keywords";
-		this._apiService.get(url).subscribe((keywordsObj) => {
-			model["keywords"] = JSON.parse(keywordsObj["_body"]);
-			model["keywords"].sort((a, b) => { let aText = a.text.toLowerCase(); let bText = b.text.toLowerCase(); if (aText > bText) return 1; else if (aText < bText) return -1; else return 0; })
-		});
 
 		url = environment.apiUrl + "/api/user/" + user["id"] + "/promises";
 		this._apiService.get(url).subscribe((prmsObj) => {
@@ -115,15 +109,13 @@ export class ProfileService {
 			});
 		});
 
-		//if (!readOnly) {
-			this._recommendationService.getOutgoingRecommendations().then((obj) => {
-				model["outgoingRecommendations"] = obj;
-			});
+		this._recommendationService.getOutgoingRecommendations().then((obj) => {
+			model["outgoingRecommendations"] = obj;
+		});
 
-			this._notificationService.get().then((obj) => {
-				model["notifications"] = obj;
-			});
-		//}
+		this._notificationService.get().then((obj) => {
+			model["notifications"] = obj;
+		});
 
 		return model;
 	}
