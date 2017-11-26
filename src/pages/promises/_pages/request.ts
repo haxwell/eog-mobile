@@ -54,7 +54,7 @@ export class RequestPage {
 	}
 
 	onSaveBtnTap(evt) {
-		this._requestsService.saveNew(user["id"], this.prm).then((data) => {
+		this._requestsService.saveNew(this.prm).then((data) => {
 			if (this.callback)
 				this.callback(true).then(() => {
 					this.viewCtrl.dismiss({ });
