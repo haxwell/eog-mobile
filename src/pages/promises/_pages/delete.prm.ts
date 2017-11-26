@@ -88,7 +88,7 @@ export class DeletePrmPage {
 	onDeleteBtnTap(evt) {
 		let self = this;
 		self._prmService.delete(self.prm).then(() => {
-			self._events.publish('prm:deleted', self.prm);
+			self._events.publish('prm:deletedByCurrentUser', self.prm);
 			self.viewCtrl.dismiss(true);
 		})
 	}

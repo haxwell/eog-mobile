@@ -41,8 +41,8 @@ export class RequestsIncomingView {
 		_events.subscribe('request:isInDispute', func);
 		_events.subscribe('request:inamicablyResolved', func);
 
-		_events.subscribe('prm:deleted', () => { 
-			this.ngOnInit(); 
+		_events.subscribe('prm:deletedByCurrentUser', () => { 
+			this.ngOnInit();
 		});
 	}
 
