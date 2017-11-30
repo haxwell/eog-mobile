@@ -1,41 +1,46 @@
 
-<table>
+<table class="-table">
 	<tr>
 		<td>
 			<ion-item *ngIf="isThumbnailImageAvailable()">
 				<ion-thumbnail item-start >
-					<img class="rotate90" [src]="getThumbnailImage()" alt="profile_image" (press)="onThumbnailPress($event)">
+					<img class="rotate90 circularized" [src]="getThumbnailImage()" alt="profile_image" (press)="onThumbnailPress($event)">
 				</ion-thumbnail>
 			</ion-item>
 			<ion-item *ngIf="!isThumbnailImageAvailable()">
 				<ion-thumbnail item-start >
-					<img src="assets/img/mushroom.jpg" (press)="onThumbnailPress($event)">
+					<img class="circularized" src="assets/img/mushroom.jpg" (press)="onThumbnailPress($event)">
 				</ion-thumbnail>
 			</ion-item>
 		</td>
 		<td>
 			<div *ngIf="isReadOnly()">
-				Name: {{getModelAttr('realname')}}<br/>
-				<span *ngIf="isCurrentUserAllowedToSeeContactInfo()">Email: {{getModelAttr('email')}}<br/>Phone: {{getModelAttr('phone')}}</span>
+				<span class="profile_header__name">{{getModelAttr('realname')}}</span><br/>
+				<span class="profile_header__desc">{{getModelAttr('description')}}</span>
+				<!-- <span *ngIf="isCurrentUserAllowedToSeeContactInfo()">Email: {{getModelAttr('email')}}<br/>Phone: {{getModelAttr('phone')}}</span> -->
 			</div>
 			<div *ngIf="!isReadOnly()">
 				<table>
 					<tr>
 						<ion-item>
-							<ion-input type="text" placeholder="Name" (ionChange)="onNameChange($event)" [value]="getModelAttr('realname')" required></ion-input>
+							<span class="profile_header__name">{{getModelAttr('realname')}}</span><br/>
+							<!-- <ion-input type="text" placeholder="Name" (ionChange)="onNameChange($event)" [value]="getModelAttr('realname')" required></ion-input> -->
 						</ion-item>
 					</tr>
 					<tr>
-						<ion-item *ngIf="isCurrentUserAllowedToSeeContactInfo()">
+						<ion-item>
+							<span class="profile_header__desc">{{getModelAttr('description')}}</span>
+							<!-- <ion-input type="text" placeholder="Name" (ionChange)="onNameChange($event)" [value]="getModelAttr('realname')" required></ion-input> -->
+						</ion-item>
+						<!-- <ion-item *ngIf="isCurrentUserAllowedToSeeContactInfo()">
 							<ion-input type="text" placeholder="you@domain.com" (ionChange)="onEmailChange($event)" [value]="getModelAttr('email')" required></ion-input>
 						</ion-item>
 					</tr>
 					<tr>
 						<ion-item *ngIf="isCurrentUserAllowedToSeeContactInfo()">
 							<ion-input type="text" placeholder="# " (ionChange)="onPhoneChange($event)" [value]="getModelAttr('phone')" required></ion-input>
-						</ion-item >
+						</ion-item > -->
 					</tr>
-
 				</table>
 			</div>
 		</td>
