@@ -1,0 +1,15 @@
+.circularized {
+	border-radius: 50%;
+}
+
+-table {
+	margin: 0 auto;
+}
+
+.rotate90 {
+	-webkit-transform: rotate(90deg);
+    -moz-transform: rotate(90deg);
+    -o-transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
+    transform: rotate(90deg);
+}
