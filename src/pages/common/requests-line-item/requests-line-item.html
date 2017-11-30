@@ -1,0 +1,7 @@
+			<ion-item class="yellow">
+				Your promise: <b>{{request.prm.title}}</b><br/>
+				Requested by: {{request.directionallyOppositeUser.realname}}<br/>
+				<button ion-button (click)="onViewContactInfoBtnTap(request)">View Their Profile</button>
+				<button ion-button (click)="onAcceptBtnTap(request)">Accept</button>
+				<button ion-button (click)="onDeclineBtnTap(request)">Decline</button>
+			</ion-item>

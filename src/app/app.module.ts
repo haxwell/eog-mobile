@@ -39,6 +39,7 @@ import { PrmPage } from '../pages/promises/promises';
 import { DeletePrmPage } from '../pages/promises/_pages/delete.prm';
 import { RequestsIncomingView } from '../pages/common/requests-incoming/requests-incoming';
 import { RequestsOutgoingView } from '../pages/common/requests-outgoing/requests-outgoing';
+import { RequestsLineItem } from '../pages/common/requests-line-item/requests-line-item';
 import { RulePage } from '../pages/promises/_pages/rule';
 import { KeywordEntryPage } from '../pages/keyword.entry/keyword.entry';
 
@@ -79,6 +80,7 @@ import { Constants } from '../_constants/constants';
     RulePage,
     RequestsIncomingView,    
     RequestsOutgoingView,
+    RequestsLineItem,
     RequestPage,
     AcceptRequestPage,
     DeclineRequestPage,
