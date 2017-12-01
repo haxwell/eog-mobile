@@ -33,9 +33,15 @@
 <ion-content padding>
 	<ion-grid>
 		<profile-header id="profile-header" [user]="getUser()" [readOnly]="true" (click)="onProfileBtnTap($event)"></profile-header>
-		<span class="requestSectionHeader">Incoming Requests</span>
-		<requests-incoming-view [ngStyle]="{'width':'100%'}" ></requests-incoming-view>
-		<span class="requestSectionHeader">Outgoing Requests</span>
-		<requests-outgoing-view [ngStyle]="{'width':'100%'}"></requests-outgoing-view>
+		<ion-list>
+			<ion-list-header>
+				Incoming Requests
+			</ion-list-header>
+			<requests-incoming-view [ngStyle]="{'width':'100%'}" ></requests-incoming-view>
+			<ion-list-header>
+				Outgoing Requests
+			</ion-list-header>
+			<requests-outgoing-view [ngStyle]="{'width':'100%'}" ></requests-outgoing-view>
+		</ion-list>
 	</ion-grid>
 </ion-content>

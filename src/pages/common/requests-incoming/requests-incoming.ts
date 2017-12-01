@@ -3,13 +3,6 @@ import { NavController } from 'ionic-angular';
 import { ModalController } from 'ionic-angular';
 import { Events } from 'ionic-angular';
 
-import { AcceptRequestPage } from '../../../pages/requests/incoming/_pages/accept.request'
-import { DeclineRequestPage } from '../../../pages/requests/incoming/_pages/decline.request'
-import { CompleteRequestPage } from '../../../pages/requests/incoming/_pages/complete.request'
-import { SecondCompleteRequestPage } from '../../../pages/requests/incoming/_pages/second.complete.request'
-import { CancelRequestPage } from '../../../pages/requests/incoming/_pages/cancel.request'
-import { ProfilePage } from '../../../pages/profile/profile'
-
 import { RequestsService } from '../../../app/_services/requests.service'
 
 import { Constants } from '../../../_constants/constants'
@@ -45,6 +38,8 @@ export class RequestsIncomingView {
 			this.ngOnInit();
 		});
 	}
+
+	getDirection() { return "incoming"; }
 
 	replaceModelElement(request) {
 		let temp = this.model.filter((obj) => { return obj["id"] !== request["id"]; });
@@ -123,50 +118,6 @@ export class RequestsIncomingView {
 		}
 		else
 			return undefined;
-	}
-
-	onDeclineBtnTap(item) {
-		this.dirty = true;
-		let self = this;
-		let modal = this.modalCtrl.create(DeclineRequestPage, {request: item});
-		modal.onDidDismiss(data => { self.ngOnInit() });
-		modal.present();
-	}
-
-	onAcceptBtnTap(item) {
-		this.dirty = true;
-		let self = this;
-		let modal = this.modalCtrl.create(AcceptRequestPage, {request: item});
-		modal.onDidDismiss(data => { self.ngOnInit() });
-		modal.present();
-	}
-
-	onCompleteBtnTap(item) {
-		this.dirty = true;
-		let self = this;
-		let modal = this.modalCtrl.create(CompleteRequestPage, {request: item});
-		modal.onDidDismiss(data => { self.ngOnInit() });
-		modal.present();
-	}
-
-	onSecondCompleteBtnTap(item) {
-		this.dirty = true;
-		let self = this;
-		let modal = this.modalCtrl.create(SecondCompleteRequestPage, {request: item});
-		modal.onDidDismiss(data => { self.ngOnInit() });
-		modal.present();
-	}
-
-	onUnableToCompleteBtnTap(item) {
-		this.dirty = true;
-		let self = this;
-		let modal = this.modalCtrl.create(CancelRequestPage, {request: item});
-		modal.onDidDismiss(data => { self.ngOnInit() });
-		modal.present();
-	}
-
-	onViewContactInfoBtnTap(item) {
-		this.navCtrl.push(ProfilePage, { user: item["directionallyOppositeUser"], readOnly: true });
 	}
 
 	getNumberOfMatchingElements(func) {

@@ -1,7 +1,68 @@
-			<ion-item class="yellow">
-				Your promise: <b>{{request.prm.title}}</b><br/>
-				Requested by: {{request.directionallyOppositeUser.realname}}<br/>
-				<button ion-button (click)="onViewContactInfoBtnTap(request)">View Their Profile</button>
-				<button ion-button (click)="onAcceptBtnTap(request)">Accept</button>
-				<button ion-button (click)="onDeclineBtnTap(request)">Decline</button>
-			</ion-item>
+	<ion-item *ngIf="isRequestPending()" class="yellow">
+		1 Your promise: <b>{{request.prm.title}}</b><br/>
+		Requested by: {{request.directionallyOppositeUser.realname}}<br/>
+		<button ion-button (click)="onViewContactInfoBtnTap(request)">View Their Profile</button>
+		<button ion-button (click)="onAcceptBtnTap(request)">Accept</button>
+		<button ion-button (click)="onDeclineBtnTap(request)">Decline</button>
+	</ion-item>
+	<ion-item *ngIf="isRequestAccepted()" class="green">
+		2 Your promise: <b>{{request.prm.title}}</b><br/>
+		Requested by: {{request.directionallyOppositeUser.realname}}<br/>
+		<button ion-button (click)="onViewContactInfoBtnTap(request)">Contact Info</button>
+		<button ion-button (click)="onCompleteBtnTap(request)">Complete</button>
+		<button ion-button (click)="onUnableToCompleteBtnTap(request)">Cancel</button>
+	</ion-item>
+	<ion-item *ngIf="isRequestDeclined()" class="red">
+		3 Your promise: <b>{{request.prm.title}}</b><br/>
+		Requested by: {{request.directionallyOppositeUser.realname}}<br/>
+		Decline Reason: {{request.declinedReasonCode.text}}<br/>
+	</ion-item>
+	<ion-item *ngIf="isRequestCompletedPendingApproval()" class="yellow">
+		4 Your promise: <b>{{request.prm.title}}</b><br/>
+		Requested by: {{request.directionallyOppositeUser.realname}}<br/>
+		<button ion-button (click)="onViewContactInfoBtnTap(request)">Contact Info</button>
+	</ion-item>
+	<ion-item *ngIf="isRequestDisputedCompleted()" class="red">
+		5 Your promise: <b>{{request.prm.title}}</b><br/>
+		Requested by: {{request.directionallyOppositeUser.realname}}<br/>
+		<button ion-button (click)="onViewContactInfoBtnTap(request)">Contact Info</button>
+		<button ion-button (click)="onCompleteBtnTap(request)">Complete</button>
+	</ion-item>
+
+	<ion-item *ngIf="isOutgoingRequestPending()" class="yellow">
+		6 The promise: <b>{{request.prm.title}}</b><br/>
+		Promised by: {{request.directionallyOppositeUser.realname}}<br/>
+		<button ion-button (click)="onCancelBtnTap(request)">Cancel</button>				
+	</ion-item>
+	<ion-item *ngIf="isOutgoingRequestAccepted()" class="green">
+		7 The promise: <b>{{request.prm.title}}</b><br/>
+		Promised by: {{request.directionallyOppositeUser.realname}}<br/>
+		<button ion-button (click)="onViewContactInfoBtnTap(request)">Contact Info</button>
+		<button ion-button (click)="onCancelBtnTap(request)">Cancel</button>
+	</ion-item>
+	<ion-item *ngIf="isOutgoingRequestCompletedAwaitingApproval()" class="yellow">
+		8 The promise: <b>{{request.prm.title}}</b><br/>
+		Promised by: {{request.directionallyOppositeUser.realname}}<br/>
+		<button ion-button (click)="onViewContactInfoBtnTap(request)">Contact Info</button>
+		<button ion-button (click)="onCompleteBtnTap(request)">Complete</button>
+		<button ion-button (click)="onNotCompleteBtnTap(request)">Not Complete</button>
+	</ion-item>
+	<ion-item *ngIf="isOutgoingRequestNotCompleteAwaitingResolution()" class="red">
+		9 The promise: <b>{{request.prm.title}}</b><br/>
+		Promised by: {{request.directionallyOppositeUser.realname}}<br/>
+		<button ion-button (click)="onViewContactInfoBtnTap(request)">Contact Info</button>
+		<button ion-button (click)="onCompleteBtnTap(request)">Mark as Complete</button>
+		<button ion-button (click)="onPermanentlyDismissBtnTap(request)">Permanently Dismiss</button>
+	</ion-item>
+	<ion-item *ngIf="isOutgoingRequestCancelled()" class="red">
+		10 The promise: <b>{{request.prm.title}}</b><br/>
+		Promised by: {{request.directionallyOppositeUser.realname}}<br/>
+		<button ion-button (click)="onCancelBtnTap(request)">Cancel</button>				
+	</ion-item>
+	<ion-item *ngIf="isOutgoingRequestDeclined()" class="red">
+		11 The promise: <b>{{request.prm.title}}</b><br/>
+		Promised by: {{request.directionallyOppositeUser.realname}}<br/>
+		Decline Reason: {{request.declinedReasonCode.text}}<br/>
+		<button ion-button (click)="onAcknowledgeBtnTap(request)">OK.. Got It.</button>
+	</ion-item>
+

@@ -1,7 +1,8 @@
-	<ion-list *ngIf="isRequestModelEmpty()">
+	<ion-item *ngIf="isRequestModelEmpty()">
 		No one has made any requests of you. Yet!
-	</ion-list>
-	<ion-list *ngIf="!isRequestModelEmpty()">
-		<requests-line-item *ngFor="let item of getPendingRequests()" [request]="item"></requests-line-item>
-	</ion-list>
-
+	</ion-item>
+	<requests-line-item *ngFor="let item of getPendingRequests()" [direction]="getDirection()" [request]="item"></requests-line-item>
+	<requests-line-item *ngFor="let item of getAcceptedRequests()" [direction]="getDirection()" [request]="item"></requests-line-item>
+	<requests-line-item *ngFor="let item of getDeclinedRequests()" [direction]="getDirection()" [request]="item"></requests-line-item>
+	<requests-line-item *ngFor="let item of getCompletedPendingApprovalRequests()" [direction]="getDirection()" [request]="item"></requests-line-item>
+	<requests-line-item *ngFor="let item of getDisputedCompletedRequests()" [direction]="getDirection()" [request]="item"></requests-line-item>

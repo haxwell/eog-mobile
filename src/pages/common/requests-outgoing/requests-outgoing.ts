@@ -38,6 +38,8 @@ export class RequestsOutgoingView {
 		_events.subscribe('request:deleted', func);
 	}
 
+	getDirection() { return "outgoing"; }
+
 	replaceModelElement(request) {
 		let temp = this.model.filter((obj) => { return obj["id"] !== request["id"]; });
 		temp.push(request);
