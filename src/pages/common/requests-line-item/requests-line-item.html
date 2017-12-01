@@ -1,68 +1,144 @@
-	<ion-item *ngIf="isRequestPending()" class="yellow">
-		1 Your promise: <b>{{request.prm.title}}</b><br/>
-		Requested by: {{request.directionallyOppositeUser.realname}}<br/>
-		<button ion-button (click)="onViewContactInfoBtnTap(request)">View Their Profile</button>
-		<button ion-button (click)="onAcceptBtnTap(request)">Accept</button>
-		<button ion-button (click)="onDeclineBtnTap(request)">Decline</button>
+	<ion-item *ngIf="isRequestPending()" class="yellow" (swipeLeft)="onDeclineBtnTap()" (swipeRight)="onAcceptBtnTap()" (click)="onTap()" (press)="onLongPress()">
+		<ion-avatar *ngIf="isDOUserProfileImageAvailable()" item-start>
+			<img [src]="getDOUserProfileImageFilepath()">
+		</ion-avatar>
+		<ion-avatar *ngIf="!isDOUserProfileImageAvailable()" item-start>
+			<img src="assets/img/mushroom.jpg">
+		</ion-avatar>
+		<span class="prmTitle"><b>{{request.prm.title}}</b></span><br/>
+		<span class="douMsg">This is where the message from the other user will go. Right in this line. It may be a long message. Like this one.</span><br/>
+		<span class="douName">{{request.directionallyOppositeUser.realname}}</span><br/>
+		<button ion-button (click)="onViewContactInfoBtnTap()">View Their Profile</button>
+		<button ion-button (click)="onAcceptBtnTap()">Accept</button>
+		<button ion-button (click)="onDeclineBtnTap()">Decline</button>
 	</ion-item>
-	<ion-item *ngIf="isRequestAccepted()" class="green">
-		2 Your promise: <b>{{request.prm.title}}</b><br/>
-		Requested by: {{request.directionallyOppositeUser.realname}}<br/>
-		<button ion-button (click)="onViewContactInfoBtnTap(request)">Contact Info</button>
-		<button ion-button (click)="onCompleteBtnTap(request)">Complete</button>
-		<button ion-button (click)="onUnableToCompleteBtnTap(request)">Cancel</button>
+	<ion-item *ngIf="isRequestAccepted()" class="green" (swipeLeft)="onUnableToCompleteBtnTap()" (swipeRight)="onCompleteBtnTap()" (click)="onTap()" (press)="onLongPress()">
+		<ion-avatar *ngIf="isDOUserProfileImageAvailable()" item-start>
+			<img [src]="getDOUserProfileImageFilepath()">
+		</ion-avatar>
+		<ion-avatar *ngIf="!isDOUserProfileImageAvailable()" item-start>
+			<img src="assets/img/mushroom.jpg">
+		</ion-avatar>
+		<span class="prmTitle"><b>{{request.prm.title}}</b></span><br/>
+		<span class="douMsg">This is where the message from the other user will go. Right in this line. It may be a long message. Like this one.</span><br/>
+		<span class="douName">{{request.directionallyOppositeUser.realname}}</span><br/>
+		<button ion-button (click)="onViewContactInfoBtnTap()">Contact Info</button>
+		<button ion-button (click)="onCompleteBtnTap()">Complete</button>
+		<button ion-button (click)="onUnableToCompleteBtnTap()">Cancel</button>
 	</ion-item>
-	<ion-item *ngIf="isRequestDeclined()" class="red">
-		3 Your promise: <b>{{request.prm.title}}</b><br/>
-		Requested by: {{request.directionallyOppositeUser.realname}}<br/>
-		Decline Reason: {{request.declinedReasonCode.text}}<br/>
+	<ion-item *ngIf="isRequestDeclined()" class="red waitingOnDirectionallyOppositeUser" (click)="onTap()" (press)="onLongPress()">
+		<ion-avatar *ngIf="isDOUserProfileImageAvailable()" item-start>
+			<img [src]="getDOUserProfileImageFilepath()">
+		</ion-avatar>
+		<ion-avatar *ngIf="!isDOUserProfileImageAvailable()" item-start>
+			<img src="assets/img/mushroom.jpg">
+		</ion-avatar>
+		<span class="prmTitle"><b>{{request.prm.title}}</b></span><br/>
+		<span class="douMsg">This is where the message from the other user will go. Right in this line. It may be a long message. Like this one.</span><br/>
+		<span class="douName">{{request.directionallyOppositeUser.realname}}</span><br/>
+		<span class="foo">Decline Reason: {{request.declinedReasonCode.text}}</span><br/>
 	</ion-item>
-	<ion-item *ngIf="isRequestCompletedPendingApproval()" class="yellow">
-		4 Your promise: <b>{{request.prm.title}}</b><br/>
-		Requested by: {{request.directionallyOppositeUser.realname}}<br/>
-		<button ion-button (click)="onViewContactInfoBtnTap(request)">Contact Info</button>
+	<ion-item *ngIf="isRequestCompletedPendingApproval()" class="yellow waitingOnDirectionallyOppositeUser" (click)="onTap()" (press)="onLongPress()">
+		<ion-avatar *ngIf="isDOUserProfileImageAvailable()" item-start>
+			<img [src]="getDOUserProfileImageFilepath()">
+		</ion-avatar>
+		<ion-avatar *ngIf="!isDOUserProfileImageAvailable()" item-start>
+			<img src="assets/img/mushroom.jpg">
+		</ion-avatar>
+		<span class="prmTitle"><b>{{request.prm.title}}</b></span><br/>
+		<span class="douMsg">This is where the message from the other user will go. Right in this line. It may be a long message. Like this one.</span><br/>
+		<span class="douName">{{request.directionallyOppositeUser.realname}}</span><br/>
+		<button ion-button (click)="onViewContactInfoBtnTap()">Contact Info</button>
 	</ion-item>
-	<ion-item *ngIf="isRequestDisputedCompleted()" class="red">
-		5 Your promise: <b>{{request.prm.title}}</b><br/>
-		Requested by: {{request.directionallyOppositeUser.realname}}<br/>
-		<button ion-button (click)="onViewContactInfoBtnTap(request)">Contact Info</button>
-		<button ion-button (click)="onCompleteBtnTap(request)">Complete</button>
-	</ion-item>
-
-	<ion-item *ngIf="isOutgoingRequestPending()" class="yellow">
-		6 The promise: <b>{{request.prm.title}}</b><br/>
-		Promised by: {{request.directionallyOppositeUser.realname}}<br/>
-		<button ion-button (click)="onCancelBtnTap(request)">Cancel</button>				
-	</ion-item>
-	<ion-item *ngIf="isOutgoingRequestAccepted()" class="green">
-		7 The promise: <b>{{request.prm.title}}</b><br/>
-		Promised by: {{request.directionallyOppositeUser.realname}}<br/>
-		<button ion-button (click)="onViewContactInfoBtnTap(request)">Contact Info</button>
-		<button ion-button (click)="onCancelBtnTap(request)">Cancel</button>
-	</ion-item>
-	<ion-item *ngIf="isOutgoingRequestCompletedAwaitingApproval()" class="yellow">
-		8 The promise: <b>{{request.prm.title}}</b><br/>
-		Promised by: {{request.directionallyOppositeUser.realname}}<br/>
-		<button ion-button (click)="onViewContactInfoBtnTap(request)">Contact Info</button>
-		<button ion-button (click)="onCompleteBtnTap(request)">Complete</button>
-		<button ion-button (click)="onNotCompleteBtnTap(request)">Not Complete</button>
-	</ion-item>
-	<ion-item *ngIf="isOutgoingRequestNotCompleteAwaitingResolution()" class="red">
-		9 The promise: <b>{{request.prm.title}}</b><br/>
-		Promised by: {{request.directionallyOppositeUser.realname}}<br/>
-		<button ion-button (click)="onViewContactInfoBtnTap(request)">Contact Info</button>
-		<button ion-button (click)="onCompleteBtnTap(request)">Mark as Complete</button>
-		<button ion-button (click)="onPermanentlyDismissBtnTap(request)">Permanently Dismiss</button>
-	</ion-item>
-	<ion-item *ngIf="isOutgoingRequestCancelled()" class="red">
-		10 The promise: <b>{{request.prm.title}}</b><br/>
-		Promised by: {{request.directionallyOppositeUser.realname}}<br/>
-		<button ion-button (click)="onCancelBtnTap(request)">Cancel</button>				
-	</ion-item>
-	<ion-item *ngIf="isOutgoingRequestDeclined()" class="red">
-		11 The promise: <b>{{request.prm.title}}</b><br/>
-		Promised by: {{request.directionallyOppositeUser.realname}}<br/>
-		Decline Reason: {{request.declinedReasonCode.text}}<br/>
-		<button ion-button (click)="onAcknowledgeBtnTap(request)">OK.. Got It.</button>
+	<ion-item *ngIf="isRequestDisputedCompleted()" class="red" (swipeRight)="onCompleteBtnTap()" (click)="onTap()" (press)="onLongPress()">
+		<ion-avatar *ngIf="isDOUserProfileImageAvailable()" item-start>
+			<img [src]="getDOUserProfileImageFilepath()">
+		</ion-avatar>
+		<ion-avatar *ngIf="!isDOUserProfileImageAvailable()" item-start>
+			<img src="assets/img/mushroom.jpg">
+		</ion-avatar>
+		<span class="prmTitle"><b>{{request.prm.title}}</b></span><br/>
+		<!-- <span class="douMsg">This is where the message from the other user will go. Right in this line. It may be a long message. Like this one.</span><br/> -->
+		<span class="douName">{{request.directionallyOppositeUser.realname}}</span><br/>
+		<button ion-button (click)="onViewContactInfoBtnTap()">Contact Info</button>
+		<button ion-button (click)="onCompleteBtnTap()">Complete</button>
 	</ion-item>
 
+	<ion-item *ngIf="isOutgoingRequestPending()" class="yellow waitingOnDirectionallyOppositeUser" (swipeLeft)="onCancelBtnTap()" (click)="onTap()" (press)="onLongPress()">
+		<ion-avatar *ngIf="isDOUserProfileImageAvailable()" item-start>
+			<img [src]="getDOUserProfileImageFilepath()">
+		</ion-avatar>
+		<ion-avatar *ngIf="!isDOUserProfileImageAvailable()" item-start>
+			<img src="assets/img/mushroom.jpg">
+		</ion-avatar>
+		<span class="prmTitle"><b>{{request.prm.title}}</b></span><br/>
+		<!-- <span class="douMsg">This is where the message from the other user will go. Right in this line. It may be a long message. Like this one.</span><br/> -->
+		<span class="douName">{{request.directionallyOppositeUser.realname}}</span><br/>
+		<button ion-button (click)="onCancelBtnTap()">Cancel</button>
+	</ion-item>
+	<ion-item *ngIf="isOutgoingRequestAccepted()" class="green waitingOnDirectionallyOppositeUser" (swipeLeft)="onCancelBtnTap()" (click)="onTap()" (press)="onLongPress()">
+		<ion-avatar *ngIf="isDOUserProfileImageAvailable()" item-start>
+			<img [src]="getDOUserProfileImageFilepath()">
+		</ion-avatar>
+		<ion-avatar *ngIf="!isDOUserProfileImageAvailable()" item-start>
+			<img src="assets/img/mushroom.jpg">
+		</ion-avatar>
+		<span class="prmTitle"><b>{{request.prm.title}}</b></span><br/>
+		<!-- <span class="douMsg">This is where the message from the other user will go. Right in this line. It may be a long message. Like this one.</span><br/> -->
+		<span class="douName">{{request.directionallyOppositeUser.realname}}</span><br/>
+		<button ion-button (click)="onViewContactInfoBtnTap()">Contact Info</button>
+		<button ion-button (click)="onCancelBtnTap()">Cancel</button>
+	</ion-item>
+	<ion-item *ngIf="isOutgoingRequestCompletedAwaitingApproval()" class="yellow" (swipeLeft)="onNotCompleteBtnTap()" (swipeRight)="onCompleteOutgoingBtnTap()" (click)="onTap()" (press)="onLongPress()">
+		<ion-avatar *ngIf="isDOUserProfileImageAvailable()" item-start>
+			<img [src]="getDOUserProfileImageFilepath()">
+		</ion-avatar>
+		<ion-avatar *ngIf="!isDOUserProfileImageAvailable()" item-start>
+			<img src="assets/img/mushroom.jpg">
+		</ion-avatar>
+		<span class="prmTitle"><b>{{request.prm.title}}</b></span><br/>
+		<!-- <span class="douMsg">This is where the message from the other user will go. Right in this line. It may be a long message. Like this one.</span><br/> -->
+		<span class="douName">{{request.directionallyOppositeUser.realname}}</span><br/>
+		<button ion-button (click)="onViewContactInfoBtnTap()">Contact Info</button>
+		<button ion-button (click)="onCompleteOutgoingBtnTap()">Complete</button>
+		<button ion-button (click)="onNotCompleteBtnTap()">Not Complete</button>
+	</ion-item>
+	<ion-item *ngIf="isOutgoingRequestNotCompleteAwaitingResolution()" class="red" (swipeLeft)="onPermanentlyDismissBtnTap()" (swipeRight)="onCompleteBtnTap()" (click)="onTap()" (press)="onLongPress()">
+		<ion-avatar *ngIf="isDOUserProfileImageAvailable()" item-start>
+			<img [src]="getDOUserProfileImageFilepath()">
+		</ion-avatar>
+		<ion-avatar *ngIf="!isDOUserProfileImageAvailable()" item-start>
+			<img src="assets/img/mushroom.jpg">
+		</ion-avatar>
+		<span class="prmTitle"><b>{{request.prm.title}}</b></span><br/>
+		<!-- <span class="douMsg">This is where the message from the other user will go. Right in this line. It may be a long message. Like this one.</span><br/> -->
+		<span class="douName">{{request.directionallyOppositeUser.realname}}</span><br/>
+		<button ion-button (click)="onViewContactInfoBtnTap()">Contact Info</button>
+		<button ion-button (click)="onCompleteBtnTap()">Mark as Complete</button>
+		<button ion-button (click)="onPermanentlyDismissBtnTap()">Permanently Dismiss</button>
+	</ion-item>
+	<ion-item *ngIf="isOutgoingRequestCancelled()" class="red" (swipeLeft)="onCancelBtnTap()" (click)="onTap()" (press)="onLongPress()">
+		<ion-avatar *ngIf="isDOUserProfileImageAvailable()" item-start>
+			<img [src]="getDOUserProfileImageFilepath()">
+		</ion-avatar>
+		<ion-avatar *ngIf="!isDOUserProfileImageAvailable()" item-start>
+			<img src="assets/img/mushroom.jpg">
+		</ion-avatar>
+		<span class="prmTitle"><b>{{request.prm.title}}</b></span><br/>
+		<!-- <span class="douMsg">This is where the message from the other user will go. Right in this line. It may be a long message. Like this one.</span><br/> -->
+		<span class="douName">{{request.directionallyOppositeUser.realname}}</span><br/>
+		<button ion-button (click)="onCancelBtnTap()">Cancel</button>				
+	</ion-item>
+	<ion-item *ngIf="isOutgoingRequestDeclined()" class="red" (swipeLeft)="onAcknowledgeBtnTap()" (click)="onTap()" (press)="onLongPress()">
+		<ion-avatar *ngIf="isDOUserProfileImageAvailable()" item-start>
+			<img [src]="getDOUserProfileImageFilepath()">
+		</ion-avatar>
+		<ion-avatar *ngIf="!isDOUserProfileImageAvailable()" item-start>
+			<img src="assets/img/mushroom.jpg">
+		</ion-avatar>
+		<span class="prmTitle"><b>{{request.prm.title}}</b></span><br/>
+		<!-- <span class="douMsg">This is where the message from the other user will go. Right in this line. It may be a long message. Like this one.</span><br/> -->
+		<span class="douName">{{request.directionallyOppositeUser.realname}}</span><br/>
+		<span class="foo">Decline Reason: {{request.declinedReasonCode.text}}</span><br/>
+		<button ion-button (click)="onAcknowledgeBtnTap()">OK.. Got It.</button>
+	</ion-item>

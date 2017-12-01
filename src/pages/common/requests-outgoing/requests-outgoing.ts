@@ -3,12 +3,6 @@ import { NavController } from 'ionic-angular';
 import { ModalController } from 'ionic-angular';
 import { Events } from 'ionic-angular';
 
-import { PermanentlyDismissUnresolvedRequestPage } from '../../../pages/requests/outgoing/_pages/permanently-dismiss-unresolved-request'
-import { NotCompleteOutgoingRequestPage } from '../../../pages/requests/outgoing/_pages/not.complete.request'
-import { CompleteOutgoingRequestPage } from '../../../pages/requests/outgoing/_pages/complete.request'
-import { CancelOutgoingRequestPage } from '../../../pages/requests/outgoing/_pages/cancel.request'
-import { ProfilePage } from '../../../pages/profile/profile'
-
 import { RequestsService } from '../../../app/_services/requests.service'
 
 import { Constants } from '../../../_constants/constants'
@@ -27,15 +21,7 @@ export class RequestsOutgoingView {
 				private _requestsService: RequestsService,
 				private _constants: Constants,
 				_events: Events) { 
-		let func = (data) => {
-			this.replaceModelElement(data["request"]);
-		};
 
-		_events.subscribe('request:saved', func);
-		_events.subscribe('request:accepted', func);
-		_events.subscribe('request:declined', func);
-		_events.subscribe('request:completed', func);
-		_events.subscribe('request:deleted', func);
 	}
 
 	getDirection() { return "outgoing"; }
@@ -126,43 +112,4 @@ export class RequestsOutgoingView {
 			return undefined;
 	}
 
-	onAcknowledgeBtnTap(item) {
-		let self = this;
-		self._requestsService.acknowledgeDeclinedRequest(item).then((data) => {
-			let list = self.model.filter((obj) => { return obj["id"] !== item["id"]; });
-			self.model = list;
-		});
-	}
-
-	onCompleteBtnTap(item) {
-		let self = this;
-		let modal = this.modalCtrl.create(CompleteOutgoingRequestPage, {request: item});
-		modal.onDidDismiss(data => { self.ngOnInit() });
-		modal.present();
-	}
-
-	onNotCompleteBtnTap(item) {
-		let self = this;
-		let modal = this.modalCtrl.create(NotCompleteOutgoingRequestPage, {request: item});
-		modal.onDidDismiss(data => { self.ngOnInit() });
-		modal.present();
-	}
-
-	onCancelBtnTap(item) {
-		let self = this;
-		let modal = this.modalCtrl.create(CancelOutgoingRequestPage, {request: item});
-		modal.onDidDismiss(data => { self.ngOnInit() });
-		modal.present();
-	}
-
-	onViewContactInfoBtnTap(item) {
-		this.navCtrl.push(ProfilePage, { user: item["directionallyOppositeUser"], readOnly: true });
-	}
-
-	onPermanentlyDismissBtnTap(item) {
-		let self = this;
-		let modal = this.modalCtrl.create(PermanentlyDismissUnresolvedRequestPage, {request: item});
-		modal.onDidDismiss(data => { self.ngOnInit() });
-		modal.present();
-	}
 }

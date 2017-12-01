@@ -122,6 +122,8 @@ export class RequestsService {
 				
 				if (obj["_body"] && obj["_body"].length > 0)
 					model = JSON.parse(obj["_body"]);
+
+				this._events.publish('request:statusChanged', {request: this.changePromiseAttributeToPrm(model)});
 				
 				resolve(model);
 			});

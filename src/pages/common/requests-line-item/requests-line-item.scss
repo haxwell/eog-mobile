@@ -1,17 +1,34 @@
-	ion-item.yellow {
-		border-style: none none none solid;
-		border-width: 7px;
-		border-color: yellow;
-	}
+ion-item.yellow {
+	border-style: none none none solid;
+	border-width: 7px;
+	border-color: yellow;
+}
 
-	ion-item.red {
-		border-style: none none none solid;
-		border-width: 7px;
-		border-color: red;
-	}
+ion-item.red {
+	border-style: none none none solid;
+	border-width: 7px;
+	border-color: red;
+}
 
-	ion-item.green {
-		border-style: none none none solid;
-		border-width: 7px;
-		border-color: green;
-	}
+ion-item.green {
+	border-style: none none none solid;
+	border-width: 7px;
+	border-color: green;
+}
+
+.prmTitle {
+	font-size: 1.25em;
+}
+
+.douName {
+	font-size: .65em;
+	font-style: italic;
+}
+
+.douMessage {
+	font-size: .9em;
+}
+
+.waitingOnDirectionallyOppositeUser {
+	background-color: lightgray;
+}

@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { ModalController, NavController, NavParams } from 'ionic-angular';
+import { ModalController, NavController, NavParams, Events } from 'ionic-angular';
 
 import { AcceptRequestPage } from '../../../pages/requests/incoming/_pages/accept.request'
 import { DeclineRequestPage } from '../../../pages/requests/incoming/_pages/decline.request'
@@ -8,7 +8,16 @@ import { SecondCompleteRequestPage } from '../../../pages/requests/incoming/_pag
 import { CancelRequestPage } from '../../../pages/requests/incoming/_pages/cancel.request'
 import { ProfilePage } from '../../../pages/profile/profile'
 
+import { PermanentlyDismissUnresolvedRequestPage } from '../../../pages/requests/outgoing/_pages/permanently-dismiss-unresolved-request'
+import { NotCompleteOutgoingRequestPage } from '../../../pages/requests/outgoing/_pages/not.complete.request'
+import { CompleteOutgoingRequestPage } from '../../../pages/requests/outgoing/_pages/complete.request'
+import { CancelOutgoingRequestPage } from '../../../pages/requests/outgoing/_pages/cancel.request'
+
 import { Constants } from '../../../_constants/constants'
+
+import { ProfilePictureService } from '../../../app/_services/profile-picture.service'
+import { ProfileService } from '../_services/profile.service'
+import { RequestsService } from '../../../app/_services/requests.service'
 
 @Component({
   selector: 'requests-line-item',
@@ -20,16 +29,38 @@ export class RequestsLineItem {
 	@Input() request = undefined;
 	@Input() direction = undefined;
 
+	directionallyOppositeUserProfileImageFilepath = undefined;
+
 	constructor(navParams: NavParams, 
 				private navCtrl: NavController,
 				private modalCtrl: ModalController,
-				private _constants: Constants) {
+				private _constants: Constants,
+				private _profilePictureService: ProfilePictureService,
+				private _profileService: ProfileService,
+				private _requestsService: RequestsService,
+                _events: Events) {
 		this.request = navParams.get('request') || undefined;
 		this.direction = navParams.get('direction') || undefined;
+
+		let func = (data) => {
+			if (data["request"]["id"] === this.request["id"])
+				this.request = data["request"];
+		};
+
+		_events.subscribe('request:saved', func);
+		_events.subscribe('request:accepted', func);
+		_events.subscribe('request:declined', func);
+		_events.subscribe('request:completed', func);
+		_events.subscribe('request:deleted', func);
+		_events.subscribe('request:statusChanged', func);
 	}
 
 	ngOnInit() {
-
+		let id = this.request["requestingUserId"];
+		let path = this._profileService.getMostProbableProfilePhotoPath() + id;
+		this._profilePictureService.get(id, path).then((path) => {
+			this.directionallyOppositeUserProfileImageFilepath = path;
+		});
 	}
 
 	ionViewWillEnter() {
@@ -87,38 +118,89 @@ export class RequestsLineItem {
 		return this.direction === 'outgoing' && this.request["deliveringStatusId"] === this._constants.REQUEST_STATUS_DECLINED; 
 	}
 
-	onDeclineBtnTap(item) {
+	onTap() {
+		console.log("tap!");
+	}
+
+	onLongPress() {
+		this.navCtrl.push(ProfilePage, { user: this.request["directionallyOppositeUser"], readOnly: true });
+	}
+
+	onDeclineBtnTap() {
 		let self = this;
-		let modal = this.modalCtrl.create(DeclineRequestPage, {request: item});
+		let modal = this.modalCtrl.create(DeclineRequestPage, {request: this.request});
 		modal.onDidDismiss(data => { self.ngOnInit() });
 		modal.present();
 	}
 
-	onAcceptBtnTap(item) {
+	onAcceptBtnTap() {
 		let self = this;
-		let modal = this.modalCtrl.create(AcceptRequestPage, {request: item});
+		let modal = this.modalCtrl.create(AcceptRequestPage, {request: this.request});
 		modal.onDidDismiss(data => { self.ngOnInit() });
 		modal.present();
 	}
 
-	onCompleteBtnTap(item) {
+	onCompleteBtnTap() {
 		let self = this;
-		let modal = this.modalCtrl.create(CompleteRequestPage, {request: item});
+		let modal = this.modalCtrl.create(CompleteRequestPage, {request: this.request});
 		modal.onDidDismiss(data => { self.ngOnInit() });
 		modal.present();
 	}
 
-	onSecondCompleteBtnTap(item) {
+	onSecondCompleteBtnTap() {
 		let self = this;
-		let modal = this.modalCtrl.create(SecondCompleteRequestPage, {request: item});
+		let modal = this.modalCtrl.create(SecondCompleteRequestPage, {request: this.request});
 		modal.onDidDismiss(data => { self.ngOnInit() });
 		modal.present();
 	}
 
-	onUnableToCompleteBtnTap(item) {
+	onUnableToCompleteBtnTap() {
 		let self = this;
-		let modal = this.modalCtrl.create(CancelRequestPage, {request: item});
+		let modal = this.modalCtrl.create(CancelRequestPage, {request: this.request});
 		modal.onDidDismiss(data => { self.ngOnInit() });
 		modal.present();
+	}
+
+	onAcknowledgeBtnTap() {
+		let self = this;
+		self._requestsService.acknowledgeDeclinedRequest(self.request).then((data) => {
+
+		});
+	}
+
+	onCompleteOutgoingBtnTap() {
+		let self = this;
+		let modal = this.modalCtrl.create(CompleteOutgoingRequestPage, {request: this.request});
+		modal.onDidDismiss(data => { self.ngOnInit() });
+		modal.present();
+	}
+
+	onNotCompleteBtnTap() {
+		let self = this;
+		let modal = this.modalCtrl.create(NotCompleteOutgoingRequestPage, {request: this.request});
+		modal.onDidDismiss(data => { self.ngOnInit() });
+		modal.present();
+	}
+
+	onCancelBtnTap() {
+		let self = this;
+		let modal = this.modalCtrl.create(CancelOutgoingRequestPage, {request: this.request});
+		modal.onDidDismiss(data => { self.ngOnInit() });
+		modal.present();
+	}
+
+	onPermanentlyDismissBtnTap() {
+		let self = this;
+		let modal = this.modalCtrl.create(PermanentlyDismissUnresolvedRequestPage, {request: this.request});
+		modal.onDidDismiss(data => { self.ngOnInit() });
+		modal.present();
+	}
+
+	getDOUserProfileImageFilepath() {
+		return this.directionallyOppositeUserProfileImageFilepath;
+	}
+
+	isDOUserProfileImageAvailable() {
+		return this.directionallyOppositeUserProfileImageFilepath !== undefined && this.directionallyOppositeUserProfileImageFilepath !== null;
 	}
 }

@@ -35,11 +35,11 @@
 		<profile-header id="profile-header" [user]="getUser()" [readOnly]="true" (click)="onProfileBtnTap($event)"></profile-header>
 		<ion-list>
 			<ion-list-header>
-				Incoming Requests
+				People asked you for...
 			</ion-list-header>
 			<requests-incoming-view [ngStyle]="{'width':'100%'}" ></requests-incoming-view>
 			<ion-list-header>
-				Outgoing Requests
+				You asked other people for...
 			</ion-list-header>
 			<requests-outgoing-view [ngStyle]="{'width':'100%'}" ></requests-outgoing-view>
 		</ion-list>
