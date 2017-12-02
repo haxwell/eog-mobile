@@ -169,7 +169,7 @@ export class ProfilePage {
 		});
 	}
 
-	onNewPromiseBtnTap(evt) {
+	onNewPromiseBtnTap() {
 		this.navCtrl.push(PrmPage, { prm: undefined, callback: this.PrmCallback });
 	}
 
@@ -206,11 +206,11 @@ export class ProfilePage {
 		return this._currentUserCanSendPointToProfileUser;
 	}
 
-	onIndividualKeywordPress(item) {
-		return this.onModifyKeywordBtnTap(item);
+	onIndividualKeywordPress() {
+		return this.onModifyKeywordBtnTap();
 	}
 
-	onModifyKeywordBtnTap(evt) {
+	onModifyKeywordBtnTap() {
 		if (!this.isReadOnly()) {
 			let self = this;
 			let modal = this.modalCtrl.create(KeywordEntryPage, {keywordArray: self.model["keywords"]});
