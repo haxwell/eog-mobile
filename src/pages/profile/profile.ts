@@ -7,6 +7,7 @@ import { AlertController } from 'ionic-angular';
 import { File } from '@ionic-native/file'
 
 import { ProfileService } from '../../pages/common/_services/profile.service'
+import { ProfilePictureService } from '../../app/_services/profile-picture.service'
 import { NotificationService } from './_services/notification.service'
 import { UserMetadataService } from '../../app/_services/user-metadata.service'
 import { RecommendationService } from '../../app/_services/recommendation.service'
@@ -14,6 +15,7 @@ import { PointsService } from '../../app/_services/points.service'
 
 import { PrmPage } from '../promises/promises'
 import { KeywordEntryPage } from '../keyword.entry/keyword.entry'
+import { DeletePrmPage } from '../promises/_pages/delete.prm'
 
 import { Constants } from '../../_constants/constants'
 
@@ -34,10 +36,13 @@ export class ProfilePage {
 	_currentUserCanSendRecommendationToProfileUser = undefined;
 	_currentUserCanSendPointToProfileUser = undefined;
 
+	directionallyOppositeUserProfileImageFilepath = {};
+
 	constructor(public navCtrl: NavController,
 				navParams: NavParams, 
 				public modalCtrl: ModalController,
 				private _profileService: ProfileService,
+				private _profilePictureService: ProfilePictureService,
 				private _notificationService: NotificationService,
 				private _userMetadataService: UserMetadataService,
 				private _recommendationService: RecommendationService,
@@ -172,6 +177,13 @@ export class ProfilePage {
 		this.navCtrl.push(PrmPage, { prm: item, callback:  this.PrmCallback, readOnly: this.isReadOnly() });
 	}
 
+	onDeletePromise(prm) {
+		let self = this;
+		let modal = this.modalCtrl.create(DeletePrmPage, {prm: prm});
+		modal.onDidDismiss(data => { if (data === true) console.log("TODO: Update The UI when Promise is deleted by a swipe left"); } );
+		modal.present();
+	}
+
 	onSendRecommendationBtnTap() {
 		let self = this;
 		self._recommendationService.sendARecommendationToAUser(this.user["id"]).then((data) => {
@@ -284,7 +296,7 @@ export class ProfilePage {
 			return this.model["notifications"];	
 	}
 
-	onNotificationPress(item) {
+	onClearIndividualNotification(item) {
 		this._notificationService.delete(item).then(() => {
 			this.model["notifications"] = this.model["notifications"].filter((obj) => {
 				return obj["id"] !== item["id"];
@@ -340,5 +352,70 @@ export class ProfilePage {
 		this._userMetadataService.getMetadataValue(this.user, this._constants.FUNCTION_KEY_CAN_SEND_RECOMMENDATION_TO_USER).then((bool) => {
 			this._currentUserCanSendRecommendationToProfileUser = bool;
 		})
+	}
+
+	setChangedAttr(key, value) {
+		let model = this._profileService.getModel(this.user);
+		model[key] = value;
+		this._events.publish('profile:changedContactInfo', model);
+		this.setDirty(true);
+	}
+
+	onEmailChange(event) {
+		this.setChangedAttr("email", event._value);
+	}
+
+	onPhoneChange(event) {
+		this.setChangedAttr("phone", event._value);	
+	}
+
+	getModelAttr(key) {
+		let model = this._profileService.getModel(this.user) || {};
+		return model[key];
+	}
+
+	getPromiseAvatarImage(prm) {
+		return "assets/img/mushroom.jpg";
+	}
+
+	getDOUserProfileImageFilepath(userId) {
+		return this.directionallyOppositeUserProfileImageFilepath;
+	}
+
+	isDOUserProfileImageAvailable(userId) {
+		let rtn = this.directionallyOppositeUserProfileImageFilepath[userId] !== undefined && this.directionallyOppositeUserProfileImageFilepath[userId] !== null;
+
+		let self = this;
+		if (self.directionallyOppositeUserProfileImageFilepath[userId] === undefined && userId !== undefined) {
+			console.log("In there..." + userId);
+			self.directionallyOppositeUserProfileImageFilepath[userId] = null;
+
+			let path = self._profileService.getMostProbableProfilePhotoPath() + userId;
+			
+			self._profilePictureService.get(userId, path).then((path) => {
+				if (path !== undefined)
+					self.directionallyOppositeUserProfileImageFilepath[userId] = path;
+			});
+		}
+
+		return rtn; 
+	}
+
+	getPointRecommendationCountPhrase(prm) {
+		let str = prm.requiredPointsQuantity + " point";
+
+		if (prm.requiredPointsQuantity > 1)
+			str += "s";
+
+		if (prm.requiredUserRecommendations.length > 0) {
+			str += ", ";
+			str += prm.requiredUserRecommendations.length;
+			str += " recommendation";
+
+			if (prm.requiredUserRecommendations.length > 1)
+				str += "s";
+		}
+
+		return str;
 	}
 }

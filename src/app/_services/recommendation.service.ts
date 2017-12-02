@@ -125,11 +125,16 @@ export class RecommendationService {
 	isCurrentUserAbleToSendARecommendationTo(receivingUserId) {
 		return new Promise((resolve, reject) => {
 			let user = this._userService.getCurrentUser();
-			let url = environment.apiUrl + "/api/user/" + receivingUserId + "/recommendations/receive/" + user["id"];
-			this._apiService.get(url)
-			.subscribe((obj) => {
-				resolve(JSON.parse(obj["_body"]));
-			});
+			
+			if (receivingUserId !== user["id"]) {
+				let url = environment.apiUrl + "/api/user/" + receivingUserId + "/recommendations/receive/" + user["id"];
+				this._apiService.get(url).subscribe((obj) => {
+					resolve(JSON.parse(obj["_body"]));
+				});
+			}
+			else {
+				resolve(false);
+			}
 		});
 	}
 	

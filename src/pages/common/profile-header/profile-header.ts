@@ -142,13 +142,17 @@ export class ProfileHeader {
 		this.setChangedAttr("realname", event._value);
 	}
 
-	onEmailChange(event) {
-		this.setChangedAttr("email", event._value);
+	onDescriptionChange(event) {
+		this.setChangedAttr("description", event._value);
 	}
 
-	onPhoneChange(event) {
-		this.setChangedAttr("phone", event._value);	
-	}
+//	onEmailChange(event) {
+//		this.setChangedAttr("email", event._value);
+//	}
+//
+//	onPhoneChange(event) {
+//		this.setChangedAttr("phone", event._value);	
+//	}
 
 	getModelAttr(key) {
 		let model = this._profileService.getModel(this.user) || {};

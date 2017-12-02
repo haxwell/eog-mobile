@@ -1,7 +1,6 @@
-
-<table class="-table">
-	<tr>
-		<td>
+<ion-grid>
+	<ion-row>
+		<ion-col col-auto>
 			<ion-item *ngIf="isThumbnailImageAvailable()">
 				<ion-thumbnail item-start >
 					<img class="rotate90 circularized" [src]="getThumbnailImage()" alt="profile_image" (press)="onThumbnailPress($event)">
@@ -12,37 +11,16 @@
 					<img class="circularized" src="assets/img/mushroom.jpg" (press)="onThumbnailPress($event)">
 				</ion-thumbnail>
 			</ion-item>
-		</td>
-		<td>
+		</ion-col>
+		<ion-col col-auto>
 			<div *ngIf="isReadOnly()">
-				<span class="profile_header__name">{{getModelAttr('realname')}}</span><br/>
-				<span class="profile_header__desc">{{getModelAttr('description')}}</span>
-				<!-- <span *ngIf="isCurrentUserAllowedToSeeContactInfo()">Email: {{getModelAttr('email')}}<br/>Phone: {{getModelAttr('phone')}}</span> -->
+				<span >{{getModelAttr('realname')}}</span><br/>
+				<span >{{getModelAttr('description')}}</span>
 			</div>
 			<div *ngIf="!isReadOnly()">
-				<table>
-					<tr>
-						<ion-item>
-							<span class="profile_header__name">{{getModelAttr('realname')}}</span><br/>
-							<!-- <ion-input type="text" placeholder="Name" (ionChange)="onNameChange($event)" [value]="getModelAttr('realname')" required></ion-input> -->
-						</ion-item>
-					</tr>
-					<tr>
-						<ion-item>
-							<span class="profile_header__desc">{{getModelAttr('description')}}</span>
-							<!-- <ion-input type="text" placeholder="Name" (ionChange)="onNameChange($event)" [value]="getModelAttr('realname')" required></ion-input> -->
-						</ion-item>
-						<!-- <ion-item *ngIf="isCurrentUserAllowedToSeeContactInfo()">
-							<ion-input type="text" placeholder="you@domain.com" (ionChange)="onEmailChange($event)" [value]="getModelAttr('email')" required></ion-input>
-						</ion-item>
-					</tr>
-					<tr>
-						<ion-item *ngIf="isCurrentUserAllowedToSeeContactInfo()">
-							<ion-input type="text" placeholder="# " (ionChange)="onPhoneChange($event)" [value]="getModelAttr('phone')" required></ion-input>
-						</ion-item > -->
-					</tr>
-				</table>
+				<ion-input type="text" class="profile_header__name" placeholder="Name" (ionChange)="onNameChange($event)" [value]="getModelAttr('realname')" required></ion-input>
+				<ion-input type="text" class="profile_header__desc" placeholder="Description" (ionChange)="onDescriptionChange($event)" [value]="getModelAttr('description')" required></ion-input>
 			</div>
-		</td>
-	</tr>
-</table>
+		</ion-col>
+	</ion-row>
+</ion-grid>

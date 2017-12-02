@@ -15,7 +15,7 @@ import { PushMessagingService } from '../../app/_services/push.messaging.service
 })
 export class LoginPage {
 
-  user = {id:-1, name: '', password: ''};
+  user = {id:-1, name: 'eoguser2', password: 'password'};
   loading = undefined;
   
   constructor(public navCtrl: NavController,

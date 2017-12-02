@@ -13,3 +13,18 @@
     -ms-transform: rotate(90deg);
     transform: rotate(90deg);
 }
+
+.profile_header__name > input.text-input.text-input-md {
+	font-size: 2em;
+	margin: 0px 8px;
+}
+
+.profile_header__desc > input.text-input.text-input-md {
+	font-size: 2em;
+	margin: 0px 8px;
+}
+
+.item-inner {
+	width: 0px;
+	padding-right: 0px!important;
+}

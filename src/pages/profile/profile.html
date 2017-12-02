@@ -10,109 +10,122 @@
 </ion-header>
 
 <ion-content padding>
-	<ion-card>
-		<ion-card-header>
-			Contact Info
-		</ion-card-header>
-		<ion-card-content>
-			<profile-header [user]="getUser()" [readOnly]="isReadOnly()"></profile-header>
-		</ion-card-content>
-	</ion-card>
+	<profile-header [user]="getUser()" [readOnly]="isReadOnly()"></profile-header>
+	<table class="fifteenPixelLeftMargin">
+		<tr>
+			<td>
+				<ion-icon class="profileIcon" name="phone-portrait"></ion-icon>
+			</td>
+			<td>
+		        <ion-input type="text" class="contactInfoField" (ionChange)="onPhoneChange($event)" [value]="getModelAttr('phone')" required></ion-input>
+			</td>
+			<td>
+				<ion-icon class="profileIcon" name="mail"></ion-icon>
+			</td>
+			<td>
+		        <ion-input type="text" class="contactInfoField" (ionChange)="onEmailChange($event)" [value]="getModelAttr('email')" required></ion-input>
+			</td>
+		</tr>
+	</table>
+
 	<ion-row *ngIf="isReadOnly()">
 		<button ion-button [disabled]="!isSendPointBtnAvailable()" (click)="onSendPointBtnTap($event)">Send Point</button>
 		<button ion-button [disabled]="!isSendRecommendBtnAvailable()" (click)="onSendRecommendationBtnTap($event)">Send Recommendation</button>
 	</ion-row>
-	<ion-row [class]="getKeywordsCardClass()">
-		<ion-card>
-			<ion-card-header>
-				Profile Keywords
-				<button *ngIf="!isReadOnly()" ion-button icon-only small color="danger" (click)="onModifyKeywordBtnTap($event)"><ion-icon name="add"></ion-icon></button>								
-			</ion-card-header>
-			<ion-card-content>
-				<span *ngIf="userHasNoKeywords() && !isReadOnly()">
-					Keywords are descriptive words and phrases. Add some to describe you!
-				</span>
-				<span *ngIf="userHasNoKeywords() && isReadOnly()">
-					This user has not defined any keywords yet.
-				</span>
-				<span class="blockItem" *ngFor="let item of model.keywords" (press)="onIndividualKeywordPress(item)">
-					{{item.text}}
-				</span>
-			</ion-card-content>
-		</ion-card>
-	</ion-row>	
-	<ion-row *ngIf="!isReadOnly() && model.points" [class]="getPointsCardClass()">
-		<ion-card>
-			<ion-card-header>
-				Points
-			</ion-card-header>
-			<ion-card-content>
-				<ion-item>
-					Total: 
-					<ion-badge item-end>{{model.points.total}}</ion-badge>
-				</ion-item>
-				<ion-item>
-					Available:
-					<ion-badge item-end>{{model.points.available}}</ion-badge>
-				</ion-item>
-				<ion-item>
-					All Time:
-					<ion-badge item-end>{{model.allTimePointCount}}</ion-badge>
-				</ion-item>
-			</ion-card-content>
-		</ion-card>
-	</ion-row>
-	<ion-row [class]="getRecommendationsCardClass()">
-		<ion-card>
-			<ion-card-header>
-				Recommendations
-			</ion-card-header>
-			<ion-card-content>
-				<div *ngIf="areIncomingRecommendationsAvailable()">
-					<span class="blockItem" *ngFor="let item of getAvailableIncomingRecommendations()">
-						{{getRealName(item)}}
-					</span>
-				</div>
-				<span *ngIf="!areIncomingRecommendationsAvailable()">No Available Recommendations</span>				
-			</ion-card-content>
-		</ion-card>
-	</ion-row>	
-	<ion-row [class]="getPromisesCardClass()">
-		<ion-card>
-			<ion-card-header>
-				Promises
-				<button *ngIf="!isReadOnly()" ion-button icon-only small color="danger" (click)="onNewPromiseBtnTap($event)"><ion-icon name="add"></ion-icon></button>				
-			</ion-card-header>
-			<ion-card-content>
-				<span *ngIf="userHasNoPromises() && !isReadOnly()">
-					Got some thing you do well? Make a promise to do it!
-				</span>
-				<span *ngIf="userHasNoPromises() && isReadOnly()">
-					This user has not added any Promises yet!
-				</span>
-				<span class="blockItem" *ngFor="let item of model.prms" (click)="onPromiseBtnTap(item)">
-					{{item.title}}
-				</span>
-			</ion-card-content>
-		</ion-card>
-	</ion-row>	
-	<ion-row *ngIf="!isReadOnly()" [class]="getNotificationsCardClass()">
-		<ion-card>
-			<ion-card-header>
-				Notifications 
-				<span *ngIf="!userHasNoNotifications()" class="blockItem" (press)="onNotificationClearAllBtnPress(item)">
-					Press Here to Clear All
-				</span>
-			</ion-card-header>
-			<ion-card-content>
-				<span *ngIf="userHasNoNotifications()">
-					No notifications.. go make something happen!
-				</span>
-				<span *ngFor="let item of getNotifications()" (press)="onNotificationPress(item)">
-					<i>{{item.howLongAgo}}</i> - {{item.message}}<br/>
-				</span>
-			</ion-card-content>
-		</ion-card>
-	</ion-row>	
+
+	<ion-list>
+		<ion-list-header class="listHeader">
+			Points
+		</ion-list-header>
+		<table>
+			<tr>
+				<td class="ptsTdElement">
+					<span class="displayBlock">{{model.points.total}}</span> Total
+				</td>
+				<td class="ptsTdElement">
+					<span class="displayBlock">{{model.points.available}}</span> Available
+				</td>
+				<td class="ptsTdElement">
+					<span class="displayBlock">{{model.allTimePointCount}}</span> All Time
+				</td>
+			</tr>
+		</table>	
+	</ion-list>
+
+	<ion-list>
+		<ion-list-header class="listHeader" *ngIf="!isReadOnly()">
+			Promises
+		</ion-list-header>
+		<ion-item *ngFor="let prm of model.prms" (swipeLeft)="onDeletePromise(prm)" (press)="onPromiseBtnTap(prm)">
+			<ion-avatar item-start>
+				<img [src]="getPromiseAvatarImage(prm)">
+			</ion-avatar>
+			<span class="prmTitle">{{prm.title}}</span><br/>
+			<span class="prmDesc">{{prm.description}}</span><br/>
+			<div class="promiseDetail">
+				<span class="prmReqdPts">{{getPointRecommendationCountPhrase(prm)}}<br/></span>
+				<span *ngFor="let keyword of prm.keywords"><span class="smallKeyword">{{keyword.text}}</span></span>
+			</div>
+		</ion-item>
+	</ion-list>
+
+	<ion-list>
+		<ion-list-header class="listHeader">
+			Recommendations
+		</ion-list-header>
+		<ion-item *ngFor="let item of getAvailableIncomingRecommendations()">
+			<ion-avatar *ngIf="isDOUserProfileImageAvailable(item['requestingUserId'])" item-start>
+				<img [src]="getDOUserProfileImageFilepath(item["requestingUserId"])">
+			</ion-avatar>
+			<ion-avatar *ngIf="!isDOUserProfileImageAvailable(item['requestingUserId'])" item-start>
+				<img src="assets/img/mushroom.jpg">
+			</ion-avatar>
+			<span>
+				{{getRealName(item)}}
+			</span>
+		</ion-item>
+		<ion-item *ngIf="!areIncomingRecommendationsAvailable()">
+			<span >No Available Recommendations</span>				
+		</ion-item>
+	</ion-list>
+
+	<ion-list>
+		<ion-list-header class="listHeader">
+			Profile Keywords
+		</ion-list-header>
+		<span *ngIf="userHasNoKeywords() && !isReadOnly()">
+			Keywords are descriptive words and phrases. Add some to describe you!
+		</span>
+		<span *ngIf="userHasNoKeywords() && isReadOnly()">
+			This user has not defined any keywords yet.
+		</span>
+		<div class="fifteenPixelLeftMargin">
+			<span *ngFor="let item of model.keywords">
+				<span class="blockItem" (press)="onIndividualKeywordPress(item)">{{item.text}}</span>
+			</span>
+		</div>
+	</ion-list>
+
+	<ion-list>
+		<ion-list-header class="listHeader" *ngIf="!isReadOnly()">
+			Notifications
+		</ion-list-header>
+		<ion-item *ngIf="userHasNoNotifications()">
+			<span >
+				<span class="notificationMsg">No notifications.. go make something happen!</span>
+			</span>
+		</ion-item>
+		<ion-item *ngFor="let item of getNotifications()" (swipeLeft)="onClearIndividualNotification(item)">
+			<ion-avatar *ngIf="isDOUserProfileImageAvailable(item['oppUserId'])" item-start>
+				<img [src]="getDOUserProfileImageFilepath(item['oppUserId'])">
+			</ion-avatar>
+			<ion-avatar *ngIf="!isDOUserProfileImageAvailable(item['oppUserId'])" item-start>
+				<img src="assets/img/mushroom.jpg">
+			</ion-avatar>
+			<span >
+				<span class="howLongAgo">{{item.howLongAgo}}</span><span class="notificationMsg">{{item.message}}</span>
+			</span>
+		</ion-item>
+	</ion-list>
 
 </ion-content>
