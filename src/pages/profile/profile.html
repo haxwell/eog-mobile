@@ -54,7 +54,10 @@
 
 	<ion-list>
 		<ion-list-header class="listHeader" *ngIf="!isReadOnly()">
-			Promises
+			<span>Promises</span>
+			<button class="listHeaderBtn" round ion-button (click)="onNewPromiseBtnTap()">
+				<ion-icon name="add"></ion-icon>
+			</button>
 		</ion-list-header>
 		<ion-item *ngFor="let prm of model.prms" (swipeLeft)="onDeletePromise(prm)" (press)="onPromiseBtnTap(prm)">
 			<ion-avatar item-start>
@@ -92,6 +95,9 @@
 	<ion-list>
 		<ion-list-header class="listHeader">
 			Profile Keywords
+			<button class="listHeaderBtn" round ion-button (click)="onIndividualKeywordPress()">
+				<ion-icon name="add"></ion-icon>
+			</button>
 		</ion-list-header>
 		<span *ngIf="userHasNoKeywords() && !isReadOnly()">
 			Keywords are descriptive words and phrases. Add some to describe you!
@@ -101,7 +107,7 @@
 		</span>
 		<div class="fifteenPixelLeftMargin">
 			<span *ngFor="let item of model.keywords">
-				<span class="blockItem" (press)="onIndividualKeywordPress(item)">{{item.text}}</span>
+				<span class="blockItem" (press)="onIndividualKeywordPress()">{{item.text}}</span>
 			</span>
 		</div>
 	</ion-list>
