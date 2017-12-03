@@ -9,27 +9,38 @@
 <ion-content padding>
 	<ion-label>Rules are lists of things another user must have <i>before</i> they can ask you to fulfill your promise. You must require at least one point, but you could require a recommendation, and many points, if you'd like.</ion-label>
 		<ion-row>
-			<ion-label>Required points</ion-label>
-			<ion-input type="number" placeholder="quantity" max="10000" [(ngModel)]="pointsQuantity" #ctrl="ngModel" required></ion-input>
+			<ion-grid>
+				<ion-row>
+					<ion-col >
+						<ion-label>Required points</ion-label>
+					</ion-col>
+					<ion-col col-auto>
+						<ion-input class="floatRight" type="number" placeholder="quantity" max="10000" [(ngModel)]="pointsQuantity" #ctrl="ngModel" required></ion-input>
+					</ion-col>
+				</ion-row>
+			</ion-grid>
+			
 		</ion-row>
 		<ion-row>
-			<table>
-				<tr>
-					<td>
-						<ion-label class="recommendationLabel">Required recommendations</ion-label>
-					</td>
-					<td *ngIf="hasRequiredRecommendations()">
-						<span class="blockItem" *ngFor="let rec of requiredUserRecommendations" (press)="onIndividualRequiredUserPress(rec)">
-							{{rec.userObj.realname}}
-						</span>
-					</td>
-					<td *ngIf="!hasRequiredRecommendations()">
-						<span >
-							No recommendations required.
-						</span>
-					</td>
-				</tr>
-			</table>
+			<ion-grid>
+				<ion-row>
+					<ion-col >
+						<span class="recommendationLabel">Required recommendations</span>
+					</ion-col>
+					<ion-col col-auto>
+						<div *ngIf="hasRequiredRecommendations()">
+							<span class="blockItem" *ngFor="let rec of requiredUserRecommendations" (press)="onIndividualRequiredUserPress(rec)">
+								{{rec.userObj.realname}}
+							</span>
+						</div>
+						<div *ngIf="!hasRequiredRecommendations()" class="floatRight">
+							<span>
+								No recommendations required.
+							</span>
+						</div>
+					</ion-col>
+				</ion-row>
+			</ion-grid>
 		</ion-row>
 		<hr/>
 		<ion-row>

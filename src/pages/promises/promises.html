@@ -38,52 +38,67 @@
 			</ul>
 		</ion-card-content>	
 	</ion-card>
-	<ion-card>
-		<ion-card-content>
-			<ion-item *ngIf="!isNewObject() && isReadOnly()">
-				<span>{{getPrmOwnerName()}}</span>
-			</ion-item>
-			<ion-item>
-				<ion-label color="primary" stacked>Title: </ion-label>
-				<ion-input type="text" placeholder="Teach a skill..." [disabled]="isReadOnly()" (ionChange)="handleTitleChange($event)" [(ngModel)]="model.title" #ctrl="ngModel" required></ion-input>
-			</ion-item>
-			<ion-item>
-				<ion-label color="primary" stacked>Description: </ion-label>
-				<ion-textarea rows="5" placeholder="I have many moons experience in XYZ and I will teach..." [disabled]="isReadOnly()" (ionChange)="handleDescriptionChange($event)" [(ngModel)]="model.description" #ctrl="ngModel" required></ion-textarea>
-			</ion-item>
-			<ion-item>
-				Rules
-				<button ion-button icon-only small color="danger" [hidden]="isReadOnly()" (click)="onNewRuleBtnTap($event)"><ion-icon name="add"></ion-icon></button><br/>
-				<i>This promise requires {{getRequiredPointsQuantity()}} points</i>
+
+	<ion-list>
+		<ion-item *ngIf="!isNewObject() && isReadOnly()">
+			<span>{{getPrmOwnerName()}}</span>
+		</ion-item>
+		<ion-item>
+			<ion-label color="primary" stacked>Title: </ion-label>
+			<ion-input type="text" placeholder="Teach a skill..." [disabled]="isReadOnly()" (ionChange)="handleTitleChange($event)" [(ngModel)]="model.title" #ctrl="ngModel" required></ion-input>
+		</ion-item>
+		<ion-item>
+			<ion-label color="primary" stacked>Description: </ion-label>
+			<ion-textarea rows="5" placeholder="I have many moons experience in XYZ and I will teach..." [disabled]="isReadOnly()" (ionChange)="handleDescriptionChange($event)" [(ngModel)]="model.description" #ctrl="ngModel" required></ion-textarea>
+		</ion-item>
+		<ion-list-header class="listHeader">
+			Rules
+			<button [hidden]="isReadOnly()" class="listHeaderBtn" round ion-button (click)="onNewRuleBtnTap($event)">
+				<ion-icon name="add"></ion-icon>
+			</button>
+		</ion-list-header>
+		<ion-item>
+			<div *ngIf="getRequiredPointsQuantity() === 0">
+				Rules describe who can request this promise from you. Set some points!
+			</div>
+			<div *ngIf="getRequiredPointsQuantity() > 0">
+				<i>This promise requires {{getRequiredPointsQuantityString()}}</i>
 				<div *ngIf="areRecommendationsRequired()">
 					<i> and the following recommendations: </i><br/>
 					<span class="blockItem" *ngFor="let rec of getRequiredUserRecommendations()">
 						{{rec.userObj.realname}}<br/>
 					</span>
 				</div>
+			</div>
 
-			</ion-item>
-		</ion-card-content>
-	</ion-card>
-	<ion-card>
-		<ion-card-header>
+		</ion-item>
+	</ion-list>
+
+	<ion-list>
+		<ion-list-header class="listHeader">
 			Keywords
-			<button *ngIf="!isReadOnly()" ion-button icon-only small color="danger" (click)="onAddKeywordBtnTap($event)"><ion-icon name="add"></ion-icon></button>								
-		</ion-card-header>
-		<ion-card-content>
-			<span *ngIf="prmHasNoKeywords()">
+			<button *ngIf="!isReadOnly()" class="listHeaderBtn" round ion-button (click)="onAddKeywordBtnTap($event)">
+				<ion-icon name="add"></ion-icon>
+			</button>
+		</ion-list-header>
+		<ion-item *ngIf="prmHasNoKeywords()">
+			<span >
 				Keywords are descriptive words and phrases. Add some that describe this Promise!
 			</span>
-			<span class="blockItem" *ngFor="let item of model.keywords" (press)="onIndividualKeywordPress(item)">
-				{{item.text}}
+		</ion-item>
+		<ion-item *ngIf="!prmHasNoKeywords()">
+			<span *ngFor="let item of model.keywords">
+				<span class="blockItem" (press)="onIndividualKeywordPress()">{{item.text}}</span>
 			</span>
-		</ion-card-content>
-	</ion-card>
-	<ion-card *ngIf="isReadOnly()">
-		<ion-card-content>
-			<span>First Fulfilled: {{getFirstFulfilledText()}} / Total Points Earned: {{getTotalPointsEarned()}} / Total Complaints: {{getNumberOfComplaints()}}</span>
-		</ion-card-content>
-	</ion-card>
+		</ion-item>
+	</ion-list>
+
+	<ion-list *ngIf="isReadOnly()" no-lines>
+		<ion-list-header class="listHeader">
+			Statistics
+		</ion-list-header>
+		<span>First Fulfilled: {{getFirstFulfilledText()}} / Total Points Earned: {{getTotalPointsEarned()}} / Total Complaints: {{getNumberOfComplaints()}}</span>
+	</ion-list>
 
 	<ion-row>
 		<button ion-button [hidden]="!isDeleteBtnVisible()" color="danger" (click)="onDeleteBtnTap($event)">Delete</button>			
@@ -91,4 +106,4 @@
 		<button ion-button [hidden]="!isRequestBtnVisible()" (click)="onRequestBtnTap($event)">Request</button>
 	</ion-row>
 
-</ion-content>
+</ion-content>	

@@ -277,6 +277,15 @@ export class PrmPage {
 		return this.model["requiredPointsQuantity"];
 	}
 
+	getRequiredPointsQuantityString() {
+		let rtn = this.model["requiredPointsQuantity"] + " point";
+
+		if (this.model["requiredPointsQuantity"] > 1)
+			rtn += "s";
+
+		return rtn;
+	}
+
 	areRecommendationsRequired(prm) {
 		return (this.model["requiredUserRecommendations"] && this.model["requiredUserRecommendations"].length > 0);
 	}
