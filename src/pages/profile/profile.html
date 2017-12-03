@@ -11,22 +11,34 @@
 
 <ion-content padding>
 	<profile-header [user]="getUser()" [readOnly]="isReadOnly()"></profile-header>
-	<table class="fifteenPixelLeftMargin">
-		<tr>
-			<td>
-				<ion-icon class="profileIcon" name="phone-portrait"></ion-icon>
-			</td>
-			<td>
-		        <ion-input type="text" class="contactInfoField" (ionChange)="onPhoneChange($event)" [value]="getModelAttr('phone')" required></ion-input>
-			</td>
-			<td>
-				<ion-icon class="profileIcon" name="mail"></ion-icon>
-			</td>
-			<td>
-		        <ion-input type="text" class="contactInfoField" (ionChange)="onEmailChange($event)" [value]="getModelAttr('email')" required></ion-input>
-			</td>
-		</tr>
-	</table>
+	<ion-grid>
+		<ion-row>
+			<ion-col col-auto>
+				<table>
+					<tr>
+						<td>
+							<ion-icon class="profileIcon" name="phone-portrait"></ion-icon>
+						</td>
+						<td>
+							<ion-input type="text" class="contactInfoField" [readonly]="isReadOnly()" (ionChange)="onPhoneChange($event)" [value]="getModelAttr('phone')" required></ion-input>
+						</td>
+					</tr>
+				</table>
+			</ion-col>
+			<ion-col col-auto>
+				<table>
+					<tr>
+						<td>
+							<ion-icon class="profileIcon" name="mail"></ion-icon>
+						</td>
+						<td>
+					        <ion-input type="text" class="contactInfoField" [readonly]="isReadOnly()" (ionChange)="onEmailChange($event)" [value]="getModelAttr('email')" required></ion-input>
+						</td>
+					</tr>
+				</table>
+			</ion-col>
+		</ion-row>		
+	</ion-grid>
 
 	<ion-row *ngIf="isReadOnly()">
 		<button ion-button [disabled]="!isSendPointBtnAvailable()" (click)="onSendPointBtnTap($event)">Send Point</button>
@@ -52,8 +64,8 @@
 		</table>	
 	</ion-list>
 
-	<ion-list>
-		<ion-list-header class="listHeader" *ngIf="!isReadOnly()">
+	<ion-list *ngIf="!isReadOnly()">
+		<ion-list-header class="listHeader" >
 			<span>Promises</span>
 			<button class="listHeaderBtn" round ion-button (click)="onNewPromiseBtnTap()">
 				<ion-icon name="add"></ion-icon>
@@ -95,7 +107,7 @@
 	<ion-list>
 		<ion-list-header class="listHeader">
 			Profile Keywords
-			<button class="listHeaderBtn" round ion-button (click)="onIndividualKeywordPress()">
+			<button *ngIf="!isReadOnly()" class="listHeaderBtn" round ion-button (click)="onIndividualKeywordPress()">
 				<ion-icon name="add"></ion-icon>
 			</button>
 		</ion-list-header>
@@ -112,8 +124,8 @@
 		</div>
 	</ion-list>
 
-	<ion-list>
-		<ion-list-header class="listHeader" *ngIf="!isReadOnly()">
+	<ion-list *ngIf="!isReadOnly()">
+		<ion-list-header class="listHeader" >
 			Notifications
 		</ion-list-header>
 		<ion-item *ngIf="userHasNoNotifications()">

@@ -102,9 +102,8 @@ export class ProfilePage {
 	}
 
 	ionViewCanLeave() {
-		if (this.isDirty()) {
-			let self = this;
-
+		let self = this;
+		if (this.isDirty() && !self.isExiting) {
 			let msg = "";
 
 			if (this._profileService.isProfileImageChanged(this.model))
@@ -115,43 +114,44 @@ export class ProfilePage {
 			let alert = this.alertCtrl.create({
 				title: 'Save Changes?',
 				message: msg,
-				buttons: [
-					{
-						text: 'No', role: 'cancel', handler: () => {
-							if (this._profileService.isProfileImageChanged(this.model)) {
+				buttons: [{
+					text: 'No', role: 'cancel', handler: () => {
+						if (this._profileService.isProfileImageChanged(this.model)) {
+							
+							// TODO: the call to .removeFile here, and the one in the process of onSaveBtnTap()
+							//  are both the same. They should be a service method somewhere.
+
+							let lastSlash = self.model["imageFileURI"].lastIndexOf('/');
+							let path = self.model["imageFileURI"].substring(0,lastSlash+1);
+							let filename = self.model["imageFileURI"].substring(lastSlash+1);
+
+							self._file.removeFile(path, filename).then((data) => {
+								console.log("User set new profile image, but said don't save it when exiting the profile page. Image was from camera or the eog api, so it was removed from phone.");
 								
-								// TODO: the call to .removeFile here, and the one in the process of onSaveBtnTap()
-								//  are both the same. They should be a service method somewhere.
+								self.setDirty(false);
+								
+								self.model["imageFileURI_OriginalValue"] = self.model["imageFileURI"];
+								self.model["imageFileURI"] = undefined;
+								
+								if (!self.isExiting)
+									self.navCtrl.pop();
+							});
 
-								let lastSlash = self.model["imageFileURI"].lastIndexOf('/');
-								let path = self.model["imageFileURI"].substring(0,lastSlash+1);
-								let filename = self.model["imageFileURI"].substring(lastSlash+1);
+						} else {
+							if (!self.isExiting)
+								self.navCtrl.pop();
+						}
 
-								self._file.removeFile(path, filename).then((data) => {
-									console.log("User set new profile image, but said don't save it when exiting the profile page. Image was from camera or the eog api, so it was removed from phone.");
-									
-									self.setDirty(false);
-									
-									self.model["imageFileURI_OriginalValue"] = self.model["imageFileURI"];
-									self.model["imageFileURI"] = undefined;
-									
-									if (!self.isExiting)
-										self.navCtrl.pop();
-								});
+					},
+				}, {
+					text: 'Yes', handler: () => {
+						self.setDirty(false);
+						self.onSaveBtnTap();
+					},
 
-							}
-
-						},
-					}, {
-						text: 'Yes', handler: () => {
-							self.setDirty(false);
-							self.onSaveBtnTap();
-						},
-
-					}
-				]
+				}]
 			});
-			//self.isExiting = true;
+			self.isExiting = true;
 			alert.present();
 		}
 
@@ -356,9 +356,11 @@ export class ProfilePage {
 
 	setChangedAttr(key, value) {
 		let model = this._profileService.getModel(this.user);
-		model[key] = value;
-		this._events.publish('profile:changedContactInfo', model);
-		this.setDirty(true);
+		if (model[key] !== value) {
+			model[key] = value;
+			this._events.publish('profile:changedContactInfo', model);
+			this.setDirty(true);
+		}
 	}
 
 	onEmailChange(event) {
