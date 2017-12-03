@@ -214,20 +214,12 @@ export class HomePage {
     }
   }
 
-  onProfileBtnTap(event) {
-  	this.navCtrl.push(ProfilePage, {user: this._userService.getCurrentUser(), readOnly: false});
-  }
-
   onSearchForUsersBtnTap(event) {
     this.navCtrl.push(SearchUsersPage);
   }
 
   onSearchForPrmsBtnTap(event) {
     this.navCtrl.push(SearchPage);
-  }
-
-  onIncomingReqBtnTap(event) {
-  	//this.navCtrl.push(RequestsIncomingPage);
   }
 
   getUser() {

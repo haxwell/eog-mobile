@@ -17,7 +17,6 @@ export class RequestsOutgoingView {
 	model = undefined;
 	
 	constructor(public navCtrl: NavController,
-				private modalCtrl: ModalController,
 				private _requestsService: RequestsService,
 				private _constants: Constants,
 				_events: Events) { 

@@ -1,10 +1,11 @@
 import { Component, Input } from '@angular/core';
-import { ModalController, NavParams } from 'ionic-angular';
+import { ModalController, NavParams, NavController } from 'ionic-angular';
 import { Events } from 'ionic-angular';
 
 import { File } from '@ionic-native/file'
 
 import { ChoosePhotoSourcePage } from '../choose-photo-source/choose-photo-source'
+import { ProfilePage } from '../../profile/profile'
 
 import { ProfileService } from '../_services/profile.service'
 
@@ -20,7 +21,8 @@ export class ProfileHeader {
 	@Input() user = undefined;
 
 	constructor(navParams: NavParams, 
-				private modalCtrl: ModalController, 
+				private modalCtrl: ModalController,
+				private navCtrl: NavController,
 				private _profileService: ProfileService, 
 				private _events: Events,
 				private _file: File) {
@@ -120,7 +122,7 @@ export class ProfileHeader {
 							model["imageFileSource"] = uriAndSource["imageFileSource"];
 
 							self._events.publish('profile:changedProfileImage', model["imageFileURI"]);
-							self.setDirty(true);						
+							self.setDirty(true);
 						}
 
 					});
@@ -133,9 +135,16 @@ export class ProfileHeader {
 
 	setChangedAttr(key, value) {
 		let model = this._profileService.getModel(this.user);
-		model[key] = value;
-		this._events.publish('profile:changedContactInfo', model);
-		this.setDirty(true);
+		
+		if (model[key] !== value) {
+			model[key] = value;
+			this._events.publish('profile:changedContactInfo', model);
+			this.setDirty(true);
+		}
+	}
+
+	onShowProfile() {
+		this.navCtrl.push(ProfilePage, {user: this.user, readOnly: false});
 	}
 
 	onNameChange(event) {
@@ -145,14 +154,6 @@ export class ProfileHeader {
 	onDescriptionChange(event) {
 		this.setChangedAttr("description", event._value);
 	}
-
-//	onEmailChange(event) {
-//		this.setChangedAttr("email", event._value);
-//	}
-//
-//	onPhoneChange(event) {
-//		this.setChangedAttr("phone", event._value);	
-//	}
 
 	getModelAttr(key) {
 		let model = this._profileService.getModel(this.user) || {};

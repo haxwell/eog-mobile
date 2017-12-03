@@ -1,4 +1,4 @@
-<ion-grid>
+<ion-grid (click)="onShowProfile()">
 	<ion-row>
 		<ion-col col-auto>
 			<ion-item *ngIf="isThumbnailImageAvailable()">
@@ -14,11 +14,13 @@
 		</ion-col>
 		<ion-col col-auto>
 			<div *ngIf="isReadOnly()">
-				<span >{{getModelAttr('realname')}}</span><br/>
-				<span >{{getModelAttr('description')}}</span>
+				<span class="profile_header__text">{{getModelAttr('realname')}}</span><br/>
+				<hr/>
+				<span class="profile_header__text">{{getModelAttr('description')}}</span>
 			</div>
 			<div *ngIf="!isReadOnly()">
 				<ion-input type="text" class="profile_header__name" placeholder="Name" (ionChange)="onNameChange($event)" [value]="getModelAttr('realname')" required></ion-input>
+				<hr/>
 				<ion-input type="text" class="profile_header__desc" placeholder="Description" (ionChange)="onDescriptionChange($event)" [value]="getModelAttr('description')" required></ion-input>
 			</div>
 		</ion-col>
