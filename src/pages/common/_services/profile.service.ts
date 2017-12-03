@@ -62,6 +62,7 @@ export class ProfileService {
 			let obj = JSON.parse(data["_body"]);
 			
 			model["allTimePointCount"] = obj["allTimePointCount"];
+			model["description"] = obj["description"];
 
 			model["keywords"] = obj["keywords"];
 			model["keywords"].sort((a, b) => { let aText = a.text.toLowerCase(); let bText = b.text.toLowerCase(); if (aText > bText) return 1; else if (aText < bText) return -1; else return 0; })
@@ -131,6 +132,7 @@ export class ProfileService {
 		tmp["phone"] = model["phone"];
 		tmp["email"] = model["email"];
 		tmp["keywords"] = model["keywords"];
+		tmp["description"] = model["description"];
 
 		//let profileImageData = this.JSON_to_URLEncoded({base64ImageData: model["base64Image"]}, undefined, undefined);
 
@@ -153,12 +155,15 @@ export class ProfileService {
 
 						this._events.publish('profile:changedContactInfoWasSaved', model);
 
+						self.init(user["id"]);
+
 						resolve(JSON.parse(resp["_body"]));					
 					});
 				}
 
 				if (self.isProfileImageChanged(model)) {
 					self._profilePictureService.save(user["id"], model["imageFileURI"]).then((data) => {
+						self.init(user["id"]);
 						userUpdateFunc();
 					});
 				} else
