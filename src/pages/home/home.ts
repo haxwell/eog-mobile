@@ -194,6 +194,11 @@ export class HomePage {
       this.setIsSearchFieldVisible(false);
   }
 
+  onShowProfile() {
+      this.navCtrl.push(ProfilePage, { user: this.user, readOnly: false });
+      this.setIsSearchFieldVisible(false);
+  }
+
   isSearchFieldVisible() {
     return this._isSearchFieldVisible;
   }

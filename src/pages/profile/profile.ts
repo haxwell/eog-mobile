@@ -148,8 +148,9 @@ export class ProfilePage {
 					text: 'Yes', handler: () => {
 						self.setDirty(false);
 						self.onSaveBtnTap();
-					},
 
+						self.navCtrl.pop();
+					},
 				}]
 			});
 			self.isExiting = true;
@@ -242,7 +243,7 @@ export class ProfilePage {
 		let self = this;
 		let modal = this.modalCtrl.create(SocialNetworkCRUDPage, {readOnly: this.isReadOnly(), name: name, value: this.model[name+"Url"]});
 		modal.onDidDismiss(data => { 
-			if (this.model[name+"Url"] !== data) {
+			if (data !== undefined && data.length > 0 && this.model[name+"Url"] !== data) {
 				this.model[name+"Url"] = data;
 				self.setDirty(true);
 			}; 

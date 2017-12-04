@@ -16,8 +16,8 @@ import { ProfileService } from '../_services/profile.service'
 
 export class ProfileHeader {
 
-	@Input() readOnly = false;
 	dirty = false;
+	@Input() readOnly = false;
 	@Input() user = undefined;
 
 	constructor(navParams: NavParams, 
@@ -26,8 +26,6 @@ export class ProfileHeader {
 				private _profileService: ProfileService, 
 				private _events: Events,
 				private _file: File) {
-		this.user = Object.assign({}, navParams.get('user'));
-		this.readOnly = navParams.get('readOnly') || false;
 
 		let self = this;
 		let func2 = (data) => {
@@ -141,10 +139,6 @@ export class ProfileHeader {
 			this._events.publish('profile:changedContactInfo', model);
 			this.setDirty(true);
 		}
-	}
-
-	onShowProfile() {
-		this.navCtrl.push(ProfilePage, {user: this.user, readOnly: false});
 	}
 
 	onNameChange(event) {

@@ -1,0 +1,20 @@
+<ion-header>
+	<ion-navbar>
+		<ion-title>
+			Edit URL
+		</ion-title>
+	</ion-navbar>
+</ion-header>
+
+<ion-content padding>
+	Enter the URL for your {{name}} page:<br/><br/>
+	<ion-row>
+		<img class="socialNetworkCRUDImg" [src]="getImageSrc()">
+		<ion-input type="text" placeholder="url" [readonly]="isReadOnly()" (ionChange)="onValueChange($event)" [value]="getValue()" required></ion-input>
+	</ion-row>
+	<ion-row>
+		<br/><br/>
+		<button ion-button (click)="onCancelBtnTap($event)">Sorry, no.. Cancel</button>
+		<button ion-button [disabled]="!isSaveBtnEnabled()" (click)="onSaveBtnTap($event)">OK</button>
+	</ion-row>
+</ion-content>
