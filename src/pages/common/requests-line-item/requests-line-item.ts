@@ -39,8 +39,6 @@ export class RequestsLineItem {
 				private _profileService: ProfileService,
 				private _requestsService: RequestsService,
                 _events: Events) {
-		this.request = navParams.get('request') || undefined;
-		this.direction = navParams.get('direction') || undefined;
 
 		let func = (data) => {
 			if (data["request"]["id"] === this.request["id"])
