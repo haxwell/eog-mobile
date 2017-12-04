@@ -18,7 +18,7 @@ export class SocialNetworkCRUDPage {
 				navParams: NavParams) {
 		this.name = navParams.get('name');
 		this.value = navParams.get('value');
-		this.readOnly = navParams.get('isReadOnly');
+		this.readOnly = navParams.get('readOnly');
 
 		this.originalValue = this.value;
 	}

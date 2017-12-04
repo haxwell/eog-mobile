@@ -241,14 +241,17 @@ export class ProfilePage {
 
 	onSocialMediaURLBtnClick(name) {
 		let self = this;
-		let modal = this.modalCtrl.create(SocialNetworkCRUDPage, {readOnly: this.isReadOnly(), name: name, value: this.model[name+"Url"]});
-		modal.onDidDismiss(data => { 
-			if (data !== undefined && data.length > 0 && this.model[name+"Url"] !== data) {
-				this.model[name+"Url"] = data;
-				self.setDirty(true);
-			}; 
-		});
-		modal.present();
+
+		if (!this.isReadOnly() || this.socialMediaURLIsAvailable(name)) {
+			let modal = this.modalCtrl.create(SocialNetworkCRUDPage, {readOnly: this.isReadOnly(), name: name, value: this.model[name+"Url"]});
+			modal.onDidDismiss(data => { 
+				if (data !== undefined && data.length > 0 && this.model[name+"Url"] !== data) {
+					this.model[name+"Url"] = data;
+					self.setDirty(true);
+				}; 
+			});
+			modal.present();
+		}
 	}
 
 	onCancelBtnTap() {
