@@ -24,6 +24,7 @@ import { SearchPage } from '../pages/search/search';
 import { SearchUsersPage } from '../pages/searchUsers/searchUsers';
 import { SendPointPage } from '../pages/searchUsers/_pages/send.point.page';
 import { SendRecommendPage } from '../pages/searchUsers/_pages/send.recommend.page';
+import { SocialNetworkCRUDPage } from '../pages/profile/_pages/social-network-CRUD';
 import { RequestPage } from '../pages/promises/_pages/request';
 import { AcceptRequestPage } from '../pages/requests/incoming/_pages/accept.request';
 import { DeclineRequestPage } from '../pages/requests/incoming/_pages/decline.request';
@@ -81,6 +82,7 @@ import { Constants } from '../_constants/constants';
     RequestsIncomingView,    
     RequestsOutgoingView,
     RequestsLineItem,
+    SocialNetworkCRUDPage,
     RequestPage,
     AcceptRequestPage,
     DeclineRequestPage,
@@ -123,6 +125,7 @@ import { Constants } from '../_constants/constants';
     RulePage,
     RequestsIncomingView,
     RequestsOutgoingView,
+    SocialNetworkCRUDPage,
     RequestPage,
     AcceptRequestPage,
     DeclineRequestPage,

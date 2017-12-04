@@ -1,3 +1,18 @@
+.socialNetworkImg {
+	display: inline;
+	padding-left: 1em;
+	padding-right: 1em;
+}
+
+.socialNetworkImg > img {
+	width: 3em;
+	height: 3em;
+}
+
+.socialNetworkList {
+	padding-left: 0px;
+}
+
 .blockItem {
 	display: inline-block;
 	border-style: solid;

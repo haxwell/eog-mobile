@@ -16,6 +16,7 @@ import { PointsService } from '../../app/_services/points.service'
 import { PrmPage } from '../promises/promises'
 import { KeywordEntryPage } from '../keyword.entry/keyword.entry'
 import { DeletePrmPage } from '../promises/_pages/delete.prm'
+import { SocialNetworkCRUDPage } from '../profile/_pages/social-network-CRUD'
 
 import { Constants } from '../../_constants/constants'
 
@@ -231,6 +232,22 @@ export class ProfilePage {
 			
 			modal.present();
 		}
+	}
+
+	socialMediaURLIsAvailable(name) {
+		return this.model[name+"Url"] !== undefined;
+	}
+
+	onSocialMediaURLBtnClick(name) {
+		let self = this;
+		let modal = this.modalCtrl.create(SocialNetworkCRUDPage, {readOnly: this.isReadOnly(), name: name, value: this.model[name+"Url"]});
+		modal.onDidDismiss(data => { 
+			if (this.model[name+"Url"] !== data) {
+				this.model[name+"Url"] = data;
+				self.setDirty(true);
+			}; 
+		});
+		modal.present();
 	}
 
 	onCancelBtnTap() {

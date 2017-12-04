@@ -66,6 +66,12 @@ export class ProfileService {
 
 			model["keywords"] = obj["keywords"];
 			model["keywords"].sort((a, b) => { let aText = a.text.toLowerCase(); let bText = b.text.toLowerCase(); if (aText > bText) return 1; else if (aText < bText) return -1; else return 0; })
+
+			model["facebookUrl"] = obj["facebookUrl"] || undefined;
+			model["youtubeUrl"] = obj["youtubeUrl"] || undefined;
+			model["instagramUrl"] = obj["instagramUrl"] || undefined;
+			model["githubUrl"] = obj["githubUrl"] || undefined;
+			model["linkedinUrl"] = obj["linkedinUrl"] || undefined;
 		});
 
 		if (model["imageFileURI"] === undefined) {
@@ -122,6 +128,7 @@ export class ProfileService {
 	}
 
 	save(model) {
+		//abcd
 		let tmp = {};
 
 		let user = this._userService.getCurrentUser();
@@ -134,9 +141,13 @@ export class ProfileService {
 		tmp["keywords"] = model["keywords"];
 		tmp["description"] = model["description"];
 
-		//let profileImageData = this.JSON_to_URLEncoded({base64ImageData: model["base64Image"]}, undefined, undefined);
+		tmp["facebookUrl"] = model["facebookUrl"];
+		tmp["youtubeUrl"] = model["youtubeUrl"];
+		tmp["instagramUrl"] = model["instagramUrl"];
+		tmp["githubUrl"] = model["githubUrl"];
+		tmp["linkedinUrl"] = model["linkedinUrl"];
 
-		let data = this.JSON_to_URLEncoded(tmp, undefined, undefined);
+		let data = this.JSON_to_UrlEncoded(tmp, undefined, undefined);
 		console.log(data);
 
 		let self = this;
@@ -176,11 +187,11 @@ export class ProfileService {
 		return model["imageFileURI_OriginalValue"] != model["imageFileURI"];
 	}
 
-	JSON_to_URLEncoded(element,key,list){
+	JSON_to_UrlEncoded(element,key,list){
   		var list = list || [];
   		if(typeof(element)=='object'){
     		for (var idx in element)
-      			this.JSON_to_URLEncoded(element[idx],key?key+'['+idx+']':idx,list);
+      			this.JSON_to_UrlEncoded(element[idx],key?key+'['+idx+']':idx,list);
   		} else {
     		list.push(key+'='+encodeURIComponent(element));
   		}

@@ -20,7 +20,7 @@
 							<ion-icon class="profileIcon" name="phone-portrait"></ion-icon>
 						</td>
 						<td>
-							<ion-input type="text" class="contactInfoField" [readonly]="isReadOnly()" (ionChange)="onPhoneChange($event)" [value]="getModelAttr('phone')" required></ion-input>
+							<ion-input type="text" class="contactInfoField" (ionChange)="onPhoneChange($event)" [value]="getModelAttr('phone')" required></ion-input>
 						</td>
 					</tr>
 				</table>
@@ -44,6 +44,43 @@
 		<button ion-button [disabled]="!isSendPointBtnAvailable()" (click)="onSendPointBtnTap($event)">Send Point</button>
 		<button ion-button [disabled]="!isSendRecommendBtnAvailable()" (click)="onSendRecommendationBtnTap($event)">Send Recommendation</button>
 	</ion-row>
+
+	<ul class="socialNetworkList">
+		<li class="socialNetworkImg" *ngIf="socialMediaURLIsAvailable('facebook')">
+			<img src="assets/img/facebook-logo-active.png" (click)="onSocialMediaURLBtnClick('facebook')">
+		</li>
+		<li class="socialNetworkImg" *ngIf="!socialMediaURLIsAvailable('facebook')">
+			<img src="assets/img/facebook-logo-inactive.png" (click)="onSocialMediaURLBtnClick('facebook')">
+		</li>
+
+		<li class="socialNetworkImg" *ngIf="socialMediaURLIsAvailable('linkedin')">
+			<img src="assets/img/linkedin-logo-active.png" (click)="onSocialMediaURLBtnClick('linkedin')">
+		</li>
+		<li class="socialNetworkImg" *ngIf="!socialMediaURLIsAvailable('linkedin')">
+			<img src="assets/img/linkedin-logo-inactive.png" (click)="onSocialMediaURLBtnClick('linkedin')">
+		</li>
+
+		<li class="socialNetworkImg" *ngIf="socialMediaURLIsAvailable('youtube')">
+			<img src="assets/img/youtube-logo-active.png" (click)="onSocialMediaURLBtnClick('youtube')">
+		</li>
+		<li class="socialNetworkImg" *ngIf="!socialMediaURLIsAvailable('youtube')">
+			<img src="assets/img/youtube-logo-inactive.png" (click)="onSocialMediaURLBtnClick('youtube')">
+		</li>
+
+		<li class="socialNetworkImg" *ngIf="socialMediaURLIsAvailable('instagram')">
+			<img src="assets/img/instagram-logo-active.png" (click)="onSocialMediaURLBtnClick('instagram')">
+		</li>
+		<li class="socialNetworkImg" *ngIf="!socialMediaURLIsAvailable('instagram')">
+			<img src="assets/img/instagram-logo-inactive.png" (click)="onSocialMediaURLBtnClick('instagram')">
+		</li>
+
+		<li class="socialNetworkImg" *ngIf="socialMediaURLIsAvailable('github')">
+			<img src="assets/img/github-logo-active.png" (click)="onSocialMediaURLBtnClick('github')">
+		</li>
+		<li class="socialNetworkImg" *ngIf="!socialMediaURLIsAvailable('github')">
+			<img src="assets/img/github-logo-inactive.png" (click)="onSocialMediaURLBtnClick('github')">
+		</li>
+	</ul>
 
 	<ion-list>
 		<ion-list-header class="listHeader">
