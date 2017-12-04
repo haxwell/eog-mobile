@@ -21,7 +21,7 @@
 			<div *ngIf="!isReadOnly()">
 				<ion-input type="text" class="profile_header__name" placeholder="Name" (ionChange)="onNameChange($event)" [value]="getModelAttr('realname')" required></ion-input>
 				<hr/>
-				<ion-input type="text" class="profile_header__desc" placeholder="Description" (ionChange)="onDescriptionChange($event)" [value]="getModelAttr('description')" required></ion-input>
+				<ion-textarea class="profile_header__desc" placeholder="Description" (ionChange)="onDescriptionChange($event)" [value]="getModelAttr('description')" required></ion-textarea>
 			</div>
 		</ion-col>
 	</ion-row>
