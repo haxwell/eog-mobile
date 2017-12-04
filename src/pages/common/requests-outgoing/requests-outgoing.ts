@@ -21,6 +21,14 @@ export class RequestsOutgoingView {
 				private _constants: Constants,
 				_events: Events) { 
 
+		let func = (req) => {
+			this._requestsService.getOutgoingRequestsForCurrentUser().then((data: Array<Object>) => {
+				this.model = data;
+			});
+		};
+
+		_events.subscribe('request:saved', func);
+
 	}
 
 	getDirection() { return "outgoing"; }
