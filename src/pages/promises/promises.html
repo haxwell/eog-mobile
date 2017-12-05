@@ -40,9 +40,9 @@
 	</ion-card>
 
 	<ion-list>
-		<ion-item *ngIf="!isNewObject() && isReadOnly()">
+		<!-- <ion-item *ngIf="!isNewObject() && isReadOnly()">
 			<span>{{getPrmOwnerName()}}</span>
-		</ion-item>
+		</ion-item> -->
 		<ion-item>
 			<ion-label color="primary" stacked>Title: </ion-label>
 			<ion-input type="text" placeholder="Teach a skill..." [disabled]="isReadOnly()" (ionChange)="handleTitleChange($event)" [(ngModel)]="model.title" #ctrl="ngModel" required></ion-input>

@@ -16,6 +16,9 @@
 	</span>
 	<hr/>
 
+	<ion-label>If you'd like, you can send a message below with your request</ion-label>
+	<ion-textarea placeholder="a short message..." (ionChange)="onMessageChange($event)" [value]="getMessageValue()" required></ion-textarea>
+
 	<ion-row>
 		<button ion-button (click)="onCancelBtnTap($event)">Cancel</button>
 		<button ion-button [disabled]="!isSaveBtnEnabled()" (click)="onSaveBtnTap($event)">Save</button>

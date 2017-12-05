@@ -8,6 +8,9 @@ import { SecondCompleteRequestPage } from '../../../pages/requests/incoming/_pag
 import { CancelRequestPage } from '../../../pages/requests/incoming/_pages/cancel.request'
 import { ProfilePage } from '../../../pages/profile/profile'
 
+/* TODO: Move Promises to the Common area. Since it is called from this common component. */
+import { PrmPage } from '../../promises/promises'
+
 import { PermanentlyDismissUnresolvedRequestPage } from '../../../pages/requests/outgoing/_pages/permanently-dismiss-unresolved-request'
 import { NotCompleteOutgoingRequestPage } from '../../../pages/requests/outgoing/_pages/not.complete.request'
 import { CompleteOutgoingRequestPage } from '../../../pages/requests/outgoing/_pages/complete.request'
@@ -29,7 +32,7 @@ export class RequestsLineItem {
 	@Input() request = undefined;
 	@Input() direction = undefined;
 
-	directionallyOppositeUserProfileImageFilepath = undefined;
+	directionallyOppositeUserProfileImageFilepath = {};
 
 	constructor(navParams: NavParams, 
 				private navCtrl: NavController,
@@ -54,19 +57,25 @@ export class RequestsLineItem {
 	}
 
 	ngOnInit() {
-		let id = this.request["requestingUserId"];
-		let path = this._profileService.getMostProbableProfilePhotoPath() + id;
-		this._profilePictureService.get(id, path).then((path) => {
-			this.directionallyOppositeUserProfileImageFilepath = path;
-		});
-	}
-
-	ionViewWillEnter() {
 
 	}
 
-	onViewContactInfoBtnTap() {
+	hasRequestMessage() {
+		return (this.request["requestMessage"] !== undefined && this.request["requestMessage"] !== null);
+	}
+
+	getRequestMessage() {
+		let rtn = this.request["requestMessage"].substring(0, 140);
+
+		if (this.request["requestMessage"].length > 140)
+			rtn += "...";
+
+		return rtn;
+	}
+
+	onViewContactInfoBtnTap(evt: Event) {
 		this.navCtrl.push(ProfilePage, { user: this.request["directionallyOppositeUser"], readOnly: true });
+		evt.preventDefault();
 	}
 
 	isRequestPending() {
@@ -116,8 +125,12 @@ export class RequestsLineItem {
 		return this.direction === 'outgoing' && this.request["deliveringStatusId"] === this._constants.REQUEST_STATUS_DECLINED; 
 	}
 
-	onTap() {
-		console.log("tap!");
+	onEditPromise() {
+		this.navCtrl.push(PrmPage, { prm: this.request["prm"], callback:  undefined, readOnly: false });
+	}
+
+	onViewPromise() {
+		this.navCtrl.push(PrmPage, { prm: this.request["prm"], callback:  undefined, readOnly: true });
 	}
 
 	onLongPress() {
@@ -194,11 +207,49 @@ export class RequestsLineItem {
 		modal.present();
 	}
 
+	getPrmOwnersUserProfileImageFilepath() {
+		return this.directionallyOppositeUserProfileImageFilepath[this.request["prm"]["userId"]];
+	}
+
+	isPrmOwnersUserProfileImageAvailable() {
+		let userId = this.request["prm"]["userId"];
+		let rtn = this.directionallyOppositeUserProfileImageFilepath[userId] !== undefined && this.directionallyOppositeUserProfileImageFilepath[userId] !== null;
+
+		let self = this;
+		if (self.directionallyOppositeUserProfileImageFilepath[userId] === undefined && userId !== undefined) {
+			self.directionallyOppositeUserProfileImageFilepath[userId] = null;
+
+			let path = self._profileService.getMostProbableProfilePhotoPath() + userId;
+			
+			self._profilePictureService.get(userId, path).then((path) => {
+				if (path !== undefined)
+					self.directionallyOppositeUserProfileImageFilepath[userId] = path;
+			});
+		}
+
+		return rtn; 
+	}
+
 	getDOUserProfileImageFilepath() {
-		return this.directionallyOppositeUserProfileImageFilepath;
+		return this.directionallyOppositeUserProfileImageFilepath[this.request["requestingUserId"]];
 	}
 
 	isDOUserProfileImageAvailable() {
-		return this.directionallyOppositeUserProfileImageFilepath !== undefined && this.directionallyOppositeUserProfileImageFilepath !== null;
+		let userId = this.request["requestingUserId"];
+		let rtn = this.directionallyOppositeUserProfileImageFilepath[userId] !== undefined && this.directionallyOppositeUserProfileImageFilepath[userId] !== null;
+
+		let self = this;
+		if (self.directionallyOppositeUserProfileImageFilepath[userId] === undefined && userId !== undefined) {
+			self.directionallyOppositeUserProfileImageFilepath[userId] = null;
+
+			let path = self._profileService.getMostProbableProfilePhotoPath() + userId;
+			
+			self._profilePictureService.get(userId, path).then((path) => {
+				if (path !== undefined)
+					self.directionallyOppositeUserProfileImageFilepath[userId] = path;
+			});
+		}
+
+		return rtn; 
 	}
 }

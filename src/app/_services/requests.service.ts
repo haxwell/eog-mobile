@@ -23,12 +23,12 @@ export class RequestsService {
 
 	}
 
-	saveNew(prm) {
+	saveNew(prm, requestingMessage) {
 		return new Promise((resolve, reject) => {
 			let user = this._userService.getCurrentUser();
 			let url = environment.apiUrl + "/api/requests";
 
-			let data =	"requestingUserId=" + user["id"] + "&requestedPromiseId=" + prm["id"];
+			let data =	"requestingUserId=" + user["id"] + "&requestedPromiseId=" + prm["id"] + "&requestingMessage=" + requestingMessage;
 			
 			let self = this;
 			self._apiService.post(url, data).subscribe((obj) => {

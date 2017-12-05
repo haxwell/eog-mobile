@@ -88,10 +88,10 @@
 		</ion-list-header>
 		<table>
 			<tr>
-				<td class="ptsTdElement">
+				<td *ngIf="!isReadOnly()" class="ptsTdElement">
 					<span class="displayBlock">{{model.points.total}}</span> Total
 				</td>
-				<td class="ptsTdElement">
+				<td *ngIf="!isReadOnly()" class="ptsTdElement">
 					<span class="displayBlock">{{model.points.available}}</span> Available
 				</td>
 				<td class="ptsTdElement">
@@ -108,7 +108,7 @@
 				<ion-icon name="add"></ion-icon>
 			</button>
 		</ion-list-header>
-		<ion-item *ngFor="let prm of model.prms" (swipeLeft)="onDeletePromise(prm)" (press)="onPromiseBtnTap(prm)">
+		<ion-item *ngFor="let prm of model.prms" (swipeLeft)="onDeletePromise(prm)" (click)="onPromiseBtnTap(prm)">
 			<ion-avatar item-start>
 				<img [src]="getPromiseAvatarImage(prm)">
 			</ion-avatar>
@@ -126,10 +126,10 @@
 			Recommendations
 		</ion-list-header>
 		<ion-item *ngFor="let item of getAvailableIncomingRecommendations()">
-			<ion-avatar *ngIf="isDOUserProfileImageAvailable(item['requestingUserId'])" item-start>
-				<img [src]="getDOUserProfileImageFilepath(item["requestingUserId"])">
+			<ion-avatar class="profileAvatar" *ngIf="isDOUserProfileImageAvailable(item['providingUserId'])" item-start>
+				<img [src]="getDOUserProfileImageFilepath(item['providingUserId'])">
 			</ion-avatar>
-			<ion-avatar *ngIf="!isDOUserProfileImageAvailable(item['requestingUserId'])" item-start>
+			<ion-avatar *ngIf="!isDOUserProfileImageAvailable(item['providingUserId'])" item-start>
 				<img src="assets/img/mushroom.jpg">
 			</ion-avatar>
 			<span>
@@ -171,7 +171,7 @@
 			</span>
 		</ion-item>
 		<ion-item *ngFor="let item of getNotifications()" (swipeLeft)="onClearIndividualNotification(item)">
-			<ion-avatar *ngIf="isDOUserProfileImageAvailable(item['oppUserId'])" item-start>
+			<ion-avatar class="profileAvatar" *ngIf="isDOUserProfileImageAvailable(item['oppUserId'])" item-start>
 				<img [src]="getDOUserProfileImageFilepath(item['oppUserId'])">
 			</ion-avatar>
 			<ion-avatar *ngIf="!isDOUserProfileImageAvailable(item['oppUserId'])" item-start>

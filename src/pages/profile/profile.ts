@@ -176,7 +176,7 @@ export class ProfilePage {
 	}
 
 	onPromiseBtnTap(item) { 
-		this.navCtrl.push(PrmPage, { prm: item, callback:  this.PrmCallback, readOnly: this.isReadOnly() });
+		this.navCtrl.push(PrmPage, { prm: item, callback: this.PrmCallback, readOnly: false });
 	}
 
 	onDeletePromise(prm) {
@@ -402,7 +402,7 @@ export class ProfilePage {
 	}
 
 	getDOUserProfileImageFilepath(userId) {
-		return this.directionallyOppositeUserProfileImageFilepath;
+		return this.directionallyOppositeUserProfileImageFilepath[userId];
 	}
 
 	isDOUserProfileImageAvailable(userId) {
@@ -410,7 +410,6 @@ export class ProfilePage {
 
 		let self = this;
 		if (self.directionallyOppositeUserProfileImageFilepath[userId] === undefined && userId !== undefined) {
-			console.log("In there..." + userId);
 			self.directionallyOppositeUserProfileImageFilepath[userId] = null;
 
 			let path = self._profileService.getMostProbableProfilePhotoPath() + userId;

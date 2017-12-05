@@ -12,6 +12,7 @@ import { UserService } 		from '../../../app/_services/user.service'
 export class RequestPage {
 
 	prm = undefined;
+	message = undefined;
 	callback = undefined;
 	
 	constructor(public navCtrl: NavController, 
@@ -54,7 +55,7 @@ export class RequestPage {
 	}
 
 	onSaveBtnTap(evt) {
-		this._requestsService.saveNew(this.prm).then((data) => {
+		this._requestsService.saveNew(this.prm, this.message).then((data) => {
 			if (this.callback)
 				this.callback(true).then(() => {
 					this.viewCtrl.dismiss({ });
@@ -64,5 +65,13 @@ export class RequestPage {
 
 	onCancelBtnTap(evt) {
 		this.viewCtrl.dismiss();
+	}
+
+	getMessageValue() {
+		return this.message;
+	}
+
+	onMessageChange(evt) {
+		this.message = evt._value;
 	}
 }
