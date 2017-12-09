@@ -73,9 +73,8 @@ export class RequestsLineItem {
 		return rtn;
 	}
 
-	onViewContactInfoBtnTap(evt: Event) {
+	onViewContactInfoBtnTap() {
 		this.navCtrl.push(ProfilePage, { user: this.request["directionallyOppositeUser"], readOnly: true });
-		evt.preventDefault();
 	}
 
 	isRequestPending() {

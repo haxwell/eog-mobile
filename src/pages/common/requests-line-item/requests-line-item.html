@@ -9,7 +9,7 @@
 		<span *ngIf="hasRequestMessage()" class="douMsg">{{getRequestMessage()}}<br/></span>
 		<span *ngIf="!hasRequestMessage()" class="douMsg">--<br/></span>
 		<span class="douName">{{request.directionallyOppositeUser.realname}}</span><br/>
-		<button ion-button (click)="onViewContactInfoBtnTap($evt)">View Their Profile</button>
+		<button ion-button (click)="onViewContactInfoBtnTap()">View Their Profile</button>
 		<button ion-button (click)="onAcceptBtnTap()">Accept</button>
 		<button ion-button (click)="onDeclineBtnTap()">Decline</button>
 	</ion-item>
@@ -24,7 +24,7 @@
 		<span *ngIf="hasRequestMessage()" class="douMsg">{{getRequestMessage()}}<br/></span>
 		<span *ngIf="!hasRequestMessage()" class="douMsg">--<br/></span>
 		<span class="douName">{{request.directionallyOppositeUser.realname}}</span><br/>
-		<button ion-button (click)="onViewContactInfoBtnTap($evt)">Contact Info</button>
+		<button ion-button (click)="onViewContactInfoBtnTap()">Contact Info</button>
 		<button ion-button (click)="onCompleteBtnTap()">Complete</button>
 		<button ion-button (click)="onUnableToCompleteBtnTap()">Cancel</button>
 	</ion-item>
@@ -40,7 +40,7 @@
 		<span *ngIf="!hasRequestMessage()" class="douMsg">--<br/></span>
 		<span class="douName">{{request.directionallyOppositeUser.realname}}</span><br/>
 		<span class="foo">Decline Reason: {{request.declinedReasonCode.text}}</span><br/>
-		<button ion-button (click)="onViewContactInfoBtnTap($evt)">Contact Info</button>
+		<button ion-button (click)="onViewContactInfoBtnTap()">Contact Info</button>
 	</ion-item>
 	<ion-item *ngIf="isRequestCompletedPendingApproval()" class="yellow waitingOnDirectionallyOppositeUser" (press)="onEditPromise()">
 		<ion-avatar class="rliAvatar" *ngIf="isDOUserProfileImageAvailable()" item-start>
