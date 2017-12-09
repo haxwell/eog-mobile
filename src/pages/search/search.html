@@ -1,33 +1,42 @@
-	<ion-header>
+<ion-header>
 	<ion-navbar>
 		<ion-title>
-			Search Promises
+			Search
 		</ion-title>
 	</ion-navbar>
 </ion-header>
 
 <ion-content padding>
-	<ion-row>
-		<ion-input type="text" placeholder="Search" [(ngModel)]="searchString" #ctrl="ngModel" required></ion-input>
-		<button ion-button icon-only (click)="onSearchBtnTap($event)">
-			<ion-icon name="search"></ion-icon>
-		</button>
-	</ion-row>
-
-	<ion-card *ngFor="let promise of resultList" (click)="showPromiseDetail(promise)">
-		<ion-card-header>
-			<ion-icon [ngStyle]="{'color':getAlreadyRequestedIconColor(promise)}" name="megaphone"> </ion-icon>
-			<ion-icon [ngStyle]="{'color':getSufficientPointsIconColor(promise)}" name="pricetag"></ion-icon>
-			<ion-icon *ngIf="hasPrmBeenPreviouslyRequested(promise)" [ngStyle]="{'color':getSufficientTimeIconColor(promise)}" name="clock"></ion-icon>
-			<ion-icon *ngIf="areRecommendationsRequired(promise)" [ngStyle]="{'color':getNecessaryRecommendationsIconColor(promise)}" name="people"></ion-icon>
-			<br/>
-			<b>{{promise.title}}</b>
-			<br/>
-			{{promise.directionallyOppositeUser.realname}}
-		</ion-card-header>
-		<ion-card-content>
-			{{promise.description}}
-		</ion-card-content>
-	</ion-card>
-
+	<ion-grid>
+		<ion-row>
+			<ion-input type="text" class="searchQueryField" (ionChange)="onQueryChanged($event)" [value]="getSearchQuery()"></ion-input>
+			<button (click)="onSearchBtnTap()">Search</button>
+		</ion-row>
+		<ion-list>
+			<ion-item *ngIf="arePromiseResultsAvailable()" no-lines>
+				<ion-list-header>
+					Promises
+				</ion-list-header>
+				<promise-line-item *ngFor="let prm of getPromiseResults()" [item]="prm"></promise-line-item>
+			</ion-item>
+			<ion-item *ngIf="!arePromiseResultsAvailable()">
+				<ion-list-header>
+					Promises
+				</ion-list-header>
+				There are no matching promises.
+			</ion-item>
+			<ion-item *ngIf="areUsersResultsAvailable()" no-lines>
+				<ion-list-header>
+					Users
+				</ion-list-header>
+				<users-line-item *ngFor="let user of getUsersResults()" [item]="user"></users-line-item>
+			</ion-item>
+			<ion-item *ngIf="!areUsersResultsAvailable()">
+				<ion-list-header>
+					Users
+				</ion-list-header>
+				There are no matching users.
+			</ion-item>
+		</ion-list>
+	</ion-grid>
 </ion-content>

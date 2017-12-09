@@ -41,6 +41,8 @@ import { DeletePrmPage } from '../pages/promises/_pages/delete.prm';
 import { RequestsIncomingView } from '../pages/common/requests-incoming/requests-incoming';
 import { RequestsOutgoingView } from '../pages/common/requests-outgoing/requests-outgoing';
 import { RequestsLineItem } from '../pages/common/requests-line-item/requests-line-item';
+import { PromiseLineItem } from '../pages/common/promise-line-item/promise-line-item';
+import { UsersLineItem } from '../pages/common/users-line-item/users-line-item';
 import { RulePage } from '../pages/promises/_pages/rule';
 import { KeywordEntryPage } from '../pages/keyword.entry/keyword.entry';
 
@@ -82,6 +84,8 @@ import { Constants } from '../_constants/constants';
     RequestsIncomingView,    
     RequestsOutgoingView,
     RequestsLineItem,
+    PromiseLineItem,
+    UsersLineItem,
     SocialNetworkCRUDPage,
     RequestPage,
     AcceptRequestPage,

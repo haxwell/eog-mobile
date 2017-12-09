@@ -19,7 +19,8 @@ import { Constants } from '../../_constants/constants';
 })
 export class SearchPage {
 	searchString = 'denv';
-	resultList = undefined;
+	prmResults = undefined;
+	usersResults = undefined;
 	dirty = false;
 	loading = undefined;
 
@@ -36,9 +37,6 @@ export class SearchPage {
 				private _constants: Constants) {
 
 		let func = (data) => {
-			// a declined event means points that were escrowed have become available,
-			//  so that means the state rules, (sufficient points, already requested, necessary recommends)
-			//  need to be recalculated. So init everything.
 			this.ngOnInit(); 
 		};
 
@@ -78,68 +76,67 @@ export class SearchPage {
 
 		self.loading.present();
 
+		this.usersResults = undefined;
+		this.prmResults = undefined;
+
 		this._searchService.searchPrms(this.searchString).then((data: Array<Object>) => {
-			self.ngOnInit();
+			//self.ngOnInit();
 
-			data.map((obj) => {
-				self._userService.getUser(obj["userId"]).then((user) => {
-					obj["directionallyOppositeUser"] = user;
-					delete obj["userId"];
+			if (data.length === 0) {
+				self.prmResults = data;
 
-					if (!data.some((obj) => { return obj["userId"] != undefined; })) {
-						self.resultList = data;
-						self.loading.dismiss();
-					}
+				if (self.usersResults !== undefined)
+					self.loading.dismiss();
+			} else {
+				data.map((obj) => {
+					self._userService.getUser(obj["userId"]).then((user) => {
+						obj["directionallyOppositeUser"] = user;
+						delete obj["userId"];
+
+						if (!data.some((obj) => { return obj["userId"] != undefined; })) {
+							self.prmResults = data;
+							
+							if (self.usersResults !== undefined)
+								self.loading.dismiss();
+						}
+					});
 				});
-			});
+			}
+		});
+
+		this._searchService.searchUsers(this.searchString).then((data: Array<Object>) => {
+			//self.ngOnInit();
+
+			self.usersResults = data;
+
+			if (self.prmResults !== undefined) {
+				self.loading.dismiss();
+			}
 		});
 	}
 
-	getNecessaryRecommendationsIconColor(prm) {
-		if (this._prmMetadataService.getMetadataValue(prm, this._constants.FUNCTION_KEY_USER_HAS_NECESSARY_RECOMMENDATIONS) === true)
-			return "green";
-		else
-			return "red";
+	getSearchQuery() {
+		return this.searchString;
 	}
 
-	getAlreadyRequestedIconColor(prm) {
-		if (this._prmMetadataService.getMetadataValue(prm, this._constants.FUNCTION_KEY_USER_HAS_CURRENTLY_REQUESTED_PRM) === false)
-			return "green";
-		else
-			return "red";
+	onQueryChanged(event) {
+		this.searchString = event._value;
 	}
 
-	getSufficientTimeIconColor(prm) {
-		if (this._prmMetadataService.getMetadataValue(prm, this._constants.FUNCTION_KEY_USER_IS_PAST_REQUEST_AGAIN_DATE) === true)
-			return "green";
-		else
-			return "red";
+	getPromiseResults() {
+		return this.prmResults;
 	}
 
-	getSufficientPointsIconColor(prm) {
-		if (this._prmMetadataService.getMetadataValue(prm, this._constants.FUNCTION_KEY_USER_HAS_SUFFICIENT_POINTS) === true)
-			return "green";
-		else
-			return "red";
+	getUsersResults() {
+		let currentUser = this._userService.getCurrentUser();
+		return this.usersResults.filter((o) => { return o["id"] !== currentUser["id"]; });
 	}
 
-	hasPrmBeenPreviouslyRequested(prm) {
-		return (this._prmMetadataService.getMetadataValue(prm, this._constants.FUNCTION_KEY_USER_HAS_PREVIOUSLY_REQUESTED_PRM) === true);
+	areUsersResultsAvailable() {
+		return this.usersResults !== undefined && this.usersResults.length > 0;
 	}
 
-	areRecommendationsRequired(prm) {
-		return (this._prmMetadataService.getMetadataValue(prm, this._constants.FUNCTION_KEY_PRM_REQUIRES_RECOMMENDATIONS) === true);	
-	}
-
-	prmCallback = (_params) => {
-		return new Promise((resolve, reject) => {
-			//this.onSearchBtnTap();
-			this.setDirty(true);
-			resolve();
-		});
-	}
-
-	showPromiseDetail(prm) {
-		this.navCtrl.push(PrmPage, { prm: prm, readOnly: true, callback: this.prmCallback });
-	}
+	arePromiseResultsAvailable() {
+		return this.prmResults !== undefined && this.prmResults.length > 0;
+	}	
 }

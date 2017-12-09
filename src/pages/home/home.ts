@@ -208,7 +208,7 @@ export class HomePage {
   }
 
   onSearchBtnTap(event) {
-    this.setIsSearchFieldVisible(!this.isSearchFieldVisible());
+      this.navCtrl.push(SearchPage, { });
   }
 
   setIsSearchFieldVisible(b) {
