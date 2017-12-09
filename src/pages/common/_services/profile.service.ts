@@ -128,7 +128,6 @@ export class ProfileService {
 	}
 
 	save(model) {
-		//abcd
 		let tmp = {};
 
 		let user = this._userService.getCurrentUser();
