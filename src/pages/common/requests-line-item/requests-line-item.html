@@ -70,10 +70,10 @@
 	</ion-item>
 
 	<ion-item *ngIf="isOutgoingRequestPending()" class="yellow waitingOnDirectionallyOppositeUser" (swipeLeft)="onCancelBtnTap()">
-		<ion-avatar class="rliAvatar" *ngIf="isPrmOwnersUserProfileImageAvailable()" item-start>
-			<img [src]="getPrmOwnersUserProfileImageFilepath()">
+		<ion-avatar class="rliAvatar" *ngIf="isPrmAvatarImageAvailable()" item-start>
+			<img [src]="getPrmAvatarImageFilepath()">
 		</ion-avatar>
-		<ion-avatar *ngIf="!isPrmOwnersUserProfileImageAvailable()" item-start>
+		<ion-avatar *ngIf="!isPrmAvatarImageAvailable()" item-start>
 			<img src="assets/img/mushroom.jpg">
 		</ion-avatar>
 		<span class="prmTitle"><b>{{request.prm.title}}</b></span><br/>
@@ -83,10 +83,10 @@
 		<button ion-button (click)="onCancelBtnTap()">Cancel</button>
 	</ion-item>
 	<ion-item *ngIf="isOutgoingRequestAccepted()" class="green waitingOnDirectionallyOppositeUser" (swipeLeft)="onCancelBtnTap()">
-		<ion-avatar class="rliAvatar" *ngIf="isPrmOwnersUserProfileImageAvailable()" item-start>
-			<img [src]="getPrmOwnersUserProfileImageFilepath()">
+		<ion-avatar class="rliAvatar" *ngIf="isPrmAvatarImageAvailable()" item-start>
+			<img [src]="getPrmAvatarImageFilepath()">
 		</ion-avatar>
-		<ion-avatar *ngIf="!isPrmOwnersUserProfileImageAvailable()" item-start>
+		<ion-avatar *ngIf="!isPrmAvatarImageAvailable()" item-start>
 			<img src="assets/img/mushroom.jpg">
 		</ion-avatar>
 		<span class="prmTitle"><b>{{request.prm.title}}</b></span><br/>
@@ -96,10 +96,10 @@
 		<button ion-button (click)="onCancelBtnTap()">Cancel</button>
 	</ion-item>
 	<ion-item *ngIf="isOutgoingRequestCompletedAwaitingApproval()" class="yellow" (swipeLeft)="onNotCompleteBtnTap()" (swipeRight)="onCompleteOutgoingBtnTap()">
-		<ion-avatar class="rliAvatar" *ngIf="isPrmOwnersUserProfileImageAvailable()" item-start>
-			<img [src]="getPrmOwnersUserProfileImageFilepath()">
+		<ion-avatar class="rliAvatar" *ngIf="isPrmAvatarImageAvailable()" item-start>
+			<img [src]="getPrmAvatarImageFilepath()">
 		</ion-avatar>
-		<ion-avatar *ngIf="!isPrmOwnersUserProfileImageAvailable()" item-start>
+		<ion-avatar *ngIf="!isPrmAvatarImageAvailable()" item-start>
 			<img src="assets/img/mushroom.jpg">
 		</ion-avatar>
 		<span class="prmTitle"><b>{{request.prm.title}}</b></span><br/>
@@ -110,10 +110,10 @@
 		<button ion-button (click)="onNotCompleteBtnTap()">Not Complete</button>
 	</ion-item>
 	<ion-item *ngIf="isOutgoingRequestNotCompleteAwaitingResolution()" class="red" (swipeLeft)="onPermanentlyDismissBtnTap()" (swipeRight)="onCompleteBtnTap()">
-		<ion-avatar class="rliAvatar" *ngIf="isPrmOwnersUserProfileImageAvailable()" item-start>
-			<img [src]="getPrmOwnersUserProfileImageFilepath()">
+		<ion-avatar class="rliAvatar" *ngIf="isPrmAvatarImageAvailable()" item-start>
+			<img [src]="getPrmAvatarImageFilepath()">
 		</ion-avatar>
-		<ion-avatar *ngIf="!isPrmOwnersUserProfileImageAvailable()" item-start>
+		<ion-avatar *ngIf="!isPrmAvatarImageAvailable()" item-start>
 			<img src="assets/img/mushroom.jpg">
 		</ion-avatar>
 		<span class="prmTitle"><b>{{request.prm.title}}</b></span><br/>
@@ -124,10 +124,10 @@
 		<button ion-button (click)="onPermanentlyDismissBtnTap()">Permanently Dismiss</button>
 	</ion-item>
 	<ion-item *ngIf="isOutgoingRequestCancelled()" class="red" (swipeLeft)="onCancelBtnTap()">
-		<ion-avatar class="rliAvatar" *ngIf="isPrmOwnersUserProfileImageAvailable()" item-start>
-			<img [src]="getPrmOwnersUserProfileImageFilepath()">
+		<ion-avatar class="rliAvatar" *ngIf="isPrmAvatarImageAvailable()" item-start>
+			<img [src]="getPrmAvatarImageFilepath()">
 		</ion-avatar>
-		<ion-avatar *ngIf="!isPrmOwnersUserProfileImageAvailable()" item-start>
+		<ion-avatar *ngIf="!isPrmAvatarImageAvailable()" item-start>
 			<img src="assets/img/mushroom.jpg">
 		</ion-avatar>
 		<span class="prmTitle"><b>{{request.prm.title}}</b></span><br/>
@@ -136,10 +136,10 @@
 		<button ion-button (click)="onCancelBtnTap()">Cancel</button>				
 	</ion-item>
 	<ion-item *ngIf="isOutgoingRequestDeclined()" class="red" (swipeLeft)="onAcknowledgeBtnTap()">
-		<ion-avatar class="rliAvatar" *ngIf="isPrmOwnersUserProfileImageAvailable()" item-start>
-			<img [src]="getPrmOwnersUserProfileImageFilepath()">
+		<ion-avatar class="rliAvatar" *ngIf="isPrmAvatarImageAvailable()" item-start>
+			<img [src]="getPrmAvatarImageFilepath()">
 		</ion-avatar>
-		<ion-avatar *ngIf="!isPrmOwnersUserProfileImageAvailable()" item-start>
+		<ion-avatar *ngIf="!isPrmAvatarImageAvailable()" item-start>
 			<img src="assets/img/mushroom.jpg">
 		</ion-avatar>
 		<span class="prmTitle"><b>{{request.prm.title}}</b></span><br/>

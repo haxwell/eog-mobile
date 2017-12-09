@@ -206,27 +206,12 @@ export class RequestsLineItem {
 		modal.present();
 	}
 
-	getPrmOwnersUserProfileImageFilepath() {
-		return this.directionallyOppositeUserProfileImageFilepath[this.request["prm"]["userId"]];
+	getPrmAvatarImageFilepath() {
+		return undefined;
 	}
 
-	isPrmOwnersUserProfileImageAvailable() {
-		let userId = this.request["prm"]["userId"];
-		let rtn = this.directionallyOppositeUserProfileImageFilepath[userId] !== undefined && this.directionallyOppositeUserProfileImageFilepath[userId] !== null;
-
-		let self = this;
-		if (self.directionallyOppositeUserProfileImageFilepath[userId] === undefined && userId !== undefined) {
-			self.directionallyOppositeUserProfileImageFilepath[userId] = null;
-
-			let path = self._profileService.getMostProbableProfilePhotoPath() + userId;
-			
-			self._profilePictureService.get(userId, path).then((path) => {
-				if (path !== undefined)
-					self.directionallyOppositeUserProfileImageFilepath[userId] = path;
-			});
-		}
-
-		return rtn; 
+	isPrmAvatarImageAvailable() {
+		return false; 
 	}
 
 	getDOUserProfileImageFilepath() {
