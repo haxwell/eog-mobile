@@ -4,8 +4,8 @@
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 
 export const domainInfo = {
-//  domain: '165.227.109.239',
-  domain: 'localhost',
+  domain: '165.227.109.239',
+//  domain: 'localhost',
   port: '8080'
 };
 
