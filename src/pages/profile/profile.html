@@ -108,7 +108,7 @@
 				<ion-icon name="add"></ion-icon>
 			</button>
 		</ion-list-header>
-		<ion-item *ngFor="let prm of model.prms" (swipeLeft)="onDeletePromise(prm)" (click)="onPromiseBtnTap(prm)">
+		<ion-item *ngFor="let prm of getPromises()" (swipeLeft)="onDeletePromise(prm)" (click)="onPromiseBtnTap(prm)">
 			<ion-avatar item-start>
 				<img [src]="getPromiseAvatarImage(prm)">
 			</ion-avatar>
@@ -118,6 +118,9 @@
 				<span class="prmReqdPts">{{getPointRecommendationCountPhrase(prm)}}<br/></span>
 				<span *ngFor="let keyword of prm.keywords"><span class="smallKeyword">{{keyword.text}}</span></span>
 			</div>
+		</ion-item>
+		<ion-item *ngIf="!userHasAnActivePromise()">
+			The promises you create will appear here! 
 		</ion-item>
 	</ion-list>
 
@@ -148,12 +151,12 @@
 				<ion-icon name="add"></ion-icon>
 			</button>
 		</ion-list-header>
-		<span *ngIf="userHasNoKeywords() && !isReadOnly()">
+		<ion-item *ngIf="userHasNoKeywords() && !isReadOnly()">
 			Keywords are descriptive words and phrases. Add some to describe you!
-		</span>
-		<span *ngIf="userHasNoKeywords() && isReadOnly()">
+		</ion-item>
+		<ion-item *ngIf="userHasNoKeywords() && isReadOnly()">
 			This user has not defined any keywords yet.
-		</span>
+		</ion-item>
 		<div class="fifteenPixelLeftMargin">
 			<span *ngFor="let item of model.keywords">
 				<span class="blockItem" (press)="onIndividualKeywordPress()">{{item.text}}</span>

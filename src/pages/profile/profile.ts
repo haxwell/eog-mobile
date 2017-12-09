@@ -280,6 +280,14 @@ export class ProfilePage {
 		return this.isDirty();
 	}
 
+	getPromises() {
+		return this.model["prms"];
+	}
+
+	userHasAnActivePromise() {
+		return this.model["prms"] !== undefined && this.model["prms"].length > 0;
+	}
+
 	areIncomingRecommendationsAvailable() {
 		return this.model["availableIncomingRecommendations"] !== undefined && this.model["availableIncomingRecommendations"].length > 0;
 	}
