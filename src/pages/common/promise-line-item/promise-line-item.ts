@@ -29,9 +29,6 @@ export class PromiseLineItem {
 				private navCtrl: NavController,
 				private modalCtrl: ModalController,
 				private _constants: Constants,
-				private _profilePictureService: ProfilePictureService,
-				private _profileService: ProfileService,
-				private _requestsService: RequestsService,
 				private _prmMetadataService: PrmMetadataService,
                 _events: Events) {
 

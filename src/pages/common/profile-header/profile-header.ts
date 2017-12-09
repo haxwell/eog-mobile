@@ -5,7 +5,6 @@ import { Events } from 'ionic-angular';
 import { File } from '@ionic-native/file'
 
 import { ChoosePhotoSourcePage } from '../choose-photo-source/choose-photo-source'
-import { ProfilePage } from '../../profile/profile'
 
 import { ProfileService } from '../_services/profile.service'
 
@@ -22,7 +21,6 @@ export class ProfileHeader {
 
 	constructor(navParams: NavParams, 
 				private modalCtrl: ModalController,
-				private navCtrl: NavController,
 				private _profileService: ProfileService, 
 				private _events: Events,
 				private _file: File) {

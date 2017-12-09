@@ -3,8 +3,6 @@ import { NavController } from 'ionic-angular';
 import { Events } from 'ionic-angular';
 import { LoadingController } from 'ionic-angular';
 
-import { PrmPage } from '../promises/promises'
-
 import { SearchService } from '../../app/_services/search.service';
 import { PointsService } from '../../app/_services/points.service';
 import { PrmMetadataService } from '../../app/_services/prm-metadata.service';
@@ -33,8 +31,7 @@ export class SearchPage {
 				private _recommendationService: RecommendationService,
 				private _prmMetadataService: PrmMetadataService,
 				private loadingCtrl: LoadingController,
-				_events: Events,
-				private _constants: Constants) {
+				_events: Events) {
 
 		let func = (data) => {
 			this.ngOnInit(); 

@@ -21,11 +21,8 @@ export class UsersLineItem {
 
 	constructor(navParams: NavParams, 
 				private navCtrl: NavController,
-				private modalCtrl: ModalController,
-				private _constants: Constants,
 				private _profilePictureService: ProfilePictureService,
 				private _profileService: ProfileService,
-				private _requestsService: RequestsService,
                 _events: Events) {
 
 	}

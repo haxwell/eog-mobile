@@ -180,7 +180,6 @@ export class ProfilePage {
 	}
 
 	onDeletePromise(prm) {
-		let self = this;
 		let modal = this.modalCtrl.create(DeletePrmPage, {prm: prm});
 		modal.onDidDismiss(data => { if (data === true) console.log("TODO: Update The UI when Promise is deleted by a swipe left"); } );
 		modal.present();
@@ -345,26 +344,6 @@ export class ProfilePage {
 
 	setDirty(b) {
 		this.dirty = b;
-	}
-
-	getNotificationsCardClass() {
-		return (this.model["notifications"] === undefined) ? "darkerWhileLoading" : "";
-	}
-
-	getPointsCardClass() {
-		return (this.model["points"] === undefined) ? "darkerWhileLoading" : "";
-	}
-
-	getRecommendationsCardClass() {
-		return (this.model["incomingRecommendations"] === undefined) ? "darkerWhileLoading" : "";
-	}
-
-	getPromisesCardClass() {
-		return (this.model["prms"] === undefined) ? "darkerWhileLoading" : "";
-	}
-
-	getKeywordsCardClass() {
-		return (this.model["keywords"] === undefined) ? "darkerWhileLoading" : "";
 	}
 
 	getUser() {
