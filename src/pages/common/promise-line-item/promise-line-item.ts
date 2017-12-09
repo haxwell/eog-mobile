@@ -5,9 +5,6 @@ import { PrmPage } from '../../promises/promises'
 
 import { Constants } from '../../../_constants/constants'
 
-import { ProfilePictureService } from '../../../app/_services/profile-picture.service'
-import { ProfileService } from '../_services/profile.service'
-import { RequestsService } from '../../../app/_services/requests.service'
 import { PrmMetadataService } from '../../../app/_services/prm-metadata.service';
 
 @Component({
@@ -27,7 +24,6 @@ export class PromiseLineItem {
 		
 	constructor(navParams: NavParams, 
 				private navCtrl: NavController,
-				private modalCtrl: ModalController,
 				private _constants: Constants,
 				private _prmMetadataService: PrmMetadataService,
                 _events: Events) {

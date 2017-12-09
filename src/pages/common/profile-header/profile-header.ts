@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { ModalController, NavParams, NavController } from 'ionic-angular';
+import { ModalController, NavParams } from 'ionic-angular';
 import { Events } from 'ionic-angular';
 
 import { File } from '@ionic-native/file'

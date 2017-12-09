@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
-import { ModalController } from 'ionic-angular';
 import { Events } from 'ionic-angular';
 
 import { RequestsService } from '../../../app/_services/requests.service'

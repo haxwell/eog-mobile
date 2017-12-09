@@ -9,14 +9,12 @@ import { PrmMetadataService } from '../../app/_services/prm-metadata.service';
 import { UserService } from '../../app/_services/user.service';
 import { RecommendationService } from '../../app/_services/recommendation.service';
 
-import { Constants } from '../../_constants/constants';
-
 @Component({
   selector: 'page-search',
   templateUrl: 'search.html'
 })
 export class SearchPage {
-	searchString = 'denv';
+	searchString = '';
 	prmResults = undefined;
 	usersResults = undefined;
 	dirty = false;

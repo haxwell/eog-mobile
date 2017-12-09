@@ -1,13 +1,10 @@
 import { Component, Input } from '@angular/core';
-import { ModalController, NavController, NavParams, Events } from 'ionic-angular';
+import { NavController, NavParams, Events } from 'ionic-angular';
 
 import { ProfilePage } from '../../profile/profile'
 
-import { Constants } from '../../../_constants/constants'
-
 import { ProfilePictureService } from '../../../app/_services/profile-picture.service'
 import { ProfileService } from '../_services/profile.service'
-import { RequestsService } from '../../../app/_services/requests.service'
 
 @Component({
   selector: 'users-line-item',
