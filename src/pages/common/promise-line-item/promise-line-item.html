@@ -1,0 +1,18 @@
+<ion-item (click)="onViewPromise()">
+	<ion-avatar *ngIf="!isPromiseImageAvailable()" item-start>
+		<img src="assets/img/mushroom.jpg">
+	</ion-avatar>
+	<ion-avatar class="pliAvatar" *ngIf="isPromiseImageAvailable()" item-start>
+		<img [src]="getPromiseImageFilepath()">
+	</ion-avatar>
+
+	<ion-icon [ngStyle]="{'color':getAlreadyRequestedIconColor(item)}" name="megaphone"> </ion-icon>
+	<ion-icon [ngStyle]="{'color':getSufficientPointsIconColor(item)}" name="pricetag"></ion-icon>
+	<ion-icon *ngIf="hasPrmBeenPreviouslyRequested(item)" [ngStyle]="{'color':getSufficientTimeIconColor(item)}" name="clock"></ion-icon>
+	<ion-icon *ngIf="areRecommendationsRequired(item)" [ngStyle]="{'color':getNecessaryRecommendationsIconColor(item)}" name="people"></ion-icon>
+
+	<span class="prmTitle">{{item.title}}</span>
+	<span class="prmDesc">{{item.description}}</span>
+</ion-item>
+
+
