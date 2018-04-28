@@ -29,6 +29,7 @@
     "@ionic-native/camera": "^4.2.1",
     "@ionic-native/core": "^4.4.0",
     "@ionic-native/file": "^4.4.0",
+    "@ionic-native/file-path": "^4.7.0",
     "@ionic-native/file-transfer": "^4.4.0",
     "@ionic-native/push": "^4.4.2",
     "@ionic-native/splash-screen": "^4.4.0",
