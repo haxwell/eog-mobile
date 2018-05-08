@@ -1,16 +1,17 @@
+.item-md ion-avatar img {
+	width: 6em;
+	height: 6em;
+}
+
 .socialNetworkImg {
 	display: inline;
-	padding-left: .6em;
-	padding-right: .6em;
+	width: 3em;
+	height: 3em;
 }
 
 .socialNetworkImg > img {
 	width: 3em;
 	height: 3em;
-}
-
-.socialNetworkList {
-	padding-left: 0px;
 }
 
 .blockItem {
@@ -22,45 +23,6 @@
 	margin-bottom: .5em;
 }
 
-.smallKeyword {
-	display: inline-block;
-	border-style: none none solid none;
-	border-width: 2px;
-	margin-left: .25em;
-	margin-right: .25em;
-}
-
-.displayBlock {
-	display: block;
-	font-size: 3em;
-	font-weight: bold;
-}
-
-.howLongAgo {
-	font-color: lightblue;
-	font-size: .75em;
-	display: block;
-}
-
-.notificationMsg {
-	font-style: italic;
-	font-size: .95em;
-	display: block;
-}
-
-.ptsTdElement {
-	padding: 1px 15px;
-}
-
-.prmDesc {
-	font-size: .9em;	
-}
-
-.prmTitle {
-	font-size: 1.25em;
-	font-weight: bold;
-}
-
 .contactInfoField {
 	font-size: 1.45em;
 }
@@ -70,30 +32,33 @@
 	margin-top: .3em; 
 }
 
-.promiseDetail {
-	margin: 0px 0px 0px 10px;
+.circularized {
+	border-radius: 50%;
 }
 
-.listHeader .label-md {
-	margin: 13px 8px 0px 0px;
-}
-
-.listHeader {
-	margin-bottom: 0px;
-}
-
-.listHeaderBtn {
-	float: right;
-}
-
-.fifteenPixelLeftMargin {
-	margin: 0px 0px 0px 15px;
-}
-
-ion-avatar.profileAvatar > img {
+.rotate90 {
 	-webkit-transform: rotate(90deg);
     -moz-transform: rotate(90deg);
     -o-transform: rotate(90deg);
     -ms-transform: rotate(90deg);
     transform: rotate(90deg);
+}
+
+.cornfieldBlueColor {
+	color: #6495ed;
+}
+
+.profileName {
+	font-size: 2.3em;
+	font-style: bold;
+}
+
+.profileDescription {
+	padding: 1em 0 0 0;
+}
+
+.centered {
+	display: block;
+	margin: 0 auto;
+	text-align: center;
 }

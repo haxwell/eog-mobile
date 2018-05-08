@@ -1,4 +1,8 @@
 <ion-header>
+	<easyah-header></easyah-header>
+</ion-header>
+
+<!-- ion-header>
 	<ion-navbar>
 		<ion-title *ngIf="isNewObject()">
 			Create New Promise
@@ -10,35 +14,9 @@
 			Promise Detail
 		</ion-title>		
 	</ion-navbar>
-</ion-header>
+</ion-header -->
 
 <ion-content padding>
-	<ion-card *ngIf="isRequestMessageAvailable()">
-		<ion-card-content *ngIf="isStillMoreTimeLeftMessageAvailable()">
-			<ion-item *ngFor="let item of getStillMoreTimeLeftMessages()" [ngStyle]="{'color':'red'}">
-				{{item.msg}}
-			</ion-item>
-		</ion-card-content>	
-		<ion-card-content *ngIf="isAlreadyRequestedMessageAvailable()">
-			<ion-item *ngFor="let item of getAlreadyRequestedRequestMessages()" [ngStyle]="{'color':'red'}">
-				{{item.msg}}
-			</ion-item>
-		</ion-card-content>	
-		<ion-card-content *ngIf="isPointsRequestMessageAvailable()">
-			<span *ngFor="let item of getPointsRequestMessages()" [ngStyle]="{'color':'red'}">
-				You need {{item.msg}}.
-			</span>
-		</ion-card-content>	
-		<ion-card-content *ngIf="isRecommendationsRequestMessageAvailable()">
-			You need recommendations from:
-			<ul>
-				<li *ngFor="let item of getRecommendationsRequestMessages()" [ngStyle]="{'color':'red'}">
-					{{item.msg}}
-				</li>
-			</ul>
-		</ion-card-content>	
-	</ion-card>
-
 	<ion-list>
 		<!-- <ion-item *ngIf="!isNewObject() && isReadOnly()">
 			<span>{{getPrmOwnerName()}}</span>
@@ -101,9 +79,7 @@
 	</ion-list>
 
 	<ion-row>
-		<button ion-button [hidden]="!isDeleteBtnVisible()" color="danger" (click)="onDeleteBtnTap($event)">Delete</button>			
 		<button ion-button [hidden]="!isSaveBtnVisible()" [disabled]="!isSaveBtnEnabled()" (click)="onSaveBtnTap($event)">Save</button>
-		<button ion-button [hidden]="!isRequestBtnVisible()" (click)="onRequestBtnTap($event)">Request</button>
 	</ion-row>
 
 </ion-content>	

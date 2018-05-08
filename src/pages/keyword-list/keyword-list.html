@@ -1,0 +1,42 @@
+<ion-header>
+	<easyah-header></easyah-header>
+</ion-header>
+
+<ion-content padding>
+
+	<ion-row>
+		<ion-col>
+			<h1 id="pageHeaderText">Keywords To Describe You...<br/></h1>
+		</ion-col>
+	</ion-row>
+
+	<ion-row>
+		<ion-card>
+			<ion-card-header>
+				Keywords (press and hold to delete)
+			</ion-card-header>
+			<ion-card-content>
+				<span *ngIf="userHasNoKeywords()">
+					There are no keywords defined yet.
+				</span>
+				<span class="blockItem" *ngFor="let item of getKeywordArray()" (press)="onIndividualKeywordPress(item)">
+					{{item.text}}
+				</span>
+			</ion-card-content>
+		</ion-card>
+	</ion-row>	
+
+	<ion-row>
+		<ion-card>
+			<ion-card-content>
+				<ion-label>Enter new keywords. Separate multiple keywords,with,commas (for example).</ion-label>
+
+				<ion-row>
+					<ion-input type="text" placeholder="..type..words..press..add" (ionChange)="onAddKeywordFieldChange($event)" [value]="getAddKeywordFieldValue()" required></ion-input>
+					<button ion-button [disabled]="!isAddBtnEnabled()" (click)="onAddBtnTap($event)">Add</button>
+				</ion-row>
+			</ion-card-content>
+		</ion-card>
+	</ion-row>
+
+</ion-content>

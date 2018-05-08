@@ -33,21 +33,11 @@ export class ChoosePhotoSourcePage {
 		
 		self.viewCtrl.dismiss(new Promise((resolve, reject) => {
 			self.cameraService.takePicture().then((imageFileURI: string) => { 
-//				let rtn = {};
-//
-//				let lastSlash = imageFileURI.lastIndexOf('/');
-//
-//				rtn["path"] = imageFileURI.substring(0,lastSlash+1);
-//				rtn["filename"] = imageFileURI.substring(lastSlash+1);
-//
-//				self._file.moveFile(rtn["path"], rtn["filename"], self._file.cacheDirectory, "eogAppProfilePic" + self.userId).then(() => {
-//					self.imageFileURI = self._file.cacheDirectory + "eogAppProfilePic" + self.userId; 
 
-					self.imageFileURI = imageFileURI;
-					console.log("just took a picture. Its at " + self.imageFileURI);
-					
-					resolve({imageFileSource: 'camera', imageFileURI: self.imageFileURI});
-//				})
+				self.imageFileURI = imageFileURI;
+				console.log("just took a picture. Its at " + self.imageFileURI);
+				
+				resolve({imageFileSource: 'camera', imageFileURI: self.imageFileURI});
 			});
 		}));
 	}
@@ -58,21 +48,11 @@ export class ChoosePhotoSourcePage {
 
 		self.viewCtrl.dismiss(new Promise((resolve, reject) => {
 			self.cameraService.loadGalleryPicture().then((imageFileURI: string) => { 
-//				let rtn = {};
-//
-//				let lastSlash = imageFileURI.lastIndexOf('/');
-//
-//				rtn["path"] = imageFileURI.substring(0,lastSlash+1);
-//				rtn["filename"] = imageFileURI.substring(lastSlash+1);
-//
-//				self._file.copyFile(rtn["path"], rtn["filename"], self._file.cacheDirectory, "eogAppProfilePic" + self.userId).then(() => {
-//					self.imageFileURI = self._file.cacheDirectory + "eogAppProfilePic" + self.userId; 
 
-					self.imageFileURI = imageFileURI;
-					console.log("just set a picture from the gallery. Its at " + self.imageFileURI);
+				self.imageFileURI = imageFileURI;
+				console.log("just set a picture from the gallery. Its at " + self.imageFileURI);
 
-					resolve({imageFileSource: 'gallery', imageFileURI: self.imageFileURI});
-//				})
+				resolve({imageFileSource: 'gallery', imageFileURI: self.imageFileURI});
 			});
 		}));
 	}

@@ -6,7 +6,6 @@ import { ApiService } from '../../../app/_services/api.service';
 import { PointsService } from '../../../app/_services/points.service';
 import { ProfilePictureService } from '../../../app/_services/profile-picture.service';
 import { RecommendationService } from '../../../app/_services/recommendation.service';
-import { NotificationService } from '../../../pages/profile/_services/notification.service'
 
 import { environment } from '../../../_environments/environment';
 
@@ -20,7 +19,6 @@ export class ProfileService {
 				private _userService: UserService, 
 				private _pointsService: PointsService,
 				private _recommendationService: RecommendationService,
-				private _notificationService: NotificationService,
 				private _profilePictureService: ProfilePictureService,
 				private _events: Events) {
 
@@ -29,7 +27,6 @@ export class ProfileService {
 	init(user) {
 		this._recommendationService.init();
 		this._pointsService.init();
-		this._notificationService.init();
 		this._profilePictureService.reset(user["id"]);
 
 		this.modelCache[user["id"]] = undefined;
@@ -82,11 +79,13 @@ export class ProfileService {
 			})
   		}
 
+  		// TODO --- REMOVE THIS. Its In Prm-Service now ---
 		url = environment.apiUrl + "/api/user/" + user["id"] + "/promises";
 		this._apiService.get(url).subscribe((prmsObj) => {
 			model["prms"] = JSON.parse(prmsObj["_body"]);
 			model["prms"].sort((a, b) => { let aText = a.title.toLowerCase(); let bText = b.title.toLowerCase(); if (aText > bText) return 1; else if (aText < bText) return -1; else return 0; })
 		});
+		// END TODO
 
 		this._pointsService.getCurrentAvailableUserPoints().then((pts) => {
 			model["points"]["available"] = pts;
@@ -118,10 +117,6 @@ export class ProfileService {
 
 		this._recommendationService.getOutgoingRecommendations().then((obj) => {
 			model["outgoingRecommendations"] = obj;
-		});
-
-		this._notificationService.get().then((obj) => {
-			model["notifications"] = obj;
 		});
 
 		return model;

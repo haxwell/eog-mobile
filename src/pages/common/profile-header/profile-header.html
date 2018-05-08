@@ -1,15 +1,20 @@
 <ion-grid>
 	<ion-row>
 		<ion-col col-auto>
-			<ion-item *ngIf="isThumbnailImageAvailable()">
-				<ion-thumbnail item-start >
-					<img class="rotate90 circularized" [src]="getThumbnailImage()" alt="profile_image" (press)="onThumbnailPress($event)">
-				</ion-thumbnail>
+			<ion-item *ngIf="isThumbnailImageAvailable() && !isFromGallery()">
+				<ion-avatar item-start >
+					<img  [src]="getThumbnailImage()" alt="profile_image" (press)="onThumbnailPress($event)">
+				</ion-avatar>
+			</ion-item>
+			<ion-item *ngIf="isThumbnailImageAvailable() && isFromGallery()">
+				<ion-avatar item-start >
+					<img  [src]="getThumbnailImage()" alt="profile_image" (press)="onThumbnailPress($event)">
+				</ion-avatar>
 			</ion-item>
 			<ion-item *ngIf="!isThumbnailImageAvailable()">
-				<ion-thumbnail item-start >
-					<img class="circularized" src="assets/img/mushroom.jpg" (press)="onThumbnailPress($event)">
-				</ion-thumbnail>
+				<ion-avatar item-start >
+					<img  src="assets/img/mushroom.jpg" (press)="onThumbnailPress($event)">
+				</ion-avatar>
 			</ion-item>
 		</ion-col>
 		<ion-col col-auto>

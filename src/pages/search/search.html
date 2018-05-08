@@ -1,42 +1,67 @@
 <ion-header>
-	<ion-navbar>
-		<ion-title>
-			Search
-		</ion-title>
-	</ion-navbar>
+	<easyah-header></easyah-header>
 </ion-header>
 
 <ion-content padding>
-	<ion-grid>
-		<ion-row>
+
+		<!-- ion-row>
 			<ion-input type="text" class="searchQueryField" (ionChange)="onQueryChanged($event)" [value]="getSearchQuery()"></ion-input>
 			<button (click)="onSearchBtnTap()">Search</button>
-		</ion-row>
-		<ion-list>
-			<ion-item *ngIf="arePromiseResultsAvailable()" no-lines>
-				<ion-list-header>
-					Promises
-				</ion-list-header>
-				<promise-line-item *ngFor="let prm of getPromiseResults()" [item]="prm"></promise-line-item>
-			</ion-item>
-			<ion-item *ngIf="!arePromiseResultsAvailable()">
-				<ion-list-header>
-					Promises
-				</ion-list-header>
-				There are no matching promises.
-			</ion-item>
-			<ion-item *ngIf="areUsersResultsAvailable()" no-lines>
-				<ion-list-header>
-					Users
-				</ion-list-header>
-				<users-line-item *ngFor="let user of getUsersResults()" [item]="user"></users-line-item>
-			</ion-item>
-			<ion-item *ngIf="!areUsersResultsAvailable()">
-				<ion-list-header>
-					Users
-				</ion-list-header>
-				There are no matching users.
-			</ion-item>
+		</ion-row -->
+		<ion-list #searchPrmResultList>
+				<ion-item-divider sticky>
+					<ion-label>
+						Promise Results
+					</ion-label>
+				</ion-item-divider>
+
+			<ion-item-group *ngFor="let prm of getPromiseResults()">
+
+				<ion-item-sliding #slidingItem [attr.track]="getTrackPrm(prm)" (click)="onViewPromise(prm)">
+					<button ion-item>
+						<ion-avatar *ngIf="!isPromiseImageAvailable()" item-start>
+							<img src="assets/img/mushroom.jpg">
+						</ion-avatar>
+						<ion-avatar class="pliAvatar" *ngIf="isPromiseImageAvailable()" item-start>
+							<img [src]="getPromiseImageFilepath()">
+						</ion-avatar>
+
+						<ion-icon [ngStyle]="{'color':getAlreadyRequestedIconColor(prm)}" name="megaphone"> </ion-icon>
+						<ion-icon [ngStyle]="{'color':getSufficientPointsIconColor(prm)}" name="pricetag"></ion-icon>
+						<ion-icon *ngIf="hasPrmBeenPreviouslyRequested(prm)" [ngStyle]="{'color':getSufficientTimeIconColor(prm)}" name="clock"></ion-icon>
+						<ion-icon *ngIf="areRecommendationsRequired(prm)" [ngStyle]="{'color':getNecessaryRecommendationsIconColor(prm)}" name="people"></ion-icon>
+
+						<span class="prmTitle">{{prm.title}}</span>
+						<span class="prmDesc">{{prm.description}}</span>
+					</button>
+
+				</ion-item-sliding>
+			</ion-item-group>
 		</ion-list>
-	</ion-grid>
+
+		<ion-list #searchUserResultList>
+				<ion-item-divider sticky>
+					<ion-label>
+						User Results
+					</ion-label>
+				</ion-item-divider>
+
+			<ion-item-group *ngFor="let user of getUsersResults()">
+
+				<ion-item-sliding #slidingItem [attr.track]="getTrackUser(user)" (click)="onViewUser(user)">
+					<button ion-item>
+						<ion-avatar class="uliAvatar" *ngIf="isProfileImageAvailable(user)" item-start>
+							<img [src]="getProfileImageFilepath(user)">
+						</ion-avatar>
+						<ion-avatar *ngIf="!isProfileImageAvailable(user)" item-start>
+							<img src="assets/img/mushroom.jpg">
+						</ion-avatar>
+
+						<span class="userRealname">{{user.realname}}</span>
+					</button>
+
+				</ion-item-sliding>
+			</ion-item-group>
+		</ion-list>
+
 </ion-content>

@@ -17,3 +17,53 @@ ion-card-header {
 		color: red;
 		background-color: red;
 	}
+
+.centered {
+	display: block;
+	margin: 0 auto;
+	text-align: center;
+}
+
+
+$categories: (
+ ionic: color($colors, primary),
+ pending: yellow,
+ accepted: green,
+ declined: red,
+ completedAwaitingApproval: #FD8B2D,
+ notCompleteAwaitingResolution: #FED035,
+ cancelled: red
+);
+
+@function auxiliary-categories() {
+  @return map-remove($categories);
+}
+
+$categories2: (
+ ionic: color($colors, primary),
+ pending: white,
+ accepted: white,
+ declined: white,
+ completedAwaitingApproval: lightgrey,
+ notCompleteAwaitingResolution: white,
+ cancelled: white
+);
+
+@function auxiliary-categories2() {
+  @return map-remove($categories2);
+}
+
+requests-incoming-view {
+  @each $track, $value in auxiliary-categories() {
+   ion-item-sliding[track=#{$track}] ion-label {
+     border-left: 6px solid $value;
+     padding-left: 10px;
+   }
+  }
+
+  @each $track, $value2 in auxiliary-categories2() {
+   ion-item-sliding[track=#{$track}] ion-label {
+   		background-color: $value2;
+   }
+  }
+}

@@ -4,17 +4,15 @@ import { NavController, NavParams } from 'ionic-angular';
 import { ModalController } from 'ionic-angular';
 import { LoadingController } from 'ionic-angular';
 
-import { RequestPage } from './_pages/request'
+//import { RequestPage } from './_pages/request'
 import { RulePage } from './_pages/rule'
-import { DeletePrmPage } from './_pages/delete.prm'
+//import { DeletePrmPage } from './_pages/delete.prm'
 import { KeywordEntryPage } from '../keyword.entry/keyword.entry'
-import { PrmService } from './_services/prm.service'
+import { PrmModelService } from './_services/prm.model.service'
 import { PrmMetadataService } from '../../app/_services/prm-metadata.service';
 import { PrmDetailService } from '../../app/_services/prm-detail.service';
 import { UserService } from '../../app/_services/user.service';
 import { Constants } from '../../_constants/constants';
-
-import Moment from 'moment'
 
 @Component({
   selector: 'page-prm-detail',
@@ -36,7 +34,7 @@ export class PrmPage {
 	constructor(public navCtrl: NavController, 
 				navParams: NavParams, 
 				private modalCtrl: ModalController,
-				private _prmService: PrmService,
+				private _prmModelService: PrmModelService,
 				private _prmMetadataService: PrmMetadataService,
 				private _prmDetailService: PrmDetailService,
 				private _userService: UserService,
@@ -45,12 +43,12 @@ export class PrmPage {
 
 		let tmp = navParams.get('prm');
 
-		this.model = tmp || this._prmService.getDefaultModel();
+		this.model = tmp || this._prmModelService.getDefaultModel();
 
 		if (tmp === undefined) {
 			this.new = true;
 		} else {
-			this._prmService.setPrmMetadata(tmp).then((prm) => {
+			this._prmModelService.setPrmMetadata(tmp).then((prm) => {
 				this.setModel(Object.assign({}, prm));
 			});
 		}
@@ -108,10 +106,6 @@ export class PrmPage {
 		return this.new;
 	}
 
-	isDeleteBtnVisible() {
-		return !this.isNewObject() && !this.isReadOnly();
-	}
-
 	handleDescriptionChange() {
 		this.setDirty(true);
 	}
@@ -124,26 +118,6 @@ export class PrmPage {
 		return this.model["keywords"] === undefined || this.model["keywords"].length === 0;
 	}
 
-	isRequestMessageAvailable() {
-		return this.requestMsgs !== undefined;
-	}
-
-	isAlreadyRequestedMessageAvailable() {
-		return this.requestMsgs !== undefined && this.requestMsgs.some((obj) => { return obj["type"] === "alreadyRequested"});
-	}
-
-	isPointsRequestMessageAvailable() {
-		return this.requestMsgs !== undefined && this.requestMsgs.some((obj) => { return obj["type"] === "points"});
-	}
-
-	isRecommendationsRequestMessageAvailable() {
-		return this.requestMsgs !== undefined && this.requestMsgs.some((obj) => { return obj["type"] === "reqd"});
-	}
-
-	isStillMoreTimeLeftMessageAvailable() {
-		return this.requestMsgs !== undefined && this.requestMsgs.some((obj) => { return obj["type"] === "timeRemaining"});
-	}
-
 	getPrmOwnerName() {
 		return this.model["directionallyOppositeUser"] !== undefined ? this.model["directionallyOppositeUser"]["realname"] : "";
 	}
@@ -152,45 +126,9 @@ export class PrmPage {
 		return this.requestMsgs;
 	}
 
-	getStillMoreTimeLeftMessages() {
-		return this.requestMsgs.filter((obj) => { return obj["type"] === "timeRemaining"});
-	}
-
-	getAlreadyRequestedRequestMessages() {
-		return this.requestMsgs.filter((obj) => { return obj["type"] === "alreadyRequested"});
-	}
-
-	getPointsRequestMessages() {
-		return this.requestMsgs.filter((obj) => { return obj["type"] === "points"});
-	}
-
-	getRecommendationsRequestMessages() {
-		return this.requestMsgs.filter((obj) => { return obj["type"] === "reqd"});
-	}
-
-	isRequestBtnVisible() {
-		return this._isRequestBtnVisible;
-	}
-
-	requestCallback = (_params) => {
-		return new Promise((resolve, reject) => {
-			if (this.callback !== undefined) 
-				this.callback(_params).then(() => {
-					resolve();
-				});
-			else
-				resolve();
-		});
-	}
-
-	onRequestBtnTap(evt) {
-		let modal = this.modalCtrl.create(RequestPage, {prm: this.model, callback: this.requestCallback});
-		modal.onDidDismiss(data => { this.navCtrl.pop(); });
-		modal.present();
-	}
-
 	isSaveBtnVisible() {
-		return !this.isReadOnly() && !this.isRequestBtnVisible();
+		// TODO: Delete this.. 
+		return true; //!this.isReadOnly() && !this.isRequestBtnVisible();
 	}
 
 	isSaveBtnEnabled() {
@@ -211,7 +149,7 @@ export class PrmPage {
 		self.loading.present();
 
 		self.callback(this.isDirty()).then(() => {
-			self._prmService.save(self.model).then((newObj) => {
+			self._prmModelService.save(self.model).then((newObj) => {
 				self.loading.dismiss();
 				self.navCtrl.pop();
 			})
@@ -253,13 +191,6 @@ export class PrmPage {
 		modal.present();
 	}
 
-	onDeleteBtnTap(evt) {
-		let self = this;
-		let modal = this.modalCtrl.create(DeletePrmPage, {prm: this.model});
-		modal.onDidDismiss(data => { self.callback(data).then(() => { if (data === true) self.navCtrl.pop(); }) } );
-		modal.present();
-	}
-
 	onCancelBtnTap(evt) {
 		// TODO: Check for changes before popping.
 		this.navCtrl.pop();
@@ -290,24 +221,4 @@ export class PrmPage {
 		return (this.model["requiredUserRecommendations"] && this.model["requiredUserRecommendations"].length > 0);
 	}
 
-	getFirstFulfilledText() {
-		if (this.model["fulfillment_dates"] !== undefined && this.model["fulfillment_dates"].length > 0) 
-			return Moment(this.model["fulfillment_dates"][0]).fromNow();
-		else
-			return "-- never --";
-	}
-
-	getNumberOfComplaints() {
-		if (this.model["num_of_complaints"] !== undefined) 
-			return this.model["num_of_complaints"];
-		else
-			return "--";
-	}
-
-	getTotalPointsEarned() {
-		if (this.model["total_points_earned"] !== undefined) 
-			return this.model["total_points_earned"];
-		else
-			return "--";
-	}
 }

@@ -1,0 +1,14 @@
+
+	<ion-item *ngIf="areResultsAvailable()" no-lines>
+		<ion-list-header>
+			Promises
+		</ion-list-header>
+		<promise-line-item *ngFor="let prm of getResults()" [item]="prm"></promise-line-item>
+	</ion-item>
+	<ion-item *ngIf="!areResultsAvailable()">
+		<ion-list-header>
+			Promises
+		</ion-list-header>
+		There are no matching promises.
+	</ion-item>
+

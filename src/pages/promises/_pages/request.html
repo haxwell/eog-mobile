@@ -11,9 +11,7 @@
 	<ion-label><b>{{prm.title}}</b></ion-label>
 	<ion-label *ngIf="!getRequiredUserRecommendations()">This will require {{prm.requiredPointsQuantity}} points from you.</ion-label>
 	<ion-label *ngIf="getRequiredUserRecommendations()">This will require {{prm.requiredPointsQuantity}} points, and the following recommendations from you.</ion-label>
-	<span class="blockItem" *ngFor="let user of getRequiredUserRecommendations()">
-		{{user.realname}}
-	</span>
+	<users-line-item *ngFor="let user of getRequiredUserRecommendations()" [item]="user" [clickthru]="false"></users-line-item>
 	<hr/>
 
 	<ion-label>If you'd like, you can send a message below with your request</ion-label>

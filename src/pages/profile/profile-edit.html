@@ -1,0 +1,71 @@
+<ion-content padding>
+
+		<ion-row>
+			<ion-col>
+				<span class="centered">
+					<button ion-button (click)="onCancelBtnTap($event)">Cancel</button>
+					<button ion-button [disabled]="!isSaveBtnEnabled()" (click)="onSaveBtnTap($event)">Save</button>
+				</span>
+			</ion-col>
+		</ion-row>
+
+		<ion-row>
+			<ion-item *ngIf="isThumbnailImageAvailable() && !isFromGallery()">
+				<ion-thumbnail >
+					<img class="rotate90 circularized centered" [src]="getThumbnailImage()" alt="profile_image" (press)="onThumbnailPress($event)">
+				</ion-thumbnail>
+			</ion-item>
+			<ion-item *ngIf="isThumbnailImageAvailable() && isFromGallery()">
+				<ion-thumbnail >
+					<img class="circularized centered" [src]="getThumbnailImage()" alt="profile_image" (press)="onThumbnailPress($event)">
+				</ion-thumbnail>
+			</ion-item>
+			<ion-item *ngIf="!isThumbnailImageAvailable()">
+				<ion-thumbnail>
+					<img class="circularized centered" src="assets/img/mushroom.jpg" (press)="onThumbnailPress($event)">
+				</ion-thumbnail>
+			</ion-item>
+		</ion-row>
+
+		<ion-row>
+			<ion-col>
+				<ion-item>
+					<ion-label color="primary" stacked>Real Name</ion-label>
+					<ion-input type="text" (ionChange)="onRealNameChange($event)" [value]="getModelAttr('realname')" required></ion-input>
+				</ion-item>
+				<ion-item>
+					<ion-label color="primary" stacked>Description</ion-label>
+					<ion-input type="text" (ionChange)="onDescriptionChange($event)" [value]="getModelAttr('description')" required></ion-input>
+				</ion-item>
+				<ion-item>
+					<ion-label color="primary" stacked>Phone Number</ion-label>
+					<ion-input type="text" (ionChange)="onPhoneChange($event)" [value]="getModelAttr('phone')" required></ion-input>
+				</ion-item>
+				<ion-item>
+					<ion-label color="primary" stacked>Email Address</ion-label>
+					<ion-input type="text" (ionChange)="onEmailChange($event)" [value]="getModelAttr('email')" required></ion-input>
+				</ion-item>
+				<ion-item>
+					<ion-label color="primary" stacked>Facebook</ion-label>
+					<ion-input type="text" (ionChange)="onFacebookChange($event)" [value]="getModelAttr('facebookUrl')" required></ion-input>
+				</ion-item>
+				<ion-item>
+					<ion-label color="primary" stacked>LinkedIn</ion-label>
+					<ion-input type="text" (ionChange)="onLinkedinChange($event)" [value]="getModelAttr('linkedinUrl')" required></ion-input>
+				</ion-item>
+				<ion-item>
+					<ion-label color="primary" stacked>YouTube</ion-label>
+					<ion-input type="text" (ionChange)="onYoutubeChange($event)" [value]="getModelAttr('youtubeUrl')" required></ion-input>
+				</ion-item>
+				<ion-item>
+					<ion-label color="primary" stacked>Instagram</ion-label>
+					<ion-input type="text" (ionChange)="onInstagramChange($event)" [value]="getModelAttr('instagramUrl')" required></ion-input>
+				</ion-item>
+				<ion-item>
+					<ion-label color="primary" stacked>GitHub</ion-label>
+					<ion-input type="text" (ionChange)="onGithubChange($event)" [value]="getModelAttr('githubUrl')" required></ion-input>
+				</ion-item>
+			</ion-col>
+		</ion-row>
+
+</ion-content>

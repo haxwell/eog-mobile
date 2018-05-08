@@ -6,15 +6,16 @@ import { DeclineRequestPage } from '../../../pages/requests/incoming/_pages/decl
 import { CompleteRequestPage } from '../../../pages/requests/incoming/_pages/complete.request'
 import { SecondCompleteRequestPage } from '../../../pages/requests/incoming/_pages/second.complete.request'
 import { CancelRequestPage } from '../../../pages/requests/incoming/_pages/cancel.request'
-import { ProfilePage } from '../../../pages/profile/profile'
 
 /* TODO: Move Promises to the Common area. Since it is called from this common component. */
 import { PrmPage } from '../../promises/promises'
+import { PrmDisplayPage } from '../../promises/display.prm'
 
 import { PermanentlyDismissUnresolvedRequestPage } from '../../../pages/requests/outgoing/_pages/permanently-dismiss-unresolved-request'
 import { NotCompleteOutgoingRequestPage } from '../../../pages/requests/outgoing/_pages/not.complete.request'
 import { CompleteOutgoingRequestPage } from '../../../pages/requests/outgoing/_pages/complete.request'
 import { CancelOutgoingRequestPage } from '../../../pages/requests/outgoing/_pages/cancel.request'
+import { ProfilePage } from '../../../pages/profile/profile'
 
 import { Constants } from '../../../_constants/constants'
 
@@ -129,7 +130,7 @@ export class RequestsLineItem {
 	}
 
 	onViewPromise() {
-		this.navCtrl.push(PrmPage, { prm: this.request["prm"], callback:  undefined, readOnly: true });
+		this.navCtrl.push(PrmDisplayPage, { prm: this.request["prm"], callback:  undefined });
 	}
 
 	onLongPress() {

@@ -1,10 +1,193 @@
+<ion-header>
+	<easyah-header></easyah-header>
+
+	<ion-row>
+			<h1 class="centered">You asked people for...<br/></h1>
+	</ion-row>
+</ion-header>
+
+<ion-content padding>
 
 	<ion-item *ngIf="isRequestModelEmpty()">
-		There are no requests that you have made to other people.
+		<img class="centered" src="assets/img/no-outgoing-requests.jpg">
+		<span class="centered"><br/>Make yourself useful! Earn some points! Then, ask someone for something!</span>
 	</ion-item>
-	<requests-line-item *ngFor="let item of getAcceptedRequests()" [direction]="getDirection()" [request]="item"></requests-line-item>
-	<requests-line-item *ngFor="let item of getCompletedAwaitingApprovalRequests()" [direction]="getDirection()" [request]="item"></requests-line-item>
-	<requests-line-item *ngFor="let item of getPendingRequests()" [direction]="getDirection()" [request]="item"></requests-line-item>
-	<requests-line-item *ngFor="let item of getNotCompleteAwaitingResolution()" [direction]="getDirection()" [request]="item"></requests-line-item>
-	<requests-line-item *ngFor="let item of getCancelledRequests()" [direction]="getDirection()" [request]="item"></requests-line-item>
-	<requests-line-item *ngFor="let item of getDeclinedRequests()" [direction]="getDirection()" [request]="item"></requests-line-item>
+
+	<ion-list *ngIf="getCompletedAwaitingApprovalRequests()">
+		<ion-item-divider sticky>
+			<ion-label>
+				Completed Requests, You Need to Approve
+			</ion-label>
+		</ion-item-divider>
+		<ion-item-group *ngFor="let request of getCompletedAwaitingApprovalRequests()">
+			<ion-item-sliding #slidingItem [attr.track]="getTrack(request)" (press)="onViewPromise(request)">
+				<button ion-item>
+					<ion-avatar class="rliAvatar" *ngIf="isPrmAvatarImageAvailable()" item-start>
+						<img [src]="getPrmAvatarImageFilepath()">
+					</ion-avatar>
+					<ion-avatar *ngIf="!isPrmAvatarImageAvailable()" item-start>
+						<img src="assets/img/mushroom.jpg">
+					</ion-avatar>
+
+					<span class="prmTitle"><b>{{request.prm.title}}</b></span><br/>
+					<span *ngIf="hasRequestMessage(request)" class="douMsg">{{getRequestMessage(request)}}<br/></span>
+					<span *ngIf="!hasRequestMessage(request)" class="douMsg">--<br/></span>
+					<span class="douName">{{request.directionallyOppositeUser.realname}}</span><br/>
+				</button>
+
+				<ion-item-options side="left">
+					<button ion-button color="secondary" (click)="onCompleteOutgoingBtnTap(request)">Complete</button>
+					<button ion-button (click)="onViewContactInfoBtnTap(request)">View Their Profile</button>
+				</ion-item-options>
+				<ion-item-options side="right">
+					<button ion-button color="danger" (click)="onNotCompleteBtnTap()">Not Complete</button>
+				</ion-item-options>
+
+			</ion-item-sliding>
+		</ion-item-group >
+	</ion-list>
+	<ion-list *ngIf="getPendingRequests()">
+		<ion-item-divider sticky>
+			<ion-label>
+				Waiting for other folks..
+			</ion-label>
+		</ion-item-divider>
+		<ion-item-group *ngFor="let request of getPendingRequests()">
+			<ion-item-sliding #slidingItem [attr.track]="getTrack(request)" (press)="onViewPromise(request)">
+				<button ion-item>
+					<ion-avatar class="rliAvatar" *ngIf="isPrmAvatarImageAvailable()" item-start>
+						<img [src]="getPrmAvatarImageFilepath()">
+					</ion-avatar>
+					<ion-avatar *ngIf="!isPrmAvatarImageAvailable()" item-start>
+						<img src="assets/img/mushroom.jpg">
+					</ion-avatar>
+
+					<span class="prmTitle"><b>{{request.prm.title}}</b></span><br/>
+					<span *ngIf="hasRequestMessage(request)" class="douMsg">{{getRequestMessage(request)}}<br/></span>
+					<span *ngIf="!hasRequestMessage(request)" class="douMsg">--<br/></span>
+					<span class="douName">{{request.directionallyOppositeUser.realname}}</span><br/>
+				</button>
+
+				<ion-item-options side="left">
+					<button ion-button (click)="onViewContactInfoBtnTap(request)">View Their Profile</button>
+				</ion-item-options>
+				<ion-item-options side="right">
+					<button ion-button color="danger" (click)="onCancelBtnTap(request)">Cancel</button>
+				</ion-item-options>
+	  		</ion-item-sliding>
+		</ion-item-group>
+	</ion-list>
+	<ion-list *ngIf="getAcceptedRequests()">
+		<ion-item-divider sticky>
+			<ion-label>
+				They Accepted!
+			</ion-label>
+		</ion-item-divider>
+		<ion-item-group *ngFor="let request of getAcceptedRequests()">
+			<ion-item-sliding #slidingItem [attr.track]="getTrack(request)" (press)="onViewPromise(request)">
+				<button ion-item>
+					<ion-avatar class="rliAvatar" *ngIf="isPrmAvatarImageAvailable()" item-start>
+						<img [src]="getPrmAvatarImageFilepath()">
+					</ion-avatar>
+					<ion-avatar *ngIf="!isPrmAvatarImageAvailable()" item-start>
+						<img src="assets/img/mushroom.jpg">
+					</ion-avatar>
+
+					<span class="prmTitle"><b>{{request.prm.title}}</b></span><br/>
+					<span *ngIf="hasRequestMessage(request)" class="douMsg">{{getRequestMessage(request)}}<br/></span>
+					<span *ngIf="!hasRequestMessage(request)" class="douMsg">--<br/></span>
+					<span class="douName">{{request.directionallyOppositeUser.realname}}</span><br/>
+				</button>
+				<ion-item-options side="left">
+					<button ion-button (click)="onViewContactInfoBtnTap(request)">View Their Profile</button>
+				</ion-item-options>
+				<ion-item-options side="right">
+					<button ion-button color="danger" (click)="onCancelBtnTap()">Cancel</button>
+				</ion-item-options>
+	  		</ion-item-sliding>
+		</ion-item-group>
+	</ion-list>
+	<ion-list *ngIf="getDeclinedRequests()">
+		<ion-item-divider sticky>
+			<ion-label>
+				They Declined :(
+			</ion-label>
+		</ion-item-divider>
+		<ion-item-group *ngFor="let request of getDeclinedRequests()">
+			<ion-item-sliding #slidingItem [attr.track]="getTrack(request)" (press)="onViewPromise(request)">
+				<button ion-item>
+					<ion-avatar class="rliAvatar" *ngIf="isPrmAvatarImageAvailable()" item-start>
+						<img [src]="getPrmAvatarImageFilepath()">
+					</ion-avatar>
+					<ion-avatar *ngIf="!isPrmAvatarImageAvailable()" item-start>
+						<img src="assets/img/mushroom.jpg">
+					</ion-avatar>
+
+					<span class="prmTitle"><b>{{request.prm.title}}</b></span><br/>
+					<span *ngIf="hasRequestMessage(request)" class="douMsg">{{getRequestMessage(request)}}<br/></span>
+					<span *ngIf="!hasRequestMessage(request)" class="douMsg">--<br/></span>
+					<span class="douName">{{request.directionallyOppositeUser.realname}}</span><br/>
+					<span class="foo">Decline Reason: {{request.declinedReasonCode.text}}</span><br/>
+				</button>
+				<ion-item-options side="left">
+					<button ion-button color="secondary" (click)="onAcknowledgeDeclinedRequestBtnTap(request)">OK.. Got It.</button>
+				</ion-item-options>
+			</ion-item-sliding>
+		</ion-item-group >
+	</ion-list>
+	<ion-list *ngIf="getNotCompleteAwaitingResolution()">
+		<ion-item-divider sticky>
+			<ion-label>
+				You marked Not Complete. Awaiting the other side's decision..
+			</ion-label>
+		</ion-item-divider>
+		<ion-item-group *ngFor="let request of getNotCompleteAwaitingResolution()">
+			<ion-item-sliding #slidingItem  [attr.track]="notCompleteAwaitingResolution" (press)="onViewPromise(request)">
+				<ion-avatar class="rliAvatar" *ngIf="isPrmAvatarImageAvailable()" item-start>
+					<img [src]="getPrmAvatarImageFilepath()">
+				</ion-avatar>
+				<ion-avatar *ngIf="!isPrmAvatarImageAvailable()" item-start>
+					<img src="assets/img/mushroom.jpg">
+				</ion-avatar>
+				<span class="prmTitle"><b>{{request.prm.title}}</b></span><br/>
+				<!-- <span class="douMsg">This is where the message from the other user will go. Right in this line. It may be a long message. Like this one.</span><br/> -->
+				<!-- <span class="douName">{{request.directionallyOppositeUser.realname}}</span><br/> -->
+
+						<ion-item-options side="left">
+							<button ion-button (click)="onViewContactInfoBtnTap(request)">View Their Profile</button>
+							<button ion-button color="danger" (click)="onPermanentlyDismissBtnTap(request)">Permanently Dismiss</button>
+						</ion-item-options>
+						<ion-item-options side="right">
+							<button ion-button color="secondary" (click)="onCompleteBtnTap(request)">Mark as Complete</button>
+						</ion-item-options>
+
+			</ion-item-sliding>
+		</ion-item-group >
+	</ion-list>
+	<!-- ion-list *ngIf="getCancelledRequests()">
+		<ion-item-divider sticky>
+			<ion-label>
+				These were in progress, but the other side cancelled. :(
+			</ion-label>
+		</ion-item-divider>
+		<ion-item-group *ngFor="let request of getCancelledRequests()">
+			<ion-item-sliding #slidingItem [attr.track]="cancelled" (press)="onViewPromise(request)">
+				<ion-avatar class="rliAvatar" *ngIf="isPrmAvatarImageAvailable()" item-start>
+					<img [src]="getPrmAvatarImageFilepath()">
+				</ion-avatar>
+				<ion-avatar *ngIf="!isPrmAvatarImageAvailable()" item-start>
+					<img src="assets/img/mushroom.jpg">
+				</ion-avatar>
+				<span class="prmTitle"><b>{{request.prm.title}}</b></span><br/>
+				<!-- <span class="douMsg">This is where the message from the other user will go. Right in this line. It may be a long message. Like this one.</span><br/> -->
+				<!-- <span class="douName">{{request.directionallyOppositeUser.realname}}</span><br/> -->
+
+				<!-- ion-item-options side="left">
+					<button ion-button color="secondary" (click)="onAcknowledgeCancelledRequestBtnTap(request)">OK.. Got it</button>
+				</ion-item-options>
+
+			</ion-item-sliding>
+		</ion-item-group >
+	</ion-list -->
+
+</ion-content>

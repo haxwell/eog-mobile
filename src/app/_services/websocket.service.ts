@@ -75,6 +75,10 @@ export class WebsocketService {
 				this.handleRequestIsInDispute(data); 
 			} else if (request["deliveringStatusId"] === this._constants.REQUEST_STATUS_RESOLVED_BUT_DISPUTED && request["requestingStatusId"] === this._constants.REQUEST_STATUS_NOT_COMPLETED) {
 				this.handleRequestWasInamicablyResolved(data);
+			} else if (request["deliveringStatusId"] === this._constants.REQUEST_STATUS_DECLINED && request["requestingStatusId"] === this._constants.REQUEST_STATUS_REQUESTOR_ACKNOWLEDGED) {
+				this.handleDeclinedRequestWasAcknowledged(data);
+			} else if (request["deliveringStatusId"] === this._constants.REQUEST_STATUS_CANCELLED && request["requestingStatusId"] === this._constants.REQUEST_STATUS_REQUESTOR_ACKNOWLEDGED) {
+				this.handleCancelledRequestWasAcknowledged(data);
 			}
 
 			else if (request["deliveringStatusId"] === this._constants.REQUEST_STATUS_DELETED) {
@@ -221,5 +225,13 @@ export class WebsocketService {
 
 		this.presentToast(data["message"]);
 		this._events.publish('points:received', data);
+	}
+
+	handleDeclinedRequestWasAcknowledged(data) {
+		this._events.publish('request:declined:acknowledged', data);
+	}
+
+	handleCancelledRequestWasAcknowledged(data) {
+		this._events.publish('request:cancelled:acknowledged', data);
 	}
 }

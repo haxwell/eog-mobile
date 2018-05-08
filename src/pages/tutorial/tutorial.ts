@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { ViewController, NavParams } from 'ionic-angular';
+import { ViewController, NavParams, Slides } from 'ionic-angular';
 
 import { UserService } from '../../app/_services/user.service';
 
@@ -10,7 +10,10 @@ import { UserService } from '../../app/_services/user.service';
 })
 export class TutorialPage {
 
+	showSkip = true;
 	currentStepNumber = 1;
+	showThisTutorialNextTime = true;
+	dirty = false;
 
 	constructor(private viewCtrl: ViewController,
 				private _userService: UserService,
@@ -18,24 +21,18 @@ export class TutorialPage {
 
 	}
 
-	onNextBtnTap() {
-		this.currentStepNumber++;
+	showThisTutorialNextTimeChanged() {
+		this.dirty = true;
 	}
 
-	onExitBtnTap() {
+	startApp() { 
+		if (this.dirty)
+			this._userService.setShowTutorialOnLogin(this.showThisTutorialNextTime);
+
 		this.viewCtrl.dismiss();
 	}
 
-	onDoNotShowAgainBtnTap() {
-		this._userService.setShowTutorialOnLogin(false);
-		this.viewCtrl.dismiss();
-	}
-
-	isCurrentStep(n) {
-		return this.currentStepNumber === n;
-	}
-
-	getCurrentStep() {
-		return this.currentStepNumber;
-	}
+	onSlideChangeStart(slider: Slides) {
+    	this.showSkip = !slider.isEnd();
+  	}
 }

@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
-import { ModalController, NavController, NavParams, Events } from 'ionic-angular';
+import { NavController, NavParams, Events } from 'ionic-angular';
 
-import { PrmPage } from '../../promises/promises'
+import { PrmDisplayPage } from '../../promises/display.prm'
 
 import { Constants } from '../../../_constants/constants'
 
@@ -101,7 +101,7 @@ export class PromiseLineItem {
 	}
 
 	onViewPromise() {
-      this.navCtrl.push(PrmPage, { prm: this.item, readOnly: true });
+      this.navCtrl.push(PrmDisplayPage, { prm: this.item });
 	}
 
 	isPromiseImageAvailable() {

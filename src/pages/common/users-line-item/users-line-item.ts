@@ -14,6 +14,7 @@ import { ProfileService } from '../_services/profile.service'
 export class UsersLineItem {
 
 	@Input() item = undefined;
+	@Input() clickthru = true;
 	profileImageFilepath = undefined;
 
 	constructor(navParams: NavParams, 
@@ -29,7 +30,8 @@ export class UsersLineItem {
 	}
 
 	onViewProfile() {
-      this.navCtrl.push(ProfilePage, { user: this.item, readOnly: true });
+      if (this.clickthru) 
+      	this.navCtrl.push(ProfilePage, { user: this.item, readOnly: true });
 	}
 
 	getProfileImageFilepath() {

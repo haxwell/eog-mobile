@@ -28,6 +28,7 @@ export class HomePage {
     _mapPrmIdToMetadataValue = {};
     isVerifyLogoutAlertVisible = false;
     isHomePageVisible = true;
+    searchTextFieldValue = undefined;    
 
     constructor(public navCtrl: NavController,
                 private _modalCtrl: ModalController, 
@@ -71,7 +72,7 @@ export class HomePage {
             });
         }
 
-        self.navBar.backButtonClick = () => { self.verifyLogout(); };
+        //self.navBar.backButtonClick = () => { self.verifyLogout(); };
 
         this.isHomePageVisible = true;
     }
@@ -205,10 +206,6 @@ export class HomePage {
 
   isSearchFieldDisabled() {
     return false;
-  }
-
-  onSearchBtnTap(event) {
-      this.navCtrl.push(SearchPage, { });
   }
 
   setIsSearchFieldVisible(b) {

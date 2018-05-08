@@ -1,4 +1,4 @@
-<ion-item (click)="onViewPromise()">
+<ion-item-sliding (click)="onViewPromise()">
 	<ion-avatar *ngIf="!isPromiseImageAvailable()" item-start>
 		<img src="assets/img/mushroom.jpg">
 	</ion-avatar>
@@ -13,6 +13,6 @@
 
 	<span class="prmTitle">{{item.title}}</span>
 	<span class="prmDesc">{{item.description}}</span>
-</ion-item>
+</ion-item-sliding>
 
 

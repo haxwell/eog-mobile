@@ -2,6 +2,10 @@ import { Component } from '@angular/core';
 
 import { ViewController, NavParams } from 'ionic-angular';
 
+//
+// I think this can be deleted, considering the update to profile editing and such.
+//
+
 @Component({
   selector: 'page-social-network-crud',
   templateUrl: 'social-network-CRUD.html'

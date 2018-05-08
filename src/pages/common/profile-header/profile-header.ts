@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { ModalController, NavParams } from 'ionic-angular';
+import { ModalController } from 'ionic-angular';
 import { Events } from 'ionic-angular';
 
 import { File } from '@ionic-native/file'
@@ -15,15 +15,21 @@ import { ProfileService } from '../_services/profile.service'
 
 export class ProfileHeader {
 
-	dirty = false;
 	@Input() readOnly = false;
+	dirty = false;
 	@Input() user = undefined;
+	modalCtrl = undefined;
 
-	constructor(navParams: NavParams, 
-				private modalCtrl: ModalController,
+	constructor(/*navParams: NavParams, */
+				modalCtrll: ModalController, 
 				private _profileService: ProfileService, 
 				private _events: Events,
 				private _file: File) {
+
+		this.modalCtrl = modalCtrll;
+
+		//this.user = Object.assign({}, navParams.get('user'));
+		//this.readOnly = navParams.get('readOnly') || false;
 
 		let self = this;
 		let func2 = (data) => {
@@ -63,6 +69,10 @@ export class ProfileHeader {
 		this.dirty = b;
 	}
 
+	isFromGallery() {
+		return this._profileService.getModel(this.user)["imageFileSource"] == 'gallery';
+	}
+
 	isThumbnailImageAvailable() {
 		return this._profileService.getModel(this.user)["imageFileURI"] !== undefined;
 	}
@@ -93,7 +103,7 @@ export class ProfileHeader {
 
 						let model = this._profileService.getModel(this.user);
 
-						if (model["imageFileURI"] !== undefined) {
+						if (model["imageFileURI"] !== undefined && model["imageFileSource"] == 'camera') {
 							let lastSlash = model["imageFileURI"].lastIndexOf('/');
 							let path = model["imageFileURI"].substring(0,lastSlash+1);
 							let filename = model["imageFileURI"].substring(lastSlash+1);
@@ -131,12 +141,9 @@ export class ProfileHeader {
 
 	setChangedAttr(key, value) {
 		let model = this._profileService.getModel(this.user);
-		
-		if (model[key] !== value) {
-			model[key] = value;
-			this._events.publish('profile:changedContactInfo', model);
-			this.setDirty(true);
-		}
+		model[key] = value;
+		this._events.publish('profile:changedContactInfo', model);
+		this.setDirty(true);
 	}
 
 	onNameChange(event) {
@@ -145,6 +152,14 @@ export class ProfileHeader {
 
 	onDescriptionChange(event) {
 		this.setChangedAttr("description", event._value);
+	}
+
+	onEmailChange(event) {
+		this.setChangedAttr("email", event._value);
+	}
+
+	onPhoneChange(event) {
+		this.setChangedAttr("phone", event._value);
 	}
 
 	getModelAttr(key) {

@@ -1,1 +1,23 @@
-<ion-nav [root]="rootPage"></ion-nav>
+<ion-menu [content]="mycontent">
+	<ion-content>
+		<profile-header id="profile-header" (click)="onShowProfile()" [user]="getUser()" [readOnly]="true"></profile-header>
+		<ion-list>
+      		<ion-item [ngStyle]="{'background-color':getSelectedColor('HomePage')}" (click)="onHomeClicked()">Home</ion-item>
+      		<ion-item [ngStyle]="{'background-color':getSelectedColor('RequestsIncomingView')}" (click)="onPeopleAskedYouClicked()">People asked you...</ion-item>
+      		<ion-item [ngStyle]="{'background-color':getSelectedColor('RequestsOutgoingView')}" (click)="onYouAskedPeopleClicked()">You asked people...</ion-item>
+
+      		<profile-points></profile-points>
+
+          <ion-item [ngStyle]="{'background-color':getSelectedColor('ProfilePage')}" (click)="onShowProfile()">About You</ion-item>
+          <ion-item [ngStyle]="{'background-color':getSelectedColor('PromiseListPage')}" (click)="onYourPromisesClicked()">Your Promises</ion-item>
+          <ion-item [ngStyle]="{'background-color':getSelectedColor('RecommendationListPage')}" (click)="onYourRecommendationsClicked()">Your Recommendations</ion-item>
+          <ion-item [ngStyle]="{'background-color':getSelectedColor('KeywordListPage')}" (click)="onYourKeywordsClicked()">Your Keywords</ion-item>
+          <ion-item [ngStyle]="{'background-color':getSelectedColor('NotificationListPage')}" (click)="onYourNotificationsClicked()">Notifications</ion-item>
+
+      		<ion-item (click)="onCloseMenuClicked()">Close Menu</ion-item>
+    	</ion-list>
+  	</ion-content>
+</ion-menu>
+
+<ion-nav #mycontent [root]="rootPage"></ion-nav>
+

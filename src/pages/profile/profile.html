@@ -1,189 +1,95 @@
 <ion-header>
-	<ion-navbar>
-		<ion-title *ngIf="isReadOnly()">
-			View Another's Profile
-		</ion-title>
-		<ion-title *ngIf="!isReadOnly()">
-			Edit Your Profile
-		</ion-title>
-	</ion-navbar>
+	<easyah-header></easyah-header>
 </ion-header>
 
 <ion-content padding>
-	<profile-header [user]="getUser()" [readOnly]="isReadOnly()"></profile-header>
-	<ion-grid>
-		<ion-row>
-			<ion-col col-auto>
-				<table>
+
+	<ion-grid >
+			<ion-row >
+				<button *ngIf="isCurrentUsersProfile()" round ion-button (click)="onEditProfileBtnClick($event)"><ion-icon class="whiteText profileIcon" name="create"></ion-icon></button>
+				<button ion-button (click)="onGoBackBtnTap($event)">Go Back</button>
+			</ion-row>
+
+			<ion-row>
+				<ion-item *ngIf="isThumbnailImageAvailable() && !isFromGallery()">
+					<ion-avatar >
+						<img [src]="getThumbnailImage()" alt="profile_image" >
+					</ion-avatar>
+				</ion-item>
+				<ion-item *ngIf="isThumbnailImageAvailable() && isFromGallery()">
+					<ion-avatar >
+						<img [src]="getThumbnailImage()" alt="profile_image" >
+					</ion-avatar>
+				</ion-item>
+				<ion-item *ngIf="!isThumbnailImageAvailable()">
+					<ion-avatar>
+						<img src="assets/img/mushroom.jpg" >
+					</ion-avatar>
+				</ion-item>
+			</ion-row>
+
+			<ion-row>
+				<div class="centered">
+					<span class="cornfieldBlueColor profileName">{{getModelAttr('realname')}}</span>
+					<br/>
+					<span class="cornfieldBlueColor profileDescription">{{getModelAttr('description')}}</span>
+				</div>
+			</ion-row>			
+			<ion-row>
+				<br/>
+			</ion-row>
+			<ion-row *ngIf="isCurrentUserAllowedToSeeContactInfo()">
+				<table class="centered">
 					<tr>
 						<td>
-							<ion-icon class="profileIcon" name="phone-portrait"></ion-icon>
+							<ion-icon class="cornfieldBlueColor profileIcon" name="phone-portrait"></ion-icon>
+						</td>
+						<td [ngStyle]="{'padding':'0 0 0 1.5em'}">
+							<span class="cornfieldBlueColor">{{getModelAttr('phone')}}</span>
+						</td>
+						<td [ngStyle]="{'padding':'0 1.5em 0 1.5em'}">
 						</td>
 						<td>
-							<ion-input type="text" class="contactInfoField" [readonly]="isReadOnly()" (ionChange)="onPhoneChange($event)" [value]="getModelAttr('phone')" required></ion-input>
+							<ion-icon class="cornfieldBlueColor profileIcon" name="mail"></ion-icon>
+						</td>
+						<td [ngStyle]="{'padding':'0 0 0 1.5em'}">
+							<span class="cornfieldBlueColor">{{getModelAttr('email')}}</span>
 						</td>
 					</tr>
 				</table>
-			</ion-col>
-			<ion-col col-auto>
-				<table>
-					<tr>
-						<td>
-							<ion-icon class="profileIcon" name="mail"></ion-icon>
-						</td>
-						<td>
-					        <ion-input type="text" class="contactInfoField" [readonly]="isReadOnly()" (ionChange)="onEmailChange($event)" [value]="getModelAttr('email')" required></ion-input>
-						</td>
-					</tr>
-				</table>
-			</ion-col>
-		</ion-row>		
+			</ion-row>		
 	</ion-grid>
 
-	<ion-row *ngIf="isReadOnly()">
-		<button ion-button [disabled]="!isSendPointBtnAvailable()" (click)="onSendPointBtnTap($event)">Send Point</button>
-		<button ion-button [disabled]="!isSendRecommendBtnAvailable()" (click)="onSendRecommendationBtnTap($event)">Send Recommendation</button>
+
+	<ion-row *ngIf="!isCurrentUsersProfile()">
+		<div class="centered">
+			<button ion-button [disabled]="!isSendPointBtnAvailable()" (click)="onSendPointBtnTap($event)">Send Point</button>
+			<button ion-button [disabled]="!isSendRecommendBtnAvailable()" (click)="onSendRecommendationBtnTap($event)">Send Recommendation</button>
+		</div>
 	</ion-row>
 
-	<ul class="socialNetworkList">
-		<li class="socialNetworkImg" *ngIf="socialMediaURLIsAvailable('facebook')">
-			<img src="assets/img/facebook-logo-active.png" (click)="onSocialMediaURLBtnClick('facebook')">
-		</li>
-		<li class="socialNetworkImg" *ngIf="!socialMediaURLIsAvailable('facebook')">
-			<img src="assets/img/facebook-logo-inactive.png" (click)="onSocialMediaURLBtnClick('facebook')">
-		</li>
+	<div [ngStyle]="{'padding-top':'2em'}">
+	</div>
 
-		<li class="socialNetworkImg" *ngIf="socialMediaURLIsAvailable('linkedin')">
-			<img src="assets/img/linkedin-logo-active.png" (click)="onSocialMediaURLBtnClick('linkedin')">
-		</li>
-		<li class="socialNetworkImg" *ngIf="!socialMediaURLIsAvailable('linkedin')">
-			<img src="assets/img/linkedin-logo-inactive.png" (click)="onSocialMediaURLBtnClick('linkedin')">
-		</li>
-
-		<li class="socialNetworkImg" *ngIf="socialMediaURLIsAvailable('youtube')">
-			<img src="assets/img/youtube-logo-active.png" (click)="onSocialMediaURLBtnClick('youtube')">
-		</li>
-		<li class="socialNetworkImg" *ngIf="!socialMediaURLIsAvailable('youtube')">
-			<img src="assets/img/youtube-logo-inactive.png" (click)="onSocialMediaURLBtnClick('youtube')">
-		</li>
-
-		<li class="socialNetworkImg" *ngIf="socialMediaURLIsAvailable('instagram')">
-			<img src="assets/img/instagram-logo-active.png" (click)="onSocialMediaURLBtnClick('instagram')">
-		</li>
-		<li class="socialNetworkImg" *ngIf="!socialMediaURLIsAvailable('instagram')">
-			<img src="assets/img/instagram-logo-inactive.png" (click)="onSocialMediaURLBtnClick('instagram')">
-		</li>
-
-		<li class="socialNetworkImg" *ngIf="socialMediaURLIsAvailable('github')">
-			<img src="assets/img/github-logo-active.png" (click)="onSocialMediaURLBtnClick('github')">
-		</li>
-		<li class="socialNetworkImg" *ngIf="!socialMediaURLIsAvailable('github')">
-			<img src="assets/img/github-logo-inactive.png" (click)="onSocialMediaURLBtnClick('github')">
-		</li>
-	</ul>
-
-	<ion-list>
-		<ion-list-header class="listHeader">
-			Points
-		</ion-list-header>
-		<table>
-			<tr>
-				<td *ngIf="!isReadOnly()" class="ptsTdElement">
-					<span class="displayBlock">{{model.points.total}}</span> Total
-				</td>
-				<td *ngIf="!isReadOnly()" class="ptsTdElement">
-					<span class="displayBlock">{{model.points.available}}</span> Available
-				</td>
-				<td class="ptsTdElement">
-					<span class="displayBlock">{{model.allTimePointCount}}</span> All Time
-				</td>
-			</tr>
-		</table>	
-	</ion-list>
-
-	<ion-list *ngIf="!isReadOnly()">
-		<ion-list-header class="listHeader" >
-			<span>Promises</span>
-			<button class="listHeaderBtn" round ion-button (click)="onNewPromiseBtnTap()">
-				<ion-icon name="add"></ion-icon>
-			</button>
-		</ion-list-header>
-		<ion-item *ngFor="let prm of getPromises()" (swipeLeft)="onDeletePromise(prm)" (click)="onPromiseBtnTap(prm)">
-			<ion-avatar item-start>
-				<img [src]="getPromiseAvatarImage(prm)">
-			</ion-avatar>
-			<span class="prmTitle">{{prm.title}}</span><br/>
-			<span class="prmDesc">{{prm.description}}</span><br/>
-			<div class="promiseDetail">
-				<span class="prmReqdPts">{{getPointRecommendationCountPhrase(prm)}}<br/></span>
-				<span *ngFor="let keyword of prm.keywords"><span class="smallKeyword">{{keyword.text}}</span></span>
-			</div>
-		</ion-item>
-		<ion-item *ngIf="!userHasAnActivePromise()">
-			The promises you create will appear here! 
-		</ion-item>
-	</ion-list>
-
-	<ion-list>
-		<ion-list-header class="listHeader">
-			Recommendations
-		</ion-list-header>
-		<ion-item *ngFor="let item of getAvailableIncomingRecommendations()">
-			<ion-avatar class="profileAvatar" *ngIf="isDOUserProfileImageAvailable(item['providingUserId'])" item-start>
-				<img [src]="getDOUserProfileImageFilepath(item['providingUserId'])">
-			</ion-avatar>
-			<ion-avatar *ngIf="!isDOUserProfileImageAvailable(item['providingUserId'])" item-start>
-				<img src="assets/img/mushroom.jpg">
-			</ion-avatar>
-			<span>
-				{{getRealName(item)}}
-			</span>
-		</ion-item>
-		<ion-item *ngIf="!areIncomingRecommendationsAvailable()">
-			<span >No Available Recommendations</span>				
-		</ion-item>
-	</ion-list>
-
-	<ion-list>
-		<ion-list-header class="listHeader">
-			Profile Keywords
-			<button *ngIf="!isReadOnly()" class="listHeaderBtn" round ion-button (click)="onIndividualKeywordPress()">
-				<ion-icon name="add"></ion-icon>
-			</button>
-		</ion-list-header>
-		<ion-item *ngIf="userHasNoKeywords() && !isReadOnly()">
-			Keywords are descriptive words and phrases. Add some to describe you!
-		</ion-item>
-		<ion-item *ngIf="userHasNoKeywords() && isReadOnly()">
-			This user has not defined any keywords yet.
-		</ion-item>
-		<div class="fifteenPixelLeftMargin">
-			<span *ngFor="let item of model.keywords">
-				<span class="blockItem" (press)="onIndividualKeywordPress()">{{item.text}}</span>
-			</span>
-		</div>
-	</ion-list>
-
-	<ion-list *ngIf="!isReadOnly()">
-		<ion-list-header class="listHeader" >
-			Notifications
-		</ion-list-header>
-		<ion-item *ngIf="userHasNoNotifications()">
-			<span >
-				<span class="notificationMsg">No notifications.. go make something happen!</span>
-			</span>
-		</ion-item>
-		<ion-item *ngFor="let item of getNotifications()" (swipeLeft)="onClearIndividualNotification(item)">
-			<ion-avatar class="profileAvatar" *ngIf="isDOUserProfileImageAvailable(item['oppUserId'])" item-start>
-				<img [src]="getDOUserProfileImageFilepath(item['oppUserId'])">
-			</ion-avatar>
-			<ion-avatar *ngIf="!isDOUserProfileImageAvailable(item['oppUserId'])" item-start>
-				<img src="assets/img/mushroom.jpg">
-			</ion-avatar>
-			<span >
-				<span class="howLongAgo">{{item.howLongAgo}}</span><span class="notificationMsg">{{item.message}}</span>
-			</span>
-		</ion-item>
-	</ion-list>
+	<ion-row>
+		<img class="socialNetworkImg" src="assets/img/facebook-logo-active.png">
+		<span >{{getSocialMediaURL('facebook')}}</span>
+	</ion-row>
+	<ion-row>
+		<img class="socialNetworkImg" src="assets/img/linkedin-logo-active.png">
+		<span >{{getSocialMediaURL('linkedin')}}</span>
+	</ion-row>
+	<ion-row>
+		<img class="socialNetworkImg" src="assets/img/youtube-logo-active.png">
+		<span >{{getSocialMediaURL('youtube')}}</span>
+	</ion-row>
+	<ion-row>
+		<img class="socialNetworkImg" src="assets/img/instagram-logo-active.png">
+		<span >{{getSocialMediaURL('instagram')}}</span>
+	</ion-row>
+	<ion-row>
+		<img class="socialNetworkImg" src="assets/img/github-logo-active.png">
+		<span >{{getSocialMediaURL('github')}}</span>
+	</ion-row>
 
 </ion-content>

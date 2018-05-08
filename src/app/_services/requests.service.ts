@@ -28,6 +28,9 @@ export class RequestsService {
 			let user = this._userService.getCurrentUser();
 			let url = environment.apiUrl + "/api/requests";
 
+			if (requestingMessage === undefined)
+				requestingMessage = '';
+
 			let data =	"requestingUserId=" + user["id"] + "&requestedPromiseId=" + prm["id"] + "&requestingMessage=" + requestingMessage;
 			
 			let self = this;
@@ -94,8 +97,10 @@ export class RequestsService {
 
 	// hack
 	changePromiseAttributeToPrm(request) {
-		request["prm"] = Object.assign({}, request["promise"]);
-		delete request["promise"];					
+		if (request !== undefined) {
+			request["prm"] = Object.assign({}, request["promise"]);
+			delete request["promise"];					
+		}
 
 		return request;
 	}
@@ -130,7 +135,15 @@ export class RequestsService {
 		});
 	}
 
+	hideIncomingAndDeclinedRequest(request) {
+		return this.setRequestStatusByUserIdAndDirection(request, this._constants.REQUEST_STATUS_DECLINED_AND_HIDDEN, this._constants.INCOMING);	
+	}
+
 	acknowledgeDeclinedRequest(request) {
+		return this.setRequestStatusByUserIdAndDirection(request, this._constants.REQUEST_STATUS_REQUESTOR_ACKNOWLEDGED, this._constants.OUTGOING);
+	}
+
+	acknowledgeCancelledRequest(request) {
 		return this.setRequestStatusByUserIdAndDirection(request, this._constants.REQUEST_STATUS_REQUESTOR_ACKNOWLEDGED, this._constants.OUTGOING);
 	}
 

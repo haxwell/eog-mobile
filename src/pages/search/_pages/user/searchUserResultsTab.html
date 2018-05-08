@@ -1,0 +1,13 @@
+
+	<ion-item *ngIf="areResultsAvailable()" no-lines>
+		<ion-list-header>
+			Users
+		</ion-list-header>
+		<users-line-item *ngFor="let user of getResults()" [item]="user"></users-line-item>
+	</ion-item>
+	<ion-item *ngIf="!areResultsAvailable()">
+		<ion-list-header>
+			Users
+		</ion-list-header>
+		There are no matching users.
+	</ion-item>

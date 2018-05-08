@@ -1,0 +1,118 @@
+<!-- ion-header>
+	<ion-navbar>
+		<ion-title *ngIf="isReadOnly()">
+			View Another's Profile
+		</ion-title>
+		<ion-title *ngIf="!isReadOnly()">
+			Edit Your Profile
+		</ion-title>
+	</ion-navbar>
+</ion-header-->
+
+<ion-header>
+	<easyah-header></easyah-header>
+</ion-header>
+
+	<!-- profile-header [user]="getUser()" [readOnly]="isReadOnly()"></profile-header -->
+
+	<ion-grid >
+		<div class="redBackground">
+			<ion-row>
+				<ion-item *ngIf="isThumbnailImageAvailable() && !isFromGallery()">
+					<ion-thumbnail >
+						<img class="rotate90 circularized centered" [src]="getThumbnailImage()" alt="profile_image" (press)="onThumbnailPress($event)">
+					</ion-thumbnail>
+				</ion-item>
+				<ion-item *ngIf="isThumbnailImageAvailable() && isFromGallery()">
+					<ion-thumbnail >
+						<img class="circularized centered" [src]="getThumbnailImage()" alt="profile_image" (press)="onThumbnailPress($event)">
+					</ion-thumbnail>
+				</ion-item>
+				<ion-item *ngIf="!isThumbnailImageAvailable()">
+					<ion-thumbnail >
+						<img class="circularized centered" src="assets/img/mushroom.jpg" (press)="onThumbnailPress($event)">
+					</ion-thumbnail>
+				</ion-item>
+			</ion-row>
+
+			<ion-row>
+				<div class="centered">
+					<ion-input type="text" class="profile_header__name" placeholder="Name" (ionChange)="onNameChange($event)" [value]="getModelAttr('realname')" required></ion-input>
+					<hr/>
+					<ion-textarea class="profile_header__desc" placeholder="Description" (ionChange)="onDescriptionChange($event)" [value]="getModelAttr('description')" required></ion-textarea>
+				</div>
+			</ion-row>			
+
+			<ion-row>
+				<table class="centered">
+					<tr>
+						<td>
+							<ion-icon class="profileIcon" name="phone-portrait"></ion-icon>
+						</td>
+						<td>
+							<ion-input type="text" class="contactInfoField" [readonly]="isReadOnly()" (ionChange)="onPhoneChange($event)" [value]="getModelAttr('phone')" required></ion-input>
+						</td>
+					</tr>
+				</table>
+			</ion-row>
+			<ion-row>
+				<table class="centered">
+					<tr>
+						<td>
+							<ion-icon class="profileIcon" name="mail"></ion-icon>
+						</td>
+						<td>
+					        <ion-input type="text" class="contactInfoField" [readonly]="isReadOnly()" (ionChange)="onEmailChange($event)" [value]="getModelAttr('email')" required></ion-input>
+						</td>
+					</tr>
+				</table>
+			</ion-row>		
+
+		</div>
+	</ion-grid>
+
+	<ion-row *ngIf="isReadOnly()">
+		<div class="centered">
+			<button ion-button [disabled]="!isSendPointBtnAvailable()" (click)="onSendPointBtnTap($event)">Send Point</button>
+			<button ion-button [disabled]="!isSendRecommendBtnAvailable()" (click)="onSendRecommendationBtnTap($event)">Send Recommendation</button>
+		</div>
+	</ion-row>
+
+	<ul class="centered socialNetworkList">
+		<li class="socialNetworkImg" *ngIf="socialMediaURLIsAvailable('facebook')">
+			<img src="assets/img/facebook-logo-active.png" (click)="onSocialMediaURLBtnClick('facebook')">
+		</li>
+		<li class="socialNetworkImg" *ngIf="!socialMediaURLIsAvailable('facebook')">
+			<img src="assets/img/facebook-logo-inactive.png" (click)="onSocialMediaURLBtnClick('facebook')">
+		</li>
+
+		<li class="socialNetworkImg" *ngIf="socialMediaURLIsAvailable('linkedin')">
+			<img src="assets/img/linkedin-logo-active.png" (click)="onSocialMediaURLBtnClick('linkedin')">
+		</li>
+		<li class="socialNetworkImg" *ngIf="!socialMediaURLIsAvailable('linkedin')">
+			<img src="assets/img/linkedin-logo-inactive.png" (click)="onSocialMediaURLBtnClick('linkedin')">
+		</li>
+
+		<li class="socialNetworkImg" *ngIf="socialMediaURLIsAvailable('youtube')">
+			<img src="assets/img/youtube-logo-active.png" (click)="onSocialMediaURLBtnClick('youtube')">
+		</li>
+		<li class="socialNetworkImg" *ngIf="!socialMediaURLIsAvailable('youtube')">
+			<img src="assets/img/youtube-logo-inactive.png" (click)="onSocialMediaURLBtnClick('youtube')">
+		</li>
+
+		<li class="socialNetworkImg" *ngIf="socialMediaURLIsAvailable('instagram')">
+			<img src="assets/img/instagram-logo-active.png" (click)="onSocialMediaURLBtnClick('instagram')">
+		</li>
+		<li class="socialNetworkImg" *ngIf="!socialMediaURLIsAvailable('instagram')">
+			<img src="assets/img/instagram-logo-inactive.png" (click)="onSocialMediaURLBtnClick('instagram')">
+		</li>
+
+		<li class="socialNetworkImg" *ngIf="socialMediaURLIsAvailable('github')">
+			<img src="assets/img/github-logo-active.png" (click)="onSocialMediaURLBtnClick('github')">
+		</li>
+		<li class="socialNetworkImg" *ngIf="!socialMediaURLIsAvailable('github')">
+			<img src="assets/img/github-logo-inactive.png" (click)="onSocialMediaURLBtnClick('github')">
+		</li>
+	</ul>
+
+

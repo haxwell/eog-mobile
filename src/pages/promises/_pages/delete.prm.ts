@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 
 import { NavController, NavParams, ViewController, Events } from 'ionic-angular';
 
-import { PrmService } 	from '../_services/prm.service';
+import { PrmModelService } 	from '../_services/prm.model.service';
 import { RequestsService } 	from '../../../app/_services/requests.service';
 import { RequestMetadataService } 	from '../../../app/_services/request-metadata.service';
 
@@ -23,7 +23,7 @@ export class DeletePrmPage {
 	constructor(public navCtrl: NavController, 
 				public params: NavParams,
 				private viewCtrl: ViewController, 
-				private _prmService: PrmService,
+				private _prmModelService: PrmModelService,
 				private _requestsService: RequestsService,
 				private _requestMetadataService: RequestMetadataService,
 				private _events: Events,
@@ -87,7 +87,7 @@ export class DeletePrmPage {
 
 	onDeleteBtnTap(evt) {
 		let self = this;
-		self._prmService.delete(self.prm).then(() => {
+		self._prmModelService.delete(self.prm).then(() => {
 			self._events.publish('prm:deletedByCurrentUser', self.prm);
 			self.viewCtrl.dismiss(true);
 		})
