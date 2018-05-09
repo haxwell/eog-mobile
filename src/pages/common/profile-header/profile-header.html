@@ -3,17 +3,17 @@
 		<ion-col col-auto>
 			<ion-item *ngIf="isThumbnailImageAvailable() && !isFromGallery()">
 				<ion-avatar item-start >
-					<img  [src]="getThumbnailImage()" alt="profile_image" (press)="onThumbnailPress($event)">
+					<img id="profileAvatarImg" [src]="getThumbnailImage()" alt="profile_image" (press)="onThumbnailPress($event)">
 				</ion-avatar>
 			</ion-item>
 			<ion-item *ngIf="isThumbnailImageAvailable() && isFromGallery()">
 				<ion-avatar item-start >
-					<img  [src]="getThumbnailImage()" alt="profile_image" (press)="onThumbnailPress($event)">
+					<img id="profileAvatarImg" [src]="getThumbnailImage()" alt="profile_image" (press)="onThumbnailPress($event)">
 				</ion-avatar>
 			</ion-item>
 			<ion-item *ngIf="!isThumbnailImageAvailable()">
 				<ion-avatar item-start >
-					<img  src="assets/img/mushroom.jpg" (press)="onThumbnailPress($event)">
+					<img id="profileAvatarImg" src="assets/img/mushroom.jpg" (press)="onThumbnailPress($event)">
 				</ion-avatar>
 			</ion-item>
 		</ion-col>
@@ -23,11 +23,11 @@
 				<hr/>
 				<span class="profile_header__desc1">{{getModelAttr('description')}}</span>
 			</div>
-			<div *ngIf="!isReadOnly()">
+			<!--div *ngIf="!isReadOnly()">
 				<ion-input type="text" class="profile_header__name" placeholder="Name" (ionChange)="onNameChange($event)" [value]="getModelAttr('realname')" required></ion-input>
 				<hr/>
 				<ion-textarea class="profile_header__desc" placeholder="Description" (ionChange)="onDescriptionChange($event)" [value]="getModelAttr('description')" required></ion-textarea>
-			</div>
+			</div -->
 		</ion-col>
 	</ion-row>
 </ion-grid>

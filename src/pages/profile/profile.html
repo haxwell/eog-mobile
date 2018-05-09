@@ -13,17 +13,17 @@
 			<ion-row>
 				<ion-item *ngIf="isThumbnailImageAvailable() && !isFromGallery()">
 					<ion-avatar >
-						<img class="centered" [src]="getThumbnailImage()" alt="profile_image" >
+						<img id="profileAvatarImg" class="centered" [src]="getThumbnailImage()" alt="profile_image" >
 					</ion-avatar>
 				</ion-item>
 				<ion-item *ngIf="isThumbnailImageAvailable() && isFromGallery()">
 					<ion-avatar >
-						<img class="centered" [src]="getThumbnailImage()" alt="profile_image" >
+						<img id="profileAvatarImg" class="centered" [src]="getThumbnailImage()" alt="profile_image" >
 					</ion-avatar>
 				</ion-item>
 				<ion-item *ngIf="!isThumbnailImageAvailable()">
 					<ion-avatar>
-						<img class="centered" src="assets/img/mushroom.jpg" >
+						<img id="profileAvatarImg" class="centered" src="assets/img/mushroom.jpg" >
 					</ion-avatar>
 				</ion-item>
 			</ion-row>
