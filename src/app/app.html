@@ -1,6 +1,6 @@
 <ion-menu [content]="mycontent">
 	<ion-content>
-		<profile-header id="profile-header" (click)="onShowProfile()" [user]="getUser()" [readOnly]="true"></profile-header>
+		<profile-header id="profile-header" (click)="onShowProfile()" [user]="getUser()"></profile-header>
 		<ion-list>
       		<ion-item [ngStyle]="{'background-color':getSelectedColor('HomePage')}" (click)="onHomeClicked()">Home</ion-item>
       		<ion-item [ngStyle]="{'background-color':getSelectedColor('RequestsIncomingView')}" (click)="onPeopleAskedYouClicked()">People asked you...</ion-item>

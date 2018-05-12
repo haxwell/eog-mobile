@@ -18,16 +18,9 @@
 			</ion-item>
 		</ion-col>
 		<ion-col col-auto>
-			<div *ngIf="isReadOnly()">
-				<span class="profile_header__text">{{getModelAttr('realname')}}</span><br/>
-				<hr/>
-				<span class="profile_header__desc1">{{getModelAttr('description')}}</span>
-			</div>
-			<!--div *ngIf="!isReadOnly()">
-				<ion-input type="text" class="profile_header__name" placeholder="Name" (ionChange)="onNameChange($event)" [value]="getModelAttr('realname')" required></ion-input>
-				<hr/>
-				<ion-textarea class="profile_header__desc" placeholder="Description" (ionChange)="onDescriptionChange($event)" [value]="getModelAttr('description')" required></ion-textarea>
-			</div -->
+			<span class="profile_header__text">{{getModelAttr('realname')}}</span><br/>
+			<hr/>
+			<span class="profile_header__desc1">{{getModelAttr('description')}}</span>
 		</ion-col>
 	</ion-row>
 </ion-grid>
