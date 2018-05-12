@@ -134,10 +134,6 @@ export class ProfilePage {
 		if (this._profileService.getModel(this.user)["imageFileURI"] === undefined)
 			return "assets/img/mushroom.jpg";
 		else
-
-			// WILO: Is this being called when we go from Profile to Home? If so, is this a different model?
-			//  why is the picture not changing?
-
 			return this._profileService.getModel(this.user)["imageFileURI"];
 	}
 
