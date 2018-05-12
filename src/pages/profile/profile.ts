@@ -16,6 +16,8 @@ import { ProfileEditPage } from './profile-edit'
 
 import { Constants } from '../../_constants/constants'
 
+import EXIF from 'exif-js';
+
 @Component({
   selector: 'page-profile',
   templateUrl: 'profile.html'
@@ -30,6 +32,8 @@ export class ProfilePage {
 
 	_currentUserCanSendRecommendationToProfileUser = undefined;
 	_currentUserCanSendPointToProfileUser = undefined;
+
+	imageOrientation = undefined;
 
 	constructor(public navCtrl: NavController,
 				navParams: NavParams, 
@@ -130,6 +134,10 @@ export class ProfilePage {
 		return this._profileService.getModel(this.user)["imageFileURI"] !== undefined;
 	}
 
+	isThumbnailImageVisible() {
+		return this.imageOrientation !== undefined;
+	}
+
 	getThumbnailImage() {
 		if (this._profileService.getModel(this.user)["imageFileURI"] === undefined)
 			return "assets/img/mushroom.jpg";
@@ -139,5 +147,23 @@ export class ProfilePage {
 
 	onGoBackBtnTap(evt) {
 		this.navCtrl.pop();
+	}
+
+	getAvatarCSSClassString() {
+		if (this.imageOrientation === 8)
+			return "rotate90Counterclockwise centered";
+		else if (this.imageOrientation === 3)
+			return "rotate180 centered";
+		else if (this.imageOrientation === 6)
+			return "rotate90Clockwise centered";
+		else
+			return "centered";
+	}
+
+	loaded(evt) {
+		let self = this;
+		EXIF.getData(evt.target, function() {
+			self.imageOrientation = EXIF.getTag(this, "Orientation");
+		});
 	}
 }

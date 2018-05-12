@@ -8,6 +8,8 @@ import { ChoosePhotoSourcePage } from '../choose-photo-source/choose-photo-sourc
 
 import { ProfileService } from '../_services/profile.service'
 
+import EXIF from 'exif-js'
+
 @Component({
   selector: 'profile-header',
   templateUrl: 'profile-header.html'
@@ -19,6 +21,8 @@ export class ProfileHeader {
 	dirty = false;
 	@Input() user = undefined;
 	modalCtrl = undefined;
+
+	imageOrientation = undefined;
 
 	constructor(/*navParams: NavParams, */
 				modalCtrll: ModalController, 
@@ -165,5 +169,23 @@ export class ProfileHeader {
 	getModelAttr(key) {
 		let model = this._profileService.getModel(this.user) || {};
 		return model[key];
+	}
+
+	getAvatarCSSClassString() {
+		if (this.imageOrientation === 8)
+			return "rotate90Counterclockwise centered";
+		else if (this.imageOrientation === 3)
+			return "rotate180 centered";
+		else if (this.imageOrientation === 6)
+			return "rotate90Clockwise centered";
+		else
+			return "centered";
+	}
+
+	loaded(evt) {
+		let self = this;
+		EXIF.getData(evt.target, function() {
+			self.imageOrientation = EXIF.getTag(this, "Orientation");
+		});
 	}
 }
