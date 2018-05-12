@@ -6,8 +6,10 @@
 
 	<ion-grid >
 			<ion-row >
-				<button *ngIf="isCurrentUsersProfile()" round ion-button (click)="onEditProfileBtnClick($event)"><ion-icon class="whiteText profileIcon" name="create"></ion-icon></button>
-				<button ion-button (click)="onGoBackBtnTap($event)">Go Back</button>
+				<ion-item no-lines>
+					<button ion-button (click)="onGoBackBtnTap($event)">Go Back</button>
+					<button *ngIf="isCurrentUsersProfile()" round ion-button item-right (click)="onEditProfileBtnClick($event)"><ion-icon class="whiteText profileIcon" name="create"></ion-icon></button>
+				</ion-item>
 			</ion-row>
 
 			<ion-row>
