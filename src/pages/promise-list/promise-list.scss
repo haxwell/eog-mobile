@@ -8,3 +8,19 @@
 	text-align: center;
 }
 
+.smallKeyword {
+	display: inline-block;
+	border-style: none none solid none;
+	border-width: 2px;
+	margin-left: .25em;
+	margin-right: .25em;
+}
+
+.prmTitle {
+	font-size: 1.25em;
+	font-weight: bold;
+}
+
+div.promiseDetail span.prmReqdPts {
+	font-weight: italic;
+}

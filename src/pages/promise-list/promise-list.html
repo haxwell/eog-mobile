@@ -24,7 +24,7 @@
 			<span class="prmTitle">{{prm.title}}</span><br/>
 			<span class="prmDesc">{{prm.description}}</span><br/>
 			<div class="promiseDetail">
-				<span class="prmReqdPts">{{getPointRecommendationCountPhrase(prm)}}<br/></span>
+				<span id="prmReqdPtsId" class="prmReqdPts">{{getPointRecommendationCountPhrase(prm)}}<br/></span>
 				<span *ngFor="let keyword of prm.keywords"><span class="smallKeyword">{{keyword.text}}</span></span>
 			</div>
 		</ion-item>
