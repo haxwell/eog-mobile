@@ -5,14 +5,13 @@ import { LoadingController } from 'ionic-angular';
 import { ModalController } from 'ionic-angular';
 
 import { ProfileService } from '../../pages/common/_services/profile.service'
-//import { ProfilePictureService } from '../../app/_services/profile-picture.service'
 import { UserMetadataService } from '../../app/_services/user-metadata.service'
-//import { UserService } from '../../app/_services/user.service'
 
 import { ChoosePhotoSourcePage } from '../../pages/common/choose-photo-source/choose-photo-source'
 
 import { File } from '@ionic-native/file'
-//import { Constants } from '../../_constants/constants'
+
+import EXIF from 'exif-js';
 
 @Component({
   selector: 'page-profile-edit',
@@ -27,15 +26,15 @@ export class ProfileEditPage {
 	loading = undefined;
 	isExiting = false;
 
+	imageOrientation = undefined;
+
 	constructor(navParams: NavParams,
 				public navCtrl: NavController,
 				public modalCtrl: ModalController,
 				public loadingCtrl: LoadingController,
 				public alertCtrl: AlertController,
 				private _profileService: ProfileService,
-				//private _profilePictureService: ProfilePictureService,
 				private _userMetadataService: UserMetadataService,
-				//private _constants: Constants,
 				private _file: File) {
 
 		this.user = Object.assign({}, navParams.get('user'));
@@ -45,8 +44,7 @@ export class ProfileEditPage {
 	}
 
 	ngOnInit() {
-		//this._profileService.init(this.user);
-		//this.model = this._profileService.getModel(this.user);
+
 	}	
 
 	isDirty() {
@@ -207,10 +205,6 @@ export class ProfileEditPage {
 		if (this._profileService.getModel(this.user)["imageFileURI"] === undefined)
 			return "assets/img/mushroom.jpg";
 		else
-
-			// WILO: Is this being called when we go from Profile to Home? If so, is this a different model?
-			//  why is the picture not changing?
-
 			return this._profileService.getModel(this.user)["imageFileURI"];
 	}
 
@@ -261,5 +255,27 @@ export class ProfileEditPage {
 		});
 		
 		modal.present();
+	}
+
+	isThumbnailImageVisible() {
+		return this.imageOrientation !== undefined;
+	}
+
+	getAvatarCSSClassString() {
+		if (this.imageOrientation === 8)
+			return "rotate90Counterclockwise centered";
+		else if (this.imageOrientation === 3)
+			return "rotate180 centered";
+		else if (this.imageOrientation === 6)
+			return "rotate90Clockwise centered";
+		else
+			return "centered";
+	}
+
+	loaded(evt) {
+		let self = this;
+		EXIF.getData(evt.target, function() {
+			self.imageOrientation = EXIF.getTag(this, "Orientation");
+		});
 	}
 }

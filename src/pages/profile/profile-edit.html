@@ -11,19 +11,19 @@
 
 		<ion-row>
 			<ion-item *ngIf="isThumbnailImageAvailable() && !isFromGallery()">
-				<ion-thumbnail >
-					<img class="rotate90 circularized centered" [src]="getThumbnailImage()" alt="profile_image" (press)="onThumbnailPress($event)">
-				</ion-thumbnail>
+				<ion-avatar >
+					<img id="profileAvatarImg" [hidden]="!isThumbnailImageVisible()" [class]="getAvatarCSSClassString()" [src]="getThumbnailImage()" alt="profile_image" (load)="loaded($event)" (press)="onThumbnailPress($event)">
+				</ion-avatar>
 			</ion-item>
 			<ion-item *ngIf="isThumbnailImageAvailable() && isFromGallery()">
-				<ion-thumbnail >
-					<img class="circularized centered" [src]="getThumbnailImage()" alt="profile_image" (press)="onThumbnailPress($event)">
-				</ion-thumbnail>
+				<ion-avatar >
+					<img id="profileAvatarImg" [hidden]="!isThumbnailImageVisible()" [class]="getAvatarCSSClassString()" [src]="getThumbnailImage()" alt="profile_image" (load)="loaded($event)" (press)="onThumbnailPress($event)">
+				</ion-avatar>
 			</ion-item>
 			<ion-item *ngIf="!isThumbnailImageAvailable()">
-				<ion-thumbnail>
+				<ion-avatar>
 					<img class="circularized centered" src="assets/img/mushroom.jpg" (press)="onThumbnailPress($event)">
-				</ion-thumbnail>
+				</ion-avatar>
 			</ion-item>
 		</ion-row>
 
