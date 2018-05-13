@@ -4,6 +4,19 @@ ion-card-header {
    width: 100%;
 }
 
+.douName {
+  font-size: .65em;
+  font-style: italic;
+}
+
+.douMessage {
+  font-size: .9em;
+}
+
+.waitingOnDirectionallyOppositeUser {
+  background-color: lightgray;
+}
+
 hr {
 	height:3px;
 }

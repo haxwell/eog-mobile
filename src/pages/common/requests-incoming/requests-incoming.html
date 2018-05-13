@@ -25,7 +25,7 @@
 		<ion-item-group *ngFor="let request of getPendingRequests()">
 			<ion-item-sliding #slidingItem [attr.track]="getTrack(request)" (press)="onViewPromise(request)">
 				<button ion-item>
-					<ion-avatar class="rliAvatar" *ngIf="isPrmAvatarImageAvailable()" item-start>
+					<ion-avatar *ngIf="isPrmAvatarImageAvailable()" item-start>
 						<img [src]="getPrmAvatarImageFilepath()">
 					</ion-avatar>
 					<ion-avatar *ngIf="!isPrmAvatarImageAvailable()" item-start>
@@ -57,7 +57,7 @@
 		<ion-item-group *ngFor="let request of getAcceptedRequests()">
 			<ion-item-sliding #slidingItem [attr.track]="getTrack(request)" (press)="onViewPromise(request)">
 				<button ion-item>
-					<ion-avatar class="rliAvatar" *ngIf="isPrmAvatarImageAvailable()" item-start>
+					<ion-avatar *ngIf="isPrmAvatarImageAvailable()" item-start>
 						<img [src]="getPrmAvatarImageFilepath()">
 					</ion-avatar>
 					<ion-avatar *ngIf="!isPrmAvatarImageAvailable()" item-start>
@@ -88,7 +88,7 @@
 		<ion-item-group *ngFor="let request of getDeclinedRequests()">
 			<ion-item-sliding #slidingItem [attr.track]="getTrack(request)" (press)="onViewPromise(request)">
 				<button ion-item>
-					<ion-avatar class="rliAvatar" *ngIf="isPrmAvatarImageAvailable()" item-start>
+					<ion-avatar *ngIf="isPrmAvatarImageAvailable()" item-start>
 						<img [src]="getPrmAvatarImageFilepath()">
 					</ion-avatar>
 					<ion-avatar *ngIf="!isPrmAvatarImageAvailable()" item-start>
@@ -119,7 +119,7 @@
 		<ion-item-group *ngFor="let request of getCompletedPendingApprovalRequests()">
 			<ion-item-sliding #slidingItem [attr.track]="getTrack(request)" (press)="onViewPromise(request)">
 				<button ion-item>
-					<ion-avatar class="rliAvatar" *ngIf="isPrmAvatarImageAvailable()" item-start>
+					<ion-avatar *ngIf="isPrmAvatarImageAvailable()" item-start>
 						<img [src]="getPrmAvatarImageFilepath()">
 					</ion-avatar>
 					<ion-avatar *ngIf="!isPrmAvatarImageAvailable()" item-start>
@@ -146,7 +146,7 @@
 		<ion-item-group *ngFor="let request of getDisputedCompletedRequests()">
 			<ion-item-sliding #slidingItem [attr.track]="getTrack(request)" (press)="onViewPromise(request)">
 				<button ion-item>
-					<ion-avatar class="rliAvatar" *ngIf="isPrmAvatarImageAvailable()" item-start>
+					<ion-avatar *ngIf="isPrmAvatarImageAvailable()" item-start>
 						<img [src]="getPrmAvatarImageFilepath()">
 					</ion-avatar>
 					<ion-avatar *ngIf="!isPrmAvatarImageAvailable()" item-start>
