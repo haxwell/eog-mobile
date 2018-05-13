@@ -16,12 +16,12 @@
 
 
 	<ion-list *ngIf="!userHasNoNotifications()">
-		<span>Swipe left to clear a notification.<br/><br/></span>
+		<!-- span>Swipe left to clear a notification.<br/><br/></span -->
 		<ion-item-group *ngFor="let item of getNotifications()">
-			<ion-item-sliding #slidingItem [attr.track]="getTrack(item)" (swipeLeft)="onClearIndividualNotification(item)">
+			<ion-item-sliding #slidingItem [attr.track]="getTrack(item)" >
 				<button ion-item>
 					<ion-avatar class="profileAvatar" *ngIf="isDOUserProfileImageAvailable(item['oppUserId'])" item-start>
-						<img [src]="getDOUserProfileImageFilepath(item['oppUserId'])">
+						<img id="profileAvatarImg" [class]="getAvatarCSSClassString()" [src]="getDOUserProfileImageFilepath(item['oppUserId'])" alt="profile_image" (load)="loaded($event)">
 					</ion-avatar>
 					<ion-avatar *ngIf="!isDOUserProfileImageAvailable(item['oppUserId'])" item-start>
 						<img src="assets/img/mushroom.jpg">
@@ -31,6 +31,11 @@
 						<span class="howLongAgo">{{item.howLongAgo}}</span><span class="notificationMsg">{{item.message}}</span>
 					</span>
 				</button>
+
+				<ion-item-options side="left">
+					<button ion-button (click)="onClearIndividualNotification(item)">Clear</button>
+				</ion-item-options>
+
 			</ion-item-sliding>
 		</ion-item-group>
 	</ion-list>
