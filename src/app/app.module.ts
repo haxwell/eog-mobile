@@ -46,7 +46,6 @@ import { PrmDisplayPage } from '../pages/promises/display.prm';
 import { DeletePrmPage } from '../pages/promises/_pages/delete.prm';
 import { RequestsIncomingView } from '../pages/common/requests-incoming/requests-incoming';
 import { RequestsOutgoingView } from '../pages/common/requests-outgoing/requests-outgoing';
-import { RequestsLineItem } from '../pages/common/requests-line-item/requests-line-item';
 import { PromiseLineItem } from '../pages/common/promise-line-item/promise-line-item';
 import { PromiseListPage } from '../pages/promise-list/promise-list';
 import { KeywordListPage } from '../pages/keyword-list/keyword-list';
@@ -99,7 +98,6 @@ import { Constants } from '../_constants/constants';
     RulePage,
     RequestsIncomingView,    
     RequestsOutgoingView,
-    RequestsLineItem,
     PromiseLineItem,
     PromiseListPage,
     KeywordListPage,
