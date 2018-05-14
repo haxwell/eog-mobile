@@ -16,7 +16,7 @@
 	</ion-item>
 
 	<ion-list>
-		<ion-item *ngFor="let item of getAvailableIncomingRecommendations()">
+		<ion-item *ngFor="let item of getAvailableIncomingRecommendations()" (click)="onViewUser(item)">
 			<ion-avatar class="profileAvatar" *ngIf="isDOUserProfileImageAvailable(item['providingUserId'])" item-start>
 				<img [src]="getDOUserProfileImageFilepath(item['providingUserId'])">
 			</ion-avatar>

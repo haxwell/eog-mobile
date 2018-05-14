@@ -1,8 +1,12 @@
 import { Component } from '@angular/core';
 
+import { NavController } from 'ionic-angular';
+
 import { RecommendationService } from '../../app/_services/recommendation.service'
 import { ProfileService } from '../../pages/common/_services/profile.service'
 import { ProfilePictureService } from '../../app/_services/profile-picture.service'
+
+import { ProfilePage } from '../profile/profile'
 
 @Component({
   selector: 'recommendation-list',
@@ -18,7 +22,8 @@ export class RecommendationListPage {
 
 	constructor(private _profileService : ProfileService,
 				private _recommendationService : RecommendationService,
-				private _profilePictureService: ProfilePictureService
+				private _profilePictureService: ProfilePictureService,
+				private navCtrl: NavController
 	) {
 		this.setDirty(true);
 	}
@@ -78,5 +83,9 @@ export class RecommendationListPage {
 		}
 
 		return rtn
+	}
+
+	onViewUser(item) {
+		this.navCtrl.push(ProfilePage, {user: item["userInfo"]});
 	}
 }
