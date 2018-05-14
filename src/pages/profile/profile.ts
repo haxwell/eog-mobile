@@ -98,11 +98,11 @@ export class ProfilePage {
 	}
 
 	getSocialMediaURL(name) {
-		return this.model[name+"Url"] || "";
+		return this._profileService.getModel(this.user)[name+"Url"] || "";
 	}
 
 	onEditProfileBtnClick() {
-      this.navCtrl.push(ProfileEditPage, {user: this.user, model: this.model});
+      this.navCtrl.push(ProfileEditPage, {user: this.user, model: this._profileService.getModel(this.user)});
 	}
 
 	getUser() {
