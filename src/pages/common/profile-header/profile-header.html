@@ -8,7 +8,7 @@
 			</ion-item>
 			<ion-item *ngIf="isThumbnailImageAvailable() && isFromGallery()">
 				<ion-avatar item-start >
-					<img id="profileAvatarImg" [class]="getAvatarCSSClassString()" [src]="getThumbnailImage()" alt="profile_image" (load)="loaded($event)" profil(press)="onThumbnailPress($event)">
+					<img id="profileAvatarImg" [class]="getAvatarCSSClassString()" [src]="getThumbnailImage()" alt="profile_image" (load)="loaded($event)" (press)="onThumbnailPress($event)">
 				</ion-avatar>
 			</ion-item>
 			<ion-item *ngIf="!isThumbnailImageAvailable()">
