@@ -109,12 +109,15 @@ export class ProfilePictureService {
 					if (lastQuestionMark === -1) 
 						lastQuestionMark = filename.length;
 
-				     this.file.copyFile(filename.substring(0,lastSlash+1), // path
-				     					filename.substring(lastSlash+1, lastQuestionMark), // relative filename
+				     let path = filename.substring(0,lastSlash+1);
+				     let relativeFilename = filename.substring(lastSlash+1, lastQuestionMark);
+
+				     this.file.copyFile(path, // path
+				     					relativeFilename, // relative filename
 				     					this.file.cacheDirectory, // to path
 				     					"eogAppProfilePic" + userId // to relative filename
 				     					).then(() => {
-				     	resolve(data);
+				     	resolve({path: path, relativeFilename: relativeFilename});
 				     }).catch(e => { 
 				     	reject();
 				     });

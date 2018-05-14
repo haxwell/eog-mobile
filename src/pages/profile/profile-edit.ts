@@ -25,6 +25,7 @@ export class ProfileEditPage {
 	dirty = false;
 	loading = undefined;
 	isExiting = false;
+	cancelBtnPressed = false;
 
 	imageOrientation = undefined;
 
@@ -60,7 +61,7 @@ export class ProfileEditPage {
 		if (this.isDirty() && !self.isExiting) {
 			let msg = "";
 
-			if (this._profileService.isProfileImageChanged(this.model))
+			if (this._profileService.isProfileImageChanged(this.model) && !this.cancelBtnPressed)
 				msg = "You changed your profile picture. Uploading it could take a long while. You got a minute (or ten)?";
 			else
 				msg = "Do you want to save your profile changes?";
@@ -70,7 +71,7 @@ export class ProfileEditPage {
 				message: msg,
 				buttons: [{
 					text: 'No', role: 'cancel', handler: () => {
-						if (this._profileService.isProfileImageChanged(this.model)) {
+						if (this._profileService.isProfileImageChanged(this.model) && !this.isFromGallery()) {
 							
 							// TODO: the call to .removeFile here, and the one in the process of onSaveBtnTap()
 							//  are both the same. They should be a service method somewhere.
@@ -118,6 +119,7 @@ export class ProfileEditPage {
 	}
 
 	onCancelBtnTap() {
+		this.cancelBtnPressed = true;
 		this.navCtrl.pop();
 	}
 
@@ -242,6 +244,8 @@ export class ProfileEditPage {
 					} else {
 						console.log("no previous image to delete, so skipping that step...")
 						console.log("setting profile header model to [" + uriAndSource["imageFileURI"] + "], and throwing profile:changedProfileImage event");
+
+						this._profileService.setMostProbableProfilePhotoPath(uriAndSource["imageFileURI"]);
 
 						model["imageFileURI"] = uriAndSource["imageFileURI"];
 						model["imageFileSource"] = uriAndSource["imageFileSource"];
