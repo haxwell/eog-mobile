@@ -66,8 +66,8 @@ export class NotificationListPage {
 			return [];
 		else
 			return this.model.sort((a, b) => {
-				if (a.timestamp > b.timestamp) return 1; 
-				else if (a.timestamp < b.timestamp) return -1; 
+				if (a.timestamp > b.timestamp) return -1; 
+				else if (a.timestamp < b.timestamp) return 1; 
 				else return 0; 
 			});
 	}
