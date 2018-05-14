@@ -51,7 +51,6 @@ import { PromiseListPage } from '../pages/promise-list/promise-list';
 import { KeywordListPage } from '../pages/keyword-list/keyword-list';
 import { RecommendationListPage } from '../pages/recommendation-list/recommendation-list';
 import { NotificationListPage } from '../pages/notification-list/notification-list';
-import { UsersLineItem } from '../pages/common/users-line-item/users-line-item';
 import { RulePage } from '../pages/promises/_pages/rule';
 import { KeywordEntryPage } from '../pages/keyword.entry/keyword.entry';
 import { ProfilePoints } from '../pages/common/profile-points/profile-points';
@@ -103,7 +102,6 @@ import { Constants } from '../_constants/constants';
     KeywordListPage,
     RecommendationListPage,
     NotificationListPage,
-    UsersLineItem,
     SocialNetworkCRUDPage,
     RequestPage,
     AcceptRequestPage,
