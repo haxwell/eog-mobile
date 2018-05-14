@@ -50,7 +50,7 @@
 
 				<ion-item-sliding #slidingItem [attr.track]="getTrackUser(user)" (click)="onViewUser(user)">
 					<button ion-item>
-						<ion-avatar class="uliAvatar" *ngIf="isProfileImageAvailable(user)" item-start>
+						<ion-avatar *ngIf="isProfileImageAvailable(user)" item-start>
 							<img [src]="getProfileImageFilepath(user)">
 						</ion-avatar>
 						<ion-avatar *ngIf="!isProfileImageAvailable(user)" item-start>

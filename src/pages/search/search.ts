@@ -164,34 +164,34 @@ export class SearchPage {
 		}
 	}
 
-	profileImageFilepath = undefined;
-	getProfileImagePath() {
-		return this.profileImageFilepath;
+	profileImageFilepath = [];
+	getProfileImageFilepath(user) {
+		return this.profileImageFilepath[user["id"]];
 	}
 
 	isProfileImageAvailable(user) {
-		let rtn = this.profileImageFilepath !== undefined && this.profileImageFilepath !== null;
+		let rtn = this.profileImageFilepath[user["id"]] !== undefined && this.profileImageFilepath[user["id"]] !== null;
 
 		let self = this;
-		if (this.profileImageFilepath === undefined) {
-				this.profileImageFilepath = null;
+		if (this.profileImageFilepath[user["id"]] === undefined) {
+				this.profileImageFilepath[user["id"]] = null;
 
 			let path = self._profileService.getMostProbableProfilePhotoPath() + user["id"];
 			
 			self._profilePictureService.get(user["id"], path).then((path) => {
 				if (path !== undefined)
-					self.profileImageFilepath = path;
+					self.profileImageFilepath[user["id"]] = path;
 			});
 		}
 
 		return rtn; 
 	}
 
-	isPromiseImageAvailable() {
+	isPromiseImageAvailable(prm) {
 		return false;
 	}
 
-	getPromiseImageFilepath() {
+	getPromiseImageFilepath(prm) {
 		return undefined;
 	}
 
