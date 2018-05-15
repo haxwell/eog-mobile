@@ -80,10 +80,12 @@ export class ChoosePhotoSourcePage {
 								if (self.imageFileSource === 'camera' || self.imageFileSource === 'eog') {
 									self._file.removeFile(path, filename).then((data) => {
 										console.log("Call to profilePictureService to DELETE photo for "+self.userId+" successful! Image was from camera or the eog api, so it was removed from phone.");
+										console.log("ChoosePhotoSource is returning [undefined], since the action take was to delete the photo, so no photo path exists anymore");										
 										resolve(undefined); 
 									});
 								} else {
 									console.log("Call to profilePictureService to DELETE photo for "+self.userId+" successful! Image was from phone's gallery, so did not try to remove it.");
+									console.log("ChoosePhotoSource is returning [undefined], since the action take was to delete the photo, so no photo path exists anymore");
 									resolve(undefined);
 								}
 
