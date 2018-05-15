@@ -85,11 +85,11 @@ export class ProfileEditPage {
 								
 								self.setDirty(false);
 								
-								self.model["imageFileURI_OriginalValue"] = self.model["imageFileURI"];
-								self.model["imageFileURI"] = undefined;
+								self.model["imageFileURI"] = self.model["imageFileURI_OriginalValue"];
+
+								self._profileService.setMostProbableProfilePhotoPath(self.model["imageFileURI"]);
 								
-								if (!self.isExiting)
-									self.navCtrl.pop();
+								self.navCtrl.pop();
 							});
 
 						} else {
@@ -243,7 +243,7 @@ export class ProfileEditPage {
 						})
 					} else {
 						console.log("no previous image to delete, so skipping that step...")
-						console.log("setting profile header model to [" + uriAndSource["imageFileURI"] + "], and throwing profile:changedProfileImage event");
+						console.log("uriAndSource = " + JSON.stringify(uriAndSource))
 
 						this._profileService.setMostProbableProfilePhotoPath(uriAndSource["imageFileURI"]);
 
