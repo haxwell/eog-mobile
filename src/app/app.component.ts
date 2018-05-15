@@ -66,6 +66,11 @@ export class EasyahApp {
   
   }
 
+  getUser() {
+    // this is called from the template
+    return this._userService.getCurrentUser();
+  }
+
   onHomeClicked() {
     var view = this.navCtrl.getActive();
     if (view.component.name != "HomePage") {
