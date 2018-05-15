@@ -22,7 +22,7 @@
 			</ion-item>
 			<ion-item *ngIf="!isThumbnailImageAvailable()">
 				<ion-avatar>
-					<img class="circularized centered" src="assets/img/mushroom.jpg" (press)="onThumbnailPress($event)">
+					<img id="profileAvatarImg" class="centered" src="assets/img/mushroom.jpg" (press)="onThumbnailPress($event)">
 				</ion-avatar>
 			</ion-item>
 		</ion-row>
