@@ -33,6 +33,11 @@ export class ProfileService {
 	}
 
 	getModel(user) {
+		if (user === undefined || user === null) {
+			console.error("Ruh roh.. Somebody passed a null or undefined to ProfileService::getModel(). Tsk Tsk.");
+			return {};
+		}
+
 		if (this.modelCache[user["id"]] === undefined) {
 			this.modelCache[user["id"]] = {};
 			return this.initModel(user, this.modelCache[user["id"]]);
@@ -72,12 +77,12 @@ export class ProfileService {
 		});
 
 		if (model["imageFileURI"] === undefined) {
-			this._profilePictureService.get(user["id"], this.getMostProbableProfilePhotoPath() + user["id"]).then((filename) => {
+			this._profilePictureService.get(user["id"], this.getMostProbableProfilePhotoPath()).then((filename) => {
 				model["imageFileSource"] = 'eog';
 				model["imageFileURI"] = filename;
 				model["imageFileURI_OriginalValue"] = filename;
 			})
-  		}
+  		} 
 
   		// TODO --- REMOVE THIS. Its In Prm-Service now ---
 		url = environment.apiUrl + "/api/user/" + user["id"] + "/promises";
