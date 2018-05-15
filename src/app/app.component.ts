@@ -66,10 +66,6 @@ export class EasyahApp {
   
   }
 
-  getUser() {
-    return this._userService.getCurrentUser();
-  }
-
   onHomeClicked() {
     var view = this.navCtrl.getActive();
     if (view.component.name != "HomePage") {
@@ -82,7 +78,7 @@ export class EasyahApp {
     var view = this.navCtrl.getActive();
     if (view.component.name != "ProfilePage") {
       this.onCloseMenuClicked();
-      this.navCtrl.push(ProfilePage, {user: this.getUser()});
+      this.navCtrl.push(ProfilePage, {user: this._userService.getCurrentUser()});
     }
   }
 

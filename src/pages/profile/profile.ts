@@ -1,10 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController, ModalController, NavParams } from 'ionic-angular';
 import { Events } from 'ionic-angular';
-//import { LoadingController } from 'ionic-angular';
-//import { AlertController } from 'ionic-angular';
-
-//import { File } from '@ionic-native/file'
 
 import { ProfileService } from '../../pages/common/_services/profile.service'
 import { UserMetadataService } from '../../app/_services/user-metadata.service'
@@ -103,10 +99,6 @@ export class ProfilePage {
 
 	onEditProfileBtnClick() {
       this.navCtrl.push(ProfileEditPage, {user: this.user, model: this._profileService.getModel(this.user)});
-	}
-
-	getUser() {
-		return this.user;
 	}
 
 	setCurrentUserCanSendPointToProfileUser() {

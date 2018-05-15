@@ -224,10 +224,6 @@ export class HomePage {
     this.navCtrl.push(SearchPage);
   }
 
-  getUser() {
-    return this.user;
-  }
-
   getMetadataValue(prm, functionKey, rtnFunction) {
       if (this._mapPrmIdToMetadataValue[prm["id"]] === undefined)
           this._mapPrmIdToMetadataValue[prm["id"]] = [];
