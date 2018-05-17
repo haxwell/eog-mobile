@@ -53,7 +53,7 @@ export class ProfilePage {
 
 	ngOnInit() {
 		this._profileService.init(this.user);
-		this.model = this._profileService.getModel(this.user);
+		this.model = this._profileService.getModel(this.user["id"]);
 
 		this.setCurrentUserCanSendPointToProfileUser();
 		this.setCurrentUserCanSendRecommendationToProfileUser();
@@ -68,7 +68,7 @@ export class ProfilePage {
 	}
 
 	isCurrentUserAllowedToSeeContactInfo() {
-		return this._profileService.getModel(this.user)["currentUserCanSeeContactInfo"];
+		return this._profileService.getModel(this.user["id"])["currentUserCanSeeContactInfo"];
 	}
 
 	onSendRecommendationBtnTap() {
@@ -94,11 +94,11 @@ export class ProfilePage {
 	}
 
 	getSocialMediaURL(name) {
-		return this._profileService.getModel(this.user)[name+"Url"] || "";
+		return this._profileService.getModel(this.user["id"])[name+"Url"] || "";
 	}
 
 	onEditProfileBtnClick() {
-      this.navCtrl.push(ProfileEditPage, {user: this.user});
+      this.navCtrl.push(ProfileEditPage, {user: this.user}); // TODO: Is it enough just to pass the ID?
 	}
 
 	setCurrentUserCanSendPointToProfileUser() {
@@ -114,16 +114,16 @@ export class ProfilePage {
 	}
 
 	getModelAttr(key) {
-		let model = this._profileService.getModel(this.user) || {};
+		let model = this._profileService.getModel(this.user["id"]) || {};
 		return model[key];
 	}
 
 	isFromGallery() {
-		return this._profileService.getModel(this.user)["imageFileSource"] == 'gallery';
+		return this._profileService.getModel(this.user["id"])["imageFileSource"] == 'gallery';
 	}
 
 	isThumbnailImageAvailable() {
-		return this._profileService.getModel(this.user)["imageFileURI"] !== undefined;
+		return this._profileService.getModel(this.user["id"])["imageFileURI"] !== undefined;
 	}
 
 	isThumbnailImageVisible() {
@@ -131,10 +131,10 @@ export class ProfilePage {
 	}
 
 	getThumbnailImage() {
-		if (this._profileService.getModel(this.user)["imageFileURI"] === undefined)
+		if (this._profileService.getModel(this.user["id"])["imageFileURI"] === undefined)
 			return "assets/img/mushroom.jpg";
 		else
-			return this._profileService.getModel(this.user)["imageFileURI"];
+			return this._profileService.getModel(this.user["id"])["imageFileURI"];
 	}
 
 	onGoBackBtnTap(evt) {

@@ -13,7 +13,7 @@ import { environment } from '../../../_environments/environment';
 export class ProfileService {
 
 	modelCache = {};
-	mostProbableProfilePhotoPath = "file:///data/data/io.easyah.mobileapp/cache/eogAppProfilePic";
+	mostProbableProfilePhotoPath = {};  		// "file:///data/data/io.easyah.mobileapp/cache/eogAppProfilePic";
 
 	constructor(private _apiService: ApiService, 
 				private _userService: UserService, 
@@ -24,31 +24,26 @@ export class ProfileService {
 
 				}
 
-	init(user) {
+	init(userId) {
 		this._recommendationService.init();
 		this._pointsService.init();
-		this._profilePictureService.reset(user["id"]);
+		this._profilePictureService.reset(userId);
 
-		this.modelCache[user["id"]] = undefined;
+		this.modelCache[userId] = undefined;
 	}
 
-	getModel(user) {
-		if (user === undefined || user === null) {
-			console.error("Ruh roh.. Somebody passed a null or undefined to ProfileService::getModel(). Tsk Tsk.");
-			return {};
-		}
-
-		if (this.modelCache[user["id"]] === undefined) {
-			this.modelCache[user["id"]] = {};
-			return this.initModel(user, this.modelCache[user["id"]]);
+	getModel(userId) {
+		if (this.modelCache[userId] === undefined) {
+			this.modelCache[userId] = {};
+			return this.initModel(userId, this.modelCache[userId]);
 		} else { 
-			return this.modelCache[user["id"]];
+			return this.modelCache[userId];
 		}
 	}
 
 	// TODO: Get rid of the user object, and just use UserId.. We have to make a call for the User object anyway,
 	//  to be sure we are getting the most recent user info
-	initModel(user, model) {
+	initModel(userId, model) {
 
 		let self = this;
 
@@ -58,13 +53,13 @@ export class ProfileService {
 
 		model["points"] = {"total" : 0, "available": 0};
 
-		this._userService.getUser(user["id"], true /* force an API call */).then((userObj) => {
+		this._userService.getUser(userId, true /* force an API call */).then((userObj) => {
 			model["realname"] = userObj["realname"];
 			model["phone"] = userObj["phone"];
 			model["email"] = userObj["email"];
 		});
 
-		let url = environment.apiUrl + "/api/user/" + user["id"] + "/profile";
+		let url = environment.apiUrl + "/api/user/" + userId + "/profile";
 		this._apiService.get(url).subscribe((data) => {
 			let obj = JSON.parse(data["_body"]);
 			
@@ -82,7 +77,7 @@ export class ProfileService {
 		});
 
 		if (model["imageFileURI"] === undefined) {
-			this._profilePictureService.get(user["id"], this.getMostProbableProfilePhotoPath()).then((filename) => {
+			this._profilePictureService.get(userId, this.getMostProbableProfilePhotoPath(userId)).then((filename) => {
 				model["imageFileSource"] = 'eog';
 				model["imageFileURI"] = filename;
 				model["imageFileURI_OriginalValue"] = filename;
@@ -90,7 +85,7 @@ export class ProfileService {
   		} 
 
   		// TODO --- REMOVE THIS. Its In Prm-Service now ---
-		url = environment.apiUrl + "/api/user/" + user["id"] + "/promises";
+		url = environment.apiUrl + "/api/user/" + userId + "/promises";
 		this._apiService.get(url).subscribe((prmsObj) => {
 			model["prms"] = JSON.parse(prmsObj["_body"]);
 			model["prms"].sort((a, b) => { let aText = a.title.toLowerCase(); let bText = b.title.toLowerCase(); if (aText > bText) return 1; else if (aText < bText) return -1; else return 0; })
@@ -106,16 +101,16 @@ export class ProfileService {
 		});
 
 		let currentUser = this._userService.getCurrentUser();
-		if (currentUser["id"] === user["id"])
+		if (currentUser["id"] === userId)
 			model["currentUserCanSeeContactInfo"] = true;
 		else {
-			url = environment.apiUrl + "/api/user/" + user["id"] + "/requests/inprogress/user/" + currentUser["id"];
+			url = environment.apiUrl + "/api/user/" + userId + "/requests/inprogress/user/" + currentUser["id"];
 			this._apiService.get(url).subscribe((prmsObj) => {
 				model["currentUserCanSeeContactInfo"] = JSON.parse(prmsObj["_body"]).length > 0;
 			});
 		}
 		
-		this._recommendationService.getIncomingRecommendations(user).then((obj: Array<Object>) => {
+		this._recommendationService.getIncomingRecommendations(userId).then((obj: Array<Object>) => {
 			model["incomingRecommendations"] = obj;
 			model["availableIncomingRecommendations"] = obj.filter((obj) => { return obj["escrowedRequestId"] === null });
 			model["availableIncomingRecommendations"].map((rec) => { 
@@ -203,12 +198,15 @@ export class ProfileService {
   		return list.join('&');
 	}
 
-	setMostProbableProfilePhotoPath(str) {
-		this.mostProbableProfilePhotoPath = str;
+	setMostProbableProfilePhotoPath(userId, str) {
+		this.mostProbableProfilePhotoPath[userId] = str;
 	}
 
-	getMostProbableProfilePhotoPath() {
-		return this.mostProbableProfilePhotoPath;
+	getMostProbableProfilePhotoPath(userId) {
+		if (this.mostProbableProfilePhotoPath[userId] === undefined)
+			this.mostProbableProfilePhotoPath[userId] = "file:///data/data/io.easyah.mobileapp/cache/eogAppProfilePic";
+
+		return this.mostProbableProfilePhotoPath[userId];
 	}
 
 }

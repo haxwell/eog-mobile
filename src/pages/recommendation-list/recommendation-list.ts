@@ -64,7 +64,7 @@ export class RecommendationListPage {
 		if (self.directionallyOppositeUserProfileImageFilepath[userId] === undefined && userId !== undefined) {
 			self.directionallyOppositeUserProfileImageFilepath[userId] = null;
 
-			let path = self._profileService.getMostProbableProfilePhotoPath() + userId;
+			let path = self._profileService.getMostProbableProfilePhotoPath(userId) + userId;
 			
 			self._profilePictureService.get(userId, path).then((path) => {
 				if (path !== undefined)

@@ -25,7 +25,7 @@ export class ProfileHeader {
 
 		let self = this;
 		let func2 = (data) => {
-			let model = this._profileService.getModel(this.user);
+			let model = this._profileService.getModel(this.user["id"]);
 
 			model["realname"] = data["realname"];
 			model["phone"] = data["phone"];
@@ -54,22 +54,22 @@ export class ProfileHeader {
 	}
 
 	isFromGallery() {
-		return this._profileService.getModel(this.user)["imageFileSource"] == 'gallery';
+		return this._profileService.getModel(this.user["id"])["imageFileSource"] == 'gallery';
 	}
 
 	isThumbnailImageAvailable() {
-		return this._profileService.getModel(this.user)["imageFileURI"] !== undefined;
+		return this._profileService.getModel(this.user["id"])["imageFileURI"] !== undefined;
 	}
 
 	getThumbnailImage() {
-		if (this._profileService.getModel(this.user)["imageFileURI"] === undefined)
+		if (this._profileService.getModel(this.user["id"])["imageFileURI"] === undefined)
 			return "assets/img/mushroom.jpg";
 		else
-			return this._profileService.getModel(this.user)["imageFileURI"];
+			return this._profileService.getModel(this.user["id"])["imageFileURI"];
 	}
 
 	getModelAttr(key) {
-		let model = this._profileService.getModel(this.user) || {};
+		let model = this._profileService.getModel(this.user["id"]) || {};
 		return model[key];
 	}
 

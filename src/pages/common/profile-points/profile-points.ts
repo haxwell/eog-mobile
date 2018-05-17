@@ -47,7 +47,7 @@ export class ProfilePoints {
 
 		// TODO: Is it entirely wasteful to make these separate calls? And to call for the
 		//  entire profile, when what we want is just one field? SPIKE anyone?
-		this.profileModel = this._profileService.getModel(this._userService.getCurrentUser());
+		this.profileModel = this._profileService.getModel(this._userService.getCurrentUser()["id"]);
 	}
 
 	getAllTimePointsCount() {
