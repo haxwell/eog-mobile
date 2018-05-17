@@ -41,7 +41,8 @@ export class ProfileEditPage {
 				private _file: File) {
 
 		this.user = Object.assign({}, navParams.get('user'));
-		this.model = navParams.get('model');
+		
+		this.model = this._profileService.getModel(this.user); 
 
 		this._userMetadataService.init();
 	}

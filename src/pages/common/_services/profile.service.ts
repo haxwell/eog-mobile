@@ -46,6 +46,8 @@ export class ProfileService {
 		}
 	}
 
+	// TODO: Get rid of the user object, and just use UserId.. We have to make a call for the User object anyway,
+	//  to be sure we are getting the most recent user info
 	initModel(user, model) {
 
 		let self = this;
@@ -54,10 +56,13 @@ export class ProfileService {
 		this._recommendationService.init();
 		this._profilePictureService.init()
 
-		model["realname"] = user["realname"];
-		model["phone"] = user["phone"];
-		model["email"] = user["email"];
 		model["points"] = {"total" : 0, "available": 0};
+
+		this._userService.getUser(user["id"], true /* force an API call */).then((userObj) => {
+			model["realname"] = userObj["realname"];
+			model["phone"] = userObj["phone"];
+			model["email"] = userObj["email"];
+		});
 
 		let url = environment.apiUrl + "/api/user/" + user["id"] + "/profile";
 		this._apiService.get(url).subscribe((data) => {

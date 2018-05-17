@@ -98,7 +98,7 @@ export class ProfilePage {
 	}
 
 	onEditProfileBtnClick() {
-      this.navCtrl.push(ProfileEditPage, {user: this.user, model: this._profileService.getModel(this.user)});
+      this.navCtrl.push(ProfileEditPage, {user: this.user});
 	}
 
 	setCurrentUserCanSendPointToProfileUser() {
