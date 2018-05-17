@@ -5,6 +5,7 @@ import { LoadingController } from 'ionic-angular';
 import { ModalController } from 'ionic-angular';
 
 import { ProfileService } from '../../pages/common/_services/profile.service'
+import { ProfilePictureService } from '../../app/_services/profile-picture.service'
 import { UserMetadataService } from '../../app/_services/user-metadata.service'
 
 import { ChoosePhotoSourcePage } from '../../pages/common/choose-photo-source/choose-photo-source'
@@ -35,6 +36,7 @@ export class ProfileEditPage {
 				public loadingCtrl: LoadingController,
 				public alertCtrl: AlertController,
 				private _profileService: ProfileService,
+				private _profilePictureService: ProfilePictureService,
 				private _userMetadataService: UserMetadataService,
 				private _file: File) {
 
@@ -210,7 +212,7 @@ export class ProfileEditPage {
 			return this._profileService.getModel(this.user)["imageFileURI"];
 	}
 
-	onThumbnailPress($event) {
+	onThumbnailClick($event) {
 		let self = this;
 		let model = this._profileService.getModel(this.user);
 		let modal = this.modalCtrl.create(ChoosePhotoSourcePage, {userId: this.user["id"], fileURI: model["imageFileURI"], fileSource: model["imageFileSource"]});
@@ -259,6 +261,73 @@ export class ProfileEditPage {
 		});
 		
 		modal.present();
+	}
+
+	onThumbnailPress($event) {
+		let alert = this.alertCtrl.create({
+			title: 'Delete Photo?',
+			message: 'Do you want to DELETE your profile picture?',
+			buttons: [
+				{
+					text: 'No', role: 'cancel', handler: () => {
+						// do nothing
+					},
+				}, {
+					text: 'Yes', handler: () => {
+						let self = this;
+
+						let func = () => {
+							let model = self._profileService.getModel(self.user);
+
+							model["imageFileURI"] = undefined;
+							model["imageFileSource"] = undefined;
+
+							self._profileService.setMostProbableProfilePhotoPath(model["imageFileURI"]);
+						}
+
+						console.log('deleting photo ' + self.user["id"]);
+
+						self._profilePictureService.delete(self.user["id"]).then(() => { 
+
+							console.log("Now in profile-edit")
+							let model = self._profileService.getModel(self.user);
+
+							if (model["imageFileSource"] === 'camera' || model["imageFileSource"] === 'eog') {
+								
+								console.log("This image came from the camera, or the api.. deleting off the phone now. path=" + model['imageFileURI'] + "]")
+
+								let lastSlash = model["imageFileURI"].lastIndexOf('/');
+								let path = model["imageFileURI"].substring(0,lastSlash+1);
+								let filename = model["imageFileURI"].substring(lastSlash+1);
+
+								self._file.removeFile(path, filename).then((data) => {
+									console.log("Call to profilePictureService to DELETE photo for "+self.user['id']+" successful! Image was from camera or the eog api, so it was removed from phone.");
+
+									func();
+									
+								}).catch(() => {
+									console.log("Caught error trying to remove file from phone");
+
+									func();
+								});
+							} else {
+								console.log("Call to profilePictureService to DELETE photo for "+self.user['id']+" successful! Image was from phone's gallery, so did not try to remove it.");
+
+								func();								
+							}
+
+						}).catch(() => {
+							console.log("An error occurred deleting the image from the server. Probably, it didn't exist there. Noting it, in case things look wonky..")
+							let model = self._profileService.getModel(self.user);
+
+							func();
+						});
+					},
+				}
+			]
+		});
+
+		alert.present();
 	}
 
 	isThumbnailImageVisible() {
