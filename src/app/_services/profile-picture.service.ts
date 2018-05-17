@@ -36,6 +36,9 @@ export class ProfilePictureService {
 
 		let self = this;
 		self._functionPromiseService.initFunc(self._constants.FUNCTION_KEY_PROFILE_PICTURE_GET, (id, photoPath) => {
+			
+			console.log("In PROFILE_PICTURE_GET, and the photoPath = [" + photoPath + "]");
+
 			let rtn = new Promise((resolve, reject) => {
 
 				let lastSlash = photoPath.lastIndexOf('/');
@@ -44,12 +47,15 @@ export class ProfilePictureService {
 
 				self.file.checkFile(path, filename).then((isFileExists) => {
 					if (isFileExists) {
+						console.log("PROFILE_PICTURE_GET says this file exists! Resolving " + (path+filename));
 						resolve(path + filename);
 					} 
 				}).catch(e => { 
+					console.log("PROFILE_PICTURE_GET got an error checking on [" + (path+filename) + "]. Calling the API to see if the picture is there.");
 				    let url = environment.apiUrl + "/api/user/" + id + "/profile/picture/isFound";
 				    this._apiService.get(url).subscribe((isFound) => {
 				    	if (isFound["_body"] == "true") {
+				    		console.log("PROFILE_PICTURE_GET received TRUE from the API, so we're downloading the file.");
 							url = environment.apiUrl + "/api/user/" + id + "/profile/picture";
 							const fileTransfer: FileTransferObject = self.transfer.create();
 
@@ -61,6 +67,7 @@ export class ProfilePictureService {
 					  		});
 
 				    	} else {
+				    		console.log("PROFILE_PICTURE_GET received [" + isFound['_body'] + "] from the /profile/picture/isFound API, so we're returning undefined.");
 							resolve(undefined);
 				    	}
 				    });
@@ -81,9 +88,13 @@ export class ProfilePictureService {
 	}
 
 	delete(userId) {
+
+		// delete the profile picture from the server, so other users won't see it either
+
 		return new Promise((resolve, reject) => {
 			let url = environment.apiUrl + "/api/user/" + userId + "/profile/picture";
 			this._apiService.delete(url).subscribe((data) => {
+				console.log("Call to delete api returned: " + JSON.stringify(data))
 				resolve(data);
 			})
 		});
@@ -103,6 +114,9 @@ export class ProfilePictureService {
 				fileTransfer.upload(filename, environment.apiUrl + "/api/user/" + userId + "/profile/picture", options)
 				   .then((data) => {
 				     // success
+
+				    console.log("successfully uploaded profile picture to server")
+
 					let lastSlash = filename.lastIndexOf('/');
 					let lastQuestionMark = filename.lastIndexOf('?');
 
@@ -124,6 +138,7 @@ export class ProfilePictureService {
 
 				   }, (err) => {
 				     // error
+				     console.log("** error uploading profile picture to server");
 				     console.log(err);
 				     reject();
 				   });
