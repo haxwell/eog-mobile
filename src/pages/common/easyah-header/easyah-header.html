@@ -5,7 +5,7 @@
 			</button>
 		</ion-col>
 		<ion-col col-6>
-			<ion-input class="searchQueryText" type="text" placeholder="Search for .... ?" (ionChange)="onSearchTextFieldChanged($event)" [value]="getSearchTextFieldValue()" required></ion-input>
+			<ion-input class="searchQueryText" type="text" placeholder="Search for .... ?" (ionChange)="onSearchTextFieldChanged($event)" [value]="getSearchTextFieldValue()" (keyup.enter)="onSearchBtnTap($event)" required></ion-input>
 		</ion-col>
 		<ion-col>
 			<button ion-button float-right [disabled]="!isSearchBtnAvailable()" (click)="onSearchBtnTap($event)">	<ion-icon name="search"></ion-icon> </button>
