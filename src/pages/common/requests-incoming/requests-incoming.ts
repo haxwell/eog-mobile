@@ -60,22 +60,20 @@ export class RequestsIncomingView {
 			return "declined";
 		else if (request["deliveringStatusId"] === this._constants.REQUEST_STATUS_ACCEPTED)
 			return "accepted";
-		else if (request["deliveringStatusId"] === this._constants.REQUEST_STATUS_COMPLETED)
-			return "completed";
+		else if (request["deliveringStatusId"] === this._constants.REQUEST_STATUS_COMPLETED) {
+			if ((request["requestingStatusId"] !== this._constants.REQUEST_STATUS_COMPLETED && request["requestingStatusId"] !== this._constants.REQUEST_STATUS_REQUESTOR_ACKNOWLEDGED && request["requestingStatusId"] !== this._constants.REQUEST_STATUS_NOT_COMPLETED))
+				return "completedAwaitingApproval"
+			else if (request["requestingStatusId"] === this._constants.REQUEST_STATUS_NOT_COMPLETED) 
+				return "notCompletedAwaitingResolution"
+			else 
+				return "completed";
+		}
 		else if (request["deliveringStatusId"] === this._constants.REQUEST_STATUS_CANCELLED)
 			return "cancelled";
 		else if (request["deliveringStatusId"] === this._constants.REQUEST_STATUS_NOT_COMPLETED)
 			return "notCompleted";
 		else if (request["deliveringStatusId"] === this._constants.REQUEST_STATUS_RESOLVED_BUT_DISPUTED)
 			return "resolvedButDisputed";
-			
-			// TODO: these bits of code comparing delivering and requesting status to determine a state
-			// TODO:  are used in multple places.. refactor them into one.
-		
-		else if (request["deliveringStatusId"] === this._constants.REQUEST_STATUS_COMPLETED && (request["requestingStatusId"] !== this._constants.REQUEST_STATUS_COMPLETED && request["requestingStatusId"] !== this._constants.REQUEST_STATUS_REQUESTOR_ACKNOWLEDGED && request["requestingStatusId"] !== this._constants.REQUEST_STATUS_NOT_COMPLETED))
-			return "completedAwaitingApproval";
-		else if (request["deliveringStatusId"] === this._constants.REQUEST_STATUS_COMPLETED && request["requestingStatusId"] === this._constants.REQUEST_STATUS_NOT_COMPLETED)
-			return "notCompletedAwaitingResolution";
 	}
 
 	getDirection() { return "incoming"; }
