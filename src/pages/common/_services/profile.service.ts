@@ -106,7 +106,8 @@ export class ProfileService {
 		else {
 			url = environment.apiUrl + "/api/user/" + userId + "/requests/inprogress/user/" + currentUser["id"];
 			this._apiService.get(url).subscribe((prmsObj) => {
-				model["currentUserCanSeeContactInfo"] = JSON.parse(prmsObj["_body"]).length > 0;
+				var b = JSON.parse(prmsObj["_body"]).length > 0;
+				model["currentUserCanSeeContactInfo"] = b;
 			});
 		}
 		
@@ -176,6 +177,14 @@ export class ProfileService {
 						self.init(user["id"]);
 						userUpdateFunc();
 					});
+
+					// TODO: Add a catch here, what if the saving of the picture fails? Need to throw that up
+					//  the chain so that whatever is calling this can update the UI, let the user know whatever.
+					//  As a reminder, the impetus for this, I was uploading a file that turned out to be too big
+					//  and caused a 500 error on the server. ProfilePictureService caught the error, logged it,
+					//  and called the reject() method on the promise, but this code doesn't recognize the reject()ion
+					//  and leaves the "Uploading..." spinner in place, waiting for a response that's never coming.
+
 				} else
 					userUpdateFunc();
 			});
