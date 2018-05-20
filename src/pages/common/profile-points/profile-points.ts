@@ -34,6 +34,10 @@ export class ProfilePoints {
 		this._events.subscribe('request:saved', func);
 		this._events.subscribe('request:declined', func);
 		this._events.subscribe('request:cancelled', func);
+		this._events.subscribe('request:completedAndApproved', func);
+		this._events.subscribe('request:inamicablyResolved', func);
+
+		this.currentUser = this._userService.getCurrentUser();
 	}
 
 	ngOnInit() {
@@ -45,16 +49,10 @@ export class ProfilePoints {
 			this.totalPoints = sumPoints;
 		});
 
-		// TODO: Is it entirely wasteful to make these separate calls? And to call for the
-		//  entire profile, when what we want is just one field? SPIKE anyone?
-		this.profileModel = this._profileService.getModel(this._userService.getCurrentUser()["id"]);
+		// this.profileModel = this._profileService.getModel(this.currentUser["id"]);
 	}
 
 	getAllTimePointsCount() {
-		if (this.profileModel !== undefined)
-			return this.profileModel["allTimePointCount"];
-		else
-			return undefined;
+		return this._profileService.getModel(this.currentUser["id"])["allTimePointCount"];
 	}
-
 }
