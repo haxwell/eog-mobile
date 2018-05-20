@@ -177,7 +177,7 @@ export class SearchPage {
 
 			this.profileImageFilepath[user["id"]] = null;
 
-			let path = self._profileService.getMostProbableProfilePhotoPath(user["id"]) + user["id"];
+			let path = self._profileService.getMostProbableProfilePhotoPath(user["id"]);
 
 			console.log("No Profile Image loaded for user Id " + user["id"] + ". Trying to find one... " + path);			
 			

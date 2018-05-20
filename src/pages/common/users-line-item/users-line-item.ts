@@ -43,9 +43,9 @@ export class UsersLineItem {
 
 		let self = this;
 		if (this.profileImageFilepath === undefined) {
-				this.profileImageFilepath = null;
+			this.profileImageFilepath = null;
 
-			let path = self._profileService.getMostProbableProfilePhotoPath(self.item["id"]) + self.item["id"];
+			let path = self._profileService.getMostProbableProfilePhotoPath(self.item["id"]);
 			
 			self._profilePictureService.get(self.item["id"], path).then((path) => {
 				if (path !== undefined)
