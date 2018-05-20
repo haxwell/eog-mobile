@@ -41,8 +41,6 @@ export class ProfileService {
 		}
 	}
 
-	// TODO: Get rid of the user object, and just use UserId.. We have to make a call for the User object anyway,
-	//  to be sure we are getting the most recent user info
 	initModel(userId, model) {
 
 		let self = this;
