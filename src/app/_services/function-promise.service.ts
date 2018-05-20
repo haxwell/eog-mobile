@@ -15,11 +15,14 @@ export class FunctionPromiseService {
 	results = {};
 	funcs = {};
 
+	freshnessLengthInMillis = 30 * 1000; // thirty seconds
+
 	constructor() {
 
 	}
 
 	reset(resultKey) {
+		console.log("FunctionPromiseService is resetting its promise for the key [" + resultKey + "]");
 		this.results[resultKey] = undefined;
 	}
 
@@ -27,19 +30,29 @@ export class FunctionPromiseService {
 		this.funcs[funcKey] = func;
 	}
 
+	setFreshnessFactorInMillis(m) {
+		this.freshnessLengthInMillis = m;
+	}
+
 	get(resultKey, funcKey, data) {
+		var timestamp = new Date().getTime();
+
 		if (this.results[resultKey] !== undefined) {
-			return this.results[resultKey];
+			
+			if (this.results[resultKey]["timestamp"] + this.freshnessLengthInMillis < timestamp) {
+				this.reset(resultKey);
+			} else {
+				return this.results[resultKey]["results"];
+			}
 		}
 
 		let func = this.funcs[funcKey];
 
 		if (func !== undefined) {
-			this.results[resultKey] = func(resultKey, data);
+			this.results[resultKey] = {timestamp: timestamp, results: func(resultKey, data)};
 		}
 
-		return this.results[resultKey];
+		return this.results[resultKey]["results"];
 	}
+
 }
-
-
