@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 
 import { NavController } from 'ionic-angular';
+import { Events } from 'ionic-angular';
 
 import { RecommendationService } from '../../app/_services/recommendation.service'
 import { ProfileService } from '../../pages/common/_services/profile.service'
@@ -23,9 +24,13 @@ export class RecommendationListPage {
 	constructor(private _profileService : ProfileService,
 				private _recommendationService : RecommendationService,
 				private _profilePictureService: ProfilePictureService,
-				private navCtrl: NavController
+				private navCtrl: NavController,
+				private _events: Events
 	) {
 		this.setDirty(true);
+
+		this._events.subscribe('recommendation:received', () => { this.setDirty(true); this.ngOnInit(); }));
+		this._events.subscribe('request:markedApprovedAfterCompletion', () => { this.setDirty(true); this.ngOnInit(); }));
 	}
 
 	ngOnInit() {
