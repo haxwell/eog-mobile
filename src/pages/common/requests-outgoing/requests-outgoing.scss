@@ -29,8 +29,8 @@ $categories: (
  accepted: green,
  declined: red,
  declinedAndHidden: red,
- completedAwaitingApproval: #FD8B2D,
- notCompleteAwaitingResolution: #FED035,
+ completedAwaitingApproval: yellow,
+ notCompleteAwaitingResolution: red,
  cancelled: red
 );
 
@@ -43,7 +43,7 @@ $categories2: (
  pending: lightgrey,
  accepted: white,
  declined: white,
- completedAwaitingApproval: lightgrey,
+ completedAwaitingApproval: white,
  notCompleteAwaitingResolution: lightgrey,
  cancelled: white
 );
