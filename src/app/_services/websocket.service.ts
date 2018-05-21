@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import { ToastController } from 'ionic-angular';
 import { Events } from 'ionic-angular';
 
-import { UserService } from '../../app/_services/user.service';
 import { RequestsService } from '../../app/_services/requests.service';
 import { DeclineReasonCodeService } from '../../app/_services/declined-reason-codes.service';
 
@@ -17,17 +16,17 @@ export class WebsocketService {
 
 	client = undefined;
 
-	constructor(private _userService: UserService,
-				private _requestsService: RequestsService,
+	constructor(private _requestsService: RequestsService,
 				private _declineReasonCodeService: DeclineReasonCodeService,
 				private toastCtrl: ToastController,
 				private _constants: Constants,
 				public _events: Events) { 
 
+				this._events.subscribe('app:login', (currentUser) => { this.init(currentUser); })
 	}
 
-	init() {
-		let user = this._userService.getCurrentUser();
+	init(currentUser) {
+		let user = currentUser;
 		let self = this;
 		if (self.client !== undefined) {
 			self.client.disconnect(() => { self.client = undefined; });
@@ -174,6 +173,8 @@ export class WebsocketService {
 		data["message"] = dou_realname + ' approved your completion, and sent you ' + data["pointsSent"] + ' points for ' + request["prm"]["title"] + '.';
 
 		this.presentToast(data["message"]);
+
+		console.log("*** Throwing request:completedAndApproved event....")
 		this._events.publish('request:completedAndApproved', data);
 	}
 

@@ -29,8 +29,8 @@ export class RecommendationListPage {
 	) {
 		this.setDirty(true);
 
-		this._events.subscribe('recommendation:received', () => { this.setDirty(true); this.ngOnInit(); }));
-		this._events.subscribe('request:markedApprovedAfterCompletion', () => { this.setDirty(true); this.ngOnInit(); }));
+		this._events.subscribe('recommendation:received', () => { this.setDirty(true); this.ngOnInit(); });
+		this._events.subscribe('request:markedApprovedAfterCompletion', () => { this.setDirty(true); this.ngOnInit(); });
 	}
 
 	ngOnInit() {

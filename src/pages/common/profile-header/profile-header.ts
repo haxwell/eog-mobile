@@ -34,6 +34,17 @@ export class ProfileHeader {
 			self.setDirty(true);
 		};
 		self._events.subscribe('profile:changedContactInfoWasSaved', func2);
+
+		// TODO: This is ugly. We do this because this is part of the app.html file, because
+		//  that is where the menu is defined, and that is called first before anything else.
+		//  so, there's no user at that time. This component is also used when viewing another
+		//  user's profile. So it needs a user objet. So we get one for the current user so this
+		//  can display in the menu properly when the menu comes up, and we set it in the html
+		//  (by passing a function which calls for the user to be displayed) elsewhere.
+
+		// Ideally, this wouldn't even be called until a user was ready. And then we could
+		//  ONLY set it through the HTML, not need this event sub. Regardless, yuk poo.
+		self._events.subscribe('app:login', (currentUser) => { this.user = currentUser; });
 	}
 
 	ngOnInit() {
@@ -54,23 +65,33 @@ export class ProfileHeader {
 	}
 
 	isFromGallery() {
-		return this._profileService.getModel(this.user["id"])["imageFileSource"] == 'gallery';
+		if (this.user)
+			return this._profileService.getModel(this.user["id"])["imageFileSource"] == 'gallery';
+		else
+			return false;
 	}
 
 	isThumbnailImageAvailable() {
-		return this._profileService.getModel(this.user["id"])["imageFileURI"] !== undefined;
+		if (this.user)
+			return this._profileService.getModel(this.user["id"])["imageFileURI"] !== undefined;
+		else
+			return false;
 	}
 
 	getThumbnailImage() {
-		if (this._profileService.getModel(this.user["id"])["imageFileURI"] === undefined)
-			return "assets/img/mushroom.jpg";
-		else
+		if (this.user && this._profileService.getModel(this.user["id"])["imageFileURI"] !== undefined)
 			return this._profileService.getModel(this.user["id"])["imageFileURI"];
+		else
+			return "assets/img/mushroom.jpg";
 	}
 
 	getModelAttr(key) {
-		let model = this._profileService.getModel(this.user["id"]) || {};
-		return model[key];
+		if (this.user) {
+			let model = this._profileService.getModel(this.user["id"]) || {};
+			return model[key];
+		} else {
+			return undefined;
+		}
 	}
 
 	getAvatarCSSClassString() {

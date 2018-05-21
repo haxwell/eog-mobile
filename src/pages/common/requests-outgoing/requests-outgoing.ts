@@ -34,7 +34,7 @@ export class RequestsOutgoingView {
 				private modalCtrl: ModalController,
 				private _requestsService: RequestsService,
 				private _constants: Constants,
-				_events: Events) { 
+				private _events: Events) { 
 
 		let func = (req) => {
 			this._requestsService.getOutgoingRequestsForCurrentUser().then((data: Array<Object>) => {
@@ -42,12 +42,12 @@ export class RequestsOutgoingView {
 			});
 		};
 
-		_events.subscribe('request:saved', func);
-		_events.subscribe('request:accepted', func);
-		_events.subscribe('request:completed', func);
-		_events.subscribe('request:cancelled', func);
-		_events.subscribe('request:declined', func);
-		_events.subscribe('request:deleted', func);
+		this._events.subscribe('request:saved', func);
+		this._events.subscribe('request:accepted', func);
+		this._events.subscribe('request:completed', func);
+		this._events.subscribe('request:cancelled', func);
+		this._events.subscribe('request:declined', func);
+		this._events.subscribe('request:deleted', func);
 	}
 
 	getTrack(request) {
@@ -227,7 +227,7 @@ export class RequestsOutgoingView {
 	onCompleteOutgoingBtnTap(request) {
 		let self = this;
 		let modal = this.modalCtrl.create(CompleteOutgoingRequestPage, {request: request});
-		modal.onDidDismiss(data => { self.ngOnInit(); self._events.publish('request:markedApprovedAfterCompletion'); });
+		modal.onDidDismiss(data => { self.ngOnInit(); console.log("about to throw request:markedApprovedAfterCOmpletion event"); self._events.publish('request:markedApprovedAfterCompletion'); });
 		modal.present();
 	}
 

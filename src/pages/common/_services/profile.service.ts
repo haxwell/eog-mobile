@@ -156,18 +156,10 @@ export class ProfileService {
 				console.log(JSON.parse(resp["_body"]));
 
 				let userUpdateFunc = () => {
-					// force refresh of current user in the userService
-					// TODO: Make the userService do this itself, perhaps with events.
-					self._userService.getUser(user["id"], true).then((userObj) => {
-						userObj["password"] = user["password"];
-						self._userService.setCurrentUser(userObj);
+					this._events.publish('profile:changedContactInfoWasSaved', model);
 
-						this._events.publish('profile:changedContactInfoWasSaved', model);
-
-						self.init(user["id"]);
-
-						resolve(JSON.parse(resp["_body"]));					
-					});
+					self.init(user["id"]);
+					resolve(JSON.parse(resp["_body"]));					
 				}
 
 				if (self.isProfileImageChanged(model)) {
