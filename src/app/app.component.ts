@@ -4,6 +4,7 @@ import { Platform, Nav, MenuController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 
 import { UserService } from './_services/user.service';
+import { WebsocketService } from './_services/websocket.service';
 
 import { LoginPage } from '../pages/login/login';
 import { HomePage } from '../pages/home/home';
@@ -27,6 +28,7 @@ export class EasyahApp {
 
   constructor(platform: Platform,
               statusBar: StatusBar,
+              private websocketService: WebsocketService,
               private _userService : UserService,
               private _menuCtrl : MenuController) {
 
