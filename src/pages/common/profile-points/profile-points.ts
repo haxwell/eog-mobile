@@ -44,7 +44,10 @@ export class ProfilePoints {
 		console.log("ProfilePoints::ngOnInit() --- just entered");
 
 		this._pointsService.init();
-		this._profileService.init(this._userService.getCurrentUser());
+
+		var user = this._userService.getCurrentUser();
+		if (user) 
+			this._profileService.init(user["id"]);
 
 		this._pointsService.getCurrentAvailableUserPoints().then((caPoints) => {
 			this.availablePoints = caPoints;
@@ -56,12 +59,10 @@ export class ProfilePoints {
 	}
 
 	getTotalPoints() {
-		console.log("getTotalPoints() returning " + this.totalPoints)
 		return this.totalPoints;
 	}
 
 	getAvailablePoints() {
-		console.log("getAvailablePoints() returning " + this.availablePoints)
 		return this.availablePoints;
 	}
 
@@ -70,7 +71,6 @@ export class ProfilePoints {
 		
 		if (user) {
 			var pts = this._profileService.getModel(user["id"])["allTimePointCount"]
-			console.log("getAllTimePoints() returning " + pts)
 			return pts;
 		} else {
 			return 0;
