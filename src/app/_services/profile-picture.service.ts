@@ -59,7 +59,7 @@ export class ProfilePictureService {
 			    let url = environment.apiUrl + "/api/user/" + id + "/profile/picture/isFound";
 			    self._apiService.get(url).subscribe((profilePictureAPITimestamp) => {
 
-			    	console.log("Call to api /isFound succeeded. returned [ " + profilePictureAPITimestamp["_body"]*1 + " ]");
+			    	console.log("Call to api /isFound[" +id+"] succeeded. returned [ " + profilePictureAPITimestamp["_body"]*1 + " ]");
 	
 					if (profilePictureAPITimestamp["_body"]*1 > 0) { // meaning, this file exists on the API
 
@@ -72,7 +72,9 @@ export class ProfilePictureService {
 
 							var millis = this._localStorageService.get(path+filename);
 
-							if (millis < profilePictureAPITimestamp) {
+							console.log("localStorage millis timestamp for " + (path+filename) + " is [" + millis + "]. The API has [" + profilePictureAPITimestamp["_body"]*1 + "] for a timestamp.");
+
+							if (millis < profilePictureAPITimestamp["_body"]*1) {
 								//download the api picture
 
 								console.log("The API profile picture is newer than the one we have. Downloading from the API.")
@@ -96,6 +98,7 @@ export class ProfilePictureService {
 						  		});
 
 							} else {
+								console.log("The Profile picture on the phone is newer than the API's photo! So we WILL NOT download from the server.")
 								resolve(path+filename);
 							}
 
@@ -125,7 +128,7 @@ export class ProfilePictureService {
 
 					} else { // meaning the file does not exist on the API
 
-						console.log("API Timestamp is 0 (right?), so the profile photo for "+id+" did not exist there.");
+						console.log("API Timestamp is 0, so the profile photo for "+id+" did not exist API-side.");
 
 						// then we need to check locally is there a file.
 						self.file.checkFile(path, filename).then((isFileExists) => {
