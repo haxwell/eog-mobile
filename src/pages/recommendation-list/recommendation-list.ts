@@ -3,11 +3,14 @@ import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { Events } from 'ionic-angular';
 
+import { UserService } from '../../app/_services/user.service';
 import { RecommendationService } from '../../app/_services/recommendation.service'
 import { ProfileService } from '../../pages/common/_services/profile.service'
 import { ProfilePictureService } from '../../app/_services/profile-picture.service'
 
 import { ProfilePage } from '../profile/profile'
+
+import EXIF from 'exif-js';
 
 @Component({
   selector: 'recommendation-list',
@@ -16,12 +19,16 @@ import { ProfilePage } from '../profile/profile'
 
 export class RecommendationListPage {
 
-	model = undefined;
 	dirty = undefined;
 
 	directionallyOppositeUserProfileImageFilepath = {};	
 
-	constructor(private _profileService : ProfileService,
+	incomingRecommendations = undefined;
+	availableIncomingRecommendations = undefined;
+	imageOrientation = undefined;
+
+	constructor(private _userService : UserService,
+				private _profileService : ProfileService,
 				private _recommendationService : RecommendationService,
 				private _profilePictureService: ProfilePictureService,
 				private navCtrl: NavController,
@@ -29,14 +36,24 @@ export class RecommendationListPage {
 	) {
 		this.setDirty(true);
 
-		this._events.subscribe('recommendation:received', () => { this.setDirty(true); this.ngOnInit(); });
-		this._events.subscribe('request:markedApprovedAfterCompletion', () => { this.setDirty(true); this.ngOnInit(); });
+		this._events.subscribe('recommendation:received', () => { console.log("RECOMMENDATION-LIST: received recommendation"); this.setDirty(true); this.ngOnInit(); });
+		this._events.subscribe('request:markedApprovedAfterCompletion', () => { console.log("RECOMMENDATION-LIST: got markedApprovedAfterCompletion event"); this.setDirty(true); this.ngOnInit(); });
 	}
 
 	ngOnInit() {
 		if (this.isDirty()) {
-			this._recommendationService.getIncomingRecommendations().then((data) => {
-				this.model = data;
+			let self = this;
+
+			self._recommendationService.init();
+			self._recommendationService.getIncomingRecommendations().then((data: Array<any>) => {
+				self.incomingRecommendations = data;
+
+				self.availableIncomingRecommendations = data.filter((rec) => { return rec["escrowedRequestId"] === null });
+				self.availableIncomingRecommendations.map((rec) => { 
+					self._userService.getUser(rec["providingUserId"]).then((user) => {
+						rec["userInfo"] = user;
+					});
+				});
 			});
 		}
 	}
@@ -50,11 +67,11 @@ export class RecommendationListPage {
 	}
 
 	areIncomingRecommendationsAvailable() {
-		return this.model != undefined && this.model != null; // this.model["availableIncomingRecommendations"] !== undefined && this.model["availableIncomingRecommendations"].length > 0;
+		return this.availableIncomingRecommendations !== undefined && this.availableIncomingRecommendations.length > 0;
 	}
 
 	getAvailableIncomingRecommendations() {
-		return this.model; // this.model["availableIncomingRecommendations"];
+		return this.availableIncomingRecommendations;
 	}
 
 	getDOUserProfileImageFilepath(userId) {
@@ -92,5 +109,21 @@ export class RecommendationListPage {
 
 	onViewUser(item) {
 		this.navCtrl.push(ProfilePage, {user: item["userInfo"]});
+	}
+
+	getAvatarCSSClassString() {
+		if (this.imageOrientation === 8)
+			return "rotate90Counterclockwise";
+		else if (this.imageOrientation === 3)
+			return "rotate180 centered";
+		else if (this.imageOrientation === 6)
+			return "rotate90Clockwise";
+	}
+
+	loaded(evt) {
+		let self = this;
+		EXIF.getData(evt.target, function() {
+			self.imageOrientation = EXIF.getTag(this, "Orientation");
+		});
 	}
 }

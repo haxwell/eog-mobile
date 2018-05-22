@@ -17,8 +17,8 @@
 
 	<ion-list>
 		<ion-item *ngFor="let item of getAvailableIncomingRecommendations()" (click)="onViewUser(item)">
-			<ion-avatar class="profileAvatar" *ngIf="isDOUserProfileImageAvailable(item['providingUserId'])" item-start>
-				<img [src]="getDOUserProfileImageFilepath(item['providingUserId'])">
+			<ion-avatar *ngIf="isDOUserProfileImageAvailable(item['providingUserId'])" item-start>
+				<img [class]="getAvatarCSSClassString()" [src]="getDOUserProfileImageFilepath(item['providingUserId'])" (load)="loaded($event)">
 			</ion-avatar>
 			<ion-avatar *ngIf="!isDOUserProfileImageAvailable(item['providingUserId'])" item-start>
 				<img src="assets/img/mushroom.jpg">

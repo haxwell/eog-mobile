@@ -109,16 +109,6 @@ export class ProfileService {
 			});
 		}
 		
-		this._recommendationService.getIncomingRecommendations(userId).then((obj: Array<Object>) => {
-			model["incomingRecommendations"] = obj;
-			model["availableIncomingRecommendations"] = obj.filter((obj) => { return obj["escrowedRequestId"] === null });
-			model["availableIncomingRecommendations"].map((rec) => { 
-				self._userService.getUser(rec["providingUserId"]).then((user) => {
-					rec["userInfo"] = user;
-				});
-			});
-		});
-
 		this._recommendationService.getOutgoingRecommendations().then((obj) => {
 			model["outgoingRecommendations"] = obj;
 		});
