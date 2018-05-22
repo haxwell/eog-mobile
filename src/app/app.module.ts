@@ -32,6 +32,7 @@ import { SendRecommendPage } from '../pages/searchUsers/_pages/send.recommend.pa
 import { SocialNetworkCRUDPage } from '../pages/profile/_pages/social-network-CRUD';
 import { RequestPage } from '../pages/promises/_pages/request';
 import { AcceptRequestPage } from '../pages/requests/incoming/_pages/accept.request';
+import { AcceptRequestTutorialPage } from '../pages/requests/incoming/_pages/accept.request.tutorial';
 import { DeclineRequestPage } from '../pages/requests/incoming/_pages/decline.request';
 import { CancelRequestPage } from '../pages/requests/incoming/_pages/cancel.request';
 import { CompleteRequestPage } from '../pages/requests/incoming/_pages/complete.request';
@@ -77,6 +78,7 @@ import { PrmModelService } from '../pages/promises/_services/prm.model.service';
 import { PrmCollectionService } from './_services/prm-collection.service';
 import { PrmMetadataService } from './_services/prm-metadata.service';
 import { PrmDetailService } from './_services/prm-detail.service';
+import { UserPreferencesService } from './_services/user-preferences.service';
 
 import { Constants } from '../_constants/constants';
 
@@ -107,6 +109,7 @@ import { Constants } from '../_constants/constants';
     SocialNetworkCRUDPage,
     RequestPage,
     AcceptRequestPage,
+    AcceptRequestTutorialPage,
     DeclineRequestPage,
     CancelRequestPage,
     CompleteRequestPage,
@@ -160,6 +163,7 @@ import { Constants } from '../_constants/constants';
     SocialNetworkCRUDPage,
     RequestPage,
     AcceptRequestPage,
+    AcceptRequestTutorialPage,
     DeclineRequestPage,
     CancelRequestPage,
     CompleteRequestPage,
@@ -191,6 +195,7 @@ import { Constants } from '../_constants/constants';
     ApiService,
     UserService,
     UserMetadataService,
+    UserPreferencesService,
     PointsService,
     FunctionPromiseService,
     ProfileKeywordService,
