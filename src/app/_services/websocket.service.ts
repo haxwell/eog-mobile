@@ -192,7 +192,9 @@ export class WebsocketService {
 		let request = data["request"];
 		let dou_realname = request["directionallyOppositeUser"]["realname"];
 
-		data["message"] = dou_realname + ' inamicably resolved the request, ' + request["prm"]["title"] + '. You got ' + data["pointsSent"] + ' points.';
+		data["message"] = dou_realname + ' inamicably resolved the request, ' + request["prm"]["title"] + '. It is done. ';
+		if (data["pointsSent"])
+			data["message"] += 'You got ' + data["pointsSent"] + ' points.';
 
 		this.presentToast(data["message"]);
 		this._events.publish('request:inamicablyResolved', data);
