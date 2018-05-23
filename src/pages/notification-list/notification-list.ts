@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Events } from 'ionic-angular';
 
 import { NotificationService } from '../../app/_services/notification.service'
 import { ProfileService } from '../../pages/common/_services/profile.service'
@@ -23,9 +24,25 @@ export class NotificationListPage {
 
 	constructor(private _notificationService : NotificationService,
 				private _profilePictureService : ProfilePictureService,
-				private _profileService : ProfileService
+				private _profileService : ProfileService,
+				private _events: Events				
 	) {
+		
+		let func = () => {
+			this.setDirty(true);
+			this.ngOnInit();
+		}
 
+		this._events.subscribe("request:received", func)
+		this._events.subscribe("request:accepted", func)
+		this._events.subscribe("request:declined", func)
+		this._events.subscribe("request:completed", func)
+		this._events.subscribe("request:cancelled", func)
+		this._events.subscribe("request:completedAndApproved", func)
+		this._events.subscribe("request:isInDispute", func)
+		this._events.subscribe("request:inamicablyResolved", func)
+		this._events.subscribe("recommendation:received", func)
+		this._events.subscribe("points:received", func)
 	}
 
 	ngOnInit() {
