@@ -26,7 +26,7 @@ git tag -a vZ.Y.X -m "vZ.Y.X .... ..... "
 git push --tags
 
 6.
-change config.xml and package.json to have the next version number
+change config.xml and package.json to have the next version number. So when this step is done, config.xml and package.json will have a version number higher than what you see from `git tag` #definitionOfDone
 
 7.
 #tag the API, too.
