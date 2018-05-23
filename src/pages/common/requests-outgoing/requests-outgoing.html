@@ -40,7 +40,7 @@
 					<button ion-button (click)="onViewContactInfoBtnTap(request)">View Their Profile</button>
 				</ion-item-options>
 				<ion-item-options side="right">
-					<button ion-button color="danger" (click)="onNotCompleteBtnTap()">Not Complete</button>
+					<button ion-button color="danger" (click)="onNotCompleteBtnTap(request)">Not Complete</button>
 				</ion-item-options>
 
 			</ion-item-sliding>
@@ -65,12 +65,12 @@
 					<span class="prmTitle"><b>{{request.prm.title}}</b></span><br/>
 					<span *ngIf="hasRequestMessage(request)" class="douMsg">{{getRequestMessage(request)}}<br/></span>
 					<span *ngIf="!hasRequestMessage(request)" class="douMsg">--<br/></span>
-					<!-- span class="douName">{{request.directionallyOppositeUser.realname}}</span><br/-->
+					<span class="douName">{{request.directionallyOppositeUser.realname}}</span><br/>
 				</button>
 
-				<!-- ion-item-options side="left">
+				<ion-item-options side="left">
 					<button ion-button (click)="onViewContactInfoBtnTap(request)">View Their Profile</button>
-				</ion-item-options -->
+				</ion-item-options>
 				<ion-item-options side="right">
 					<button ion-button color="danger" (click)="onCancelBtnTap(request)">Cancel</button>
 				</ion-item-options>
@@ -126,7 +126,7 @@
 					<span class="prmTitle"><b>{{request.prm.title}}</b></span><br/>
 					<span *ngIf="hasRequestMessage(request)" class="douMsg">{{getRequestMessage(request)}}<br/></span>
 					<span *ngIf="!hasRequestMessage(request)" class="douMsg">--<br/></span>
-					<!-- span class="douName">{{request.directionallyOppositeUser.realname}}</span><br/ -->
+					<span class="douName">{{request.directionallyOppositeUser.realname}}</span><br/>
 					<span class="foo">Decline Reason: {{request.declinedReasonCode.text}}</span><br/>
 				</button>
 				<ion-item-options side="left">
@@ -143,16 +143,17 @@
 		</ion-item-divider>
 		<ion-item-group *ngFor="let request of getNotCompleteAwaitingResolution()">
 			<ion-item-sliding #slidingItem  [attr.track]="notCompleteAwaitingResolution" (press)="onViewPromise(request)">
-				<ion-avatar *ngIf="isPrmAvatarImageAvailable()" item-start>
-					<img [src]="getPrmAvatarImageFilepath()">
-				</ion-avatar>
-				<ion-avatar *ngIf="!isPrmAvatarImageAvailable()" item-start>
-					<img src="assets/img/mushroom.jpg">
-				</ion-avatar>
-				<span class="prmTitle"><b>{{request.prm.title}}</b></span><br/>
-				<!-- <span class="douMsg">This is where the message from the other user will go. Right in this line. It may be a long message. Like this one.</span><br/> -->
-				<!-- <span class="douName">{{request.directionallyOppositeUser.realname}}</span><br/> -->
-				<span class="douName">{{request.directionallyOppositeUser.realname}}</span><br/>
+				<button ion-item>
+					<ion-avatar *ngIf="isPrmAvatarImageAvailable()" item-start>
+						<img [src]="getPrmAvatarImageFilepath()">
+					</ion-avatar>
+					<ion-avatar *ngIf="!isPrmAvatarImageAvailable()" item-start>
+						<img src="assets/img/mushroom.jpg">
+					</ion-avatar>
+					<span class="prmTitle"><b>{{request.prm.title}}</b></span><br/>
+					<!-- <span class="douMsg">This is where the message from the other user will go. Right in this line. It may be a long message. Like this one.</span><br/> -->
+					<span class="douName">{{request.directionallyOppositeUser.realname}}</span><br/>
+				</button>
 
 				<ion-item-options side="left">
 					<button ion-button (click)="onViewContactInfoBtnTap(request)">View Their Profile</button>

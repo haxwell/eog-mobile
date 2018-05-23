@@ -227,7 +227,7 @@ export class RequestsOutgoingView {
 	onCompleteOutgoingBtnTap(request) {
 		let self = this;
 		let modal = this.modalCtrl.create(CompleteOutgoingRequestPage, {request: request});
-		modal.onDidDismiss(data => { self.ngOnInit(); console.log("about to throw request:markedApprovedAfterCOmpletion event"); self._events.publish('request:markedApprovedAfterCompletion'); });
+		modal.onDidDismiss(data => { self.ngOnInit(); self._events.publish('request:markedApprovedAfterCompletion'); });
 		modal.present();
 	}
 
