@@ -94,10 +94,11 @@ export class PrmMetadataService extends DomainObjectMetadataService {
 							if (archivedRequests.length > 0) {
 								resolve(archivedRequests.some((request) => {
 									let canRequestAgainDate = request["canRequestAgainDate"];
+									console.log("request " + request["id"] + " canRequestAgainDate = [" + canRequestAgainDate + "]");
 									return (Moment(canRequestAgainDate) < Moment(new Date().getTime()));
 									}));
 							} else
-								resolve(null); // there is no PAST_REQUEST_AGAIN_DATE for this prm and user
+								resolve(null); // there is no CAN_REQUEST_AGAIN_DATE for this prm and user
 						});
 					}
 				})
