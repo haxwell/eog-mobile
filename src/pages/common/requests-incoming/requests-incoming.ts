@@ -64,7 +64,7 @@ export class RequestsIncomingView {
 			if ((request["requestingStatusId"] !== this._constants.REQUEST_STATUS_COMPLETED && request["requestingStatusId"] !== this._constants.REQUEST_STATUS_REQUESTOR_ACKNOWLEDGED && request["requestingStatusId"] !== this._constants.REQUEST_STATUS_NOT_COMPLETED))
 				return "completedAwaitingApproval"
 			else if (request["requestingStatusId"] === this._constants.REQUEST_STATUS_NOT_COMPLETED) 
-				return "notCompletedAwaitingResolution"
+				return "notCompleteAwaitingResolution"
 			else 
 				return "completed";
 		}
