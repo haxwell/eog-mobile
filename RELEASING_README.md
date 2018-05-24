@@ -5,7 +5,7 @@ Be sure
 - you have deployed to the phone and done basic testing BEFORE building this APK. If not, and it breaks, as its want to do, you'll just have to do it anyway, so...
 - all changes you want in this version are committed in both the API and the Client.
 - versions have been upped from the last time you did this.. (see #6)
-
+- you have changed the environment.ts file (in the client) to reflect the environment this build is going to (production vs staging)
 
 1.
 ionic cordova build --release android
