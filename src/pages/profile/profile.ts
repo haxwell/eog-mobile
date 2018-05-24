@@ -49,10 +49,15 @@ export class ProfilePage {
 		this._events.subscribe('profile:changedContactInfoWasSaved', (savedModel) => {
 			this.model = savedModel;
 		})
+
+		this._events.subscribe('request:accepted', (data) => {
+			if (data["request"]["directionallyOppositeUser"]["id"] === this.user["id"])
+				this.ngOnInit();
+		})
 	}
 
 	ngOnInit() {
-		this._profileService.init(this.user);
+		this._profileService.init(this.user["id"]);
 		this.model = this._profileService.getModel(this.user["id"]);
 
 		this.setCurrentUserCanSendPointToProfileUser();
