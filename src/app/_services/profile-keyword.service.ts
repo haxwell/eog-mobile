@@ -43,8 +43,10 @@ export class ProfileKeywordService {
 
 		let data = this.JSON_to_UrlEncoded(tmp, undefined, undefined);
 
+		let user = this._userService.getCurrentUser();
+
 		return new Promise((resolve, reject) => {
-			let url = environment.apiUrl + "/api/profile/keywords";
+			let url = environment.apiUrl + "/api/user/" + user["id"] + "/profile/keywords";
 			self._apiService.post(url, data)
 			.subscribe((resp) => {
 
