@@ -80,7 +80,6 @@ export class PrmModelService {
 	save(model) {
 		let self = this;
 		let data = this.JSON_to_URLEncoded(model, undefined, undefined);
-		console.log(data);
 
 		return new Promise((resolve, reject) => {
 			let url = environment.apiUrl + "/api/promises";
@@ -88,7 +87,6 @@ export class PrmModelService {
 			.subscribe((resp) => {
 				let obj = JSON.parse(resp["_body"]);
 				
-				console.log(obj);
 				self._events.publish("promise:saved", obj)
 				
 				resolve(obj);
@@ -116,7 +114,6 @@ export class PrmModelService {
 			.subscribe((resp) => {
 				let obj = JSON.parse(resp["_body"]);
 				
-				console.log(obj);
 				self._events.publish("promise:deleted", obj)
 				
 				resolve(obj);
