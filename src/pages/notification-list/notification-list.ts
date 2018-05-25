@@ -48,7 +48,7 @@ export class NotificationListPage {
 	ngOnInit() {
 		var self = this;
 		if (self.isDirty()) {
-			self._notificationService.get().then((data) => {
+			self._notificationService.get(true /* force update */ ).then((data) => {
 				self.model = data;
 			});
 		}
