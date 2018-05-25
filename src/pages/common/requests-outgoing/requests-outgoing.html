@@ -36,11 +36,11 @@
 				</button>
 
 				<ion-item-options side="left">
-					<button ion-button color="secondary" (click)="onCompleteOutgoingBtnTap(request)">Complete</button>
+					<button ion-button color="secondary" (click)="onCompleteOutgoingBtnTap(request)">Approve</button>
 					<button ion-button (click)="onViewContactInfoBtnTap(request)">View Their Profile</button>
 				</ion-item-options>
 				<ion-item-options side="right">
-					<button ion-button color="danger" (click)="onNotCompleteBtnTap(request)">Not Complete</button>
+					<button ion-button color="danger" (click)="onNotCompleteBtnTap(request)">Disapprove</button>
 				</ion-item-options>
 
 			</ion-item-sliding>
@@ -102,7 +102,7 @@
 					<button ion-button (click)="onViewContactInfoBtnTap(request)">View Their Profile</button>
 				</ion-item-options>
 				<ion-item-options side="right">
-					<button ion-button color="danger" (click)="onCancelBtnTap()">Cancel</button>
+					<button ion-button color="danger" (click)="onCancelBtnTap(request)">Cancel</button>
 				</ion-item-options>
 	  		</ion-item-sliding>
 		</ion-item-group>
