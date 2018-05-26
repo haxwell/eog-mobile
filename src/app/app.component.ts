@@ -5,6 +5,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 
 import { UserService } from './_services/user.service';
 import { WebsocketService } from './_services/websocket.service';
+import { UserPreferencesService } from './_services/user-preferences.service';
 import { UnseenChangesIndicatorService } from './_services/unseen-changes-indicator.service';
 
 import { LoginPage } from '../pages/login/login';
@@ -31,7 +32,8 @@ export class EasyahApp {
 
   constructor(platform: Platform,
               statusBar: StatusBar,
-              private websocketService: WebsocketService,
+              private websocketService: WebsocketService, // defined here so it will be initialized, but not used in this class
+              private userPreferencesService : UserPreferencesService, // defined here so it will be initialized, but not used in this class
               private _userService : UserService,
               private _menuCtrl : MenuController,
               private _alertCtrl: AlertController,
