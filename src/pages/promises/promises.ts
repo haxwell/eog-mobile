@@ -148,7 +148,7 @@ export class PrmPage {
 
 		self.loading.present();
 
-		self.callback(this.isDirty()).then(() => {
+		self.callback(self.isDirty(), self.model).then(() => {
 			self._prmModelService.save(self.model).then((newObj) => {
 				self.loading.dismiss();
 				self.navCtrl.pop();

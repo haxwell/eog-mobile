@@ -3,8 +3,8 @@
 		<profile-header id="profile-header" (click)="onShowProfile()" [user]="getUser()"></profile-header>
 		<ion-list>
       		<ion-item [ngStyle]="{'background-color':getSelectedColor('HomePage')}" (click)="onHomeClicked()">Home</ion-item>
-      		<ion-item [ngStyle]="{'background-color':getSelectedColor('RequestsIncomingView')}" (click)="onPeopleAskedYouClicked()">People asked you...</ion-item>
-      		<ion-item [ngStyle]="{'background-color':getSelectedColor('RequestsOutgoingView')}" (click)="onYouAskedPeopleClicked()">You asked people...</ion-item>
+      		<ion-item [ngStyle]="{'background-color':getSelectedColor('RequestsIncomingView')}" (click)="onPeopleAskedYouClicked()">People asked you... <ion-icon [hidden]="!areIncomingUnseenChanges()" name="bulb"></ion-icon></ion-item>
+      		<ion-item [ngStyle]="{'background-color':getSelectedColor('RequestsOutgoingView')}" (click)="onYouAskedPeopleClicked()">You asked people... <ion-icon [hidden]="!areOutgoingUnseenChanges()" name="bulb"></ion-icon></ion-item>
 
       		<profile-points></profile-points>
 
@@ -12,12 +12,11 @@
           <ion-item [ngStyle]="{'background-color':getSelectedColor('PromiseListPage')}" (click)="onYourPromisesClicked()">Your Promises</ion-item>
           <ion-item [ngStyle]="{'background-color':getSelectedColor('RecommendationListPage')}" (click)="onYourRecommendationsClicked()">Your Recommendations</ion-item>
           <ion-item [ngStyle]="{'background-color':getSelectedColor('KeywordListPage')}" (click)="onYourKeywordsClicked()">Your Keywords</ion-item>
-          <ion-item [ngStyle]="{'background-color':getSelectedColor('NotificationListPage')}" (click)="onYourNotificationsClicked()">Notifications</ion-item>
+          <ion-item [ngStyle]="{'background-color':getSelectedColor('NotificationListPage')}" (click)="onYourNotificationsClicked()">Notifications <ion-icon [hidden]="!areNotificationUnseenChanges()" name="bulb"></ion-icon></ion-item>
 
-      		<ion-item (click)="onCloseMenuClicked()">Close Menu</ion-item>
+      		<ion-item (click)="onLogoutBtnClick()">Log Out</ion-item>
     	</ion-list>
   	</ion-content>
 </ion-menu>
 
 <ion-nav #mycontent [root]="rootPage"></ion-nav>
-

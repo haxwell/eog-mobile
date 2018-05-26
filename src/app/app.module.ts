@@ -79,8 +79,17 @@ import { PrmCollectionService } from './_services/prm-collection.service';
 import { PrmMetadataService } from './_services/prm-metadata.service';
 import { PrmDetailService } from './_services/prm-detail.service';
 import { UserPreferencesService } from './_services/user-preferences.service';
+import { UnseenChangesIndicatorService } from './_services/unseen-changes-indicator.service';
 
 import { Constants } from '../_constants/constants';
+
+import { HammerGestureConfig, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
+
+export class CustomHammerConfig extends HammerGestureConfig {
+    overrides = {
+        'press': { time: 1000 }  //set press delay for 1 second
+    }
+}
 
 @NgModule({
   declarations: [
@@ -125,7 +134,6 @@ import { Constants } from '../_constants/constants';
     SearchUsersPage,
     SendPointPage,
     SendRecommendPage,
-
     KeywordEntryPage,
     ProfilePoints
   ],
@@ -179,7 +187,6 @@ import { Constants } from '../_constants/constants';
     SearchUsersPage,
     SendPointPage,
     SendRecommendPage,
-
     KeywordEntryPage,
     ProfilePoints
   ],
@@ -214,7 +221,9 @@ import { Constants } from '../_constants/constants';
     NotificationService,
     WebsocketService,
     PushMessagingService,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    UnseenChangesIndicatorService,
+    {provide: HAMMER_GESTURE_CONFIG,    useClass: CustomHammerConfig},
+    {provide: ErrorHandler,             useClass: IonicErrorHandler}
   ]
 })
 export class AppModule {}

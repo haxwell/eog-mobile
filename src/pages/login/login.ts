@@ -14,8 +14,8 @@ import { UserService } from '../../app/_services/user.service';
 })
 export class LoginPage {
 
-  user = {id:-1, name: 'eogadmin', password: 'password'};
-  //user = {id:-1, name: '', password: ''};
+//  user = {id:-1, name: 'eogadmin', password: 'password'};
+  user = {id:-1, name: '', password: ''};
   loading = undefined;
   
   constructor(public navCtrl: NavController,

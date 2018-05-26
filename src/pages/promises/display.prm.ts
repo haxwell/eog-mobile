@@ -30,6 +30,8 @@ export class PrmDisplayPage {
 	callback = undefined; // TODO: necessary?
 	requiredUserObjectsLoadedCount = 0; 
 
+	dirty = false;
+
 	constructor(public navCtrl: NavController, 
 				navParams: NavParams, 
 				private modalCtrl: ModalController,
@@ -185,6 +187,7 @@ export class PrmDisplayPage {
 		modal.present();
 	}
 
+	// this callback calls back the callback that was passed into this page initially.
 	requestCallback = (_params) => {
 		return new Promise((resolve, reject) => {
 			if (this.callback !== undefined) 
@@ -215,7 +218,15 @@ export class PrmDisplayPage {
 	}
 
 	onEditPromiseBtnClick() {
-		this.navCtrl.push(PrmPage, {prm: this.model});
-	}
+		let self = this;
 
+		let editPromiseCallback = (isDirty, prmModel) => {
+			return new Promise((resolve, reject) => {
+				self.model = prmModel;
+				resolve();
+			})
+		}
+
+		self.navCtrl.push(PrmPage, {prm: self.model, callback: editPromiseCallback});
+	}
 }

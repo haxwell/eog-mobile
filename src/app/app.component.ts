@@ -1,11 +1,11 @@
 import { Component, ViewChild } from '@angular/core';
 
-import { Platform, Nav, MenuController } from 'ionic-angular';
+import { Platform, Nav, MenuController, AlertController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 
 import { UserService } from './_services/user.service';
-import { UserPreferencesService } from './_services/user-preferences.service';
 import { WebsocketService } from './_services/websocket.service';
+import { UnseenChangesIndicatorService } from './_services/unseen-changes-indicator.service';
 
 import { LoginPage } from '../pages/login/login';
 import { HomePage } from '../pages/home/home';
@@ -25,42 +25,22 @@ export class EasyahApp {
   lastTimeBackPress = 0;
   timePeriodToExit = 750;
 
+  exitFunction = undefined;  
+
   @ViewChild(Nav) navCtrl: Nav;
 
   constructor(platform: Platform,
               statusBar: StatusBar,
               private websocketService: WebsocketService,
-              private _userPreferencesService: UserPreferencesService,
               private _userService : UserService,
-              private _menuCtrl : MenuController) {
+              private _menuCtrl : MenuController,
+              private _alertCtrl: AlertController,
+              private _uciService: UnseenChangesIndicatorService
+  ) {
 
-    //let self = this;
-
-/*
-    platform.registerBackButtonAction(() => {
-          // get current active page
-          let view = self.navCtrl.getActive();
-
-          if (view.component.name == "HomePage") {
-              // press Back twice to logout..
-              if (new Date().getTime() - self.lastTimeBackPress < self.timePeriodToExit) {
-                  self.navCtrl.pop();
-              } else {
-                  self.lastTimeBackPress = new Date().getTime();
-              }
-          } else if (view.component.name == "LoginPage") {
-              // press Back twice again to exit the app..
-              if (new Date().getTime() - self.lastTimeBackPress < self.timePeriodToExit) {
-                  platform.exitApp();
-              } else {
-                  self.lastTimeBackPress = new Date().getTime();
-              }
-          } else {
-              // go to previous page
-              self.navCtrl.pop({});
-          }
-      });
-*/
+    this.exitFunction = () => {
+      platform.exitApp();
+    }
 
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
@@ -78,7 +58,7 @@ export class EasyahApp {
   onHomeClicked() {
     var view = this.navCtrl.getActive();
     if (view.component.name != "HomePage") {
-      this.onCloseMenuClicked();
+      this._menuCtrl.close();
       this.navCtrl.push(HomePage, {});
     }
   }
@@ -86,7 +66,7 @@ export class EasyahApp {
   onShowProfile() {
     var view = this.navCtrl.getActive();
     if (view.component.name != "ProfilePage") {
-      this.onCloseMenuClicked();
+      this._menuCtrl.close();
       this.navCtrl.push(ProfilePage, {user: this._userService.getCurrentUser()});
     }
   }
@@ -94,7 +74,8 @@ export class EasyahApp {
   onYouAskedPeopleClicked() {
     var view = this.navCtrl.getActive();
     if (view.component.name != "RequestsOutgoingView") {
-      this.onCloseMenuClicked();
+      this._menuCtrl.close();
+      this._uciService.resetOutgoingUnseenChanges();
       this.navCtrl.push(RequestsOutgoingView, {});
     }
   }
@@ -102,7 +83,8 @@ export class EasyahApp {
   onPeopleAskedYouClicked() {
     var view = this.navCtrl.getActive();
     if (view.component.name != "RequestsIncomingView") {
-      this.onCloseMenuClicked();
+      this._menuCtrl.close();
+      this._uciService.resetIncomingUnseenChanges();
       this.navCtrl.push(RequestsIncomingView, {});
     }
   }
@@ -110,7 +92,7 @@ export class EasyahApp {
   onYourPromisesClicked() {
     var view = this.navCtrl.getActive();
     if (view.component.name != "PromiseListPage") {
-      this.onCloseMenuClicked();
+      this._menuCtrl.close();
       this.navCtrl.push(PromiseListPage, {});
     }
   }
@@ -118,7 +100,7 @@ export class EasyahApp {
   onYourRecommendationsClicked() {
     var view = this.navCtrl.getActive();
     if (view.component.name != "RecommendationListPage") {
-      this.onCloseMenuClicked();
+      this._menuCtrl.close();
       this.navCtrl.push(RecommendationListPage, {});
     }
   }
@@ -126,7 +108,7 @@ export class EasyahApp {
   onYourKeywordsClicked() {
     var view = this.navCtrl.getActive();
     if (view.component.name != "KeywordListPage") {
-      this.onCloseMenuClicked();
+      this._menuCtrl.close();
       this.navCtrl.push(KeywordListPage, {});
     }
   }
@@ -134,13 +116,27 @@ export class EasyahApp {
   onYourNotificationsClicked() {
     var view = this.navCtrl.getActive();
     if (view.component.name != "NotificationListPage") {
-      this.onCloseMenuClicked();
+      this._menuCtrl.close();
+      this._uciService.resetNotificationUnseenChanges();
       this.navCtrl.push(NotificationListPage, {});
     }
   }
 
-  onCloseMenuClicked() {
-    this._menuCtrl.close();
+  onLogoutBtnClick() {
+    let confirmAlert = this._alertCtrl.create({
+      title: 'Exit Easyah?',
+      message: "Sure you want to exit the app?",
+      buttons: [{
+        text: "No, I'll stay.",
+        role: 'cancel'
+      }, {
+        text: 'Yes, exit!',
+        handler: () => {
+          this.exitFunction();
+        }
+      }]
+    });
+    confirmAlert.present();
   }
 
   getSelectedColor(pageName) {
@@ -150,6 +146,18 @@ export class EasyahApp {
     } else {
       return "white"
     }
+  }
+
+  areIncomingUnseenChanges() {
+    return this._uciService.areIncomingUnseenChanges();
+  }
+
+  areOutgoingUnseenChanges() {
+    return this._uciService.areOutgoingUnseenChanges();
+  }
+
+  areNotificationUnseenChanges() {
+    return this._uciService.areNotificationUnseenChanges();
   }
 
 }
