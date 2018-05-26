@@ -145,7 +145,7 @@ export class CreateAccountPage {
 
 								let okAlert = self._alertCtrl.create({
 		            				title: 'Alright!',
-		            				subTitle: "Account Created.\n\nu: " + self.user["name"] + "\np: ..." + self.user["password"].substring(self.user["password"].length - 3) + "\n\nClick OK to sign in.",
+		            				message: "Account Created.<br/>user: " + self.user["name"] + "<br/>pw: ..." + self.user["password"].substring(self.user["password"].length - 5) + "<br/><br/>Click OK to sign in.",
 		            				buttons: [{
 		            					text: 'OK',
 		            					handler: () => {
@@ -161,7 +161,7 @@ export class CreateAccountPage {
 	            		} else {
 	            			let err = self._alertCtrl.create({
 	            				title: 'Aargh...',
-	            				subTitle: "That wasn't a valid code.......",
+	            				message: "That wasn't a valid code.......",
 	            				buttons: [{
 	            					text: 'Grr.',
 	            					handler: () => {
