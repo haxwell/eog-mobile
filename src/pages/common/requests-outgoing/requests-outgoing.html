@@ -49,7 +49,7 @@
 	<ion-list *ngIf="getPendingRequests()">
 		<ion-item-divider sticky>
 			<ion-label>
-				Waiting for other folks..
+				Awaiting a decision by others..
 			</ion-label>
 		</ion-item-divider>
 		<ion-item-group *ngFor="let request of getPendingRequests()">
@@ -80,7 +80,7 @@
 	<ion-list *ngIf="getAcceptedRequests()">
 		<ion-item-divider sticky>
 			<ion-label>
-				They Accepted!
+				They Accepted! These are in-progress
 			</ion-label>
 		</ion-item-divider>
 		<ion-item-group *ngFor="let request of getAcceptedRequests()">

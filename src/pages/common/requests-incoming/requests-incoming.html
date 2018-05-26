@@ -19,7 +19,7 @@
 	<ion-list *ngIf="getPendingRequests()">
 		<ion-item-divider sticky>
 			<ion-label>
-				Waiting for you
+				Waiting for you to accept, or decline
 			</ion-label>
 		</ion-item-divider>
 		<ion-item-group *ngFor="let request of getPendingRequests()">
@@ -140,7 +140,7 @@
 	<ion-list *ngIf="getDisputedCompletedRequests()">
 		<ion-item-divider sticky>
 			<ion-label>
-				Disputed, Completed
+				There is a dispute with these
 			</ion-label>
 		</ion-item-divider>
 		<ion-item-group *ngFor="let request of getDisputedCompletedRequests()">
