@@ -22,11 +22,11 @@ export class UnseenChangesIndicatorService {
 		}
 
 		this._events.subscribe("request:received", funcIncoming)
-		this._events.subscribe("request:accepted", funcIncoming)
+		this._events.subscribe("request:accepted", funcOutgoing)
 		this._events.subscribe("request:declined", funcOutgoing)
 		this._events.subscribe("request:completed", funcOutgoing)
 		this._events.subscribe("request:cancelled", funcOutgoing)
-		this._events.subscribe("request:completedAndApproved", funcIncoming)
+		this._events.subscribe("request:completedAndApproved", funcNotification)
 		this._events.subscribe("request:isInDispute", funcIncoming)
 		this._events.subscribe("request:inamicablyResolved", funcIncoming)
 		this._events.subscribe("recommendation:received", funcNotification)
