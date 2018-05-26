@@ -1,5 +1,5 @@
 <ion-item (click)="onViewProfile()" no-lines>
-	<ion-avatar class="uliAvatar" *ngIf="isProfileImageAvailable()" item-start>
+	<ion-avatar *ngIf="isProfileImageAvailable()" item-start>
 		<img [src]="getProfileImageFilepath()">
 	</ion-avatar>
 	<ion-avatar *ngIf="!isProfileImageAvailable()" item-start>
