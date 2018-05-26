@@ -173,8 +173,6 @@ export class WebsocketService {
 		data["message"] = dou_realname + ' approved your completion, and sent you ' + data["pointsSent"] + ' points for ' + request["prm"]["title"] + '.';
 
 		this.presentToast(data["message"]);
-
-		console.log("*** Throwing request:completedAndApproved event....")
 		this._events.publish('request:completedAndApproved', data);
 	}
 
