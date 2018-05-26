@@ -33,13 +33,13 @@ export class RecommendationService {
 
 		if (this.mapUserToArrayOfRecommendations[_userId] === undefined) {
 			this.mapUserToArrayOfRecommendations[_userId] = null;
-			this.mapUserToArrayOfRecommendations[_userId] = this.getPromiseWhichSetsArraysOfRecommendations(_userId);
+			this.mapUserToArrayOfRecommendations[_userId] = this.getPromiseWhichSetsArraysOfUserRecommendations(_userId);
 		}
 
 		return this.mapUserToArrayOfRecommendations[_userId];
 	}
 
-	getPromiseWhichSetsArraysOfRecommendations(_userId) {
+	getPromiseWhichSetsArraysOfUserRecommendations(_userId) {
 		let self = this;
 		return new Promise((resolve, reject) => {
 			let url = environment.apiUrl + "/api/user/" + _userId + "/recommendations/incoming";
@@ -65,13 +65,15 @@ export class RecommendationService {
 	getUserHasNecessaryRecommendations(_prm) {
 		let self = this;
 
+		let _userId = this._userService.getCurrentUser()["id"];
+
 		return new Promise((resolve, reject) => {
 			this.getInitializationPromiseObject().then(() => {
 				let count = 0;
 
 				self.getIncomingRecommendations().then((incomingRecommendations: Array<Object>) => {
 					_prm["requiredUserRecommendations"].map((obj) => {
-						if (incomingRecommendations.some((obj2) => { return obj2["escrowedRequestId"] === null && obj2["providingUserId"] === obj["requiredRecommendUserId"]; }))
+						if (incomingRecommendations.some((obj2) => { return obj2["escrowedRequestId"] === null && (obj2["providingUserId"] === obj["requiredRecommendUserId"] || _userId === obj["requiredRecommendUserId"]); }))
 							count++;
 					});
 
