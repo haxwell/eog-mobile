@@ -62,11 +62,34 @@
 			</ion-row>		
 	</ion-grid>
 
-
 	<ion-row *ngIf="!isCurrentUsersProfile()">
 		<div class="centered">
 			<button ion-button [disabled]="!isSendPointBtnAvailable()" (click)="onSendPointBtnTap($event)">Send Point</button>
 			<button ion-button [disabled]="!isSendRecommendBtnAvailable()" (click)="onSendRecommendationBtnTap($event)">Send Recommendation</button>
+		</div>
+	</ion-row>
+
+	<br/>
+	<ion-row *ngIf="!isCurrentUsersProfile()">
+		<div class="centered">
+			<ion-list>
+				<ion-list-header class="listHeader">
+					Profile Info
+				</ion-list-header>
+				<table>
+					<tr>
+						<td class="ptsTdElement">
+							<span class="displayBlock">{{getAllTimePointCount()}}</span> All Time Points
+						</td>
+						<td class="ptsTdElement">
+							<span class="displayBlock">{{getDisputedRequestPercentage()}}%</span> Disputed Request %
+						</td>
+						<td class="ptsTdElement">
+							<span class="displayBlock">{{getHowLongAgoForMostRecentDisputedRequest()}}</span> Most Recent Dispute
+						</td>
+					</tr>
+				</table>	
+			</ion-list>
 		</div>
 	</ion-row>
 

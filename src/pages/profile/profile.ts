@@ -13,6 +13,7 @@ import { ProfileEditPage } from './profile-edit'
 import { Constants } from '../../_constants/constants'
 
 import EXIF from 'exif-js';
+import Moment from 'moment';
 
 @Component({
   selector: 'page-profile',
@@ -162,5 +163,31 @@ export class ProfilePage {
 		EXIF.getData(evt.target, function() {
 			self.imageOrientation = EXIF.getTag(this, "Orientation");
 		});
+	}
+
+	getAllTimePointCount() {
+		let val = this._profileService.getModel(this.user["id"])["allTimePointCount"];
+		if (val === undefined) 
+			return 0;
+		else
+			return val;
+	}
+
+	getDisputedRequestPercentage() {
+		let drc = this._profileService.getModel(this.user["id"])["disputedRequestCount"];
+		let rc = this._profileService.getModel(this.user["id"])["requestCount"];
+
+		if (drc === undefined || rc === undefined || drc === 0)
+			return 0;
+		else
+			return (drc / rc) * 100;
+	}
+
+	getHowLongAgoForMostRecentDisputedRequest() {
+		let val = this._profileService.getModel(this.user["id"])["mostRecentDisputedRequestTimestamp"]
+		if (val === undefined)
+			return "Never";
+		else
+			return Moment(val).fromNow();
 	}
 }

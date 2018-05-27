@@ -72,6 +72,10 @@ export class ProfileService {
 			model["instagramUrl"] = obj["instagramUrl"] || undefined;
 			model["githubUrl"] = obj["githubUrl"] || undefined;
 			model["linkedinUrl"] = obj["linkedinUrl"] || undefined;
+
+			model["requestCount"] = obj["requestCount"];
+			model["disputedRequestCount"] = obj["disputedRequestCount"];
+			model["mostRecentDisputedRequestTimestamp"] = obj["mostRecentDisputedRequestTimestamp"] || undefined;
 		});
 
 		if (model["imageFileURI"] === undefined) {
