@@ -113,7 +113,8 @@ export class CreateAccountPage {
 	      title: "What's in the text?",
 	      inputs: [{
 	      	name: 'code',
-	      	placeholder: '..code from text msg..'
+	      	placeholder: '..code from text msg..',
+	      	type: 'number'
 	      }],
 	      buttons: [{
 	        text: 'Cancel',
