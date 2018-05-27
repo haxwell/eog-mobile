@@ -48,6 +48,7 @@ export class RequestsOutgoingView {
 		this._events.subscribe('request:cancelled', func);
 		this._events.subscribe('request:declined', func);
 		this._events.subscribe('request:deleted', func);
+		this._events.subscribe('request:inamicablyResolved', func);
 	}
 
 	getTrack(request) {

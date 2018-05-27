@@ -6,6 +6,8 @@ import { RequestsService } 	from '../../../../app/_services/requests.service';
 import { ApiService } 	from '../../../../app/_services/api.service';
 import { environment } from '../../../../_environments/environment';
 
+import { Constants } from '../../../../_constants/constants';
+
 @Component({
   selector: 'page-requests-incoming-complete',
   templateUrl: 'complete.request.html'
@@ -22,7 +24,8 @@ export class CompleteRequestPage {
 				public params: NavParams,
 				private viewCtrl: ViewController, 
 				private _requestsService: RequestsService,
-				private _apiService: ApiService) {
+				private _apiService: ApiService,
+				private _constants : Constants) {
 		this.request = params.get('request');
 	}
 
@@ -37,6 +40,10 @@ export class CompleteRequestPage {
 
 	isSaveBtnEnabled() {
 		return this.confirmationString.toLowerCase() === 'complete';
+	}
+
+	isRequestInDispute() {
+		return this.request["deliveringStatusId"] === this._constants.REQUEST_STATUS_COMPLETED;
 	}
 
 	getSelectedRequestAgainDelayId() {
