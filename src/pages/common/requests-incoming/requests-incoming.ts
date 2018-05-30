@@ -42,6 +42,7 @@ export class RequestsIncomingView {
 
 		_events.subscribe('request:received', func);
 		_events.subscribe('request:cancelled', func);
+		_events.subscribe('request:notYetAccepted:cancelledByRequestor', func);
 		_events.subscribe('request:completedAndApproved', func);
 		_events.subscribe('request:isInDispute', func);
 		_events.subscribe('request:inamicablyResolved', func);
@@ -107,6 +108,9 @@ export class RequestsIncomingView {
 		if (!rtn) {
 			len = this.model.length;
 			len -= this.getNumberOfMatchingElements((obj) => { 
+						return obj["deliveringStatusId"] === this._constants.REQUEST_STATUS_PENDING && obj["requestingStatusId"] === this._constants.REQUEST_STATUS_CANCELLED;
+					});
+			len -= this.getNumberOfMatchingElements((obj) => { 
 						return obj["deliveringStatusId"] === this._constants.REQUEST_STATUS_CANCELLED && obj["requestingStatusId"] === null;
 					});
 			len -= this.getNumberOfMatchingElements((obj) => { 
@@ -145,7 +149,16 @@ export class RequestsIncomingView {
 	}
 
 	getPendingRequests() {
-		return this.filterModelByDeliveringStatus(this._constants.REQUEST_STATUS_PENDING);
+		let rtn = this.filterModelByDeliveringStatus(this._constants.REQUEST_STATUS_PENDING); 
+		
+		if (rtn) {
+			rtn = rtn.filter((obj) => { return obj["requestingStatusId"] !== this._constants.REQUEST_STATUS_CANCELLED; });
+		}
+
+		if (rtn)
+			return rtn.length > 0 ? rtn : undefined
+		else
+			return undefined;
 	}
 
 	getCompletedPendingApprovalRequests() {

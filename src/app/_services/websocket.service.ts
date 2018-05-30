@@ -68,6 +68,8 @@ export class WebsocketService {
 				this.handleRequestCompleted(data); 
 			} else if (request["deliveringStatusId"] === this._constants.REQUEST_STATUS_CANCELLED && request["requestingStatusId"] === null) {
 				this.handleRequestCancelled(data);
+			} else if (request["deliveringStatusId"] !== this._constants.REQUEST_STATUS_ACCEPTED && request["requestingStatusId"] === this._constants.REQUEST_STATUS_CANCELLED) {
+				this.handleIncomingAndAsYetNotAcceptedRequestCancelled(data);
 			} else if (request["deliveringStatusId"] === this._constants.REQUEST_STATUS_COMPLETED && request["requestingStatusId"] === this._constants.REQUEST_STATUS_COMPLETED) {
 				this.handleRequestCompletedAndApproved(data); 
 			} else if (request["deliveringStatusId"] === this._constants.REQUEST_STATUS_COMPLETED && request["requestingStatusId"] === this._constants.REQUEST_STATUS_NOT_COMPLETED) {
@@ -154,6 +156,16 @@ export class WebsocketService {
 
 		this.presentToast(data["message"]);
 		this._events.publish('request:completed', data);
+	}
+
+	handleIncomingAndAsYetNotAcceptedRequestCancelled(data) {
+		//let request = data["request"];
+		//let dou_realname = request["directionallyOppositeUser"]["realname"];
+
+		//data["message"] = dou_realname + ' just cancelled their as-yet-unaccepted request to you, ' + request["prm"]["title"];
+
+		//this.presentToast(data["message"]);
+		this._events.publish('request:notYetAccepted:cancelledByRequestor', data);
 	}
 
 	handleRequestCancelled(data) {
