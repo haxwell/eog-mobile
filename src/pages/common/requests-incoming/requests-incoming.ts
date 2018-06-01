@@ -43,6 +43,7 @@ export class RequestsIncomingView {
 		_events.subscribe('request:received', func);
 		_events.subscribe('request:cancelled', func);
 		_events.subscribe('request:notYetAccepted:cancelledByRequestor', func);
+		_events.subscribe('request:accepted:cancelledByRequestor', func);
 		_events.subscribe('request:completedAndApproved', func);
 		_events.subscribe('request:isInDispute', func);
 		_events.subscribe('request:inamicablyResolved', func);
@@ -108,6 +109,9 @@ export class RequestsIncomingView {
 		if (!rtn) {
 			len = this.model.length;
 			len -= this.getNumberOfMatchingElements((obj) => { 
+						return obj["deliveringStatusId"] === this._constants.REQUEST_STATUS_ACCEPTED && obj["requestingStatusId"] === this._constants.REQUEST_STATUS_CANCELLED;
+					});
+			len -= this.getNumberOfMatchingElements((obj) => { 
 						return obj["deliveringStatusId"] === this._constants.REQUEST_STATUS_PENDING && obj["requestingStatusId"] === this._constants.REQUEST_STATUS_CANCELLED;
 					});
 			len -= this.getNumberOfMatchingElements((obj) => { 
@@ -133,7 +137,15 @@ export class RequestsIncomingView {
 	}
 
 	getAcceptedRequests() {
-		return this.filterModelByDeliveringStatus(this._constants.REQUEST_STATUS_ACCEPTED);
+		let self = this;
+		let requests = this.filterModelByDeliveringStatus(this._constants.REQUEST_STATUS_ACCEPTED);
+		
+		if (requests !== undefined) {
+			let rtn = requests.filter((obj) => { return obj["requestingStatusId"] !== self._constants.REQUEST_STATUS_CANCELLED; });
+			return rtn.length > 0 ? rtn : undefined // there is a refactor to be had here.. this logic is used several times..
+		}
+		else
+			return undefined;
 	}
 
 	getDeclinedRequests() {
@@ -145,7 +157,7 @@ export class RequestsIncomingView {
 			return rtn.length > 0 ? rtn : undefined // there is a refactor to be had here.. this logic is used several times..
 		}
 		else
-			return requests;
+			return undefined;
 	}
 
 	getPendingRequests() {

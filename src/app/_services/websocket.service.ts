@@ -57,11 +57,18 @@ export class WebsocketService {
 			delete data["directionallyOppositeUser"];
 
 			let request = this._requestsService.changePromiseAttributeToPrm(data["request"]); 
+			
+			console.log("websocket.service received notice of a REQUEST event")
+			console.log(JSON.stringify(request))
 
 			if (request["deliveringStatusId"] === this._constants.REQUEST_STATUS_PENDING && request["requestingStatusId"] === null) {
 				this.handleRequestReceived(data)
+			} else if (request["deliveringStatusId"] === this._constants.REQUEST_STATUS_PENDING && request["requestingStatusId"] === this._constants.REQUEST_STATUS_CANCELLED) {
+				this.handlePendingRequestCanceled(data);
 			} else if (request["deliveringStatusId"] === this._constants.REQUEST_STATUS_ACCEPTED && request["requestingStatusId"] === null) {
 				this.handleRequestAccepted(data);
+			} else if (request["deliveringStatusId"] === this._constants.REQUEST_STATUS_ACCEPTED && request["requestingStatusId"] === this._constants.REQUEST_STATUS_CANCELLED) {
+				this.handlePreviouslyAcceptedRequestCancelledByRequestor(data);
 			} else if (request["deliveringStatusId"] === this._constants.REQUEST_STATUS_DECLINED && request["requestingStatusId"] === null) {
 				this.handleRequestDeclined(data);
 			} else if (request["deliveringStatusId"] === this._constants.REQUEST_STATUS_COMPLETED && request["requestingStatusId"] === null) {
@@ -119,6 +126,16 @@ export class WebsocketService {
 		this._events.publish('request:received', data);
 	}
 
+	handlePendingRequestCanceled(data) {
+		let request = data["request"];
+		let dou_realname = request["directionallyOppositeUser"]["realname"];
+
+		data["message"] = dou_realname + ' cancelled their request for your Promise, ' + request["prm"]["title"] + ', before you got to act on it.';
+
+		this.presentToast(data["message"]);
+		this._events.publish('outgoing:request:cancelled', data);
+	}
+
 	handleRequestAccepted(data) {
 		let request = data["request"];
 		let dou_realname = request["directionallyOppositeUser"]["realname"];
@@ -127,6 +144,24 @@ export class WebsocketService {
 
 		this.presentToast(data["message"]);
 		this._events.publish('request:accepted', data);
+	}
+
+	handlePreviouslyAcceptedRequestCancelledByRequestor(data) {
+		let request = data["request"];
+		let dou_realname = request["directionallyOppositeUser"]["realname"];
+
+		data["message"] = dou_realname + ' just cancelled a request that you had accepted (' + request["prm"]["title"] + '). ';
+		if (data["pointsSent"]) {
+			data["message"] += 'You got ' + data["pointsSent"] + ' point';
+
+			if (data["pointsSent"] * 1 > 1)
+				data["message"] += 's.';
+			else
+				data["message"] += '.';
+		}
+
+		this.presentToast(data["message"]);
+		this._events.publish('request:accepted:cancelledByRequestor', data);
 	}
 
 	handleRequestDeclined(data) {
@@ -203,8 +238,14 @@ export class WebsocketService {
 		let dou_realname = request["directionallyOppositeUser"]["realname"];
 
 		data["message"] = dou_realname + ' inamicably resolved the request, ' + request["prm"]["title"] + '. It is done. ';
-		if (data["pointsSent"])
-			data["message"] += 'You got ' + data["pointsSent"] + ' points.';
+		if (data["pointsSent"]) {
+			data["message"] += 'You got ' + data["pointsSent"] + ' point';
+
+			if (data["pointsSent"] * 1 > 1)
+				data["message"] += 's.';
+			else
+				data["message"] += '.';
+		}
 
 		this.presentToast(data["message"]);
 		this._events.publish('request:inamicablyResolved', data);
