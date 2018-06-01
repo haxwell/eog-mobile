@@ -28,7 +28,7 @@
 					<ion-input type="text" (ionChange)="onEmailChange($event)" [value]="getModelAttr('email')" required></ion-input>
 				</ion-item>
 				<ion-item>
-					<ion-label color="primary" stacked>Username (that you will use to log in here)</ion-label>	
+					<ion-label color="primary" stacked>Username (that you will use to log in here, no spaces)</ion-label>	
 					<ion-input type="text" (ionChange)="onNameChange($event)" [value]="getModelAttr('name')" required></ion-input>
 				</ion-item>
 				<ion-item>
@@ -36,7 +36,7 @@
 					<ion-input type="password" (ionChange)="onPasswordChange($event)" [value]="getModelAttr('password')" required></ion-input>
 				</ion-item>
 				<ion-item>
-					<ion-label color="primary" stacked>Username that referred you? (Optional)</ion-label>					
+					<ion-label color="primary" stacked>Did someone refer you? What's their username? (Optional)</ion-label>
 					<ion-input type="text" (ionChange)="onReferringUsernameChange($event)" [value]="getReferringUsername()" required></ion-input>
 				</ion-item>
 				<ion-row>

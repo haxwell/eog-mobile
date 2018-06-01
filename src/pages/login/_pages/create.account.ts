@@ -71,7 +71,8 @@ export class CreateAccountPage {
 	}
 
 	isSaveBtnEnabled() {
-		return 	this.user["email"].length > 3 && 
+		return 	this.user["email"].length > 5 && 
+				this.user["realname"].length > 2 && 
 				this.user["name"].length > 2 && 
 				this.user["password"].length > 5 &&
 				this.user["phone"].length === 10 &&
@@ -80,6 +81,23 @@ export class CreateAccountPage {
 
 	onOKBtnTap(evt) {
 		let self = this;
+
+		if (this.user["name"].lastIndexOf(' ') > -1) {
+			let alert = this._alertCtrl.create({
+				title: 'Doh!',
+				message: "Usernames cannot have spaces in them.",
+				buttons: [
+					{
+						text: 'OK', role: 'cancel', handler: () => {
+							// do nothing
+						}
+					}
+				]
+			})
+
+			alert.present();
+			return;			
+		}
 
 		self._userService.isUsernameAvailable(self.user["name"]).then((isUsernameAvailable) => {
 			if (isUsernameAvailable) {
@@ -107,7 +125,7 @@ export class CreateAccountPage {
 				}
 			} else {
 				let alert = this._alertCtrl.create({
-					title: 'Dangit!',
+					title: 'Doh!',
 					message: "Sorry, that username is already taken :(",
 					buttons: [
 						{
