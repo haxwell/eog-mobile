@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { NavController, NavParams, ViewController } from 'ionic-angular';
+import { NavController, NavParams, ViewController, Events } from 'ionic-angular';
 
 import { RequestsService } 	from '../../../../app/_services/requests.service';
 
@@ -19,7 +19,8 @@ export class CancelOutgoingRequestPage {
 	constructor(public navCtrl: NavController, 
 				public params: NavParams,
 				private viewCtrl: ViewController, 
-				private _requestsService: RequestsService) {
+				private _requestsService: RequestsService,
+				private _events : Events) {
 		this.request = params.get('request');
 	}
 
@@ -32,9 +33,10 @@ export class CancelOutgoingRequestPage {
 	}
 
 	onSaveBtnTap(evt) {
-		this._requestsService.cancelOutgoingRequest(this.request).then((obj) => {
-			console.log(obj);
-			this.viewCtrl.dismiss();			
+		let self = this;
+		self._requestsService.cancelOutgoingRequest(this.request).then((obj) => {
+			self._events.publish("outgoing:request:cancelled", undefined);
+			self.viewCtrl.dismiss();
 		})
 	}
 
