@@ -62,6 +62,23 @@ export class UserService {
 		this.tutorialHasBeenShown = b;
 	}
 
+	isUsernameAvailable(username) {
+		let self = this;
+		let url = environment.apiUrl + "/api/users/isUsernameAvailable?q=" + username;
+
+		self.promise = new Promise(
+			(resolve, reject) => {
+				this._apiService.getUnsecuredAPI(url, '').subscribe(
+					(data) => {
+						resolve(JSON.parse(data["_body"]));
+					}, (err) => {
+						reject(err);
+					})
+			});
+
+		return self.promise;
+	}
+
 	verifyAndLoginUser(username, password) {
 		let self = this;
 		let url = environment.apiUrl + "/api/verifyCredentials";

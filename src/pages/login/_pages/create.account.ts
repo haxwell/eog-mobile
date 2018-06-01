@@ -81,28 +81,46 @@ export class CreateAccountPage {
 	onOKBtnTap(evt) {
 		let self = this;
 
-		if (!self.codeAlreadySent) {
-			let alert = this._alertCtrl.create({
-				title: 'Ready for a text?',
-				message: "We're gonna send a text to your phone at " + self.user["phone"] + ". Okay?",
-				buttons: [
-					{
-						text: 'No', role: 'cancel', handler: () => {
-							// do nothing
-						},
-					}, {
-						text: 'Yes', handler: () => {
-	           				self._userService.sendCodeToPhoneNumber(self.user["phone"]);
-		            		self.codeAlreadySent = true;
-		            		self.onOKBtnTap2(evt);
-		            	}
-		            }]
-		        });
+		self._userService.isUsernameAvailable(self.user["name"]).then((isUsernameAvailable) => {
+			if (isUsernameAvailable) {
+				if (!self.codeAlreadySent) {
+					let alert = this._alertCtrl.create({
+						title: 'Ready for a text?',
+						message: "We're gonna send a text to your phone at " + self.user["phone"] + ". Okay?",
+						buttons: [
+							{
+								text: 'No', role: 'cancel', handler: () => {
+									// do nothing
+								},
+							}, {
+								text: 'Yes', handler: () => {
+			           				self._userService.sendCodeToPhoneNumber(self.user["phone"]);
+				            		self.codeAlreadySent = true;
+				            		self.onOKBtnTap2(evt);
+				            	}
+				            }]
+				        });
 
-	        alert.present();
-		} else {
-			self.onOKBtnTap2(evt);
-		}
+			        alert.present();
+				} else {
+					self.onOKBtnTap2(evt);
+				}
+			} else {
+				let alert = this._alertCtrl.create({
+					title: 'Dangit!',
+					message: "Sorry, that username is already taken :(",
+					buttons: [
+						{
+							text: 'OK', role: 'cancel', handler: () => {
+								// do nothing
+							}
+						}
+					]
+				})
+
+				alert.present();
+			}
+		})
 	}
 
 
