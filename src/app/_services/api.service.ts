@@ -34,6 +34,11 @@ export class ApiService {
 		return this._http.get(url, {headers: headers});
 	}
 
+	getUnsecuredAPI(url: string, data: string) {
+		//let headers: Headers = new Headers();
+		return this._http.get(url, data);
+	}
+
 	post(url: string, data: string) {
 		let user = this.currentUser;
 
