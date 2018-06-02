@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="io.easyah.mobileapp" version="0.0.9" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="io.easyah.mobileapp" version="0.0.10" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Easyah</name>
-    <description>Easyah makes pay-it-forward collaborative.</description>
+    <description>Easyah makes it easier for people to collaborate on big ideas.</description>
     <author email="johnathan@jj-ccs.com" href="">Johnathan E. James</author>
     <content src="index.html" />
     <access origin="*" />
@@ -90,5 +90,5 @@
     <plugin name="phonegap-plugin-push" spec="^2.1.0">
         <variable name="FCM_VERSION" value="11.0.1" />
     </plugin>
-    <engine name="android" spec="~7.1.0" />
+    <engine name="android" spec="7.1.0" />
 </widget>
