@@ -1,45 +1,49 @@
-<ion-header>
+<ion-header no-border>
 	<ion-navbar>
-		<ion-title>
-			Welcome!
-		</ion-title>
+		<ion-buttons end *ngIf="showSkip">
+			<button ion-button (click)="startApp()" color="primary">Exit Tutorial</button>
+		</ion-buttons>
 	</ion-navbar>
 </ion-header>
 
-<ion-content padding>
-	<ion-row *ngIf="isCurrentStep(1)">
-Easyah is your gateway to a network of people, doing their part to improve their corner of the world.<br/><br/>
+<ion-content no-bounce>
+	<ion-slides #slides (ionSlideWillChange)="onSlideChangeStart($event)" pager>
+		<ion-slide>
+			Easyah makes it easier to collaborate with other people on big ideas. It uses the concept of paying-it-forward to make it work.<br/><br/>
 
-Quickly, there are three things you need to understand to use Easyah.<br/><br/>
+			This is an early TEST version, so let me know your thoughts at info@easyah.io!<br/><br/>
 
-<ul>
-	<li><b>Dreams</b> / These are tasks that you want to accomplish.<br/><br/></li>
-	<li><b>Promises</b> / These are offers you make to do something for someone.<br/><br/></li>
-	<li><b>Points</b> / These allow one person to ask another person to fulfill a promise they made.<br/><br/></li>
-</ul>
+			<img id="login-logo-img" src="assets/img/logo.jpg">
+		</ion-slide>
+		<ion-slide>
+			Quickly, there are a three concepts you need to understand to use Easyah.<br/><br/><br/>
 
-So, in a nutshell, you define your Dreams, and then you search for Promises by other users who can help you. These Promises will require points. When you have earned enough points, you can make a request for a person to fulfill the Promise they made, for you.
-<br/><br/>
-	</ion-row>
+			<b>Promises</b><br/> ..Offers you make to do something for someone.<br/><br/>
+			<b>Points</b><br/>..Increase your ability to request a Promise from someone else. You receive Points from other users, when they appreciate something you did, either one at a time (slooow), or in bunches when you fulfill a promise (faster).<br/><br/>
+			<b>Recommendations</b><br/> ..Let others know where your points came from. Some promises will require a recommendation before they can be requested.<br/><br/>
+		</ion-slide>
+		<ion-slide>
+			As you might expect, you can search for..<br/><br/>
 
-	<ion-row *ngIf="isCurrentStep(2)">
-<span>Sometimes, instead of asking people to fulfill a promise for you, you will need to be the person making and fulfilling Promises for other people. <b>This is the primary way you will receive points.</b> When you fulfill your Promise, you get a number of points in return. You decide how many that is.<br/><br/></span>
+			<b>people</b>, to send them points, or give them your recommendation,<br/><br/>
+			or<br/>
+			<b>people's promises</b>, to request them, if you have the points!<br/><br/>
 
-So, Easyah, is like life!<br/><br/> Sometimes you are doing things for other people, sometimes they are doing things for you. If you do both of those here on Easyah, you will be helping our mission: to make Good Things(tm) happen.<br/><br/>
+			<br/>TIP! Try searching for 'First Time User'.<br/><br/>
+		</ion-slide>
+		<ion-slide>
+			To get started, click on the menu button in the upper left.<br/><br/> There will be a menu option, <b>Your Promises</b>. Select this option to create your Promises.<br/><br/> 
 
-Join us online, in our Facebook group! Search for 'easyah.io'.<br/><br/>
+			Join us online, in our Facebook group! Search for 'easyah.io'.<br/><br/>
 
-To get started now, 
-<ul>
-	<li>Click on your contact info at the top of the screen to go to your Profile. From there, you can create your Promises, and Dreams.</li>
-	<li>Or, you may want to search for other people, and see their Promises and Dreams. Search by tapping the magnifying glass in the upper right corner of the home page.</li>
-</ul>
-<br/><br/>
-	</ion-row>
+			<ion-checkbox [(ngModel)]="showThisTutorialNextTime" (ionChange)="showThisTutorialNextTimeChanged()"></ion-checkbox>
+			<ion-label>Show This Tutorial Next Time</ion-label>
+			<br/>
 
-	<ion-row>
-		<button ion-button *ngIf="getCurrentStep() === 2" (click)="onExitBtnTap($event)">Exit</button>
-		<button ion-button *ngIf="getCurrentStep() === 2" (click)="onDoNotShowAgainBtnTap($event)">Do Not Show Tutorial Again</button>
-		<button ion-button *ngIf="getCurrentStep() === 1" (click)="onNextBtnTap($event)">Next &gt;</button>
-	</ion-row>
+			<button ion-button icon-end large clear (click)="startApp()">
+				Continue
+				<ion-icon name="arrow-forward"></ion-icon>
+			</button>				
+		</ion-slide>
+	</ion-slides>
 </ion-content>	

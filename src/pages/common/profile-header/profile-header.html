@@ -1,43 +1,26 @@
-
-<table>
-	<tr>
-		<td>
-			<ion-item *ngIf="isThumbnailImageAvailable()">
-				<ion-thumbnail item-start >
-					<img class="rotate90" [src]="getThumbnailImage()" alt="profile_image" (press)="onThumbnailPress($event)">
-				</ion-thumbnail>
+<ion-grid>
+	<ion-row>
+		<ion-col col-auto>
+			<ion-item *ngIf="isThumbnailImageAvailable() && !isFromGallery()">
+				<ion-avatar item-start >
+					<img id="profileAvatarImg" [class]="getAvatarCSSClassString()" [src]="getThumbnailImage()" alt="profile_image" (load)="loaded($event)" (press)="onThumbnailPress($event)">
+				</ion-avatar>
+			</ion-item>
+			<ion-item *ngIf="isThumbnailImageAvailable() && isFromGallery()">
+				<ion-avatar item-start >
+					<img id="profileAvatarImg" [class]="getAvatarCSSClassString()" [src]="getThumbnailImage()" alt="profile_image" (load)="loaded($event)" (press)="onThumbnailPress($event)">
+				</ion-avatar>
 			</ion-item>
 			<ion-item *ngIf="!isThumbnailImageAvailable()">
-				<ion-thumbnail item-start >
-					<img src="assets/img/mushroom.jpg" (press)="onThumbnailPress($event)">
-				</ion-thumbnail>
+				<ion-avatar item-start >
+					<img id="profileAvatarImg" src="assets/img/mushroom.jpg" (press)="onThumbnailPress($event)">
+				</ion-avatar>
 			</ion-item>
-		</td>
-		<td>
-			<div *ngIf="isReadOnly()">
-				Name: {{getModelAttr('realname')}}<br/>
-				<span *ngIf="isCurrentUserAllowedToSeeContactInfo()">Email: {{getModelAttr('email')}}<br/>Phone: {{getModelAttr('phone')}}</span>
-			</div>
-			<div *ngIf="!isReadOnly()">
-				<table>
-					<tr>
-						<ion-item>
-							<ion-input type="text" placeholder="Name" (ionChange)="onNameChange($event)" [value]="getModelAttr('realname')" required></ion-input>
-						</ion-item>
-					</tr>
-					<tr>
-						<ion-item *ngIf="isCurrentUserAllowedToSeeContactInfo()">
-							<ion-input type="text" placeholder="you@domain.com" (ionChange)="onEmailChange($event)" [value]="getModelAttr('email')" required></ion-input>
-						</ion-item>
-					</tr>
-					<tr>
-						<ion-item *ngIf="isCurrentUserAllowedToSeeContactInfo()">
-							<ion-input type="text" placeholder="# " (ionChange)="onPhoneChange($event)" [value]="getModelAttr('phone')" required></ion-input>
-						</ion-item >
-					</tr>
-
-				</table>
-			</div>
-		</td>
-	</tr>
-</table>
+		</ion-col>
+		<ion-col col-auto>
+			<span class="profile_header__text">{{getModelAttr('realname')}}</span><br/>
+			<hr/>
+			<span class="profile_header__desc1">{{getModelAttr('description')}}</span>
+		</ion-col>
+	</ion-row>
+</ion-grid>

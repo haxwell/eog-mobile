@@ -6,7 +6,6 @@ import { ApiService } from '../../../app/_services/api.service';
 import { PointsService } from '../../../app/_services/points.service';
 import { ProfilePictureService } from '../../../app/_services/profile-picture.service';
 import { RecommendationService } from '../../../app/_services/recommendation.service';
-import { NotificationService } from '../../../pages/profile/_services/notification.service'
 
 import { environment } from '../../../_environments/environment';
 
@@ -14,37 +13,35 @@ import { environment } from '../../../_environments/environment';
 export class ProfileService {
 
 	modelCache = {};
-	mostProbableProfilePhotoPath = "file:///data/data/io.easyah.mobileapp/cache/eogAppProfilePic";
+	mostProbableProfilePhotoPath = {};  		// "file:///data/data/io.easyah.mobileapp/cache/eogAppProfilePic";
 
 	constructor(private _apiService: ApiService, 
 				private _userService: UserService, 
 				private _pointsService: PointsService,
 				private _recommendationService: RecommendationService,
-				private _notificationService: NotificationService,
 				private _profilePictureService: ProfilePictureService,
 				private _events: Events) {
 
 				}
 
-	init(user) {
+	init(userId) {
 		this._recommendationService.init();
 		this._pointsService.init();
-		this._notificationService.init();
-		this._profilePictureService.reset(user["id"]);
+		this._profilePictureService.reset(userId);
 
-		this.modelCache[user["id"]] = undefined;
+		this.modelCache[userId] = undefined;
 	}
 
-	getModel(user) {
-		if (this.modelCache[user["id"]] === undefined) {
-			this.modelCache[user["id"]] = {};
-			return this.initModel(user, this.modelCache[user["id"]]);
+	getModel(userId) {
+		if (this.modelCache[userId] === undefined) {
+			this.modelCache[userId] = {};
+			return this.initModel(userId, this.modelCache[userId]);
 		} else { 
-			return this.modelCache[user["id"]];
+			return this.modelCache[userId];
 		}
 	}
 
-	initModel(user, model) {
+	initModel(userId, model) {
 
 		let self = this;
 
@@ -52,46 +49,50 @@ export class ProfileService {
 		this._recommendationService.init();
 		this._profilePictureService.init()
 
-		model["realname"] = user["realname"];
-		model["phone"] = user["phone"];
-		model["email"] = user["email"];
 		model["points"] = {"total" : 0, "available": 0};
 
-		let url = environment.apiUrl + "/api/user/" + user["id"] + "/profile";
+		this._userService.getUser(userId, true /* force an API call */).then((userObj) => {
+			model["realname"] = userObj["realname"];
+			model["phone"] = userObj["phone"];
+			model["email"] = userObj["email"];
+		});
+
+		let url = environment.apiUrl + "/api/user/" + userId + "/profile";
 		this._apiService.get(url).subscribe((data) => {
 			let obj = JSON.parse(data["_body"]);
 			
-			if (obj[0] === undefined)
-				model["allTimePointCount"] = 0;
-			else 
-				model["allTimePointCount"] = obj[0]["allTimePointCount"];
+			model["allTimePointCount"] = obj["allTimePointCount"];
+			model["description"] = obj["description"];
+
+			model["keywords"] = obj["keywords"];
+			model["keywords"].sort((a, b) => { let aText = a.text.toLowerCase(); let bText = b.text.toLowerCase(); if (aText > bText) return 1; else if (aText < bText) return -1; else return 0; })
+
+			model["facebookUrl"] = obj["facebookUrl"] || undefined;
+			model["youtubeUrl"] = obj["youtubeUrl"] || undefined;
+			model["instagramUrl"] = obj["instagramUrl"] || undefined;
+			model["githubUrl"] = obj["githubUrl"] || undefined;
+			model["linkedinUrl"] = obj["linkedinUrl"] || undefined;
+
+			model["requestCount"] = obj["requestCount"];
+			model["disputedRequestCount"] = obj["disputedRequestCount"];
+			model["mostRecentDisputedRequestTimestamp"] = obj["mostRecentDisputedRequestTimestamp"] || undefined;
 		});
 
 		if (model["imageFileURI"] === undefined) {
-			this._profilePictureService.get(user["id"], this.getMostProbableProfilePhotoPath() + user["id"]).then((filename) => {
+			this._profilePictureService.get(userId, this.getMostProbableProfilePhotoPath(userId)).then((filename) => {
 				model["imageFileSource"] = 'eog';
 				model["imageFileURI"] = filename;
 				model["imageFileURI_OriginalValue"] = filename;
 			})
-  		}
+  		} 
 
-		url = environment.apiUrl + "/api/user/" + user["id"] + "/keywords";
-		this._apiService.get(url).subscribe((keywordsObj) => {
-			model["keywords"] = JSON.parse(keywordsObj["_body"]);
-			model["keywords"].sort((a, b) => { let aText = a.text.toLowerCase(); let bText = b.text.toLowerCase(); if (aText > bText) return 1; else if (aText < bText) return -1; else return 0; })
-		});
-
-		url = environment.apiUrl + "/api/user/" + user["id"] + "/dreams";
-		this._apiService.get(url).subscribe((dreamsObj) => {
-			model["dreams"] = JSON.parse(dreamsObj["_body"]);
-			model["dreams"].sort((a, b) => { let aText = a.title.toLowerCase(); let bText = b.title.toLowerCase(); if (aText > bText) return 1; else if (aText < bText) return -1; else return 0; })
-		});
-
-		url = environment.apiUrl + "/api/user/" + user["id"] + "/promises";
+  		// TODO --- REMOVE THIS. Its In Prm-Service now ---
+		url = environment.apiUrl + "/api/user/" + userId + "/promises";
 		this._apiService.get(url).subscribe((prmsObj) => {
 			model["prms"] = JSON.parse(prmsObj["_body"]);
 			model["prms"].sort((a, b) => { let aText = a.title.toLowerCase(); let bText = b.title.toLowerCase(); if (aText > bText) return 1; else if (aText < bText) return -1; else return 0; })
 		});
+		// END TODO
 
 		this._pointsService.getCurrentAvailableUserPoints().then((pts) => {
 			model["points"]["available"] = pts;
@@ -102,34 +103,19 @@ export class ProfileService {
 		});
 
 		let currentUser = this._userService.getCurrentUser();
-		if (currentUser["id"] === user["id"])
+		if (currentUser["id"] === userId)
 			model["currentUserCanSeeContactInfo"] = true;
 		else {
-			url = environment.apiUrl + "/api/user/" + user["id"] + "/requests/inprogress/user/" + currentUser["id"];
+			url = environment.apiUrl + "/api/user/" + userId + "/requests/inprogress/user/" + currentUser["id"];
 			this._apiService.get(url).subscribe((prmsObj) => {
-				model["currentUserCanSeeContactInfo"] = JSON.parse(prmsObj["_body"]).length > 0;
+				var b = JSON.parse(prmsObj["_body"]).length > 0;
+				model["currentUserCanSeeContactInfo"] = b;
 			});
 		}
 		
-		this._recommendationService.getIncomingRecommendations(user).then((obj: Array<Object>) => {
-			model["incomingRecommendations"] = obj;
-			model["availableIncomingRecommendations"] = obj.filter((obj) => { return obj["escrowedRequestId"] === null });
-			model["availableIncomingRecommendations"].map((rec) => { 
-				self._userService.getUser(rec["providingUserId"]).then((user) => {
-					rec["userInfo"] = user;
-				});
-			});
+		this._recommendationService.getOutgoingRecommendations().then((obj) => {
+			model["outgoingRecommendations"] = obj;
 		});
-
-		//if (!readOnly) {
-			this._recommendationService.getOutgoingRecommendations().then((obj) => {
-				model["outgoingRecommendations"] = obj;
-			});
-
-			this._notificationService.get().then((obj) => {
-				model["notifications"] = obj;
-			});
-		//}
 
 		return model;
 	}
@@ -145,10 +131,15 @@ export class ProfileService {
 		tmp["phone"] = model["phone"];
 		tmp["email"] = model["email"];
 		tmp["keywords"] = model["keywords"];
+		tmp["description"] = model["description"];
 
-		//let profileImageData = this.JSON_to_URLEncoded({base64ImageData: model["base64Image"]}, undefined, undefined);
+		tmp["facebookUrl"] = model["facebookUrl"];
+		tmp["youtubeUrl"] = model["youtubeUrl"];
+		tmp["instagramUrl"] = model["instagramUrl"];
+		tmp["githubUrl"] = model["githubUrl"];
+		tmp["linkedinUrl"] = model["linkedinUrl"];
 
-		let data = this.JSON_to_URLEncoded(tmp, undefined, undefined);
+		let data = this.JSON_to_UrlEncoded(tmp, undefined, undefined);
 		console.log(data);
 
 		let self = this;
@@ -159,22 +150,25 @@ export class ProfileService {
 				console.log(JSON.parse(resp["_body"]));
 
 				let userUpdateFunc = () => {
-					// force refresh of current user in the userService
-					// TODO: Make the userService do this itself, perhaps with events.
-					self._userService.getUser(user["id"], true).then((userObj) => {
-						userObj["password"] = user["password"];
-						self._userService.setCurrentUser(userObj);
+					this._events.publish('profile:changedContactInfoWasSaved', model);
 
-						this._events.publish('profile:changedContactInfoWasSaved', model);
-
-						resolve(JSON.parse(resp["_body"]));					
-					});
+					self.init(user["id"]);
+					resolve(JSON.parse(resp["_body"]));					
 				}
 
 				if (self.isProfileImageChanged(model)) {
 					self._profilePictureService.save(user["id"], model["imageFileURI"]).then((data) => {
+						self.init(user["id"]);
 						userUpdateFunc();
 					});
+
+					// TODO: Add a catch here, what if the saving of the picture fails? Need to throw that up
+					//  the chain so that whatever is calling this can update the UI, let the user know whatever.
+					//  As a reminder, the impetus for this, I was uploading a file that turned out to be too big
+					//  and caused a 500 error on the server. ProfilePictureService caught the error, logged it,
+					//  and called the reject() method on the promise, but this code doesn't recognize the reject()ion
+					//  and leaves the "Uploading..." spinner in place, waiting for a response that's never coming.
+
 				} else
 					userUpdateFunc();
 			});
@@ -185,11 +179,11 @@ export class ProfileService {
 		return model["imageFileURI_OriginalValue"] != model["imageFileURI"];
 	}
 
-	JSON_to_URLEncoded(element,key,list){
+	JSON_to_UrlEncoded(element,key,list){
   		var list = list || [];
   		if(typeof(element)=='object'){
     		for (var idx in element)
-      			this.JSON_to_URLEncoded(element[idx],key?key+'['+idx+']':idx,list);
+      			this.JSON_to_UrlEncoded(element[idx],key?key+'['+idx+']':idx,list);
   		} else {
     		list.push(key+'='+encodeURIComponent(element));
   		}
@@ -197,12 +191,15 @@ export class ProfileService {
   		return list.join('&');
 	}
 
-	setMostProbableProfilePhotoPath(str) {
-		this.mostProbableProfilePhotoPath = str;
+	setMostProbableProfilePhotoPath(userId, str) {
+		this.mostProbableProfilePhotoPath[userId] = str;
 	}
 
-	getMostProbableProfilePhotoPath() {
-		return this.mostProbableProfilePhotoPath;
+	getMostProbableProfilePhotoPath(userId) {
+		if (this.mostProbableProfilePhotoPath[userId] === undefined)
+			this.mostProbableProfilePhotoPath[userId] = "file:///data/data/io.easyah.mobileapp/cache/eogAppProfilePic" + userId;
+
+		return this.mostProbableProfilePhotoPath[userId];
 	}
 
 }

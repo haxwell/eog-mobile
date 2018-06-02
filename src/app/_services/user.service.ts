@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Events } from 'ionic-angular';
 
-import { LocalStorageService } from 'angular-2-local-storage';
-
 import { ApiService } from './api.service';
 import { environment } from '../../_environments/environment';
 
@@ -13,15 +11,20 @@ export class UserService {
 	usersPromise = {};
 	isCurrentUserDirty = false;
 	tutorialHasBeenShown = undefined;
+	currentUser = undefined;
 
-	constructor(private _apiService: ApiService, private _localStorageService: LocalStorageService, private _events: Events) {
+	constructor(private _apiService: ApiService, private _events: Events) {
 		this._events.subscribe('profile:changedContactInfoWasSaved', (newProfile) => { 
-			let curr = this.getCurrentUser();
+			let curr = this.currentUser;
 			this.getUser(curr["id"], true).then((user) => {
 				user["password"] = curr["password"]; // Something unsafe about that... hmmm.
-				this.setCurrentUser(user);
+				this.currentUser = user;
 			});
 		});
+
+		this._events.subscribe('app:login', (currentUser) => {
+			this.currentUser = currentUser;
+		})
 	}
 
 	getUser(userId, force?: boolean) {
@@ -48,11 +51,7 @@ export class UserService {
 	}
 
 	getCurrentUser() {
-		return this._localStorageService.get('user');
-	}
-
-	setCurrentUser(user) {
-		this._localStorageService.set('user', user);
+		return this.currentUser;
 	}
 
 	getTutorialHasBeenShown() {
@@ -61,6 +60,23 @@ export class UserService {
 
 	setTutorialHasBeenShown(b) {
 		this.tutorialHasBeenShown = b;
+	}
+
+	isUsernameAvailable(username) {
+		let self = this;
+		let url = environment.apiUrl + "/api/users/isUsernameAvailable?q=" + username;
+
+		self.promise = new Promise(
+			(resolve, reject) => {
+				this._apiService.getUnsecuredAPI(url, '').subscribe(
+					(data) => {
+						resolve(JSON.parse(data["_body"]));
+					}, (err) => {
+						reject(err);
+					})
+			});
+
+		return self.promise;
 	}
 
 	verifyAndLoginUser(username, password) {
@@ -168,23 +184,32 @@ export class UserService {
 	}
 
 	setShowTutorialOnLogin(b) {
-		let url = environment.apiUrl + "/api/user/" + this.getCurrentUser()["id"] + "/preferences/showTutorialOnLogin";
-		let data = "value=" + (b === true);
+		if (this.currentUser) {
+			let url = environment.apiUrl + "/api/user/" + this.currentUser["id"] + "/preferences/showTutorialOnLogin";
+			let data = "value=" + (b === true);
 
-		return new Promise((resolve, reject) => {
-			this._apiService.post(url, data).subscribe(
-				(val) => { resolve(val); }
-			)
-		});
+			return new Promise((resolve, reject) => {
+				this._apiService.post(url, data).subscribe(
+					(val) => { resolve(val); }
+				)
+			});
+		} else {
+			console.error("setting a user specific property before the user has been set.")
+		}
+
 	}
 
 	getShowTutorialOnLogin() {
-		let url = environment.apiUrl + "/api/user/" + this.getCurrentUser()["id"] + "/preferences/showTutorialOnLogin";
+		if (this.currentUser) {
+			let url = environment.apiUrl + "/api/user/" + this.currentUser["id"] + "/preferences/showTutorialOnLogin";
 
-		return new Promise((resolve, reject) => {
-			this._apiService.get(url).subscribe(
-				(val) => { resolve(val["_body"] === '' || val["_body"] === 'true' ); }
-			)
-		});
+			return new Promise((resolve, reject) => {
+				this._apiService.get(url).subscribe(
+					(val) => { resolve(val["_body"] === '' || val["_body"] === 'true' ); }
+				)
+			});
+		} else {
+			return false;
+		}
 	}
 }

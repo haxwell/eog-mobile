@@ -71,7 +71,8 @@ export class CreateAccountPage {
 	}
 
 	isSaveBtnEnabled() {
-		return 	this.user["email"].length > 3 && 
+		return 	this.user["email"].length > 5 && 
+				this.user["realname"].length > 2 && 
 				this.user["name"].length > 2 && 
 				this.user["password"].length > 5 &&
 				this.user["phone"].length === 10 &&
@@ -81,28 +82,63 @@ export class CreateAccountPage {
 	onOKBtnTap(evt) {
 		let self = this;
 
-		if (!self.codeAlreadySent) {
+		if (this.user["name"].lastIndexOf(' ') > -1) {
 			let alert = this._alertCtrl.create({
-				title: 'Ready for a text?',
-				message: "We're gonna send a text to your phone at " + self.user["phone"] + ". Okay?",
+				title: 'Doh!',
+				message: "Usernames cannot have spaces in them.",
 				buttons: [
 					{
-						text: 'No', role: 'cancel', handler: () => {
+						text: 'OK', role: 'cancel', handler: () => {
 							// do nothing
-						},
-					}, {
-						text: 'Yes', handler: () => {
-	           				self._userService.sendCodeToPhoneNumber(self.user["phone"]);
-		            		self.codeAlreadySent = true;
-		            		self.onOKBtnTap2(evt);
-		            	}
-		            }]
-		        });
+						}
+					}
+				]
+			})
 
-	        alert.present();
-		} else {
-			self.onOKBtnTap2(evt);
+			alert.present();
+			return;			
 		}
+
+		self._userService.isUsernameAvailable(self.user["name"]).then((isUsernameAvailable) => {
+			if (isUsernameAvailable) {
+				if (!self.codeAlreadySent) {
+					let alert = this._alertCtrl.create({
+						title: 'Ready for a text?',
+						message: "We're gonna send a text to your phone at " + self.user["phone"] + ". Okay?",
+						buttons: [
+							{
+								text: 'No', role: 'cancel', handler: () => {
+									// do nothing
+								},
+							}, {
+								text: 'Yes', handler: () => {
+			           				self._userService.sendCodeToPhoneNumber(self.user["phone"]);
+				            		self.codeAlreadySent = true;
+				            		self.onOKBtnTap2(evt);
+				            	}
+				            }]
+				        });
+
+			        alert.present();
+				} else {
+					self.onOKBtnTap2(evt);
+				}
+			} else {
+				let alert = this._alertCtrl.create({
+					title: 'Doh!',
+					message: "Sorry, that username is already taken :(",
+					buttons: [
+						{
+							text: 'OK', role: 'cancel', handler: () => {
+								// do nothing
+							}
+						}
+					]
+				})
+
+				alert.present();
+			}
+		})
 	}
 
 
@@ -113,7 +149,8 @@ export class CreateAccountPage {
 	      title: "What's in the text?",
 	      inputs: [{
 	      	name: 'code',
-	      	placeholder: '..code from text msg..'
+	      	placeholder: '..code from text msg..',
+	      	type: 'number'
 	      }],
 	      buttons: [{
 	        text: 'Cancel',
@@ -145,7 +182,7 @@ export class CreateAccountPage {
 
 								let okAlert = self._alertCtrl.create({
 		            				title: 'Alright!',
-		            				subTitle: "Account Created.\n\nu: " + self.user["name"] + "\np: ..." + self.user["password"].substring(self.user["password"].length - 3) + "\n\nClick OK to sign in.",
+		            				message: "Account Created.<br/>user: " + self.user["name"] + "<br/>pw: ..." + self.user["password"].substring(self.user["password"].length - 5) + "<br/><br/>Click OK to sign in.",
 		            				buttons: [{
 		            					text: 'OK',
 		            					handler: () => {
@@ -161,7 +198,7 @@ export class CreateAccountPage {
 	            		} else {
 	            			let err = self._alertCtrl.create({
 	            				title: 'Aargh...',
-	            				subTitle: "That wasn't a valid code.......",
+	            				message: "That wasn't a valid code.......",
 	            				buttons: [{
 	            					text: 'Grr.',
 	            					handler: () => {

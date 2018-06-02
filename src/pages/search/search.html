@@ -1,33 +1,67 @@
-	<ion-header>
-	<ion-navbar>
-		<ion-title>
-			Search Promises
-		</ion-title>
-	</ion-navbar>
+<ion-header>
+	<easyah-header></easyah-header>
 </ion-header>
 
 <ion-content padding>
-	<ion-row>
-		<ion-input type="text" placeholder="Search" [(ngModel)]="searchString" #ctrl="ngModel" required></ion-input>
-		<button ion-button icon-only (click)="onSearchBtnTap($event)">
-			<ion-icon name="search"></ion-icon>
-		</button>
-	</ion-row>
 
-	<ion-card *ngFor="let promise of resultList" (click)="showPromiseDetail(promise)">
-		<ion-card-header>
-			<ion-icon [ngStyle]="{'color':getAlreadyRequestedIconColor(promise)}" name="megaphone"> </ion-icon>
-			<ion-icon [ngStyle]="{'color':getSufficientPointsIconColor(promise)}" name="pricetag"></ion-icon>
-			<ion-icon *ngIf="hasPrmBeenPreviouslyRequested(promise)" [ngStyle]="{'color':getSufficientTimeIconColor(promise)}" name="clock"></ion-icon>
-			<ion-icon *ngIf="areRecommendationsRequired(promise)" [ngStyle]="{'color':getNecessaryRecommendationsIconColor(promise)}" name="people"></ion-icon>
-			<br/>
-			<b>{{promise.title}}</b>
-			<br/>
-			{{promise.directionallyOppositeUser.realname}}
-		</ion-card-header>
-		<ion-card-content>
-			{{promise.description}}
-		</ion-card-content>
-	</ion-card>
+		<!-- ion-row>
+			<ion-input type="text" class="searchQueryField" (ionChange)="onQueryChanged($event)" [value]="getSearchQuery()"></ion-input>
+			<button (click)="onSearchBtnTap()">Search</button>
+		</ion-row -->
+		<ion-list #searchPrmResultList>
+				<ion-item-divider sticky>
+					<ion-label>
+						Promise Results
+					</ion-label>
+				</ion-item-divider>
+
+			<ion-item-group *ngFor="let prm of getPromiseResults()">
+
+				<ion-item-sliding #slidingItem [attr.track]="getTrackPrm(prm)" (click)="onViewPromise(prm)">
+					<button ion-item>
+						<ion-avatar *ngIf="!isPromiseImageAvailable()" item-start>
+							<img src="assets/img/mushroom.jpg">
+						</ion-avatar>
+						<ion-avatar *ngIf="isPromiseImageAvailable()" item-start>
+							<img [src]="getPromiseImageFilepath()">
+						</ion-avatar>
+
+						<ion-icon [ngStyle]="{'color':getAlreadyRequestedIconColor(prm)}" name="megaphone"> </ion-icon>
+						<ion-icon [ngStyle]="{'color':getSufficientPointsIconColor(prm)}" name="pricetag"></ion-icon>
+						<ion-icon *ngIf="hasPrmBeenPreviouslyRequested(prm)" [ngStyle]="{'color':getSufficientTimeIconColor(prm)}" name="clock"></ion-icon>
+						<ion-icon *ngIf="areRecommendationsRequired(prm)" [ngStyle]="{'color':getNecessaryRecommendationsIconColor(prm)}" name="people"></ion-icon>
+
+						<span class="prmTitle">{{prm.title}}</span>
+						<span class="prmDesc">{{prm.description}}</span>
+					</button>
+
+				</ion-item-sliding>
+			</ion-item-group>
+		</ion-list>
+
+		<ion-list #searchUserResultList>
+				<ion-item-divider sticky>
+					<ion-label>
+						User Results
+					</ion-label>
+				</ion-item-divider>
+
+			<ion-item-group *ngFor="let user of getUsersResults()">
+
+				<ion-item-sliding #slidingItem [attr.track]="getTrackUser(user)" (click)="onViewUser(user)">
+					<button ion-item>
+						<ion-avatar *ngIf="isProfileImageAvailable(user)" item-start>
+							<img [src]="getProfileImageFilepath(user)">
+						</ion-avatar>
+						<ion-avatar *ngIf="!isProfileImageAvailable(user)" item-start>
+							<img src="assets/img/mushroom.jpg">
+						</ion-avatar>
+
+						<span class="userRealname">{{user.realname}}</span>
+					</button>
+
+				</ion-item-sliding>
+			</ion-item-group>
+		</ion-list>
 
 </ion-content>

@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Events } from 'ionic-angular';
 
 import { UserService } from '../../../app/_services/user.service';
 import { ApiService } from '../../../app/_services/api.service';
@@ -6,9 +7,13 @@ import { ApiService } from '../../../app/_services/api.service';
 import { environment } from '../../../_environments/environment';
 
 @Injectable()
-export class PrmService {
+export class PrmModelService {
 	
-	constructor(private _apiService: ApiService, private _userService: UserService) { }
+	constructor(private _apiService: ApiService, private _userService: UserService,
+				private _events: Events
+	) {
+
+	}
 
 	getDefaultModel() { 
 		let user = this._userService.getCurrentUser();
@@ -73,15 +78,18 @@ export class PrmService {
 	}
 
 	save(model) {
+		let self = this;
 		let data = this.JSON_to_URLEncoded(model, undefined, undefined);
-		console.log(data);
 
 		return new Promise((resolve, reject) => {
 			let url = environment.apiUrl + "/api/promises";
 			this._apiService.post(url, data)
 			.subscribe((resp) => {
-				console.log(JSON.parse(resp["_body"]));
-				resolve(JSON.parse(resp["_body"]));
+				let obj = JSON.parse(resp["_body"]);
+				
+				self._events.publish("promise:saved", obj)
+				
+				resolve(obj);
 			});
 		});
 	}
@@ -99,12 +107,16 @@ export class PrmService {
 	}
 
 	delete(model) {
+		let self = this;
 		return new Promise((resolve, reject) => {
 			let url = environment.apiUrl + "/api/promises/" + model["id"];
 			this._apiService.delete(url)
 			.subscribe((resp) => {
-				console.log(JSON.parse(resp["_body"]));
-				resolve(JSON.parse(resp["_body"]));
+				let obj = JSON.parse(resp["_body"]);
+				
+				self._events.publish("promise:deleted", obj)
+				
+				resolve(obj);
 			});
 		});	
 	}

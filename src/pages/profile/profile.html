@@ -1,137 +1,132 @@
 <ion-header>
-	<ion-navbar>
-		<ion-title *ngIf="isReadOnly()">
-			View Another's Profile
-		</ion-title>
-		<ion-title *ngIf="!isReadOnly()">
-			Edit Your Profile
-		</ion-title>
-	</ion-navbar>
+	<easyah-header></easyah-header>
 </ion-header>
 
 <ion-content padding>
-	<ion-card>
-		<ion-card-header>
-			Contact Info
-		</ion-card-header>
-		<ion-card-content>
-			<profile-header [user]="getUser()" [readOnly]="isReadOnly()"></profile-header>
-		</ion-card-content>
-	</ion-card>
-	<ion-row *ngIf="isReadOnly()">
-		<button ion-button [disabled]="!isSendPointBtnAvailable()" (click)="onSendPointBtnTap($event)">Send Point</button>
-		<button ion-button [disabled]="!isSendRecommendBtnAvailable()" (click)="onSendRecommendationBtnTap($event)">Send Recommendation</button>
-	</ion-row>
-	<ion-row [class]="getKeywordsCardClass()">
-		<ion-card>
-			<ion-card-header>
-				Profile Keywords
-				<button *ngIf="!isReadOnly()" ion-button icon-only small color="danger" (click)="onModifyKeywordBtnTap($event)"><ion-icon name="add"></ion-icon></button>								
-			</ion-card-header>
-			<ion-card-content>
-				<span *ngIf="userHasNoKeywords() && !isReadOnly()">
-					Keywords are descriptive words and phrases. Add some to describe you!
-				</span>
-				<span *ngIf="userHasNoKeywords() && isReadOnly()">
-					This user has not defined any keywords yet.
-				</span>
-				<span class="blockItem" *ngFor="let item of model.keywords" (press)="onIndividualKeywordPress(item)">
-					{{item.text}}
-				</span>
-			</ion-card-content>
-		</ion-card>
-	</ion-row>	
-	<ion-row *ngIf="!isReadOnly() && model.points" [class]="getPointsCardClass()">
-		<ion-card>
-			<ion-card-header>
-				Points
-			</ion-card-header>
-			<ion-card-content>
-				<ion-item>
-					Total: 
-					<ion-badge item-end>{{model.points.total}}</ion-badge>
+
+	<ion-grid >
+			<ion-row >
+				<ion-item no-lines>
+					<button ion-button (click)="onGoBackBtnTap($event)">Go Back</button>
+					<button *ngIf="isCurrentUsersProfile()" round ion-button item-right (click)="onEditProfileBtnClick($event)"><ion-icon class="whiteText profileIcon" name="create"></ion-icon></button>
 				</ion-item>
-				<ion-item>
-					Available:
-					<ion-badge item-end>{{model.points.available}}</ion-badge>
+			</ion-row>
+
+			<ion-row>
+				<ion-item *ngIf="isThumbnailImageAvailable() && !isFromGallery()">
+					<ion-avatar >
+						<img id="profileAvatarImg" [hidden]="!isThumbnailImageVisible()" [class]="getAvatarCSSClassString()" [src]="getThumbnailImage()" (load)="loaded($event)" alt="profile_image" >
+					</ion-avatar>
 				</ion-item>
-				<ion-item>
-					All Time:
-					<ion-badge item-end>{{model.allTimePointCount}}</ion-badge>
+				<ion-item *ngIf="isThumbnailImageAvailable() && isFromGallery()">
+					<ion-avatar >
+						<img id="profileAvatarImg" [hidden]="!isThumbnailImageVisible()" [class]="getAvatarCSSClassString()" [src]="getThumbnailImage()" (load)="loaded($event)" alt="profile_image" >
+					</ion-avatar>
 				</ion-item>
-			</ion-card-content>
-		</ion-card>
-	</ion-row>
-	<ion-row [class]="getRecommendationsCardClass()">
-		<ion-card>
-			<ion-card-header>
-				Recommendations
-			</ion-card-header>
-			<ion-card-content>
-				<div *ngIf="areIncomingRecommendationsAvailable()">
-					<span class="blockItem" *ngFor="let item of getAvailableIncomingRecommendations()">
-						{{getRealName(item)}}
-					</span>
+				<ion-item *ngIf="!isThumbnailImageAvailable()">
+					<ion-avatar>
+						<img id="profileAvatarImg" class="centered" src="assets/img/mushroom.jpg" >
+					</ion-avatar>
+				</ion-item>
+			</ion-row>
+
+			<ion-row>
+				<div class="centered">
+					<span class="cornfieldBlueColor profileName">{{getModelAttr('realname')}}</span>
+					<br/>
+					<span class="cornfieldBlueColor profileDescription">{{getModelAttr('description')}}</span>
 				</div>
-				<span *ngIf="!areIncomingRecommendationsAvailable()">No Available Recommendations</span>				
-			</ion-card-content>
-		</ion-card>
-	</ion-row>	
-	<ion-row [class]="getDreamsCardClass()">
-		<ion-card>
-			<ion-card-header>
-				Dreams
-				<button *ngIf="!isReadOnly()" ion-button icon-only small color="danger" (click)="onNewDreamBtnTap($event)"><ion-icon name="add"></ion-icon></button>
-			</ion-card-header>
-			<ion-card-content>
-				<span *ngIf="userHasNoDreams() && !isReadOnly()">
-					Where do you see yourself tomorrow? Add a dream here!
-				</span>
-				<span *ngIf="userHasNoDreams() && isReadOnly()">
-					This user has not added any dreams yet!
-				</span>
-				<span class="blockItem" *ngFor="let item of model.dreams" (click)="onDreamBtnTap(item)">
-					{{item.title}}
-				</span>
-			</ion-card-content>
-		</ion-card>
-	</ion-row>	
-	<ion-row [class]="getPromisesCardClass()">
-		<ion-card>
-			<ion-card-header>
-				Promises
-				<button *ngIf="!isReadOnly()" ion-button icon-only small color="danger" (click)="onNewPromiseBtnTap($event)"><ion-icon name="add"></ion-icon></button>				
-			</ion-card-header>
-			<ion-card-content>
-				<span *ngIf="userHasNoPromises() && !isReadOnly()">
-					Got some thing you do well? Make a promise to do it!
-				</span>
-				<span *ngIf="userHasNoPromises() && isReadOnly()">
-					This user has not added any Promises yet!
-				</span>
-				<span class="blockItem" *ngFor="let item of model.prms" (click)="onPromiseBtnTap(item)">
-					{{item.title}}
-				</span>
-			</ion-card-content>
-		</ion-card>
-	</ion-row>	
-	<ion-row *ngIf="!isReadOnly()" [class]="getNotificationsCardClass()">
-		<ion-card>
-			<ion-card-header>
-				Notifications 
-				<span *ngIf="!userHasNoNotifications()" class="blockItem" (press)="onNotificationClearAllBtnPress(item)">
-					Press Here to Clear All
-				</span>
-			</ion-card-header>
-			<ion-card-content>
-				<span *ngIf="userHasNoNotifications()">
-					No notifications.. go make something happen!
-				</span>
-				<span *ngFor="let item of getNotifications()" (press)="onNotificationPress(item)">
-					<i>{{item.howLongAgo}}</i> - {{item.message}}<br/>
-				</span>
-			</ion-card-content>
-		</ion-card>
-	</ion-row>	
+			</ion-row>			
+			<ion-row>
+				<br/>
+			</ion-row>
+			<ion-row *ngIf="isCurrentUserAllowedToSeeContactInfo()">
+				<table class="centered">
+					<tr>
+						<td>
+							<ion-icon class="cornfieldBlueColor profileIcon" name="phone-portrait"></ion-icon>
+						</td>
+						<td [ngStyle]="{'padding':'0 0 0 1.5em'}">
+							<span class="cornfieldBlueColor">{{getModelAttr('phone')}}</span>
+						</td>
+						<td [ngStyle]="{'padding':'0 1.5em 0 1.5em'}">
+						</td>
+						<td>
+							<ion-icon class="cornfieldBlueColor profileIcon" name="mail"></ion-icon>
+						</td>
+						<td [ngStyle]="{'padding':'0 0 0 1.5em'}">
+							<span class="cornfieldBlueColor">{{getModelAttr('email')}}</span>
+						</td>
+					</tr>
+				</table>
+			</ion-row>		
+	</ion-grid>
+
+	<ion-row *ngIf="!isCurrentUsersProfile()">
+		<div class="centered">
+			<button ion-button [disabled]="!isSendPointBtnAvailable()" (click)="onSendPointBtnTap($event)">Send Point</button>
+			<button ion-button [disabled]="!isSendRecommendBtnAvailable()" (click)="onSendRecommendationBtnTap($event)">Send Recommendation</button>
+		</div>
+	</ion-row>
+
+	<br/>
+	<ion-row *ngIf="!isCurrentUsersProfile()">
+		<div class="centered">
+			<ion-list>
+				<ion-list-header class="listHeader">
+					Profile Info
+				</ion-list-header>
+				<table>
+					<tr>
+						<td class="ptsTdElement">
+							<span class="displayBlock">{{getAllTimePointCount()}}</span> All Time Points
+						</td>
+						<td class="ptsTdElement">
+							<span class="displayBlock">{{getDisputedRequestPercentage()}}%</span> Disputed Request %
+						</td>
+						<td class="ptsTdElement">
+							<span class="displayBlock">{{getHowLongAgoForMostRecentDisputedRequest()}}</span> Most Recent Dispute
+						</td>
+					</tr>
+				</table>	
+			</ion-list>
+		</div>
+	</ion-row>
+
+	<div [ngStyle]="{'padding-top':'2em'}">
+	</div>
+
+	<div *ngIf="isCurrentUserAllowedToSeeContactInfo()">
+		<ion-row>
+			<ion-item>
+				<img class="socialNetworkImg" src="assets/img/facebook-logo-active.png">
+				<span >{{getSocialMediaURL('facebook')}}</span>
+			</ion-item>
+		</ion-row>
+		<ion-row>
+			<ion-item>
+			<img class="socialNetworkImg" src="assets/img/linkedin-logo-active.png">
+			<span >{{getSocialMediaURL('linkedin')}}</span>
+			</ion-item>
+		</ion-row>
+		<ion-row>
+			<ion-item>
+				<img class="socialNetworkImg" src="assets/img/youtube-logo-active.png">
+				<span >{{getSocialMediaURL('youtube')}}</span>
+			</ion-item>		
+		</ion-row>
+		<ion-row>
+			<ion-item>
+				<img class="socialNetworkImg" src="assets/img/instagram-logo-active.png">
+				<span >{{getSocialMediaURL('instagram')}}</span>
+			</ion-item>				
+		</ion-row>
+		<ion-row>
+			<ion-item>		
+				<img class="socialNetworkImg" src="assets/img/github-logo-active.png">
+				<span >{{getSocialMediaURL('github')}}</span>
+			</ion-item>		
+		</ion-row>
+	</div>
 
 </ion-content>

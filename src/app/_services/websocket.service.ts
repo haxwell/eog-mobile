@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import { ToastController } from 'ionic-angular';
 import { Events } from 'ionic-angular';
 
-import { UserService } from '../../app/_services/user.service';
 import { RequestsService } from '../../app/_services/requests.service';
 import { DeclineReasonCodeService } from '../../app/_services/declined-reason-codes.service';
 
@@ -17,17 +16,17 @@ export class WebsocketService {
 
 	client = undefined;
 
-	constructor(private _userService: UserService,
-				private _requestsService: RequestsService,
+	constructor(private _requestsService: RequestsService,
 				private _declineReasonCodeService: DeclineReasonCodeService,
 				private toastCtrl: ToastController,
 				private _constants: Constants,
 				public _events: Events) { 
 
+				this._events.subscribe('app:login', (currentUser) => { this.init(currentUser); })
 	}
 
-	init() {
-		let user = this._userService.getCurrentUser();
+	init(currentUser) {
+		let user = currentUser;
 		let self = this;
 		if (self.client !== undefined) {
 			self.client.disconnect(() => { self.client = undefined; });
@@ -58,23 +57,36 @@ export class WebsocketService {
 			delete data["directionallyOppositeUser"];
 
 			let request = this._requestsService.changePromiseAttributeToPrm(data["request"]); 
+			
+			console.log("websocket.service received notice of a REQUEST event")
+			console.log(JSON.stringify(request))
 
 			if (request["deliveringStatusId"] === this._constants.REQUEST_STATUS_PENDING && request["requestingStatusId"] === null) {
 				this.handleRequestReceived(data)
+			} else if (request["deliveringStatusId"] === this._constants.REQUEST_STATUS_PENDING && request["requestingStatusId"] === this._constants.REQUEST_STATUS_CANCELLED) {
+				this.handlePendingRequestCanceled(data);
 			} else if (request["deliveringStatusId"] === this._constants.REQUEST_STATUS_ACCEPTED && request["requestingStatusId"] === null) {
 				this.handleRequestAccepted(data);
+			} else if (request["deliveringStatusId"] === this._constants.REQUEST_STATUS_ACCEPTED && request["requestingStatusId"] === this._constants.REQUEST_STATUS_CANCELLED) {
+				this.handlePreviouslyAcceptedRequestCancelledByRequestor(data);
 			} else if (request["deliveringStatusId"] === this._constants.REQUEST_STATUS_DECLINED && request["requestingStatusId"] === null) {
 				this.handleRequestDeclined(data);
 			} else if (request["deliveringStatusId"] === this._constants.REQUEST_STATUS_COMPLETED && request["requestingStatusId"] === null) {
 				this.handleRequestCompleted(data); 
 			} else if (request["deliveringStatusId"] === this._constants.REQUEST_STATUS_CANCELLED && request["requestingStatusId"] === null) {
 				this.handleRequestCancelled(data);
+			} else if (request["deliveringStatusId"] !== this._constants.REQUEST_STATUS_ACCEPTED && request["requestingStatusId"] === this._constants.REQUEST_STATUS_CANCELLED) {
+				this.handleIncomingAndAsYetNotAcceptedRequestCancelled(data);
 			} else if (request["deliveringStatusId"] === this._constants.REQUEST_STATUS_COMPLETED && request["requestingStatusId"] === this._constants.REQUEST_STATUS_COMPLETED) {
 				this.handleRequestCompletedAndApproved(data); 
 			} else if (request["deliveringStatusId"] === this._constants.REQUEST_STATUS_COMPLETED && request["requestingStatusId"] === this._constants.REQUEST_STATUS_NOT_COMPLETED) {
 				this.handleRequestIsInDispute(data); 
 			} else if (request["deliveringStatusId"] === this._constants.REQUEST_STATUS_RESOLVED_BUT_DISPUTED && request["requestingStatusId"] === this._constants.REQUEST_STATUS_NOT_COMPLETED) {
 				this.handleRequestWasInamicablyResolved(data);
+			} else if (request["deliveringStatusId"] === this._constants.REQUEST_STATUS_DECLINED && request["requestingStatusId"] === this._constants.REQUEST_STATUS_REQUESTOR_ACKNOWLEDGED) {
+				this.handleDeclinedRequestWasAcknowledged(data);
+			} else if (request["deliveringStatusId"] === this._constants.REQUEST_STATUS_CANCELLED && request["requestingStatusId"] === this._constants.REQUEST_STATUS_REQUESTOR_ACKNOWLEDGED) {
+				this.handleCancelledRequestWasAcknowledged(data);
 			}
 
 			else if (request["deliveringStatusId"] === this._constants.REQUEST_STATUS_DELETED) {
@@ -114,6 +126,16 @@ export class WebsocketService {
 		this._events.publish('request:received', data);
 	}
 
+	handlePendingRequestCanceled(data) {
+		let request = data["request"];
+		let dou_realname = request["directionallyOppositeUser"]["realname"];
+
+		data["message"] = dou_realname + ' cancelled their request for your Promise, ' + request["prm"]["title"] + ', before you got to act on it.';
+
+		this.presentToast(data["message"]);
+		this._events.publish('outgoing:request:cancelled', data);
+	}
+
 	handleRequestAccepted(data) {
 		let request = data["request"];
 		let dou_realname = request["directionallyOppositeUser"]["realname"];
@@ -122,6 +144,24 @@ export class WebsocketService {
 
 		this.presentToast(data["message"]);
 		this._events.publish('request:accepted', data);
+	}
+
+	handlePreviouslyAcceptedRequestCancelledByRequestor(data) {
+		let request = data["request"];
+		let dou_realname = request["directionallyOppositeUser"]["realname"];
+
+		data["message"] = dou_realname + ' just cancelled a request that you had accepted (' + request["prm"]["title"] + '). ';
+		if (data["pointsSent"]) {
+			data["message"] += 'You got ' + data["pointsSent"] + ' point';
+
+			if (data["pointsSent"] * 1 > 1)
+				data["message"] += 's.';
+			else
+				data["message"] += '.';
+		}
+
+		this.presentToast(data["message"]);
+		this._events.publish('request:accepted:cancelledByRequestor', data);
 	}
 
 	handleRequestDeclined(data) {
@@ -151,6 +191,16 @@ export class WebsocketService {
 
 		this.presentToast(data["message"]);
 		this._events.publish('request:completed', data);
+	}
+
+	handleIncomingAndAsYetNotAcceptedRequestCancelled(data) {
+		//let request = data["request"];
+		//let dou_realname = request["directionallyOppositeUser"]["realname"];
+
+		//data["message"] = dou_realname + ' just cancelled their as-yet-unaccepted request to you, ' + request["prm"]["title"];
+
+		//this.presentToast(data["message"]);
+		this._events.publish('request:notYetAccepted:cancelledByRequestor', data);
 	}
 
 	handleRequestCancelled(data) {
@@ -187,7 +237,15 @@ export class WebsocketService {
 		let request = data["request"];
 		let dou_realname = request["directionallyOppositeUser"]["realname"];
 
-		data["message"] = dou_realname + ' inamicably resolved the request, ' + request["prm"]["title"] + '. You got ' + data["pointsSent"] + ' points.';
+		data["message"] = dou_realname + ' inamicably resolved the request, ' + request["prm"]["title"] + '. It is done. ';
+		if (data["pointsSent"]) {
+			data["message"] += 'You got ' + data["pointsSent"] + ' point';
+
+			if (data["pointsSent"] * 1 > 1)
+				data["message"] += 's.';
+			else
+				data["message"] += '.';
+		}
 
 		this.presentToast(data["message"]);
 		this._events.publish('request:inamicablyResolved', data);
@@ -221,5 +279,13 @@ export class WebsocketService {
 
 		this.presentToast(data["message"]);
 		this._events.publish('points:received', data);
+	}
+
+	handleDeclinedRequestWasAcknowledged(data) {
+		this._events.publish('request:declined:acknowledged', data);
+	}
+
+	handleCancelledRequestWasAcknowledged(data) {
+		this._events.publish('request:cancelled:acknowledged', data);
 	}
 }

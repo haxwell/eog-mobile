@@ -94,10 +94,11 @@ export class PrmMetadataService extends DomainObjectMetadataService {
 							if (archivedRequests.length > 0) {
 								resolve(archivedRequests.some((request) => {
 									let canRequestAgainDate = request["canRequestAgainDate"];
+									console.log("request " + request["id"] + " canRequestAgainDate = [" + canRequestAgainDate + "]");
 									return (Moment(canRequestAgainDate) < Moment(new Date().getTime()));
 									}));
 							} else
-								resolve(null); // there is no PAST_REQUEST_AGAIN_DATE for this prm and user
+								resolve(null); // there is no CAN_REQUEST_AGAIN_DATE for this prm and user
 						});
 					}
 				})
@@ -129,30 +130,38 @@ export class PrmMetadataService extends DomainObjectMetadataService {
 			self._constants.FUNCTION_KEY_PRM_IS_REQUESTABLE, 
 			(prm) => {
 				return new Promise((resolve, reject) => {
-					let calcFunc1: (Number) => Promise<Object> = 
-						self.getCalcFunctionObject(this._constants.FUNCTION_KEY_USER_HAS_NECESSARY_RECOMMENDATIONS)["func"];
 
-					calcFunc1(prm).then((data1) => {
-						if (data1 === true) {
-							self.getCalcFunctionObject(self._constants.FUNCTION_KEY_USER_HAS_SUFFICIENT_POINTS)["func"](prm).then((data2) => {
-								if (data2 === true) {
-									self.getCalcFunctionObject(self._constants.FUNCTION_KEY_USER_HAS_CURRENTLY_REQUESTED_PRM)["func"](prm).then((data3) => {
-										if (data3 === false) {
-											self.getCalcFunctionObject(self._constants.FUNCTION_KEY_USER_IS_PAST_REQUEST_AGAIN_DATE)["func"](prm).then((data4) => {
-												if (data4 === true || data4 === null) {
-													resolve(true);
-												}
-											});
-										} else
-											resolve(false);
-									});
-								} else 
-									resolve(false);
-							});
-						}
-						else
-							resolve(false);
-					});
+					let user = this._userService.getCurrentUser();
+					if (prm["userId"] !== user["id"]) {
+
+						let calcFunc1: (Number) => Promise<Object> = 
+							self.getCalcFunctionObject(this._constants.FUNCTION_KEY_USER_HAS_NECESSARY_RECOMMENDATIONS)["func"];
+
+						calcFunc1(prm).then((data1) => {
+							if (data1 === true) {
+								self.getCalcFunctionObject(self._constants.FUNCTION_KEY_USER_HAS_SUFFICIENT_POINTS)["func"](prm).then((data2) => {
+									if (data2 === true) {
+										self.getCalcFunctionObject(self._constants.FUNCTION_KEY_USER_HAS_CURRENTLY_REQUESTED_PRM)["func"](prm).then((data3) => {
+											if (data3 === false) {
+												self.getCalcFunctionObject(self._constants.FUNCTION_KEY_USER_IS_PAST_REQUEST_AGAIN_DATE)["func"](prm).then((data4) => {
+													if (data4 === true || data4 === null) {
+														resolve(true);
+													}
+												});
+											} else
+												resolve(false);
+										});
+									} else 
+										resolve(false);
+								});
+							}
+							else
+								resolve(false);
+						});
+					}
+					else
+						resolve(false);
+
 				});
 			});
 

@@ -100,7 +100,7 @@ export class RulePage {
 	}
 
 	onSaveBtnTap(evt) {
-		this.viewCtrl.dismiss({requiredPointsQuantity: this.pointsQuantity*1, requiredUserRecommendations: this.requiredUserRecommendations });
+		this.viewCtrl.dismiss({requiredPointsQuantity: Math.ceil(this.pointsQuantity*1), requiredUserRecommendations: this.requiredUserRecommendations });
 	}
 
 	onCancelBtnTap(evt) {

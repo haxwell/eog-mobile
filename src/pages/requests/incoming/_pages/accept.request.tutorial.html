@@ -1,0 +1,32 @@
+<ion-header no-border>
+	<ion-navbar>
+		<ion-buttons end *ngIf="showSkip">
+			<button ion-button (click)="dismissTutorial()" color="primary">Exit Tutorial</button>
+		</ion-buttons>
+	</ion-navbar>
+</ion-header>
+
+<ion-content no-bounce>
+	<ion-slides #slides (ionSlideWillChange)="onSlideChangeStart($event)" pager>
+		<ion-slide>
+			Now that you have accepted a request, reach out to the person, and make arrangements for you to do your thing!<br/><br/>
+			You can see their contact information on their profile page.<br/><br/><br/>
+			They also can see yours now, too! So expect them to reach out to you, as well.<br/><br/>
+		</ion-slide>
+		<ion-slide>
+			Once you have finished doing your promise for them, come back here, and mark your promise Complete.<br/><br/>
+
+			The other user will confirm that you did your thing for them, and then you will get the agreed upon points.<br/><br/>
+
+			<ion-checkbox [(ngModel)]="showThisTutorialNextTime" (ionChange)="showThisTutorialNextTimeChanged()"></ion-checkbox>
+			<ion-label>Show This Tutorial Next Time</ion-label>
+			<br/>
+
+			<button ion-button icon-end large clear (click)="dismissTutorial()">
+				Continue
+				<ion-icon name="arrow-forward"></ion-icon>
+			</button>				
+		</ion-slide>
+	</ion-slides>
+
+</ion-content>	

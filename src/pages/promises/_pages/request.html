@@ -11,19 +11,11 @@
 	<ion-label><b>{{prm.title}}</b></ion-label>
 	<ion-label *ngIf="!getRequiredUserRecommendations()">This will require {{prm.requiredPointsQuantity}} points from you.</ion-label>
 	<ion-label *ngIf="getRequiredUserRecommendations()">This will require {{prm.requiredPointsQuantity}} points, and the following recommendations from you.</ion-label>
-	<span class="blockItem" *ngFor="let user of getRequiredUserRecommendations()">
-		{{user.realname}}
-	</span>
+	<users-line-item *ngFor="let user of getRequiredUserRecommendations()" [item]="user" [clickthru]="false"></users-line-item>
 	<hr/>
-	<ion-label>People make Promises because they want to help you with your Dream. A relevant Dream can motivate them to accept your request! You can create Dreams on your Profile page.</ion-label>
-	<ion-row>
-		<ion-label>Which of your Dreams do you want to associate with this request?</ion-label>
-	</ion-row>		
-	<ion-row>
-		<ion-select [(ngModel)]="selectedDreamId" >
-			<ion-option *ngFor="let dream of dreams" [value]="dream.id">{{dream.title}}</ion-option>
-		</ion-select>
-	</ion-row>		
+
+	<ion-label>If you'd like, you can send a message below with your request</ion-label>
+	<ion-textarea placeholder="a short message..." (ionChange)="onMessageChange($event)" [value]="getMessageValue()" required></ion-textarea>
 
 	<ion-row>
 		<button ion-button (click)="onCancelBtnTap($event)">Cancel</button>

@@ -1,53 +1,20 @@
 <ion-header>
-	<ion-navbar [hideBackButton]="isSearchFieldVisible()">
-
-		<ion-title *ngIf="!isSearchFieldVisible()" end>
-			<img id="header-logo-image" src="assets/img/logo-full.jpg">
-		</ion-title>
-
-		<ion-item *ngIf="isSearchFieldVisible()" end>
-			<ion-searchbar (input)="executeQuery($event)"></ion-searchbar>
-			<ion-list>
-				<ion-item *ngFor="let prm of getPrmResults()" (click)="onPrmResultTap(prm)">
-					<ion-icon [ngStyle]="{'color':getAlreadyRequestedIconColor(prm)}" name="megaphone"> </ion-icon>
-					<ion-icon [ngStyle]="{'color':getSufficientPointsIconColor(prm)}" name="pricetag"></ion-icon>
-					<ion-icon *ngIf="hasPrmBeenPreviouslyRequested(prm)" [ngStyle]="{'color':getSufficientTimeIconColor(prm)}" name="clock"></ion-icon>
-					<ion-icon *ngIf="areRecommendationsRequired(prm)" [ngStyle]="{'color':getNecessaryRecommendationsIconColor(prm)}" name="people"></ion-icon>
-					{{ prm.title }}
-				</ion-item>
-				<ion-item *ngFor="let item of getUserResults()" (click)="onUserResultTap(item)">
-					{{ item.realname }}
-				</ion-item>
-			</ion-list>
-		</ion-item>
-
-		<ion-buttons end>
-			<button ion-button icon-only (click)="onSearchBtnTap($event)">
-				<ion-icon name="search"></ion-icon>
-			</button>
-		</ion-buttons>
-
-	</ion-navbar>
+	<easyah-header></easyah-header>
 </ion-header>
 
 <ion-content padding>
+	
 	<ion-grid>
 		<ion-row>
-			<ion-card>
-				<profile-header [user]="getUser()" [readOnly]="true" (click)="onProfileBtnTap($event)"></profile-header>
-			</ion-card>
-		</ion-row>
-		<ion-row>
-			<span class="requestSectionHeader">Incoming Requests</span>
-		</ion-row>
-		<ion-row>
-			<requests-incoming-view [ngStyle]="{'width':'100%'}" ></requests-incoming-view>
-		</ion-row>
-		<ion-row>
-			<span class="requestSectionHeader">Outgoing Requests</span>
-		</ion-row>
-		<ion-row>
-			<requests-outgoing-view [ngStyle]="{'width':'100%'}"></requests-outgoing-view>
+			<ion-col >
+				<img id="login-logo-img" src="assets/img/logo.jpg">
+				<span class="centered">
+	Click the menu icon in the upper left!<br/>
+	Or Search in the upper right!
+</span>
+
+			</ion-col>
 		</ion-row>
 	</ion-grid>
+
 </ion-content>

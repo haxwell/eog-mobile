@@ -1,13 +1,16 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import { Headers } from '@angular/http';
-
-import { LocalStorageService } from 'angular-2-local-storage';
+import { Events } from 'ionic-angular';
 
 @Injectable()
 export class ApiService {
 	
-	constructor(private _http: Http, private _localStorageService: LocalStorageService) { }
+	currentUser = undefined;
+
+	constructor(private _http: Http, private _events: Events) {
+		this._events.subscribe('app:login', (currentUser) => { this.currentUser = currentUser; });
+	}
 
 	getHeaders(username, password) {
 		let headers: Headers = new Headers(); // TO ANSWER: Why do we use new here, but inject the others?
@@ -18,7 +21,7 @@ export class ApiService {
 	}
 
 	get(url: string) {
-		let user = this._localStorageService.get('user');
+		let user = this.currentUser;
 
 	    let username: string = user["name"];
 	    let password: string = user["password"];
@@ -31,8 +34,13 @@ export class ApiService {
 		return this._http.get(url, {headers: headers});
 	}
 
+	getUnsecuredAPI(url: string, data: string) {
+		//let headers: Headers = new Headers();
+		return this._http.get(url, data);
+	}
+
 	post(url: string, data: string) {
-		let user = this._localStorageService.get('user');
+		let user = this.currentUser;
 
 	    let username: string = user["name"];
 	    let password: string = user["password"];
@@ -49,7 +57,7 @@ export class ApiService {
 	}
 
 	delete(url: string) {
-		let user = this._localStorageService.get('user');
+		let user = this.currentUser;
 
 	    let username: string = user["name"];
 	    let password: string = user["password"];

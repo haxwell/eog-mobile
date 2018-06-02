@@ -1,15 +1,57 @@
+#profileAvatarImg {
+	width: 6em;
+	height: 6em;
+}
+
+.socialNetworkImg {
+	display: inline;
+	width: 3em;
+	height: 3em;
+}
+
+.socialNetworkImg > img {
+	width: 3em;
+	height: 3em;
+	margin: 0 0 0 0;
+}
+
 .blockItem {
 	display: inline-block;
 	border-style: solid;
 	padding: 0.5em;
 	margin-left: .25em;
 	margin-right: .25em;
+	margin-bottom: .5em;
 }
 
-.rotate90 {
-	-webkit-transform: rotate(90deg);
-    -moz-transform: rotate(90deg);
-    -o-transform: rotate(90deg);
-    -ms-transform: rotate(90deg);
-    transform: rotate(90deg);
+.contactInfoField {
+	font-size: 1.45em;
+}
+
+.profileIcon {
+	font-size: 1.45em;
+	margin-top: .3em; 
+}
+
+.circularized {
+	border-radius: 50%;
+}
+
+.cornfieldBlueColor {
+	color: #6495ed;
+}
+
+.profileName {
+	font-size: 2.3em;
+	font-style: bold;
+}
+
+.profileDescription {
+	padding: 1em 0 0 0;
+}
+
+.centered {
+	display: block;
+	margin: 0 auto;
+	text-align: center;
 }

@@ -5,7 +5,6 @@ import { Platform, AlertController } from 'ionic-angular';
 import { Push } from '@ionic-native/push';
 //import { PushObject, PushOptions } from '@ionic-native/push';
 
-import { UserService } from '../../app/_services/user.service';
 import { ApiService } from '../../app/_services/api.service';
 
 import { environment } from '../../_environments/environment';
@@ -16,15 +15,15 @@ export class PushMessagingService {
 	client = undefined;
 
 	constructor(private platform: Platform,
-				private _userService: UserService,
 				private _apiService: ApiService,
 				public _events: Events,
 				public push: Push, 
 				public alertCtrl: AlertController) { 
 
+				this._events.subscribe('app:login', (currentUser) => { this.init(currentUser); })
 	}
 
-	init() {
+	init(currentUser) {
 	    if (!this.platform.is('cordova')) {
 	      console.warn('Push notifications not initalized. Run in physical device.');
 	      return;
@@ -39,7 +38,7 @@ export class PushMessagingService {
 	    let self = this;
 	    pushObject.on('registration').subscribe((data: any) => {
 			console.log('device token -> ' + data.registrationId);
-			let user = this._userService.getCurrentUser();
+			let user = currentUser;
 			let url = environment.apiUrl + "/api/users/" + user["id"] + "/deviceId";
 			let postData = this.JSON_to_URLEncoded({deviceId: data.registrationId}, undefined, undefined);
 

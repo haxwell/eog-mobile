@@ -1,0 +1,7 @@
+For the error deploying with stompjs:
+
+    "main": "./lib/stomp.min.js"
+
+    add that line to node_modules/stompjs/package.json
+
+Be sure the min-something or other in config.xml is set to at least 19.

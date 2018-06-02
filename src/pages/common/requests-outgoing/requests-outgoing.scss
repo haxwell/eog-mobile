@@ -4,21 +4,65 @@ ion-card-header {
    width: 100%;
 }
 
-	hr {
-		height:3px;
-	}
+.douName {
+  font-size: .65em;
+  font-style: italic;
+}
 
-	hr.green {
-		color: green;
-		background-color: green;
-	}
+.douMessage {
+  font-size: .9em;
+}
 
-	hr.yellow {
-		color: yellow;
-		background-color: yellow;
-	}
+.waitingOnDirectionallyOppositeUser {
+  background-color: lightgray;
+}
 
-	hr.red {
-		color: red;
-		background-color: red;
-	}
+centered {
+	display: block;
+	margin: 0 auto;
+	text-align: center;
+}
+
+$categories: (
+ ionic: color($colors, primary),
+ pending: yellow,
+ accepted: green,
+ declined: red,
+ declinedAndHidden: red,
+ completedAwaitingApproval: yellow,
+ notCompleteAwaitingResolution: red,
+ cancelled: red
+);
+
+@function auxiliary-categories() {
+  @return map-remove($categories);
+}
+
+$categories2: (
+ ionic: color($colors, primary),
+ pending: lightgrey,
+ accepted: white,
+ declined: white,
+ completedAwaitingApproval: white,
+ notCompleteAwaitingResolution: lightgrey,
+ cancelled: white
+);
+
+@function auxiliary-categories2() {
+  @return map-remove($categories2);
+}
+
+requests-outgoing-view {
+  @each $track, $value in auxiliary-categories() {
+   ion-item-sliding[track=#{$track}] ion-label {
+     border-left: 6px solid $value;
+     padding-left: 10px;
+   }
+  }
+
+  @each $track, $value2 in auxiliary-categories2() {
+   ion-item-sliding[track=#{$track}] ion-label {
+   		background-color: $value2;
+   }
+  }
+}

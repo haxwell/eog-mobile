@@ -16,19 +16,19 @@
 		<ion-row>
 			<ion-col>
 				<ion-item>
-					<ion-label color="primary" stacked>Real Name</ion-label>
+					<ion-label color="primary" stacked>Real Name (that your mother gave you)</ion-label>
 					<ion-input type="text" (ionChange)="onRealNameChange($event)" [value]="getModelAttr('realname')" required></ion-input>
 				</ion-item>
 				<ion-item>
 					<ion-label color="primary" stacked>Phone Number</ion-label>
-					<ion-input type="number" placeholder="3035551212" (ionChange)="onPhoneChange($event)" [value]="getModelAttr('phone')" required></ion-input>
+					<ion-input type="number" (ionChange)="onPhoneChange($event)" [value]="getModelAttr('phone')" required></ion-input>
 				</ion-item>
 				<ion-item>
 					<ion-label color="primary" stacked>Email Address</ion-label>					
 					<ion-input type="text" (ionChange)="onEmailChange($event)" [value]="getModelAttr('email')" required></ion-input>
 				</ion-item>
 				<ion-item>
-					<ion-label color="primary" stacked>Username</ion-label>					
+					<ion-label color="primary" stacked>Username (that you will use to log in here, no spaces)</ion-label>	
 					<ion-input type="text" (ionChange)="onNameChange($event)" [value]="getModelAttr('name')" required></ion-input>
 				</ion-item>
 				<ion-item>
@@ -36,9 +36,10 @@
 					<ion-input type="password" (ionChange)="onPasswordChange($event)" [value]="getModelAttr('password')" required></ion-input>
 				</ion-item>
 				<ion-item>
-					<ion-label color="primary" stacked>Username that referred you? (Optional)</ion-label>					
+					<ion-label color="primary" stacked>Did someone refer you? What's their username? (Optional)</ion-label>
 					<ion-input type="text" (ionChange)="onReferringUsernameChange($event)" [value]="getReferringUsername()" required></ion-input>
 				</ion-item>
+				<br/>
 				<ion-row>
 					<button ion-button (click)="onCancelBtnTap($event)">Cancel</button>
 					<button ion-button [disabled]="!isSaveBtnEnabled()" (click)="onOKBtnTap($event)">OK</button>

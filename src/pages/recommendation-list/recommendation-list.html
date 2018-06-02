@@ -1,0 +1,31 @@
+<ion-header>
+	<easyah-header></easyah-header>
+</ion-header>
+
+<ion-content padding>
+
+	<ion-row>
+		<ion-col>
+			<h1 id="pageHeaderText">Your recommendations...<br/></h1>
+		</ion-col>
+	</ion-row>
+
+	<ion-item *ngIf="!areIncomingRecommendationsAvailable()">
+		<img class="centered" src="assets/img/no-recommendations.jpg">
+		<span class="centered"><br/>You don't have any active recommendations.. yet!</span>
+	</ion-item>
+
+	<ion-list>
+		<ion-item *ngFor="let item of getAvailableIncomingRecommendations()" (click)="onViewUser(item)">
+			<ion-avatar *ngIf="isDOUserProfileImageAvailable(item['providingUserId'])" item-start>
+				<img [class]="getAvatarCSSClassString()" [src]="getDOUserProfileImageFilepath(item['providingUserId'])" (load)="loaded($event)">
+			</ion-avatar>
+			<ion-avatar *ngIf="!isDOUserProfileImageAvailable(item['providingUserId'])" item-start>
+				<img src="assets/img/mushroom.jpg">
+			</ion-avatar>
+			<span>
+				{{getRealName(item)}}
+			</span>
+		</ion-item>
+	</ion-list>
+</ion-content>

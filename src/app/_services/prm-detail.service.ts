@@ -21,7 +21,9 @@ export class PrmDetailService {
 	getPrmDetailMessages(_prm) {
 		let _msgs = [];
 
-		if (_prm !== undefined) {
+		// Only return detail messages if the promise exists, and belongs to another user.
+		
+		if (_prm !== undefined && _prm["userId"] !== this._userService.getCurrentUser()["id"]) {
 			let self = this;
 
 			this._prmMetadataService.getMetadataValue(_prm, this._constants.FUNCTION_KEY_USER_HAS_CURRENTLY_REQUESTED_PRM).then((bool) => {
@@ -50,7 +52,7 @@ export class PrmDetailService {
 							self._recommendationService.getIncomingRecommendations().then((list: Array<Object>) => {
 
 								// inefficient O(n2) algorithm.. but the lists should 
-								// be relatively short, so it kinda (kinda) okay.
+								// be relatively short, so its kinda (kinda) okay.
 								for (var y=0; y < list.length; y++) {
 									for (var x=0; x < tmpReqdRecs.length; x++) {
 										if (tmpReqdRecs[x]["requiredRecommendUserId"] === list[y]["providingUserId"])

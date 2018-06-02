@@ -28,6 +28,7 @@ export class HomePage {
     _mapPrmIdToMetadataValue = {};
     isVerifyLogoutAlertVisible = false;
     isHomePageVisible = true;
+    searchTextFieldValue = undefined;    
 
     constructor(public navCtrl: NavController,
                 private _modalCtrl: ModalController, 
@@ -71,7 +72,7 @@ export class HomePage {
             });
         }
 
-        self.navBar.backButtonClick = () => { self.verifyLogout(); };
+        //self.navBar.backButtonClick = () => { self.verifyLogout(); };
 
         this.isHomePageVisible = true;
     }
@@ -194,16 +195,17 @@ export class HomePage {
       this.setIsSearchFieldVisible(false);
   }
 
+  onShowProfile() {
+      this.navCtrl.push(ProfilePage, { user: this.user, readOnly: false });
+      this.setIsSearchFieldVisible(false);
+  }
+
   isSearchFieldVisible() {
     return this._isSearchFieldVisible;
   }
 
   isSearchFieldDisabled() {
     return false;
-  }
-
-  onSearchBtnTap(event) {
-    this.setIsSearchFieldVisible(!this.isSearchFieldVisible());
   }
 
   setIsSearchFieldVisible(b) {
@@ -214,24 +216,12 @@ export class HomePage {
     }
   }
 
-  onProfileBtnTap(event) {
-  	this.navCtrl.push(ProfilePage, {user: this._userService.getCurrentUser(), readOnly: false});
-  }
-
   onSearchForUsersBtnTap(event) {
     this.navCtrl.push(SearchUsersPage);
   }
 
   onSearchForPrmsBtnTap(event) {
     this.navCtrl.push(SearchPage);
-  }
-
-  onIncomingReqBtnTap(event) {
-  	//this.navCtrl.push(RequestsIncomingPage);
-  }
-
-  getUser() {
-    return this.user;
   }
 
   getMetadataValue(prm, functionKey, rtnFunction) {

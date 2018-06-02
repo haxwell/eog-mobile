@@ -7,12 +7,20 @@
 </ion-header>
 
 <ion-content padding>
-	<ion-label>You are about to indicate you have fulfilled the following promise:</ion-label>
-	<hr/>
-	<ion-label><b>{{request.prm.title}}</b> for {{request.directionallyOppositeUser.realname}}</ion-label>
-	<br/>
-	<ion-label>The requesting user will have a chance to mark it COMPLETE, as well.</ion-label>
-	<ion-label>If they do mark it COMPLETE, you'll then get their points.</ion-label>
+	<div *ngIf="!isRequestInDispute()">
+		<ion-label>You are about to indicate you have fulfilled the following promise:</ion-label>
+		<hr/>
+		<ion-label><b>{{request.prm.title}}</b> for {{request.directionallyOppositeUser.realname}}</ion-label>
+		<br/>
+		<ion-label>The requesting user will have a chance to mark it COMPLETE, as well.</ion-label>
+		<ion-label>If they do mark it COMPLETE, you'll then get their points.</ion-label>
+	</div>
+	<div *ngIf="isRequestInDispute()">
+		<ion-label>You are about to resolve this disputed request inamicably.</ion-label>
+		<ion-label>You will get half the points, and they will keep half. It will show on both of records, that this request was resolved inamicably.</ion-label>
+		<br/>
+		<ion-label>Are you sure?</ion-label>
+	</div>
 
 	<ion-row>
 		<ion-label>Type the word complete, and then press the YES! button if you're sure.</ion-label>

@@ -1,12 +1,12 @@
 import { Component, Input } from '@angular/core';
-import { ModalController, NavParams } from 'ionic-angular';
+import { ModalController } from 'ionic-angular';
 import { Events } from 'ionic-angular';
 
 import { File } from '@ionic-native/file'
 
-import { ChoosePhotoSourcePage } from '../choose-photo-source/choose-photo-source'
-
 import { ProfileService } from '../_services/profile.service'
+
+import EXIF from 'exif-js'
 
 @Component({
   selector: 'profile-header',
@@ -15,21 +15,17 @@ import { ProfileService } from '../_services/profile.service'
 
 export class ProfileHeader {
 
-	@Input() readOnly = false;
 	dirty = false;
 	@Input() user = undefined;
 
-	constructor(navParams: NavParams, 
-				private modalCtrl: ModalController, 
-				private _profileService: ProfileService, 
-				private _events: Events,
-				private _file: File) {
-		this.user = Object.assign({}, navParams.get('user'));
-		this.readOnly = navParams.get('readOnly') || false;
+	imageOrientation = undefined;
+
+	constructor(private _profileService: ProfileService, 
+				private _events: Events) {
 
 		let self = this;
 		let func2 = (data) => {
-			let model = this._profileService.getModel(this.user);
+			let model = this._profileService.getModel(this.user["id"]);
 
 			model["realname"] = data["realname"];
 			model["phone"] = data["phone"];
@@ -38,6 +34,17 @@ export class ProfileHeader {
 			self.setDirty(true);
 		};
 		self._events.subscribe('profile:changedContactInfoWasSaved', func2);
+
+		// TODO: This is ugly. We do this because this is part of the app.html file, because
+		//  that is where the menu is defined, and that is called first before anything else.
+		//  so, there's no user at that time. This component is also used when viewing another
+		//  user's profile. So it needs a user objet. So we get one for the current user so this
+		//  can display in the menu properly when the menu comes up, and we set it in the html
+		//  (by passing a function which calls for the user to be displayed) elsewhere.
+
+		// Ideally, this wouldn't even be called until a user was ready. And then we could
+		//  ONLY set it through the HTML, not need this event sub. Regardless, yuk poo.
+		self._events.subscribe('app:login', (currentUser) => { this.user = currentUser; });
 	}
 
 	ngOnInit() {
@@ -49,14 +56,6 @@ export class ProfileHeader {
 			this.ngOnInit();
 	}
 
-	isCurrentUserAllowedToSeeContactInfo() {
-		return this._profileService.getModel(this.user)["currentUserCanSeeContactInfo"];
-	}
-
-	isReadOnly() {
-		return this.readOnly;
-	}
-
 	isDirty() {
 		return this.dirty;
 	}
@@ -65,93 +64,51 @@ export class ProfileHeader {
 		this.dirty = b;
 	}
 
+	isFromGallery() {
+		if (this.user)
+			return this._profileService.getModel(this.user["id"])["imageFileSource"] == 'gallery';
+		else
+			return false;
+	}
+
 	isThumbnailImageAvailable() {
-		return this._profileService.getModel(this.user)["imageFileURI"] !== undefined;
+		if (this.user)
+			return this._profileService.getModel(this.user["id"])["imageFileURI"] !== undefined;
+		else
+			return false;
 	}
 
 	getThumbnailImage() {
-		if (this._profileService.getModel(this.user)["imageFileURI"] === undefined)
-			return "assets/img/mushroom.jpg";
+		if (this.user && this._profileService.getModel(this.user["id"])["imageFileURI"] !== undefined)
+			return this._profileService.getModel(this.user["id"])["imageFileURI"];
 		else
-
-			// WILO: Is this being called when we go from Profile to Home? If so, is this a different model?
-			//  why is the picture not changing?
-
-			return this._profileService.getModel(this.user)["imageFileURI"];
-	}
-
-	onThumbnailPress($event) {
-		if (!this.isReadOnly()) {
-			let self = this;
-			let model = this._profileService.getModel(this.user);
-			let modal = this.modalCtrl.create(ChoosePhotoSourcePage, {userId: this.user["id"], fileURI: model["imageFileURI"], fileSource: model["imageFileSource"]});
-			
-			modal.onDidDismiss((promise) => {
-				if (promise) {
-					promise.then((uriAndSource) => { 
-						if (uriAndSource === undefined) {
-							uriAndSource = {};
-						}
-
-						let model = this._profileService.getModel(this.user);
-
-						if (model["imageFileURI"] !== undefined) {
-							let lastSlash = model["imageFileURI"].lastIndexOf('/');
-							let path = model["imageFileURI"].substring(0,lastSlash+1);
-							let filename = model["imageFileURI"].substring(lastSlash+1);
-
-							self._file.removeFile(path, filename).then((data) => {
-								this._profileService.setMostProbableProfilePhotoPath(uriAndSource["imageFileURI"]);
-
-								console.log("User saved a new profile image. [" + model["imageFileURI"] + "] is no longer the image to use, so it has been removed." );
-								console.log("setting profile header model to [" + uriAndSource["imageFileURI"] + "], and throwing profile:changedProfileImage event");
-
-								model["imageFileURI"] = uriAndSource["imageFileURI"];
-								model["imageFileSource"] = uriAndSource["imageFileSource"];
-
-								self._events.publish('profile:changedProfileImage', model["imageFileURI"]);
-								self.setDirty(true);						
-							})
-						} else {
-							console.log("no previous image to delete, so skipping that step...")
-							console.log("setting profile header model to [" + uriAndSource["imageFileURI"] + "], and throwing profile:changedProfileImage event");
-
-							model["imageFileURI"] = uriAndSource["imageFileURI"];
-							model["imageFileSource"] = uriAndSource["imageFileSource"];
-
-							self._events.publish('profile:changedProfileImage', model["imageFileURI"]);
-							self.setDirty(true);						
-						}
-
-					});
-				}
-			});
-			
-			modal.present();
-		}
-	}
-
-	setChangedAttr(key, value) {
-		let model = this._profileService.getModel(this.user);
-		model[key] = value;
-		this._events.publish('profile:changedContactInfo', model);
-		this.setDirty(true);
-	}
-
-	onNameChange(event) {
-		this.setChangedAttr("realname", event._value);
-	}
-
-	onEmailChange(event) {
-		this.setChangedAttr("email", event._value);
-	}
-
-	onPhoneChange(event) {
-		this.setChangedAttr("phone", event._value);	
+			return "assets/img/mushroom.jpg";
 	}
 
 	getModelAttr(key) {
-		let model = this._profileService.getModel(this.user) || {};
-		return model[key];
+		if (this.user) {
+			let model = this._profileService.getModel(this.user["id"]) || {};
+			return model[key];
+		} else {
+			return undefined;
+		}
+	}
+
+	getAvatarCSSClassString() {
+		if (this.imageOrientation === 8)
+			return "rotate90Counterclockwise centered";
+		else if (this.imageOrientation === 3)
+			return "rotate180 centered";
+		else if (this.imageOrientation === 6)
+			return "rotate90Clockwise centered";
+		else
+			return "centered";
+	}
+
+	loaded(evt) {
+		let self = this;
+		EXIF.getData(evt.target, function() {
+			self.imageOrientation = EXIF.getTag(this, "Orientation");
+		});
 	}
 }

@@ -1,0 +1,35 @@
+<ion-header>
+	<easyah-header></easyah-header>
+</ion-header>
+
+<ion-content padding>
+
+
+	<ion-row>
+		<ion-col>
+			<h1 id="pageHeaderText">Your Promises...<br/></h1>
+		</ion-col>
+	</ion-row>
+	<ion-row >
+		<button round ion-button (click)="onNewPromiseBtnTap()">
+			<ion-icon name="add"></ion-icon>
+		</button>
+	</ion-row>
+
+	<ion-list>
+		<ion-item *ngFor="let prm of getPromises()" (swipeLeft)="onDeletePromise(prm)" (click)="onPromiseBtnTap(prm)">
+			<ion-avatar item-start>
+				<img [src]="getPromiseAvatarImage(prm)">
+			</ion-avatar>
+			<span class="prmTitle">{{prm.title}}</span><br/>
+			<span class="prmDesc">{{prm.description}}</span><br/>
+			<div class="promiseDetail">
+				<span id="prmReqdPtsId" class="prmReqdPts">{{getPointRecommendationCountPhrase(prm)}}<br/></span>
+				<span *ngFor="let keyword of prm.keywords"><span class="smallKeyword">{{keyword.text}}</span></span>
+			</div>
+		</ion-item>
+		<ion-item *ngIf="!userHasAnActivePromise()">
+			The promises you create will appear here! 
+		</ion-item>
+	</ion-list>
+</ion-content>

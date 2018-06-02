@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 
-import { UserService } from '../../../app/_services/user.service';
-import { ApiService } from '../../../app/_services/api.service';
+import { UserService } from './user.service';
+import { ApiService } from './api.service';
 
-import { environment } from '../../../_environments/environment';
+import { environment } from '../../_environments/environment';
 
 import Moment from 'moment'
 

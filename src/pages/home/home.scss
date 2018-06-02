@@ -1,5 +1,6 @@
-page-home {
 
+page-home {
+	
 }
 
 .requestSectionHeader {
@@ -16,4 +17,15 @@ h2 {
 
 #header-logo-image {
 	height: 1.75em;
+}
+
+#login-logo-img {
+	display: block;
+	margin: 0 auto;
+}
+
+.centered {
+	display: block;
+	margin: 0 auto;
+	text-align: center;
 }

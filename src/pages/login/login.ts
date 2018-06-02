@@ -1,13 +1,12 @@
 import { Component } from '@angular/core';
 import { NavController, LoadingController, AlertController } from 'ionic-angular';
+import { Events } from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { HomePage } from '../home/home';
 import { CreateAccountPage } from './_pages/create.account'
 
 import { UserService } from '../../app/_services/user.service';
-import { WebsocketService } from '../../app/_services/websocket.service';
-import { PushMessagingService } from '../../app/_services/push.messaging.service';
 
 @Component({
   selector: 'page-login',
@@ -15,16 +14,16 @@ import { PushMessagingService } from '../../app/_services/push.messaging.service
 })
 export class LoginPage {
 
+//  user = {id:-1, name: 'eogadmin', password: 'password'};
   user = {id:-1, name: '', password: ''};
   loading = undefined;
   
   constructor(public navCtrl: NavController,
               private _alertCtrl: AlertController,
               private _userService: UserService,
-              private _websocketService: WebsocketService,
-              private _pushMessagingService: PushMessagingService,
               private loadingCtrl: LoadingController,
-              private splashScreen: SplashScreen) {
+              private splashScreen: SplashScreen,
+              private _events: Events) {
 
   }
 
@@ -49,12 +48,12 @@ export class LoginPage {
       self.user["password"] = pw;
       self.user["name"] = un;
 
-      self._userService.setCurrentUser(self.user);
-      self._websocketService.init();
-      self._pushMessagingService.init();
-      
+      self._events.publish("app:login", userObj);
+
       self.loading.dismiss();
       this.navCtrl.push(HomePage);
+
+
     }, 
     (err) => {
         self.loading.dismiss();

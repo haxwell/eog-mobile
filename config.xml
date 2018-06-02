@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="io.easyah.mobileapp" version="0.0.6" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="io.easyah.mobileapp" version="0.0.9" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Easyah</name>
-    <description>Pay-It-Forward meets Craigslist and Meetup.</description>
+    <description>Easyah makes pay-it-forward collaborative.</description>
     <author email="johnathan@jj-ccs.com" href="">Johnathan E. James</author>
     <content src="index.html" />
     <access origin="*" />
@@ -15,7 +15,7 @@
     <preference name="webviewbounce" value="false" />
     <preference name="UIWebViewBounce" value="false" />
     <preference name="DisallowOverscroll" value="true" />
-    <preference name="android-minSdkVersion" value="16" />
+    <preference name="android-minSdkVersion" value="19" />
     <preference name="BackupWebStorage" value="none" />
     <preference name="SplashMaintainAspectRatio" value="true" />
     <preference name="FadeSplashScreenDuration" value="300" />
@@ -90,5 +90,5 @@
     <plugin name="phonegap-plugin-push" spec="^2.1.0">
         <variable name="FCM_VERSION" value="11.0.1" />
     </plugin>
-    <engine name="android" spec="~6.4.0" />
+    <engine name="android" spec="~7.1.0" />
 </widget>
