@@ -39,6 +39,7 @@
 					<ion-label color="primary" stacked>Did someone refer you? What's their username? (Optional)</ion-label>
 					<ion-input type="text" (ionChange)="onReferringUsernameChange($event)" [value]="getReferringUsername()" required></ion-input>
 				</ion-item>
+				<br/>
 				<ion-row>
 					<button ion-button (click)="onCancelBtnTap($event)">Cancel</button>
 					<button ion-button [disabled]="!isSaveBtnEnabled()" (click)="onOKBtnTap($event)">OK</button>
