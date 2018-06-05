@@ -24,11 +24,6 @@ import { ProfileEditPage } from '../pages/profile/profile-edit';
 import { ProfileHeader } from '../pages/common/profile-header/profile-header';
 import { ChoosePhotoSourcePage } from '../pages/common/choose-photo-source/choose-photo-source';
 import { SearchPage } from '../pages/search/search';
-import { SearchUserResultsTab } from '../pages/search/_pages/user/searchUserResultsTab';
-import { SearchPrmResultsTab } from '../pages/search/_pages/prm/searchPrmResultsTab';
-import { SearchUsersPage } from '../pages/searchUsers/searchUsers';
-import { SendPointPage } from '../pages/searchUsers/_pages/send.point.page';
-import { SendRecommendPage } from '../pages/searchUsers/_pages/send.recommend.page';
 import { SocialNetworkCRUDPage } from '../pages/profile/_pages/social-network-CRUD';
 import { RequestPage } from '../pages/promises/_pages/request';
 import { AcceptRequestPage } from '../pages/requests/incoming/_pages/accept.request';
@@ -127,11 +122,6 @@ export class CustomHammerConfig extends HammerGestureConfig {
     CancelOutgoingRequestPage,
     RequestContactInfoPage,
     SearchPage,
-    SearchUserResultsTab,
-    SearchPrmResultsTab,
-    SearchUsersPage,
-    SendPointPage,
-    SendRecommendPage,
     KeywordEntryPage,
     ProfilePoints
   ],
@@ -179,11 +169,6 @@ export class CustomHammerConfig extends HammerGestureConfig {
     CancelOutgoingRequestPage,
     RequestContactInfoPage,
     SearchPage,
-    SearchUserResultsTab,
-    SearchPrmResultsTab,
-    SearchUsersPage,
-    SendPointPage,
-    SendRecommendPage,
     KeywordEntryPage,
     ProfilePoints
   ],
