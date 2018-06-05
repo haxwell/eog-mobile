@@ -1,6 +1,6 @@
 
 export const domainInfo = {
-  domain: '165.227.109.239', // prod
+  domain: 'localhost',
   port: '8080'
 };
 
