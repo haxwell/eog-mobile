@@ -61,6 +61,8 @@ export class SearchPage {
 			this.hasSufficientTimePassed[prm["id"]] = undefined;
 			this.hasBeenPreviouslyRequested[prm["id"]] = undefined;
 
+			this._prmMetadataService.markDirty({domainObject: prm});
+
 			this.ngOnInit(); 
 		};
 
