@@ -8,11 +8,13 @@ import { PrmPage } from './promises'
 import { RequestPage } from './_pages/request'
 //import { RulePage } from './_pages/rule'
 import { DeletePrmPage } from './_pages/delete.prm'
+import { OutgoingRequestMadeTutorialPage } from './_pages/outgoing-request-made-tutorial'
 //import { KeywordEntryPage } from '../keyword.entry/keyword.entry'
 import { PrmModelService } from './_services/prm.model.service'
 import { PrmMetadataService } from '../../app/_services/prm-metadata.service';
 import { PrmDetailService } from '../../app/_services/prm-detail.service';
 import { UserService } from '../../app/_services/user.service';
+import { UserPreferencesService } from '../../app/_services/user-preferences.service';
 import { Constants } from '../../_constants/constants';
 
 import Moment from 'moment'
@@ -29,6 +31,7 @@ export class PrmDisplayPage {
 	_isRequestBtnVisible = undefined;
 	callback = undefined; // TODO: necessary?
 	requiredUserObjectsLoadedCount = 0; 
+	showTutorialAfterOutgoingRequestMade = true;
 
 	dirty = false;
 
@@ -39,6 +42,7 @@ export class PrmDisplayPage {
 				private _prmMetadataService: PrmMetadataService,
 				private _prmDetailService: PrmDetailService,
 				private _userService: UserService,
+				private _userPreferencesService: UserPreferencesService,
 				//private loadingCtrl: LoadingController,
 				private _constants: Constants) {
 
@@ -75,9 +79,14 @@ export class PrmDisplayPage {
 
 	ngOnInit() {
 		let self = this;
-		return self._prmMetadataService.getMetadataValue(self.model, self._constants.FUNCTION_KEY_PRM_IS_REQUESTABLE).then((bool) => { 
+		self._prmMetadataService.getMetadataValue(self.model, self._constants.FUNCTION_KEY_PRM_IS_REQUESTABLE).then((bool) => { 
 			self._isRequestBtnVisible = bool;
 		});
+
+		self._userPreferencesService.getPreference("showTutorialAfterOutgoingRequestMade", true).then((data) => {
+			self.showTutorialAfterOutgoingRequestMade = data["pref"];
+		})
+
 	}
 
 	setModel(m) {
@@ -200,8 +209,25 @@ export class PrmDisplayPage {
 	}
 
 	onRequestBtnTap(evt) {
-		let modal = this.modalCtrl.create(RequestPage, {prm: this.model, callback: this.requestCallback});
-		modal.onDidDismiss(data => { this.navCtrl.pop(); });
+		let self = this;
+		let modal = self.modalCtrl.create(RequestPage, {prm: self.model, callback: self.requestCallback});
+		modal.onDidDismiss(data => { 
+			if (data !== undefined) {
+				if (self.showTutorialAfterOutgoingRequestMade) {
+					let modal = self.modalCtrl.create(OutgoingRequestMadeTutorialPage, { });
+
+					modal.onDidDismiss((data) => {
+						self.navCtrl.pop();
+					});
+
+					modal.present();
+				} else {
+					self.navCtrl.pop();
+				}
+			} else {
+				self.navCtrl.pop();
+			}
+		});
 		modal.present();
 	}
 

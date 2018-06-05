@@ -38,6 +38,7 @@ import { CancelOutgoingRequestPage } from '../pages/requests/outgoing/_pages/can
 import { RequestContactInfoPage } from '../pages/requests/_pages/contact.info';
 import { PrmPage } from '../pages/promises/promises';
 import { PrmDisplayPage } from '../pages/promises/display.prm';
+import { OutgoingRequestMadeTutorialPage } from '../pages/promises/_pages/outgoing-request-made-tutorial';
 import { DeletePrmPage } from '../pages/promises/_pages/delete.prm';
 import { RequestsIncomingView } from '../pages/common/requests-incoming/requests-incoming';
 import { RequestsOutgoingView } from '../pages/common/requests-outgoing/requests-outgoing';
@@ -99,6 +100,7 @@ export class CustomHammerConfig extends HammerGestureConfig {
     ChoosePhotoSourcePage,
     PrmPage,
     PrmDisplayPage,
+    OutgoingRequestMadeTutorialPage,
     DeletePrmPage,
     RulePage,
     RequestsIncomingView,    
@@ -148,6 +150,7 @@ export class CustomHammerConfig extends HammerGestureConfig {
     ChoosePhotoSourcePage,
     PrmPage,
     PrmDisplayPage,
+    OutgoingRequestMadeTutorialPage,
     PromiseListPage,
     KeywordListPage,
     RecommendationListPage,
