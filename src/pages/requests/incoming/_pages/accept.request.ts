@@ -35,7 +35,6 @@ export class AcceptRequestPage {
 	onSaveBtnTap(evt) {
 		var self = this;
 		self._requestsService.acceptIncomingRequest(self.request).then((obj) => {
-			console.log(obj);
 
 			if (self.showTutorialAfterRequestAccepted) {
 				let modal = self._modalCtrl.create(AcceptRequestTutorialPage, { });
