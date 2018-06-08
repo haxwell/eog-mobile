@@ -54,14 +54,6 @@ export class NotificationListPage {
 		}
 	}
 
-/*
-	ionViewWillLeave() {
-		if (this.isDirty()) {
-			this._keywordService.save(this.model);
-		}
-	}
-*/
-
 	getTrack(item) {
 		return "notification";
 	}
