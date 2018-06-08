@@ -25,7 +25,6 @@ export class PrmPage {
 	callback = undefined;
 	new = false;
 	dirty = false;
-	readOnly = false;
 	requestMsgs = undefined;
 	newKeywords = [];
 	loading = undefined;
@@ -75,7 +74,6 @@ export class PrmPage {
 		if (tmp !== undefined && tmp["userId"] !== this._userService.getCurrentUser()["id"] )
 			this.requestMsgs = this._prmDetailService.getPrmDetailMessages(tmp);
 
-		this.readOnly = navParams.get('readOnly') || false;
 		this.callback = navParams.get('callback') || function() { return new Promise((resolve, reject) => { resolve(); }) };
 	}
 
@@ -88,12 +86,14 @@ export class PrmPage {
 		});
 	}
 
-	setModel(m) {
-		this.model = m;
+	ionViewWillLeave() {
+		if (this.isDirty()) {
+			if (this.)
+		}
 	}
 
-	isReadOnly() {
-		return this.readOnly;
+	setModel(m) {
+		this.model = m;
 	}
 
 	isDirty() {

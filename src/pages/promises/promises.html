@@ -2,36 +2,19 @@
 	<easyah-header></easyah-header>
 </ion-header>
 
-<!-- ion-header>
-	<ion-navbar>
-		<ion-title *ngIf="isNewObject()">
-			Create New Promise
-		</ion-title>
-		<ion-title *ngIf="!isNewObject() && !isReadOnly()">
-			Edit Your Promise
-		</ion-title>
-		<ion-title *ngIf="!isNewObject() && isReadOnly()">
-			Promise Detail
-		</ion-title>		
-	</ion-navbar>
-</ion-header -->
-
 <ion-content padding>
 	<ion-list>
-		<!-- <ion-item *ngIf="!isNewObject() && isReadOnly()">
-			<span>{{getPrmOwnerName()}}</span>
-		</ion-item> -->
 		<ion-item>
 			<ion-label color="primary" stacked>Title: </ion-label>
-			<ion-input type="text" placeholder="Teach a skill..." [disabled]="isReadOnly()" (ionChange)="handleTitleChange($event)" [(ngModel)]="model.title" #ctrl="ngModel" required></ion-input>
+			<ion-input type="text" placeholder="Teach a skill..." (ionChange)="handleTitleChange($event)" [(ngModel)]="model.title" #ctrl="ngModel" required></ion-input>
 		</ion-item>
 		<ion-item>
 			<ion-label color="primary" stacked>Description: </ion-label>
-			<ion-textarea rows="5" placeholder="I have many moons experience in XYZ and I will teach..." [disabled]="isReadOnly()" (ionChange)="handleDescriptionChange($event)" [(ngModel)]="model.description" #ctrl="ngModel" required></ion-textarea>
+			<ion-textarea rows="5" placeholder="I have many moons experience in XYZ and I will teach..." (ionChange)="handleDescriptionChange($event)" [(ngModel)]="model.description" #ctrl="ngModel" required></ion-textarea>
 		</ion-item>
 		<ion-list-header class="listHeader">
 			Rules
-			<button [hidden]="isReadOnly()" class="listHeaderBtn" round ion-button (click)="onNewRuleBtnTap($event)">
+			<button class="listHeaderBtn" round ion-button (click)="onNewRuleBtnTap($event)">
 				<ion-icon name="add"></ion-icon>
 			</button>
 		</ion-list-header>
@@ -55,7 +38,7 @@
 	<ion-list>
 		<ion-list-header class="listHeader">
 			Keywords
-			<button *ngIf="!isReadOnly()" class="listHeaderBtn" round ion-button (click)="onAddKeywordBtnTap($event)">
+			<button class="listHeaderBtn" round ion-button (click)="onAddKeywordBtnTap($event)">
 				<ion-icon name="add"></ion-icon>
 			</button>
 		</ion-list-header>
@@ -69,13 +52,6 @@
 				<span class="blockItem" (press)="onIndividualKeywordPress()">{{item.text}}</span>
 			</span>
 		</ion-item>
-	</ion-list>
-
-	<ion-list *ngIf="isReadOnly()" no-lines>
-		<ion-list-header class="listHeader">
-			Statistics
-		</ion-list-header>
-		<span>First Fulfilled: {{getFirstFulfilledText()}} / Total Points Earned: {{getTotalPointsEarned()}} / Total Complaints: {{getNumberOfComplaints()}}</span>
 	</ion-list>
 
 	<ion-row>
