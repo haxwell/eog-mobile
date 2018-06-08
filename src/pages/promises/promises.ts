@@ -128,11 +128,6 @@ export class PrmPage {
 		return this.requestMsgs;
 	}
 
-	isSaveBtnVisible() {
-		// TODO: Delete this.. 
-		return true; //!this.isReadOnly() && !this.isRequestBtnVisible();
-	}
-
 	isSaveBtnEnabled() {
 		return !this.isReadOnly() && this.isDirty() && 
 			(this.model["requiredPointsQuantity"] !== undefined && this.model["requiredPointsQuantity"] > 0) &&
