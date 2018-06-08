@@ -48,6 +48,9 @@ export class PrmMetadataService extends DomainObjectMetadataService {
 
 	init() {
 		let self = this;
+
+		super.init();
+
 		this.addMetadataCalculationFunction(
 			this._constants.FUNCTION_KEY_USER_HAS_SUFFICIENT_POINTS, 
 			(prm) => {
