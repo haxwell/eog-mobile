@@ -124,4 +124,39 @@ describe('KeywordEntryPage Component', () => {
     expect(component.getKeywordArray().length).toEqual(1);
   });
 
+  it('should not allow duplicates', () => {
+    component.newKeywordsString = "testing1,2,3,testing1";
+    expect(component.getAddKeywordFieldValue()).toBe('testing1,2,3,testing1');
+
+    component.onAddBtnTap();
+
+    expect(component.getKeywordArray()).toContain({id: -1, text: 'testing1'});
+    expect(component.getKeywordArray()).toContain({id: -1, text: '2'});
+    expect(component.getKeywordArray()).toContain({id: -1, text: '3'});
+    expect(component.getKeywordArray().length).toEqual(3);
+  })
+
+  it('should trim the whitespace from names', () => {
+    component.newKeywordsString = " testing1 , 2,3";
+    expect(component.getAddKeywordFieldValue()).toBe(' testing1 , 2,3');
+
+    component.onAddBtnTap();
+
+    expect(component.getKeywordArray()).toContain({id: -1, text: 'testing1'});
+    expect(component.getKeywordArray()).toContain({id: -1, text: '2'});
+    expect(component.getKeywordArray()).toContain({id: -1, text: '3'});
+    expect(component.getKeywordArray().length).toEqual(3);
+  })
+
+  it('should not allow blanks', () => {
+    expect(component.getKeywordArray().length).toEqual(0);
+
+    component.newKeywordsString = ", ,";
+    expect(component.getAddKeywordFieldValue()).toBe(', ,');
+
+    component.onAddBtnTap();
+
+    expect(component.getKeywordArray().length).toEqual(0);
+  })
+
 });
