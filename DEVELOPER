@@ -5,3 +5,9 @@ For the error deploying with stompjs:
     add that line to node_modules/stompjs/package.json
 
 Be sure the android-minSdkVersion in config.xml is set to at least 19.
+
+-----
+UNIT TESTS
+-----
+
+    To run all tests, type 'npm test'
