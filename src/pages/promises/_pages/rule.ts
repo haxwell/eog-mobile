@@ -31,23 +31,25 @@ export class RulePage {
 	}
 
 	onSearchUserBtnTap(evt) {
-		let self = this;
-		this._searchService.searchUsers(this.searchString).then((data: Array<Object>) => {
-			self.searchResultList = data;
-			self.origSearchResultSize = data.length;
-			self.origSearchResultsAlreadyRequiredCount = 0;
+		if (this.isSearchBtnEnabled()) {
+			let self = this;
+			this._searchService.searchUsers(this.searchString).then((data: Array<Object>) => {
+				self.searchResultList = data;
+				self.origSearchResultSize = data.length;
+				self.origSearchResultsAlreadyRequiredCount = 0;
 
-			let tmp = self.searchResultList.filter((obj) => { 
-				return !self.requiredUserRecommendations.some(
-					(obj2) => { return obj["id"] === obj2["requiredRecommendUserId"]; }
-				) 
+				let tmp = self.searchResultList.filter((obj) => { 
+					return !self.requiredUserRecommendations.some(
+						(obj2) => { return obj["id"] === obj2["requiredRecommendUserId"]; }
+					) 
+				});
+
+				self.origSearchResultsAlreadyRequiredCount = self.origSearchResultSize - tmp.length;
+				self.searchResultList = tmp;			
+
+				self.updateSearchResultListCountString();
 			});
-
-			self.origSearchResultsAlreadyRequiredCount = self.origSearchResultSize - tmp.length;
-			self.searchResultList = tmp;			
-
-			self.updateSearchResultListCountString();
-		});
+		}
 	}
 
 	updateSearchResultListCountString() {

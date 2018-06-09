@@ -44,7 +44,7 @@
 		</ion-row>
 		<hr/>
 		<ion-row>
-			<ion-input type="text" placeholder="To require a recommend, search a user name" (ionChange)="handleSearchStringChange($event)" [(ngModel)]="searchString" #ctrl="ngModel" required></ion-input>
+			<ion-input type="text" placeholder="To require a recommend, search a user name" (ionChange)="handleSearchStringChange($event)" [(ngModel)]="searchString" #ctrl="ngModel" (keyup.enter)="onSearchUserBtnTap($event)" required></ion-input>
 			<button ion-button icon-only [disabled]="!isSearchBtnEnabled()" (click)="onSearchUserBtnTap($event)">
 				<ion-icon name="search"></ion-icon>
 			</button>
