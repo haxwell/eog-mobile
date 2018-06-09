@@ -1,24 +1,3 @@
-export class wrReadyMock {
-  public subscribe(): any { return {}; };
-}
-
-export class ViewControllerMock { 
-    public _setHeader(): any { return {} }; 
-    public _setNavbar(): any { return {} };
-    public _setIONContent(): any { return {} }; 
-    public _setIONContentRef(): any { return {} }; 
-    public dismiss(o: any): any { return o; };
-
-    public writeReady: wrReadyMock;
-    public readReady: wrReadyMock;
-
-    public unsubscribe(): any { return 0; };
-
-    constructor() {
-      this.writeReady = new wrReadyMock();
-      this.readReady = new wrReadyMock();
-    }
-}
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
