@@ -319,7 +319,6 @@ export class ProfileEditPage {
 
 						}).catch(() => {
 							console.log("An error occurred deleting the image from the server. Probably, it didn't exist there. Noting it, in case things look wonky..")
-							let model = self._profileService.getModel(self.user["id"]);
 
 							func();
 						});
