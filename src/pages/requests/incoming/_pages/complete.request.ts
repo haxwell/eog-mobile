@@ -51,11 +51,13 @@ export class CompleteRequestPage {
 	}
 
 	onSaveBtnTap(evt) {
-		this.request["requestAgainDelayCode"] = this.getSelectedRequestAgainDelayId(); 
-		this._requestsService.completeIncomingRequest(this.request).then((obj) => {
-			console.log(obj);
-			this.viewCtrl.dismiss();			
-		});
+		if (this.isSaveBtnEnabled()) {
+			this.request["requestAgainDelayCode"] = this.getSelectedRequestAgainDelayId(); 
+			this._requestsService.completeIncomingRequest(this.request).then((obj) => {
+				console.log(obj);
+				this.viewCtrl.dismiss();			
+			});
+		}
 	}
 
 	onCancelBtnTap(evt) {

@@ -24,7 +24,7 @@
 
 	<ion-row>
 		<ion-label>Type the word complete, and then press the YES! button if you're sure.</ion-label>
-		<ion-input type="text" placeholder="type complete here..." [(ngModel)]="confirmationString" #ctrl="ngModel" required></ion-input>		
+		<ion-input type="text" placeholder="type complete here..." [(ngModel)]="confirmationString" #ctrl="ngModel" (keyup.enter)="onSaveBtnTap($event)" required></ion-input>
 	</ion-row>
 
 	<ion-row>
