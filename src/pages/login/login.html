@@ -4,10 +4,10 @@
 			<ion-col >
 				<img id="login-logo-img" src="assets/img/logo.jpg">
 				<ion-label color="primary" stacked>Username</ion-label>
-				<ion-input type="text" [(ngModel)]="user.name" #ctrl="ngModel" required></ion-input>
+				<ion-input type="text" [(ngModel)]="user.name" #ctrl="ngModel" (keyup.enter)="onLoginBtnTap($event)" required></ion-input>
 
 				<ion-label color="primary" stacked>Password</ion-label>
-				<ion-input type="password" [(ngModel)]="user.password" #ctrl="ngModel" required></ion-input>
+				<ion-input type="password" [(ngModel)]="user.password" #ctrl="ngModel" (keyup.enter)="onLoginBtnTap($event)" required></ion-input>
 
 				<button class="wideButton" ion-button (click)="onLoginBtnTap($event)">Login</button>
 				<button class="wideButton" ion-button (click)="onCreateAccountBtnTap($event)">Create Account</button>	

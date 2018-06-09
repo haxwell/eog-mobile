@@ -35,42 +35,45 @@ export class LoginPage {
   }
 
   onLoginBtnTap(event) {
-    let self = this;
-    self.loading = self.loadingCtrl.create({
-      content: 'Please wait...'
-    })
 
-    self.loading.present();
+    if (this.user.name.length > 0 && this.user.password.length > 0) {
+      let self = this;
+      self.loading = self.loadingCtrl.create({
+        content: 'Please wait...'
+      })
 
-    this._userService.verifyAndLoginUser(this.user.name, this.user.password).then((userObj) => {
-      let pw = self.user.password;
-      let un = self.user.name;
+      self.loading.present();
 
-      self.user = userObj;
-      
-      self.user["password"] = pw;
-      self.user["name"] = un;
+      this._userService.verifyAndLoginUser(this.user.name, this.user.password).then((userObj) => {
+        let pw = self.user.password;
+        let un = self.user.name;
 
-      self._events.publish("app:login", userObj);
+        self.user = userObj;
+        
+        self.user["password"] = pw;
+        self.user["name"] = un;
 
-      self.loading.dismiss();
-      this.navCtrl.push(HomePage);
+        self._events.publish("app:login", userObj);
 
-
-    }, 
-    (err) => {
         self.loading.dismiss();
-        let okAlert = self._alertCtrl.create({
-                title: 'Sad face..',
-                subTitle: "Bad username/password!",
-                buttons: [{
-                  text: 'OK',
-                  handler: () => { }
-                }]
-              })
+        this.navCtrl.push(HomePage);
 
-        okAlert.present();
-    });
+
+      }, 
+      (err) => {
+          self.loading.dismiss();
+          let okAlert = self._alertCtrl.create({
+                  title: 'Sad face..',
+                  subTitle: "Bad username/password!",
+                  buttons: [{
+                    text: 'OK',
+                    handler: () => { }
+                  }]
+                })
+
+          okAlert.present();
+      });
+    }
   }
 
   onCreateAccountBtnTap(event) {
