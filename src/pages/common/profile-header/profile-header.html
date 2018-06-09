@@ -1,12 +1,7 @@
 <ion-grid>
 	<ion-row>
 		<ion-col col-auto>
-			<ion-item *ngIf="isThumbnailImageAvailable() && !isFromGallery()">
-				<ion-avatar item-start >
-					<img id="profileAvatarImg" [class]="getAvatarCSSClassString()" [src]="getThumbnailImage()" alt="profile_image" (load)="loaded($event)" (press)="onThumbnailPress($event)">
-				</ion-avatar>
-			</ion-item>
-			<ion-item *ngIf="isThumbnailImageAvailable() && isFromGallery()">
+			<ion-item *ngIf="isThumbnailImageAvailable()">
 				<ion-avatar item-start >
 					<img id="profileAvatarImg" [class]="getAvatarCSSClassString()" [src]="getThumbnailImage()" alt="profile_image" (load)="loaded($event)" (press)="onThumbnailPress($event)">
 				</ion-avatar>
