@@ -68,7 +68,7 @@ describe('KeywordEntryPage Component', () => {
     expect(component.isAddBtnEnabled()).toBe(true);
   });
 
-  it('should add newly typed keywords as only keywords when keywords is empty, as in an initial state', () => {
+  it('should add newly typed keywords as the only keywords when we begin in an initial state', () => {
     component.newKeywordsString = 'testing,1,2,3';
 
     expect(component.getKeywordArray().length).toEqual(0);
@@ -83,7 +83,7 @@ describe('KeywordEntryPage Component', () => {
     expect(component.isAddBtnEnabled()).toBe(false);
   });
 
-  it('should add newly typed keywords as only keywords when keywords is empty, as in an initial state', () => {
+  it('should not overwrite existing keywords when newly typed keywords are added', () => {
     component.getKeywordArray().push({id: -1, text: 'foo'});
     component.newKeywordsString = 'testing,1,2,3';
 
