@@ -8,13 +8,14 @@ import { CreateAccountPage } from './_pages/create.account'
 
 import { UserService } from '../../app/_services/user.service';
 
+import { environment } from '../../_environments/environment';
+
 @Component({
   selector: 'page-login',
   templateUrl: 'login.html'
 })
 export class LoginPage {
 
-//  user = {id:-1, name: 'eogadmin', password: 'password'};
   user = {id:-1, name: '', password: ''};
   loading = undefined;
   
@@ -25,6 +26,8 @@ export class LoginPage {
               private splashScreen: SplashScreen,
               private _events: Events) {
 
+              if ( !environment.production )
+                this.user = {id:-1, name: 'eoguser2', password: 'password'};
   }
 
   ionViewWillEnter() {
