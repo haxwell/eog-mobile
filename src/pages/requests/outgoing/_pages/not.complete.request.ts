@@ -26,10 +26,12 @@ export class NotCompleteOutgoingRequestPage {
 	}
 
 	onSaveBtnTap(evt) {
-		this._requestsService.notCompleteOutgoingRequest(this.request).then((obj) => {
-			console.log(obj);
-			this.viewCtrl.dismiss();
-		});
+		if (this.isSaveBtnEnabled()) {
+			this._requestsService.notCompleteOutgoingRequest(this.request).then((obj) => {
+				console.log(obj);
+				this.viewCtrl.dismiss();
+			});
+		}
 	}
 
 	onCancelBtnTap(evt) {

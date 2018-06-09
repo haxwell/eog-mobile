@@ -26,7 +26,7 @@
 		<ion-label>If you really want to mark this request incomplete,</ion-label>
 		<ion-label>type the word incomplete in the text box.</ion-label>
 		<br/>
-		<ion-input type="text" placeholder="type incomplete here..." [(ngModel)]="confirmationString" #ctrl="ngModel" required></ion-input>		
+		<ion-input type="text" placeholder="type incomplete here..." [(ngModel)]="confirmationString" #ctrl="ngModel" (keyup.enter)="onSaveBtnTap($event)" required></ion-input>
 	</ion-row>
 
 	<ion-row>
