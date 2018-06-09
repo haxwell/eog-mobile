@@ -23,9 +23,6 @@ import { ProfilePage } from '../pages/profile/profile';
 })
 export class EasyahApp {
   rootPage:any = LoginPage;
-  lastTimeBackPress = 0;
-  timePeriodToExit = 750;
-
   exitFunction = undefined;  
 
   @ViewChild(Nav) navCtrl: Nav;
