@@ -48,12 +48,10 @@ export class DomainObjectMetadataService {
 	getMetadataValue(_domainObject, functionKey) {
 		let self = this;
 		if (this.mapPropertyKeyToCalcFunction.length === 0) {
-			console.log("ERROR: MetadataService not initialized.");
 			return undefined; // TODO: handle this error better
 		}
 
 		if (!this.mapPropertyKeyToCalcFunction.some((obj) => { return obj["property"] === functionKey; })) {
-			console.log("ERROR: Called MetadataService for a function key which is not defined.");
 			return undefined;
 		}
 
