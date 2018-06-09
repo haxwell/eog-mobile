@@ -93,16 +93,26 @@ export class KeywordListPage {
 	}
 
 	onAddBtnTap() {
-		let tmp = this.newKeywordsString.split(',');
+		if (this.isAddBtnEnabled()) {
+			let tmp = this.newKeywordsString.split(',');
 
-		tmp.forEach((obj) => {
-			if (obj.length > 0) {
-				this.setDirty(true);
-				this.model["keywords"].push({id: -1, text: obj});
-			}
-		})
+			tmp.forEach((obj) => {
+				obj = obj.trim();
 
-		this.newKeywordsString = '';
-		this.setDirty(true);
+				if (obj.length > 0) {
+					this.setDirty(true);
+
+					let dupes = this.model["keywords"].filter((kw) => {
+						return kw["text"] == obj;
+					})
+
+					if (dupes.length == 0)
+						this.model["keywords"].push({id: -1, text: obj});
+				}
+			})
+
+			this.newKeywordsString = '';
+			this.setDirty(true);
+		}
 	}
 }
