@@ -93,11 +93,6 @@ describe('KeywordEntryPage Component', () => {
     expect(component.isAddBtnEnabled()).toBe(false);
   });
 
-  it('should not have save button enabled', () => {
-    expect(component.getKeywordArray().length).toEqual(0);
-    expect(component.isSaveBtnEnabled()).toBe(false);
-  });
-
   it('should not have keywords already', () => {
     expect(component.userHasNoKeywords()).toBe(true);
   });
