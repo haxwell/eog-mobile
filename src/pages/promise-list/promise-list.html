@@ -3,8 +3,6 @@
 </ion-header>
 
 <ion-content padding>
-
-
 	<ion-row>
 		<ion-col>
 			<h1 id="pageHeaderText">Your Promises...<br/></h1>
@@ -16,8 +14,8 @@
 		</button>
 	</ion-row>
 
-	<ion-list>
-		<ion-item *ngFor="let prm of getPromises()" (swipeLeft)="onDeletePromise(prm)" (click)="onPromiseBtnTap(prm)">
+	<ion-list *ngIf="userHasAnActivePromise()">
+		<ion-item *ngFor="let prm of getPromises()" (click)="onPromiseBtnTap(prm)">
 			<ion-avatar item-start>
 				<img [src]="getPromiseAvatarImage(prm)">
 			</ion-avatar>
@@ -28,7 +26,9 @@
 				<span *ngFor="let keyword of prm.keywords"><span class="smallKeyword">{{keyword.text}}</span></span>
 			</div>
 		</ion-item>
-		<ion-item *ngIf="!userHasAnActivePromise()">
+	</ion-list>
+	<ion-list *ngIf="!userHasAnActivePromise()">
+		<ion-item>
 			The promises you create will appear here! 
 		</ion-item>
 	</ion-list>
