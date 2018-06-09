@@ -1,11 +1,12 @@
 import { async, TestBed } from '@angular/core/testing';
 import { IonicModule } from 'ionic-angular';
 import { ViewController, NavParams } from 'ionic-angular';
+import { mockView } from 'ionic-angular/util/mock-providers';
+
 
 import { KeywordEntryPage } from './keyword.entry';
 import {
-  NavParamsMock,
-  ViewControllerMock
+  NavParamsMock
 } from '../../../test-config/mocks-ionic';
 
 describe('KeywordEntryPage Component', () => {
@@ -21,7 +22,7 @@ describe('KeywordEntryPage Component', () => {
         IonicModule.forRoot(KeywordEntryPage)
       ],
       providers: [
-        { provide: ViewController, useClass: ViewControllerMock },
+        { provide: ViewController, useValue: mockView() },
         { provide: NavParams, useClass: NavParamsMock }        
       ]
     })
@@ -37,6 +38,11 @@ describe('KeywordEntryPage Component', () => {
     component = fixture.componentInstance;
   });
 
+  afterEach(() => {
+    fixture.destroy();
+    component = null;
+  });
+
   it('should be created', () => {
     expect(component instanceof KeywordEntryPage).toBe(true);
   });
@@ -45,6 +51,7 @@ describe('KeywordEntryPage Component', () => {
     expect(component.getKeywordArray().length).toEqual(0);
     expect(component.isSaveBtnEnabled()).toBe(false);
   });
+
 
   it('should not have add button enabled', () => {
     expect(component.getKeywordArray().length).toEqual(0);
