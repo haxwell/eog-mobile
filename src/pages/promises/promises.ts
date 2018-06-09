@@ -3,16 +3,13 @@ import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { ModalController } from 'ionic-angular';
 import { LoadingController } from 'ionic-angular';
+import { AlertController } from 'ionic-angular';
 
-//import { RequestPage } from './_pages/request'
 import { RulePage } from './_pages/rule'
-//import { DeletePrmPage } from './_pages/delete.prm'
 import { KeywordEntryPage } from '../keyword.entry/keyword.entry'
 import { PrmModelService } from './_services/prm.model.service'
-import { PrmMetadataService } from '../../app/_services/prm-metadata.service';
 import { PrmDetailService } from '../../app/_services/prm-detail.service';
 import { UserService } from '../../app/_services/user.service';
-import { Constants } from '../../_constants/constants';
 
 @Component({
   selector: 'page-prm-detail',
@@ -28,17 +25,16 @@ export class PrmPage {
 	requestMsgs = undefined;
 	newKeywords = [];
 	loading = undefined;
-	_isRequestBtnVisible = undefined;
+	shouldPopOnReturnToThisView = false;
 
 	constructor(public navCtrl: NavController, 
 				navParams: NavParams, 
 				private modalCtrl: ModalController,
+				private _alertCtrl: AlertController,
 				private _prmModelService: PrmModelService,
-				private _prmMetadataService: PrmMetadataService,
 				private _prmDetailService: PrmDetailService,
 				private _userService: UserService,
-				private loadingCtrl: LoadingController,
-				private _constants: Constants) {
+				private loadingCtrl: LoadingController) {
 
 		let tmp = navParams.get('prm');
 
@@ -78,18 +74,69 @@ export class PrmPage {
 	}
 
 	ngOnInit() {
-		let self = this;
-		self._prmMetadataService.init();
 
-		self._prmMetadataService.getMetadataValue(self.model, self._constants.FUNCTION_KEY_PRM_IS_REQUESTABLE).then((bool) => { 
-			self._isRequestBtnVisible = bool && !self.isNewObject() && self.isReadOnly();
-		});
 	}
 
-	ionViewWillLeave() {
-		if (this.isDirty()) {
-			if (this.)
+	ionViewDidEnter() {
+		if (this.shouldPopOnReturnToThisView) {
+			this.navCtrl.pop();
 		}
+	}
+
+	ionViewCanLeave() {
+		let self = this;
+		
+		return new Promise((resolve, reject) => { 
+			if (self.isDirty()) {
+				if (self.isSaveBtnEnabled()) {
+				    let confirmAlert = this._alertCtrl.create({
+				      title: 'Save changes?',
+				      message: "This promise is ready to go. Do you want to save it?",
+				      buttons: [{
+				        text: "No, don't save.",
+				        role: 'cancel',
+				        handler: () => {
+							self.setDirty(false);
+							self.setShouldPopOnReturnToThisView();
+							resolve();
+						}
+				      }, {
+				        text: 'Yes, save it!',
+				        handler: () => {
+							self.setDirty(false);
+				          	self.onSaveBtnTap(false);
+				          	self.setShouldPopOnReturnToThisView();
+							resolve();
+				        }
+				      }]
+				    });
+				    confirmAlert.present();
+				} else {
+				    let confirmAlert = this._alertCtrl.create({
+				      title: 'Save changes?',
+				      message: "You'll lose the changes you made. Exit anyway?",
+				      buttons: [{
+				        text: "No, don't exit!",
+				        role: 'cancel',
+				        handler: () => {
+				        	reject();
+						}
+				      }, {
+				        text: 'Yes, lose changes',
+				        handler: () => {
+							self.setDirty(false);
+							self.setShouldPopOnReturnToThisView();
+							resolve();
+				        }
+				      }]
+				    });
+				    confirmAlert.present();
+				}
+			} else {
+				self.setShouldPopOnReturnToThisView();
+				resolve();
+			}
+		})
 	}
 
 	setModel(m) {
@@ -98,6 +145,10 @@ export class PrmPage {
 
 	isDirty() {
 		return this.dirty;
+	}
+
+	setShouldPopOnReturnToThisView() {
+		this.shouldPopOnReturnToThisView = true;
 	}
 
 	setDirty(b) {
@@ -129,14 +180,14 @@ export class PrmPage {
 	}
 
 	isSaveBtnEnabled() {
-		return !this.isReadOnly() && this.isDirty() && 
+		return this.isDirty() && 
 			(this.model["requiredPointsQuantity"] !== undefined && this.model["requiredPointsQuantity"] > 0) &&
 			this.model["keywords"].length > 0 &&
 			this.model["title"].length > 0 &&
 			this.model["description"].length > 0;
 	}
 
-	onSaveBtnTap(evt) {
+	onSaveBtnTap(shouldCallNavCtrlPop) {
 		let self = this;
 
 		self.loading = self.loadingCtrl.create({
@@ -147,15 +198,17 @@ export class PrmPage {
 
 		self.callback(self.isDirty(), self.model).then(() => {
 			self._prmModelService.save(self.model).then((newObj) => {
+				self.setDirty(false);			
 				self.loading.dismiss();
-				self.navCtrl.pop();
+				
+				if (shouldCallNavCtrlPop)
+					self.navCtrl.pop();
 			})
 		});
 	}
 
 	onIndividualKeywordPress(item) {
-		if (!this.isReadOnly())
-			return this.onAddKeywordBtnTap(item);
+		return this.onAddKeywordBtnTap(item);
 	}
 
 	onAddKeywordBtnTap(evt) {
