@@ -26,10 +26,12 @@ export class CancelRequestPage {
 	}
 
 	onSaveBtnTap(evt) {
-		this._requestsService.cancelIncomingRequest(this.request).then((obj) => {
-			console.log(obj);
-			this.viewCtrl.dismiss();			
-		})
+		if (this.isSaveBtnEnabled()) {
+			this._requestsService.cancelIncomingRequest(this.request).then((obj) => {
+				console.log(obj);
+				this.viewCtrl.dismiss();
+			})
+		}
 	}
 
 	onCancelBtnTap(evt) {

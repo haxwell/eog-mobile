@@ -14,7 +14,7 @@
 
 	<ion-row>
 		<ion-label>Type the word cancel, and then press the YES! button if you're sure.</ion-label>
-		<ion-input type="text" placeholder="type cancel here..." [(ngModel)]="confirmationString" #ctrl="ngModel" required></ion-input>		
+		<ion-input type="text" placeholder="type cancel here..." [(ngModel)]="confirmationString" #ctrl="ngModel" (keyup.enter)="onSaveBtnTap($event)" required></ion-input>
 	</ion-row>
 
 	<ion-row>
