@@ -58,16 +58,26 @@ export class KeywordEntryPage {
 	}
 
 	onAddBtnTap() {
-		let tmp = this.newKeywordsString.split(',');
+		if (this.isAddBtnEnabled()) {
+			let tmp = this.newKeywordsString.split(',');
 
-		tmp.forEach((obj) => {
-			if (obj.length > 0) {
-				this.setDirty(true);
-				this.keywordArray.push({id: -1, text: obj});
-			}
-		})
+			tmp.forEach((obj) => {
+				obj = obj.trim();
 
-		this.newKeywordsString = '';
+				if (obj.length > 0) {
+					this.setDirty(true);
+
+					let dupes = this.keywordArray.filter((kw) => {
+						return kw["text"] == obj;
+					})
+
+					if (dupes.length == 0)
+						this.keywordArray.push({id: -1, text: obj});
+				}
+			})
+
+			this.newKeywordsString = '';
+		}
 	}
 
 	onSaveBtnTap(evt) {
