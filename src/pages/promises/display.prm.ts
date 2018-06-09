@@ -79,6 +79,9 @@ export class PrmDisplayPage {
 
 	ngOnInit() {
 		let self = this;
+
+		self._prmMetadataService.init();
+
 		self._prmMetadataService.getMetadataValue(self.model, self._constants.FUNCTION_KEY_PRM_IS_REQUESTABLE).then((bool) => { 
 			self._isRequestBtnVisible = bool;
 		});
