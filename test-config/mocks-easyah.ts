@@ -12,3 +12,14 @@ export class ApiServiceMock {
 export class ProfilePictureServiceMock {
 	
 }
+
+export class PrmCollectionServiceMock {
+
+	public resetModel(): any {
+
+	}
+
+	public getModel(): any {
+		return {};
+	}
+}
