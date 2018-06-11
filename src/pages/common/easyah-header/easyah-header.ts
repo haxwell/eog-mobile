@@ -3,6 +3,8 @@ import { NavController } from 'ionic-angular';
 
 import { SearchPage } from '../../search/search';
 
+import { environment } from '../../../_environments/environment';
+
 @Component({
   selector: 'easyah-header',
   templateUrl: 'easyah-header.html'
@@ -11,10 +13,10 @@ import { SearchPage } from '../../search/search';
 export class EasyahHeader {
 
 	searchTextFieldValue = undefined;
-	//searchTextFieldValue = 'denver';
 
 	constructor(private navCtrl: NavController) {
-		
+		if ( !environment.production )
+			this.searchTextFieldValue = 'denver'
 	}
 
 	onSearchBtnTap(evt) {
