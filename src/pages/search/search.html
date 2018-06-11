@@ -11,28 +11,9 @@
 					</ion-label>
 				</ion-item-divider>
 
-			<ion-item-group *ngFor="let prm of getPromiseResults()">
-
-				<ion-item-sliding #slidingItem [attr.track]="getTrackPrm(prm)" (click)="onViewPromise(prm)">
-					<button ion-item>
-						<ion-avatar *ngIf="!isPromiseImageAvailable()" item-start>
-							<img src="assets/img/mushroom.jpg">
-						</ion-avatar>
-						<ion-avatar *ngIf="isPromiseImageAvailable()" item-start>
-							<img [src]="getPromiseImageFilepath()">
-						</ion-avatar>
-
-						<ion-icon [ngStyle]="{'color':getAlreadyRequestedIconColor(prm)}" name="megaphone"> </ion-icon>
-						<ion-icon [ngStyle]="{'color':getSufficientPointsIconColor(prm)}" name="pricetag"></ion-icon>
-						<ion-icon *ngIf="hasPrmBeenPreviouslyRequested(prm)" [ngStyle]="{'color':getSufficientTimeIconColor(prm)}" name="clock"></ion-icon>
-						<ion-icon *ngIf="areRecommendationsRequired(prm)" [ngStyle]="{'color':getNecessaryRecommendationsIconColor(prm)}" name="people"></ion-icon>
-
-						<span class="prmTitle">{{prm.title}}</span>
-						<span class="prmDesc">{{prm.description}}</span>
-					</button>
-
-				</ion-item-sliding>
-			</ion-item-group>
+			<other-peoples-promise-list [prms]="getPromiseResults()">
+			</other-peoples-promise-list>
+	
 		</ion-list>
 
 		<ion-list #searchUserResultList>
@@ -44,7 +25,7 @@
 
 			<ion-item-group *ngFor="let user of getUsersResults()">
 
-				<ion-item-sliding #slidingItem [attr.track]="getTrackUser(user)" (click)="onViewUser(user)">
+				<ion-item-sliding #slidingItem (click)="onViewUser(user)">
 					<button ion-item>
 						<ion-avatar *ngIf="isProfileImageAvailable(user)" item-start>
 							<img [src]="getProfileImageFilepath(user)">
