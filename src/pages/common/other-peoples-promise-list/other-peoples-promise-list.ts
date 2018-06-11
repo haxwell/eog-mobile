@@ -45,8 +45,6 @@ export class OtherPeoplesPromiseList {
 
 			this._prmMetadataService.markDirty({domainObject: prm});
 
-			console.log(" ------ ===- ---- finishing other-peoples-promise-list event handler")
-
 			this.ngOnInit(); 
 		};
 
@@ -145,5 +143,4 @@ export class OtherPeoplesPromiseList {
 	onViewPromise(prm) {
       this.navCtrl.push(PrmDisplayPage, { prm: prm });
 	}
-
 }
