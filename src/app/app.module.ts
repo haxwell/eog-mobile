@@ -36,6 +36,7 @@ import { NotCompleteOutgoingRequestPage } from '../pages/requests/outgoing/_page
 import { PermanentlyDismissUnresolvedRequestPage } from '../pages/requests/outgoing/_pages/permanently-dismiss-unresolved-request';
 import { CancelOutgoingRequestPage } from '../pages/requests/outgoing/_pages/cancel.request';
 import { RequestContactInfoPage } from '../pages/requests/_pages/contact.info';
+import { OtherPeoplesPromiseList } from '../pages/common/other-peoples-promise-list/other-peoples-promise-list';
 import { PrmPage } from '../pages/promises/promises';
 import { PrmDisplayPage } from '../pages/promises/display.prm';
 import { OutgoingRequestMadeTutorialPage } from '../pages/promises/_pages/outgoing-request-made-tutorial';
@@ -75,6 +76,7 @@ import { PrmMetadataService } from './_services/prm-metadata.service';
 import { PrmDetailService } from './_services/prm-detail.service';
 import { UserPreferencesService } from './_services/user-preferences.service';
 import { UnseenChangesIndicatorService } from './_services/unseen-changes-indicator.service';
+import { HomeService } from '../pages/home/_services/home.service';
 
 import { Constants } from '../_constants/constants';
 
@@ -100,6 +102,7 @@ export class CustomHammerConfig extends HammerGestureConfig {
     ChoosePhotoSourcePage,
     PrmPage,
     PrmDisplayPage,
+    OtherPeoplesPromiseList,
     OutgoingRequestMadeTutorialPage,
     DeletePrmPage,
     RulePage,
@@ -150,6 +153,7 @@ export class CustomHammerConfig extends HammerGestureConfig {
     ChoosePhotoSourcePage,
     PrmPage,
     PrmDisplayPage,
+    OtherPeoplesPromiseList,
     OutgoingRequestMadeTutorialPage,
     PromiseListPage,
     KeywordListPage,
@@ -207,6 +211,7 @@ export class CustomHammerConfig extends HammerGestureConfig {
     WebsocketService,
     PushMessagingService,
     UnseenChangesIndicatorService,
+    HomeService,
     {provide: HAMMER_GESTURE_CONFIG,    useClass: CustomHammerConfig},
     {provide: ErrorHandler,             useClass: IonicErrorHandler}
   ]
