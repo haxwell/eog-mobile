@@ -16,4 +16,15 @@
 		</ion-row>
 	</ion-grid>
 
+	<ion-list #recentPrmList>
+		<ion-item-divider sticky>
+			<ion-label>
+				Promises Recently Created By Others
+			</ion-label>
+		</ion-item-divider>
+
+		<other-peoples-promise-list [prms]="getMostRecentlyCreatedPromises()">
+		</other-peoples-promise-list>
+	</ion-list>
+
 </ion-content>

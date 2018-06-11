@@ -3,7 +3,7 @@ import { NavController, Navbar, Events, ModalController, AlertController } from 
 import { TutorialPage } from '../tutorial/tutorial'
 
 import { UserService } from '../../app/_services/user.service'
-
+import { HomeService } from './_services/home.service'
 
 @Component({
     selector: 'page-home',
@@ -14,16 +14,23 @@ export class HomePage {
     @ViewChild(Navbar) navBar: Navbar;
 
     showTutorialPromise = undefined;
+    mostRecentlyCreatedPromises = undefined;
 
     constructor(public navCtrl: NavController,
                 private _modalCtrl: ModalController, 
-                private _userService: UserService
+                private _userService: UserService,
+                private _homeService: HomeService
     ) {
 
     }
 
     ngOnInit() {
-        this.showTutorialPromise = this._userService.getShowTutorialOnLogin();
+        let self = this;
+        self.showTutorialPromise = self._userService.getShowTutorialOnLogin();
+
+        self._homeService.getMostRecentlyCreatedPromises().then((data) => {
+            self.mostRecentlyCreatedPromises = data;
+        });
     }
 
     ionViewWillEnter() {
@@ -41,6 +48,10 @@ export class HomePage {
                 }
             });
         }
+    }
+
+    getMostRecentlyCreatedPromises() {
+        return this.mostRecentlyCreatedPromises;
     }
 
 }
