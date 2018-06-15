@@ -43,7 +43,6 @@ import { OutgoingRequestMadeTutorialPage } from '../pages/promises/_pages/outgoi
 import { DeletePrmPage } from '../pages/promises/_pages/delete.prm';
 import { RequestsIncomingView } from '../pages/common/requests-incoming/requests-incoming';
 import { RequestsOutgoingView } from '../pages/common/requests-outgoing/requests-outgoing';
-import { PromiseLineItem } from '../pages/common/promise-line-item/promise-line-item';
 import { PromiseListPage } from '../pages/promise-list/promise-list';
 import { KeywordListPage } from '../pages/keyword-list/keyword-list';
 import { RecommendationListPage } from '../pages/recommendation-list/recommendation-list';
@@ -108,7 +107,6 @@ export class CustomHammerConfig extends HammerGestureConfig {
     RulePage,
     RequestsIncomingView,    
     RequestsOutgoingView,
-    PromiseLineItem,
     PromiseListPage,
     KeywordListPage,
     RecommendationListPage,
