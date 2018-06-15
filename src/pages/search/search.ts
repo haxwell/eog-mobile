@@ -3,6 +3,8 @@ import { NavController, NavParams } from 'ionic-angular';
 import { Events } from 'ionic-angular';
 import { LoadingController } from 'ionic-angular';
 
+import { Constants } from '../../_constants/constants'
+
 import { PrmDisplayPage } from '../promises/display.prm'
 import { ProfilePage } from '../profile/profile'
 
@@ -30,6 +32,7 @@ export class SearchPage {
 				private _profilePictureService: ProfilePictureService,
 				private _userService: UserService,
 				private loadingCtrl: LoadingController,
+				private _constants: Constants,
 				_events: Events) {
 
 		this.searchString = navParams.get('searchString') || '';
@@ -128,7 +131,7 @@ export class SearchPage {
 
 			console.log("No Profile Image loaded for user Id " + user["id"] + ". Trying to find one... " + path);			
 			
-			self._profilePictureService.get(user["id"], path).then((path) => {
+			self._profilePictureService.get(this._constants.PHOTO_TYPE_PROFILE, user["id"], path).then((path) => {
 				if (path !== undefined)
 					self.profileImageFilepath[user["id"]] = path;
 			});

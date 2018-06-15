@@ -11,6 +11,8 @@ import { PrmModelService } from './_services/prm.model.service'
 import { PrmDetailService } from '../../app/_services/prm-detail.service';
 import { UserService } from '../../app/_services/user.service';
 
+import EXIF from 'exif-js'
+
 @Component({
   selector: 'page-prm-detail',
   templateUrl: 'promises.html'
@@ -26,6 +28,7 @@ export class PrmPage {
 	newKeywords = [];
 	loading = undefined;
 	shouldPopOnReturnToThisView = false;
+	imageOrientation = undefined;
 
 	constructor(public navCtrl: NavController, 
 				navParams: NavParams, 
@@ -271,4 +274,32 @@ export class PrmPage {
 		return (this.model["requiredUserRecommendations"] && this.model["requiredUserRecommendations"].length > 0);
 	}
 
+	isThumbnailImageAvailable() {
+		return this.model["imageFileURI"] !== undefined;
+	}
+
+	getThumbnailImage() {
+		if (this.model["imageFileURI"] !== undefined)
+			return this.model["imageFileURI"];
+		else
+			return "assets/img/mushroom.jpg";
+	}
+
+	getAvatarCSSClassString() {
+		if (this.imageOrientation === 8)
+			return "rotate90Counterclockwise centered";
+		else if (this.imageOrientation === 3)
+			return "rotate180 centered";
+		else if (this.imageOrientation === 6)
+			return "rotate90Clockwise centered";
+		else
+			return "centered";
+	}
+
+	loaded(evt) {
+		let self = this;
+		EXIF.getData(evt.target, function() {
+			self.imageOrientation = EXIF.getTag(this, "Orientation");
+		});
+	}
 }

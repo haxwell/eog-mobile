@@ -36,5 +36,7 @@ export class Constants {
 	FUNCTION_KEY_PROFILE_PICTURE_GET = 0;
 	FUNCTION_KEY_PROFILE_PICTURE_SET = 1;
 
-
+	//
+	PHOTO_TYPE_PRM = 'prm';
+	PHOTO_TYPE_PROFILE = 'profile';
 }

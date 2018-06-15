@@ -6,6 +6,8 @@ import { ProfilePage } from '../../profile/profile'
 import { ProfilePictureService } from '../../../app/_services/profile-picture.service'
 import { ProfileService } from '../_services/profile.service'
 
+import { Constants } from '../../../_constants/constants'
+
 @Component({
   selector: 'users-line-item',
   templateUrl: 'users-line-item.html'
@@ -21,6 +23,7 @@ export class UsersLineItem {
 				private navCtrl: NavController,
 				private _profilePictureService: ProfilePictureService,
 				private _profileService: ProfileService,
+				private _constants : Constants,
                 _events: Events) {
 
 	}
@@ -47,7 +50,7 @@ export class UsersLineItem {
 
 			let path = self._profileService.getMostProbableProfilePhotoPath(self.item["id"]);
 			
-			self._profilePictureService.get(self.item["id"], path).then((path) => {
+			self._profilePictureService.get(self._constants.PHOTO_TYPE_PROFILE, self.item["id"], path).then((path) => {
 				if (path !== undefined)
 					self.profileImageFilepath = path;
 			});

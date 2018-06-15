@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Events } from 'ionic-angular';
 
+import { Constants } from '../../../_constants/constants';
+
 import { UserService } from '../../../app/_services/user.service';
 import { ApiService } from '../../../app/_services/api.service';
 import { PointsService } from '../../../app/_services/points.service';
@@ -20,6 +22,7 @@ export class ProfileService {
 				private _pointsService: PointsService,
 				private _recommendationService: RecommendationService,
 				private _profilePictureService: ProfilePictureService,
+				private _constants : Constants,
 				private _events: Events) {
 
 				}
@@ -27,7 +30,7 @@ export class ProfileService {
 	init(userId) {
 		this._recommendationService.init();
 		this._pointsService.init();
-		this._profilePictureService.reset(userId);
+		this._profilePictureService.reset(this._constants.PHOTO_TYPE_PROFILE, userId);
 
 		this.modelCache[userId] = undefined;
 	}
@@ -79,7 +82,7 @@ export class ProfileService {
 		});
 
 		if (model["imageFileURI"] === undefined) {
-			this._profilePictureService.get(userId, this.getMostProbableProfilePhotoPath(userId)).then((filename) => {
+			this._profilePictureService.get(this._constants.PHOTO_TYPE_PROFILE, userId, this.getMostProbableProfilePhotoPath(userId)).then((filename) => {
 				model["imageFileSource"] = 'eog';
 				model["imageFileURI"] = filename;
 				model["imageFileURI_OriginalValue"] = filename;
@@ -157,7 +160,7 @@ export class ProfileService {
 				}
 
 				if (self.isProfileImageChanged(model)) {
-					self._profilePictureService.save(user["id"], model["imageFileURI"]).then((data) => {
+					self._profilePictureService.save(this._constants.PHOTO_TYPE_PROFILE, user["id"], model["imageFileURI"]).then((data) => {
 						self.init(user["id"]);
 						userUpdateFunc();
 					});

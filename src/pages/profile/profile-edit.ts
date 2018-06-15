@@ -4,6 +4,8 @@ import { AlertController } from 'ionic-angular';
 import { LoadingController } from 'ionic-angular';
 import { ModalController } from 'ionic-angular';
 
+import { Constants } from '../../_constants/constants'
+
 import { ProfileService } from '../../pages/common/_services/profile.service'
 import { ProfilePictureService } from '../../app/_services/profile-picture.service'
 import { UserMetadataService } from '../../app/_services/user-metadata.service'
@@ -38,6 +40,7 @@ export class ProfileEditPage {
 				private _profileService: ProfileService,
 				private _profilePictureService: ProfilePictureService,
 				private _userMetadataService: UserMetadataService,
+				private _constants: Constants,
 				private _file: File) {
 
 		this.user = Object.assign({}, navParams.get('user'));
@@ -288,7 +291,7 @@ export class ProfileEditPage {
 
 						console.log('deleting photo ' + self.user["id"]);
 
-						self._profilePictureService.delete(self.user["id"]).then(() => { 
+						self._profilePictureService.delete(self._constants.PHOTO_TYPE_PROFILE, self.user["id"]).then(() => { 
 
 							console.log("Now in profile-edit")
 							let model = self._profileService.getModel(self.user["id"]);

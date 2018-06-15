@@ -55,6 +55,24 @@
 	</ion-list>
 
 	<ion-row>
+		<ion-item *ngIf="isThumbnailImageAvailable() && !isFromGallery()">
+			<ion-avatar >
+				<img id="prmAvatarImg" [hidden]="!isThumbnailImageVisible()" [class]="getAvatarCSSClassString()" [src]="getThumbnailImage()" (load)="loaded($event)" alt="profile_image" >
+			</ion-avatar>
+		</ion-item>
+		<ion-item *ngIf="isThumbnailImageAvailable() && isFromGallery()">
+			<ion-avatar >
+				<img id="prmAvatarImg" [hidden]="!isThumbnailImageVisible()" [class]="getAvatarCSSClassString()" [src]="getThumbnailImage()" (load)="loaded($event)" alt="profile_image" >
+			</ion-avatar>
+		</ion-item>
+		<ion-item *ngIf="!isThumbnailImageAvailable()">
+			<ion-avatar>
+				<img id="prmAvatarImg" class="centered" src="assets/img/mushroom.jpg" >
+			</ion-avatar>
+		</ion-item>
+	</ion-row>	
+
+	<ion-row>
 		<button ion-button [disabled]="!isSaveBtnEnabled()" (click)="onSaveBtnTap(true)">Save</button>
 	</ion-row>
 

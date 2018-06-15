@@ -3,6 +3,8 @@ import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { Events } from 'ionic-angular';
 
+import { Constants } from '../../_constants/constants'
+
 import { UserService } from '../../app/_services/user.service';
 import { RecommendationService } from '../../app/_services/recommendation.service'
 import { ProfileService } from '../../pages/common/_services/profile.service'
@@ -32,6 +34,7 @@ export class RecommendationListPage {
 				private _recommendationService : RecommendationService,
 				private _profilePictureService: ProfilePictureService,
 				private navCtrl: NavController,
+				private _constants: Constants,
 				private _events: Events
 	) {
 		this.setDirty(true);
@@ -88,7 +91,7 @@ export class RecommendationListPage {
 
 			let path = self._profileService.getMostProbableProfilePhotoPath(userId);
 			
-			self._profilePictureService.get(userId, path).then((path) => {
+			self._profilePictureService.get(this._constants.PHOTO_TYPE_PROFILE, userId, path).then((path) => {
 				if (path !== undefined)
 					self.directionallyOppositeUserProfileImageFilepath[userId] = path;
 			});

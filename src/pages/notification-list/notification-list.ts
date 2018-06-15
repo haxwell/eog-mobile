@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { Events } from 'ionic-angular';
 
+import { Constants } from '../../_constants/constants'
+
 import { NotificationService } from '../../app/_services/notification.service'
 import { ProfileService } from '../../pages/common/_services/profile.service'
 import { ProfilePictureService } from '../../app/_services/profile-picture.service'
@@ -25,6 +27,7 @@ export class NotificationListPage {
 	constructor(private _notificationService : NotificationService,
 				private _profilePictureService : ProfilePictureService,
 				private _profileService : ProfileService,
+				private _constants: Constants,
 				private _events: Events				
 	) {
 		
@@ -109,7 +112,7 @@ export class NotificationListPage {
 
 			let path = self._profileService.getMostProbableProfilePhotoPath(userId);
 			
-			self._profilePictureService.get(userId, path).then((path) => {
+			self._profilePictureService.get(this._constants.PHOTO_TYPE_PROFILE, userId, path).then((path) => {
 				if (path !== undefined)
 					self.directionallyOppositeUserProfileImageFilepath[userId] = path;
 			});
