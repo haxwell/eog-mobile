@@ -14,7 +14,7 @@ import { DeclineReasonCodeService } from './_services/declined-reason-codes.serv
 import { NotificationService } from './_services/notification.service';
 import { PointsService } from './_services/points.service';
 import { ProfileService } from '../pages/common/_services/profile.service';
-import { ProfilePictureService } from './_services/profile-picture.service';
+import { PictureService } from './_services/picture.service';
 import { RecommendationService } from './_services/recommendation.service';
 import { RequestsService } from './_services/requests.service';
 import { SearchService } from './_services/search.service';
@@ -32,7 +32,7 @@ import {
 import {
   ApiServiceMock,
   UserServiceMock,
-  ProfilePictureServiceMock
+  PictureServiceMock
 } from '../../test-config/mocks-easyah';
 
 describe('EasyahApp Component', () => {
@@ -51,7 +51,7 @@ describe('EasyahApp Component', () => {
         DeclineReasonCodeService,
         PointsService,
         ProfileService,
-        { provide: ProfilePictureService, useClass: ProfilePictureServiceMock },
+        { provide: PictureService, useClass: PictureServiceMock },
         RecommendationService,
         RequestsService,
         SearchService,

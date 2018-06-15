@@ -6,7 +6,7 @@ import { Constants } from '../../../_constants/constants';
 import { UserService } from '../../../app/_services/user.service';
 import { ApiService } from '../../../app/_services/api.service';
 import { PointsService } from '../../../app/_services/points.service';
-import { ProfilePictureService } from '../../../app/_services/profile-picture.service';
+import { PictureService } from '../../../app/_services/picture.service';
 import { RecommendationService } from '../../../app/_services/recommendation.service';
 
 import { environment } from '../../../_environments/environment';
@@ -21,7 +21,7 @@ export class ProfileService {
 				private _userService: UserService, 
 				private _pointsService: PointsService,
 				private _recommendationService: RecommendationService,
-				private _profilePictureService: ProfilePictureService,
+				private _pictureService: PictureService,
 				private _constants : Constants,
 				private _events: Events) {
 
@@ -30,7 +30,7 @@ export class ProfileService {
 	init(userId) {
 		this._recommendationService.init();
 		this._pointsService.init();
-		this._profilePictureService.reset(this._constants.PHOTO_TYPE_PROFILE, userId);
+		this._pictureService.reset(this._constants.PHOTO_TYPE_PROFILE, userId);
 
 		this.modelCache[userId] = undefined;
 	}
@@ -50,7 +50,7 @@ export class ProfileService {
 
 		this._pointsService.init();
 		this._recommendationService.init();
-		this._profilePictureService.init()
+		this._pictureService.init()
 
 		model["points"] = {"total" : 0, "available": 0};
 
@@ -82,7 +82,7 @@ export class ProfileService {
 		});
 
 		if (model["imageFileURI"] === undefined) {
-			this._profilePictureService.get(this._constants.PHOTO_TYPE_PROFILE, userId, this.getMostProbableProfilePhotoPath(userId)).then((filename) => {
+			this._pictureService.get(this._constants.PHOTO_TYPE_PROFILE, userId, this.getMostProbableProfilePhotoPath(userId)).then((filename) => {
 				model["imageFileSource"] = 'eog';
 				model["imageFileURI"] = filename;
 				model["imageFileURI_OriginalValue"] = filename;
@@ -160,7 +160,7 @@ export class ProfileService {
 				}
 
 				if (self.isProfileImageChanged(model)) {
-					self._profilePictureService.save(this._constants.PHOTO_TYPE_PROFILE, user["id"], model["imageFileURI"]).then((data) => {
+					self._pictureService.save(this._constants.PHOTO_TYPE_PROFILE, user["id"], model["imageFileURI"]).then((data) => {
 						self.init(user["id"]);
 						userUpdateFunc();
 					});

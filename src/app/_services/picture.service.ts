@@ -13,7 +13,7 @@ import { Constants } from '../../_constants/constants';
 import { environment } from '../../_environments/environment';
 
 @Injectable()
-export class ProfilePictureService { 
+export class PictureService { 
 
 	_functionPromiseService = new FunctionPromiseService();
 

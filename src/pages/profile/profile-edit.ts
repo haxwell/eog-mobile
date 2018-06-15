@@ -7,7 +7,7 @@ import { ModalController } from 'ionic-angular';
 import { Constants } from '../../_constants/constants'
 
 import { ProfileService } from '../../pages/common/_services/profile.service'
-import { ProfilePictureService } from '../../app/_services/profile-picture.service'
+import { PictureService } from '../../app/_services/picture.service'
 import { UserMetadataService } from '../../app/_services/user-metadata.service'
 
 import { ChoosePhotoSourcePage } from '../../pages/common/choose-photo-source/choose-photo-source'
@@ -38,7 +38,7 @@ export class ProfileEditPage {
 				public loadingCtrl: LoadingController,
 				public alertCtrl: AlertController,
 				private _profileService: ProfileService,
-				private _profilePictureService: ProfilePictureService,
+				private _pictureService: PictureService,
 				private _userMetadataService: UserMetadataService,
 				private _constants: Constants,
 				private _file: File) {
@@ -291,7 +291,7 @@ export class ProfileEditPage {
 
 						console.log('deleting photo ' + self.user["id"]);
 
-						self._profilePictureService.delete(self._constants.PHOTO_TYPE_PROFILE, self.user["id"]).then(() => { 
+						self._pictureService.delete(self._constants.PHOTO_TYPE_PROFILE, self.user["id"]).then(() => { 
 
 							console.log("Now in profile-edit")
 							let model = self._profileService.getModel(self.user["id"]);
@@ -305,7 +305,7 @@ export class ProfileEditPage {
 								let filename = model["imageFileURI"].substring(lastSlash+1);
 
 								self._file.removeFile(path, filename).then((data) => {
-									console.log("Call to profilePictureService to DELETE photo for "+self.user['id']+" successful! Image was from camera or the eog api, so it was removed from phone.");
+									console.log("Call to pictureService to DELETE photo for "+self.user['id']+" successful! Image was from camera or the eog api, so it was removed from phone.");
 
 									func();
 									
@@ -315,7 +315,7 @@ export class ProfileEditPage {
 									func();
 								});
 							} else {
-								console.log("Call to profilePictureService to DELETE photo for "+self.user['id']+" successful! Image was from phone's gallery, so did not try to remove it.");
+								console.log("Call to pictureService to DELETE photo for "+self.user['id']+" successful! Image was from phone's gallery, so did not try to remove it.");
 
 								func();								
 							}

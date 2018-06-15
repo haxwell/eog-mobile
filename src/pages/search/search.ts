@@ -10,7 +10,7 @@ import { ProfilePage } from '../profile/profile'
 
 import { SearchService } from '../../app/_services/search.service';
 import { ProfileService } from '../common/_services/profile.service';
-import { ProfilePictureService } from '../../app/_services/profile-picture.service';
+import { PictureService } from '../../app/_services/picture.service';
 import { PrmMetadataService } from '../../app/_services/prm-metadata.service';
 import { UserService } from '../../app/_services/user.service';
 
@@ -29,7 +29,7 @@ export class SearchPage {
 				public navCtrl: NavController,
 				private _searchService: SearchService,
 				private _profileService: ProfileService,
-				private _profilePictureService: ProfilePictureService,
+				private _pictureService: PictureService,
 				private _userService: UserService,
 				private loadingCtrl: LoadingController,
 				private _constants: Constants,
@@ -131,7 +131,7 @@ export class SearchPage {
 
 			console.log("No Profile Image loaded for user Id " + user["id"] + ". Trying to find one... " + path);			
 			
-			self._profilePictureService.get(this._constants.PHOTO_TYPE_PROFILE, user["id"], path).then((path) => {
+			self._pictureService.get(this._constants.PHOTO_TYPE_PROFILE, user["id"], path).then((path) => {
 				if (path !== undefined)
 					self.profileImageFilepath[user["id"]] = path;
 			});

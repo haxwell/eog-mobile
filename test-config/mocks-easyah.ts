@@ -9,7 +9,7 @@ export class ApiServiceMock {
 	
 }
 
-export class ProfilePictureServiceMock {
+export class PictureServiceMock {
 	
 }
 

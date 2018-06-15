@@ -4,7 +4,6 @@ import { AlertController, ViewController, NavParams } from 'ionic-angular';
 import { File } from '@ionic-native/file'
 
 import { CameraService } from '../_services/camera.service';
-import { ProfilePictureService } from '../../../app/_services/profile-picture.service'
 
 @Component({
   selector: 'page-choose-photo-source',
@@ -18,7 +17,6 @@ export class ChoosePhotoSourcePage {
 	userId = undefined;
 
 	constructor(private viewCtrl: ViewController, private cameraService: CameraService,
-				private _profilePictureService: ProfilePictureService,
 				private _alertCtrl: AlertController, public params: NavParams,
 				private _file: File) {
 

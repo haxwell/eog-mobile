@@ -3,7 +3,7 @@ import { NavController, NavParams, Events } from 'ionic-angular';
 
 import { ProfilePage } from '../../profile/profile'
 
-import { ProfilePictureService } from '../../../app/_services/profile-picture.service'
+import { PictureService } from '../../../app/_services/picture.service'
 import { ProfileService } from '../_services/profile.service'
 
 import { Constants } from '../../../_constants/constants'
@@ -21,7 +21,7 @@ export class UsersLineItem {
 
 	constructor(navParams: NavParams, 
 				private navCtrl: NavController,
-				private _profilePictureService: ProfilePictureService,
+				private _pictureService: PictureService,
 				private _profileService: ProfileService,
 				private _constants : Constants,
                 _events: Events) {
@@ -50,7 +50,7 @@ export class UsersLineItem {
 
 			let path = self._profileService.getMostProbableProfilePhotoPath(self.item["id"]);
 			
-			self._profilePictureService.get(self._constants.PHOTO_TYPE_PROFILE, self.item["id"], path).then((path) => {
+			self._pictureService.get(self._constants.PHOTO_TYPE_PROFILE, self.item["id"], path).then((path) => {
 				if (path !== undefined)
 					self.profileImageFilepath = path;
 			});
