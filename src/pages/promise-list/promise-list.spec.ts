@@ -5,7 +5,7 @@ import { mockView, mockNavController } from 'ionic-angular/util/mock-providers';
 
 import { EasyahHeader } from '../../pages/common/easyah-header/easyah-header';
 import { PromiseListPage } from './promise-list';
-import { PrmPage } from '../promises/promises';
+import { PrmEditPage } from '../promises/edit.prm';
 import { PrmDisplayPage } from '../promises/display.prm';
 
 import { PrmCollectionService } from '../../app/_services/prm-collection.service';
@@ -62,22 +62,22 @@ describe('PromiseListPage Component', () => {
     expect(component instanceof PromiseListPage).toBe(true);
   });
 
-  it('should show the PrmPage dialog when the New Promise button is tapped', () => {
-	spyOn(mockNavCtrl, 'push');
+  it('should show the PrmEditPage dialog when the New Promise button is tapped', () => {
+  	spyOn(mockNavCtrl, 'push');
 
-	component.onNewPromiseBtnTap();
+  	component.onNewPromiseBtnTap();
 
-	expect(mockNavCtrl.push).toHaveBeenCalledWith(PrmPage, {prm: undefined, callback: jasmine.any(Function)});
+  	expect(mockNavCtrl.push).toHaveBeenCalledWith(PrmEditPage, {prm: undefined, callback: jasmine.any(Function)});
   })
 
   it('should show the PrmDisplayPage when an individual Promise is tapped', () => {
-	spyOn(mockNavCtrl, 'push');
+  	spyOn(mockNavCtrl, 'push');
 
-	let _prm = {id: -1, text: 'text'};
+  	let _prm = {id: -1, text: 'text'};
 
-	component.onPromiseBtnTap(_prm);
+  	component.onPromiseBtnTap(_prm);
 
-	expect(mockNavCtrl.push).toHaveBeenCalledWith(PrmDisplayPage, {prm: _prm, callback: jasmine.any(Function)});
+  	expect(mockNavCtrl.push).toHaveBeenCalledWith(PrmDisplayPage, {prm: _prm, callback: jasmine.any(Function)});
   })
 
 });

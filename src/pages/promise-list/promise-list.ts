@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { NavController, ModalController } from 'ionic-angular';
 import { Events } from 'ionic-angular';
 
-import { PrmPage } from '../promises/promises'
+import { PrmEditPage } from '../promises/edit.prm'
 import { PrmDisplayPage } from '../promises/display.prm'
 import { DeletePrmPage } from '../promises/_pages/delete.prm'
 
@@ -14,6 +14,11 @@ import { PrmCollectionService } from '../../app/_services/prm-collection.service
   templateUrl: 'promise-list.html'
 })
 
+/**
+ *
+ * Displays a list of promises owned by the current user.
+ *  
+ */
 export class PromiseListPage {
 
 	model = {};
@@ -66,25 +71,22 @@ export class PromiseListPage {
 	}
 
 	onNewPromiseBtnTap() {
-		this.navCtrl.push(PrmPage, { prm: undefined, callback: this.PrmCallback });
+		this.navCtrl.push(PrmEditPage, { prm: undefined, callback: this.PrmCallback });
 	}
 
 	onPromiseBtnTap(item) { 
 		this.navCtrl.push(PrmDisplayPage, { prm: item, callback: this.PrmCallback });
 	}
 
-	onDeletePromise(prm) {
-		let modal = this.modalCtrl.create(DeletePrmPage, {prm: prm});
-		modal.onDidDismiss(data => { if (data === true) console.log("TODO: Update The UI when Promise is deleted by a swipe left"); } );
-		modal.present();
-	}
-
 	userHasAnActivePromise() {
 		return this.model["prms"] !== undefined && this.model["prms"].length > 0;
 	}
 
-	getPromiseAvatarImage(prm) {
-		return "assets/img/mushroom.jpg";
+	getThumbnailImage(prm) {
+		if (prm["imageFileURI"] !== undefined)
+			return prm["imageFileURI"];
+		else
+			return "assets/img/mushroom.jpg";
 	}
 
 	getPointRecommendationCountPhrase(prm) {
