@@ -2,22 +2,41 @@ import { Injectable } from '@angular/core';
 
 import { UserService } from './user.service';
 import { ApiService } from './api.service';
+import { PictureService } from './picture.service';
 
 import { environment } from '../../_environments/environment';
+import { Constants } from '../../_constants/constants';
 
 @Injectable()
 export class SearchService {
 	
-	constructor(private _apiService: ApiService, private _userService: UserService) { }
+	constructor(private _apiService: ApiService, private _userService: UserService,
+				private _pictureService: PictureService, private _constants: Constants) { 
+
+	}
 
 	searchPrms(qStr) {
+		let self = this;
 		return new Promise((resolve, reject) => {
-			let user = this._userService.getCurrentUser();
+			let user = self._userService.getCurrentUser();
 			let url = environment.apiUrl + "/api/promises?q=" + qStr;
-			this._apiService.get(url)
+			self._apiService.get(url)
 			.subscribe((searchObj) => {
 				let rtn = JSON.parse(searchObj["_body"]);
-				resolve(rtn.filter((obj) => { return obj["userId"] !== user["id"]; }));
+
+				rtn = rtn.filter((obj) => { return obj["userId"] !== user["id"]; });
+
+				// TODO: This is duplicated in prm-collection-service.ts
+				rtn.forEach((prm) => {
+					self._pictureService.get(self._constants.PHOTO_TYPE_PRM, prm["id"]).then((filename) => {
+						console.log("in search.ts, called to get the filename for prm " + prm["id"] + ", and got " + filename)
+						prm["imageFileSource"] = 'eog';
+						prm["imageFileURI"] = filename;
+						prm["imageFileURI_OriginalValue"] = filename;
+					});
+				});
+
+				resolve(rtn);
 			});
 		});
 	}
