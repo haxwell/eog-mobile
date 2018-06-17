@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
-import { NavController, ModalController } from 'ionic-angular';
+import { NavController } from 'ionic-angular';
 import { Events } from 'ionic-angular';
 
 import { PrmEditPage } from '../promises/edit.prm'
 import { PrmDisplayPage } from '../promises/display.prm'
-import { DeletePrmPage } from '../promises/_pages/delete.prm'
 
 import { PrmCollectionService } from '../../app/_services/prm-collection.service'
 
+import EXIF from 'exif-js';
 
 @Component({
   selector: 'promise-list',
@@ -23,10 +23,10 @@ export class PromiseListPage {
 
 	model = {};
 	dirty = undefined;
+	imageOrientation = {};
 
 	constructor(private _prmcService : PrmCollectionService,
 				private navCtrl : NavController,
-				private modalCtrl : ModalController,
 				private _events: Events
 	) {
 		this.setDirty(true);
@@ -82,13 +82,6 @@ export class PromiseListPage {
 		return this.model["prms"] !== undefined && this.model["prms"].length > 0;
 	}
 
-	getThumbnailImage(prm) {
-		if (prm["imageFileURI"] !== undefined)
-			return prm["imageFileURI"];
-		else
-			return "assets/img/mushroom.jpg";
-	}
-
 	getPointRecommendationCountPhrase(prm) {
 		let str = prm.requiredPointsQuantity + " point";
 
@@ -105,5 +98,38 @@ export class PromiseListPage {
 		}
 
 		return str;
+	}
+
+	isThumbnailImageAvailable(prm) {
+		return prm["imageFileURI"] !== undefined;
+	}
+
+	getThumbnailImage(prm) {
+		if (prm["imageFileURI"] !== undefined)
+			return prm["imageFileURI"];
+		else
+			return "assets/img/mushroom.jpg";
+	}
+
+	isThumbnailImageVisible(prm) {
+		return this.imageOrientation[prm["id"]] !== undefined;
+	}
+
+	getAvatarCSSClassString(prm) {
+		if (this.imageOrientation[prm["id"]] === 8)
+			return "rotate90Counterclockwise centered";
+		else if (this.imageOrientation[prm["id"]] === 3)
+			return "rotate180 centered";
+		else if (this.imageOrientation[prm["id"]] === 6)
+			return "rotate90Clockwise centered";
+		else
+			return "centered";
+	}
+
+	loaded(evt, prm) {
+		let self = this;
+		EXIF.getData(evt.target, function() {
+			self.imageOrientation[prm["id"]] = EXIF.getTag(this, "Orientation");
+		});
 	}
 }
