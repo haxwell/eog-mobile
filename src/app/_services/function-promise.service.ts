@@ -22,7 +22,6 @@ export class FunctionPromiseService {
 	}
 
 	reset(resultKey) {
-		console.log("FunctionPromiseService is resetting its promise for the key [" + JSON.stringify(resultKey) + "]");
 		this.results[resultKey] = undefined;
 	}
 
@@ -40,7 +39,6 @@ export class FunctionPromiseService {
 		if (this.results[resultKey] !== undefined) {
 			
 			if (this.results[resultKey]["timestamp"] + this.freshnessLengthInMillis < timestamp) {
-				console.log("function promise freshness expired.")
 				this.reset(resultKey);
 			} else {
 				return this.results[resultKey]["results"];
@@ -50,7 +48,7 @@ export class FunctionPromiseService {
 		let func = this.funcs[funcKey];
 
 		if (func !== undefined) {
-			this.results[resultKey] = {timestamp: timestamp, results: func(resultKey, data)};
+			this.results[resultKey] = {timestamp: timestamp, results: func(data)};
 		}
 
 		return this.results[resultKey]["results"];
