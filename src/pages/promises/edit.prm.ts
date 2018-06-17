@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 
+import { File } from '@ionic-native/file'
+
 import { NavController, NavParams } from 'ionic-angular';
 import { ModalController } from 'ionic-angular';
 import { LoadingController } from 'ionic-angular';
@@ -7,18 +9,23 @@ import { AlertController } from 'ionic-angular';
 
 import { RulePage } from './_pages/rule'
 import { KeywordEntryPage } from '../keyword.entry/keyword.entry'
+import { ChoosePhotoSourcePage } from '../common/choose-photo-source/choose-photo-source'
+
 import { PrmModelService } from './_services/prm.model.service'
 import { PrmDetailService } from '../../app/_services/prm-detail.service';
 import { UserService } from '../../app/_services/user.service';
+import { PictureService } from '../../app/_services/picture.service';
+
+import { Constants } from '../../_constants/constants';
 
 import EXIF from 'exif-js'
 
 @Component({
-  selector: 'page-prm-detail',
-  templateUrl: 'promises.html'
+  selector: 'page-prm-edit',
+  templateUrl: 'edit.prm.html'
 })
 
-export class PrmPage {
+export class PrmEditPage {
 
 	model = {};
 	callback = undefined;
@@ -37,7 +44,10 @@ export class PrmPage {
 				private _prmModelService: PrmModelService,
 				private _prmDetailService: PrmDetailService,
 				private _userService: UserService,
-				private loadingCtrl: LoadingController) {
+				private _pictureService: PictureService,
+				private loadingCtrl: LoadingController,
+				private _constants: Constants,
+				private _file: File) {
 
 		let tmp = navParams.get('prm');
 
@@ -53,6 +63,9 @@ export class PrmPage {
 
 		this.model["keywords"].sort((a, b) => { let aText = a.text.toLowerCase(); let bText = b.text.toLowerCase(); if (aText > bText) return 1; else if (aText < bText) return -1; else return 0; })
 
+/*
+//		This should never be the case. You can't edit another user's prm
+
         if (this.model["userId"] !== this._userService.getCurrentUser()["id"] && 
         	this.model["directionallyOppositeUser"] === undefined) {
 		        let getUserPromise = this._userService.getUser(this.model["userId"]);
@@ -61,6 +74,7 @@ export class PrmPage {
 		            delete this.model["userId"];
 		        });
         }
+*/
 
 		if (this.areRecommendationsRequired(this.model)) {
 			this.model["requiredUserRecommendations"].forEach((rec) => {
@@ -200,14 +214,35 @@ export class PrmPage {
 		self.loading.present();
 
 		self.callback(self.isDirty(), self.model).then(() => {
-			self._prmModelService.save(self.model).then((newObj) => {
-				self.setDirty(false);			
+
+			let func = (obj) => {
+				if (self.isImageChanged(self.model)) {
+					self._pictureService.save(self._constants.PHOTO_TYPE_PRM, obj["id"], self.model["imageFileURI"]).then((data) => {
+						console.log("prm " + obj["id"] + " picture is saved...");
+					})
+				}			
+			}
+
+			// call to save the model, and then the prmModelService will call func(). This is order is important, because this may
+			//  be a new object, and to save the image associated with it, we need an ID. So save, get an ID, then save the prm image
+			//  via the callback.
+			
+			self._prmModelService.save(self.model, func).then((newObj) => {
+
+				self.setDirty(false);
 				self.loading.dismiss();
-				
+					
 				if (shouldCallNavCtrlPop)
 					self.navCtrl.pop();
+
 			})
 		});
+	}
+
+	isImageChanged(model) {
+		let rtn = this.model["imageFileURI_OriginalValue"] != model["imageFileURI"];
+		console.log("edit-prm::isImageChanged() returning " + rtn);
+		return rtn;
 	}
 
 	onIndividualKeywordPress(item) {
@@ -245,7 +280,6 @@ export class PrmPage {
 	}
 
 	onCancelBtnTap(evt) {
-		// TODO: Check for changes before popping.
 		this.navCtrl.pop();
 	}
 
@@ -285,6 +319,10 @@ export class PrmPage {
 			return "assets/img/mushroom.jpg";
 	}
 
+	isThumbnailImageVisible() {
+		return this.imageOrientation !== undefined;
+	}
+
 	getAvatarCSSClassString() {
 		if (this.imageOrientation === 8)
 			return "rotate90Counterclockwise centered";
@@ -302,4 +340,123 @@ export class PrmPage {
 			self.imageOrientation = EXIF.getTag(this, "Orientation");
 		});
 	}
+
+	onThumbnailClick($event) {
+		let self = this;
+		let model = this.model;
+		let modal = this.modalCtrl.create(ChoosePhotoSourcePage, {fileURI: this.model["imageFileURI"], fileSource: this.model["imageFileSource"]});
+		
+		modal.onDidDismiss((promise) => {
+			if (promise) {
+				promise.then((uriAndSource) => { 
+					if (uriAndSource === undefined) {
+						uriAndSource = {};
+					}
+
+					//let model = this._profileService.getModel(this.user["id"]);
+
+					if (model["imageFileURI"] !== undefined && model["imageFileSource"] == 'camera') {
+						let lastSlash = model["imageFileURI"].lastIndexOf('/');
+						let path = model["imageFileURI"].substring(0,lastSlash+1);
+						let filename = model["imageFileURI"].substring(lastSlash+1);
+
+						self._file.removeFile(path, filename).then((data) => {
+							self._pictureService.setMostProbablePhotoPath(self._constants.PHOTO_TYPE_PRM, model["id"], uriAndSource["imageFileURI"]);
+
+							console.log("User saved a new prm image. [" + model["imageFileURI"] + "] is no longer the image to use, so it has been removed." );
+							console.log("setting prm model to [" + uriAndSource["imageFileURI"] + "]");
+
+							model["imageFileURI"] = uriAndSource["imageFileURI"];
+							model["imageFileSource"] = uriAndSource["imageFileSource"];
+
+							//self._events.publish('profile:changedProfileImage', model["imageFileURI"]);
+							self.setDirty(true);						
+						})
+					} else {
+						console.log("no previous image to delete, so skipping that step...")
+						console.log("uriAndSource = " + JSON.stringify(uriAndSource))
+
+						self._pictureService.setMostProbablePhotoPath(self._constants.PHOTO_TYPE_PRM, model["id"], uriAndSource["imageFileURI"]);
+
+						model["imageFileURI"] = uriAndSource["imageFileURI"];
+						model["imageFileSource"] = uriAndSource["imageFileSource"];
+
+						//self._events.publish('profile:changedProfileImage', model["imageFileURI"]);
+						self.setDirty(true);
+					}
+
+				});
+			}
+		});
+		
+		modal.present();
+	}
+
+	onThumbnailPress($event) {
+		let self = this;
+
+		let alert = this._alertCtrl.create({
+			title: 'Delete Photo?',
+			message: 'Do you want to DELETE the picture on this promise?',
+			buttons: [
+				{
+					text: 'No', role: 'cancel', handler: () => {
+						// do nothing
+					},
+				}, {
+					text: 'Yes', handler: () => {
+						//let self = this;
+
+						let func = () => {
+							//let model = self._profileService.getModel(self.user["id"]);
+
+							self.model["imageFileURI"] = undefined;
+							self.model["imageFileSource"] = undefined;
+
+							self._pictureService.setMostProbablePhotoPath(self._constants.PHOTO_TYPE_PRM, self.model["id"], self.model["imageFileURI"]);
+						}
+
+						console.log('deleting photo ' + self.model["id"]);
+
+						self._pictureService.delete(self._constants.PHOTO_TYPE_PROFILE, self.model["id"]).then(() => { 
+
+							let model = self._prmModelService.get(self.model["id"]);
+
+							if (model["imageFileSource"] === 'camera' || model["imageFileSource"] === 'eog') {
+								
+								console.log("This image came from the camera, or the api.. deleting off the phone now. path=" + model['imageFileURI'] + "]")
+
+								let lastSlash = model["imageFileURI"].lastIndexOf('/');
+								let path = model["imageFileURI"].substring(0,lastSlash+1);
+								let filename = model["imageFileURI"].substring(lastSlash+1);
+
+								self._file.removeFile(path, filename).then((data) => {
+									console.log("Call to pictureService to DELETE photo for "+model['id']+" successful! Image was from camera or the eog api, so it was removed from phone.");
+
+									func();
+									
+								}).catch(() => {
+									console.log("Caught error trying to remove file from phone");
+
+									func();
+								});
+							} else {
+								console.log("Call to pictureService to DELETE photo for "+model['id']+" successful! Image was from phone's gallery, so did not try to remove it.");
+
+								func();								
+							}
+
+						}).catch(() => {
+							console.log("An error occurred deleting the image from the server. Probably, it didn't exist there. Noting it, in case things look wonky..")
+
+							func();
+						});
+					},
+				}
+			]
+		});
+
+		alert.present();
+	}
+
 }

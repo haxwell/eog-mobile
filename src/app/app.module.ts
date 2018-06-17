@@ -37,7 +37,7 @@ import { PermanentlyDismissUnresolvedRequestPage } from '../pages/requests/outgo
 import { CancelOutgoingRequestPage } from '../pages/requests/outgoing/_pages/cancel.request';
 import { RequestContactInfoPage } from '../pages/requests/_pages/contact.info';
 import { OtherPeoplesPromiseList } from '../pages/common/other-peoples-promise-list/other-peoples-promise-list';
-import { PrmPage } from '../pages/promises/promises';
+import { PrmEditPage } from '../pages/promises/edit.prm';
 import { PrmDisplayPage } from '../pages/promises/display.prm';
 import { OutgoingRequestMadeTutorialPage } from '../pages/promises/_pages/outgoing-request-made-tutorial';
 import { DeletePrmPage } from '../pages/promises/_pages/delete.prm';
@@ -99,7 +99,7 @@ export class CustomHammerConfig extends HammerGestureConfig {
     ProfileEditPage,
     ProfileHeader,
     ChoosePhotoSourcePage,
-    PrmPage,
+    PrmEditPage,
     PrmDisplayPage,
     OtherPeoplesPromiseList,
     OutgoingRequestMadeTutorialPage,
@@ -149,7 +149,7 @@ export class CustomHammerConfig extends HammerGestureConfig {
     ProfileEditPage,
     ProfileHeader,
     ChoosePhotoSourcePage,
-    PrmPage,
+    PrmEditPage,
     PrmDisplayPage,
     OtherPeoplesPromiseList,
     OutgoingRequestMadeTutorialPage,
