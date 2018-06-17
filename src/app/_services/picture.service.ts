@@ -16,6 +16,7 @@ import { environment } from '../../_environments/environment';
 export class PictureService { 
 
 	_functionPromiseService = new FunctionPromiseService();
+	mostProbablePhotoPath = {};
 
 	constructor(private _apiService: ApiService,
 				private _constants: Constants,
@@ -32,7 +33,8 @@ export class PictureService {
 		// because this gives us a framework, to call the method, and reuse the promise from it.
 		//  we get the promise once, and return it over and over. Otherwise, we'd get a new promise
 		//  (and new API call) each time, unless we figured a way to save the original promise.
-		//  which is what this is. part of, anyway.
+		//  which is what this is. part of, anyway. Also, the functionPromiseService allows us to 
+		//  expire the results after a certain amount of time, keeping our results fresh.
 
 		// We don't put the SET/DELETE functionality in the framework because it will not be repeatedly called 
 		//  by Angular; only once when the button is pushed.
@@ -42,59 +44,45 @@ export class PictureService {
 
 		// THE PURPOSE of this function is to get the most up to date profile picture for a given ID.
 		//
-		// You pass in the id, and a path to check an existing file.
+		// You pass in the objId, and a path to check an existing file.
 		//
 		////////
-		self._functionPromiseService.initFunc(self._constants.FUNCTION_KEY_PROFILE_PICTURE_GET, (id, data) => {
-			
+		self._functionPromiseService.initFunc(self._constants.FUNCTION_KEY_PROFILE_PICTURE_GET, (data) => {
+
+			let objId = data["objId"];
 			let photoType = data["photoType"];
 			let photoPath = data["path"];
 
 			let rtn = new Promise((resolve, reject) => {
 
-				if (photoType != self._constants.PHOTO_TYPE_PROFILE && photoType != self._constants.PHOTO_TYPE_PRM)
+				if (!objId)
 					reject();
 
-				console.log("In PROFILE_PICTURE_GET, photoType = [" + photoType + "] and the photoPath = [" + photoPath + "]");
+				if (photoType != self._constants.PHOTO_TYPE_PROFILE && photoType != self._constants.PHOTO_TYPE_PRM)
+					reject();
 
 				let lastSlash = photoPath.lastIndexOf('/');
 				let path = photoPath.substring(0,lastSlash+1);
 				let filename = photoPath.substring(lastSlash+1);
 
 				// check the API, it returns the timestamp of the file it has. Client checks
-			    let url = environment.apiUrl + "/api/resource/" + photoType + "/" + id + "/isFound";
+			    let url = environment.apiUrl + "/api/resource/" + photoType + "/" + objId + "/isFound";
 			    self._apiService.get(url).subscribe((pictureAPITimestamp) => {
 
-			    	console.log("Call to api /isFound[" +id+"] succeeded. returned [ " + pictureAPITimestamp["_body"]*1 + " ]");
-	
 					if (pictureAPITimestamp["_body"]*1 > 0) { // meaning, this file exists on the API
-
-						console.log("API Timestamp is greater than 0, so the profile photo for "+id+" does indeed exist there.");
 
 						// now we need the timestamp of the file on this local device we're running on...
 						self.file.checkFile(path, filename).then((fileExists) => {
 							
-							console.log("File exists on device: " + path+filename)
-
 							var millis = this._localStorageService.get(path+filename);
-
-							console.log("localStorage millis timestamp for " + (path+filename) + " is [" + millis + "]. The API has [" + pictureAPITimestamp["_body"]*1 + "] for a timestamp.");
-
 							if (millis < pictureAPITimestamp["_body"]*1) {
 								//download the api picture
 
-								console.log("The API picture is newer than the one we have. Downloading from the API.")
-
-								url = environment.apiUrl + "/api/resource/" + photoType + "/" + id;
+								url = environment.apiUrl + "/api/resource/" + photoType + "/" + objId;
 								const fileTransfer: FileTransferObject = self.transfer.create();
 
 								fileTransfer.download(url, path + filename).then((entry) => {
-								    console.log("-- just downloaded the pic for " + id)
-
 									var millis = new Date().getTime();
-
-									console.log("== setting the localStorage timestamp for this file to: " + millis);
-
 									this._localStorageService.set(path+filename, millis);
 
 								    resolve(path + filename);
@@ -104,24 +92,17 @@ export class PictureService {
 						  		});
 
 							} else {
-								console.log("The "+photoType+" picture on the phone is newer than the API's photo! So we WILL NOT download from the server.")
 								resolve(path+filename);
 							}
 
 						}).catch(e => {
 							// call to checkfile failed.. the file likely does not exist.. regardless try downloading it from the server.
-							console.log("-- Error calling checkFile " + JSON.stringify(e));
-							
-							url = environment.apiUrl + "/api/resource/" + photoType + "/" + id;
+
+							url = environment.apiUrl + "/api/resource/" + photoType + "/" + objId;
 							const fileTransfer: FileTransferObject = self.transfer.create();
 
 							fileTransfer.download(url, path + filename).then((entry) => {
-							    console.log("-- just downloaded the " + photoType + " pic for " + id)
-
 								var millis = new Date().getTime();
-
-								console.log("== setting the localStorage timestamp for this file to: " + millis);
-
 								this._localStorageService.set(path+filename, millis);
 
 							    resolve(path + filename);
@@ -133,16 +114,13 @@ export class PictureService {
 
 					} else { // meaning the file does not exist on the API
 
-						console.log("API Timestamp is 0, so the "+ photoType +" photo for "+id+" did not exist API-side.");
-
 						// then we need to check locally is there a file.
 						self.file.checkFile(path, filename).then((isFileExists) => {
 							if (isFileExists) {
-								console.log("PICTURE_GET says this file exists, but it is stale. Removing from the device.");
 
 								// we need to remove this file. A file that does not exist on the server is stale. 
 								self.file.removeFile(path, filename).then((promiseResult) => {
-									
+
 								})
 
 								// there's no photo, so we can resolve undefined.
@@ -150,7 +128,6 @@ export class PictureService {
 							} 
 						}).catch(e => { 
 							// If not on the phone, return undefined
-							console.log(photoType + " Photo for " + id + " not found on phone or api, returning an undefined path");
 							resolve(undefined)
 						})
 					}
@@ -168,9 +145,9 @@ export class PictureService {
 		return this._functionPromiseService.reset(photoType+objId);
 	}
 
-	get(photoType, objId, path) {
-		let data = {photoType: photoType, path: path}
-		return this._functionPromiseService.get(objId, this._constants.FUNCTION_KEY_PROFILE_PICTURE_GET, data);
+	get(photoType, objId) {
+		let data = {photoType: photoType, objId: objId, path: this.getMostProbablePhotoPath(photoType, objId)}
+		return this._functionPromiseService.get(photoType+objId, this._constants.FUNCTION_KEY_PROFILE_PICTURE_GET, data);
 	}
 
 	delete(photoType, objId) {
@@ -179,7 +156,6 @@ export class PictureService {
 		return new Promise((resolve, reject) => {
 			let url = environment.apiUrl + "/api/resource/" + photoType + "/" + objId;
 			this._apiService.delete(url).subscribe((data) => {
-				console.log("Call to delete api returned: " + JSON.stringify(data))
 				resolve(data);
 			})
 		});
@@ -200,8 +176,6 @@ export class PictureService {
 				   .then((data) => {
 				     // success
 
-				    console.log("successfully uploaded "+photoType+" picture to server")
-
 					let lastSlash = filename.lastIndexOf('/');
 					let lastQuestionMark = filename.lastIndexOf('?');
 
@@ -216,6 +190,7 @@ export class PictureService {
 				     					this.file.cacheDirectory, // to path
 				     					"eogApp" +photoType+ "Pic" + objId // to relative filename
 				     					).then(() => {
+				     	this.reset(photoType, objId);
 				     	resolve({path: path, relativeFilename: relativeFilename});
 				     }).catch(e => { 
 				     	reject();
@@ -223,13 +198,23 @@ export class PictureService {
 
 				   }, (err) => {
 				     // error
-				     console.log("** error uploading profile picture to server");
-				     console.log(err);
 				     reject();
 				   });
 			} else {
+				this.reset(photoType, objId);
 				resolve(undefined);
 			}
 		});
+	}
+
+	setMostProbablePhotoPath(photoType, objId, str) {
+		this.mostProbablePhotoPath[photoType+objId] = str;
+	}
+
+	getMostProbablePhotoPath(photoType, objId) {
+		if (this.mostProbablePhotoPath[photoType+objId] === undefined)
+			this.mostProbablePhotoPath[photoType+objId] = "file:///data/data/io.easyah.mobileapp/cache/" + (photoType+objId);
+
+		return this.mostProbablePhotoPath[photoType+objId];
 	}
 }
