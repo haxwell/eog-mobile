@@ -66,12 +66,11 @@ export class OtherPeoplesPromiseList {
 		return this.prms;
 	}
 
-	isPromiseImageAvailable(prm) {
-		return false;
-	}
-
-	getPromiseImageFilepath(prm) {
-		return undefined;
+	getThumbnailImage(prm) {
+		if (prm["imageFileURI"] !== undefined)
+			return prm["imageFileURI"];
+		else
+			return "assets/img/mushroom.jpg";
 	}
 
 	getAlreadyRequestedIconColor(prm) {

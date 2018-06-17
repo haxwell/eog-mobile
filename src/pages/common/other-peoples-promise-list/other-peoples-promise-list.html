@@ -2,11 +2,8 @@
 
 	<ion-item-sliding #slidingItem (click)="onViewPromise(prm)">
 		<button ion-item>
-			<ion-avatar *ngIf="!isPromiseImageAvailable()" item-start>
-				<img src="assets/img/mushroom.jpg">
-			</ion-avatar>
-			<ion-avatar *ngIf="isPromiseImageAvailable()" item-start>
-				<img [src]="getPromiseImageFilepath()">
+			<ion-avatar item-start>
+				<img [src]="getThumbnailImage(prm)">
 			</ion-avatar>
 
 			<ion-icon [ngStyle]="{'color':getAlreadyRequestedIconColor(prm)}" name="megaphone"> </ion-icon>
