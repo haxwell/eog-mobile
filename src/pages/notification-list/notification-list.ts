@@ -4,7 +4,6 @@ import { Events } from 'ionic-angular';
 import { Constants } from '../../_constants/constants'
 
 import { NotificationService } from '../../app/_services/notification.service'
-import { ProfileService } from '../../pages/common/_services/profile.service'
 import { PictureService } from '../../app/_services/picture.service'
 
 import EXIF from 'exif-js';
@@ -26,7 +25,6 @@ export class NotificationListPage {
 
 	constructor(private _notificationService : NotificationService,
 				private _pictureService : PictureService,
-				private _profileService : ProfileService,
 				private _constants: Constants,
 				private _events: Events				
 	) {
@@ -110,9 +108,7 @@ export class NotificationListPage {
 		if (self.directionallyOppositeUserProfileImageFilepath[userId] === undefined && userId !== undefined) {
 			self.directionallyOppositeUserProfileImageFilepath[userId] = null;
 
-			let path = self._profileService.getMostProbableProfilePhotoPath(userId);
-			
-			self._pictureService.get(this._constants.PHOTO_TYPE_PROFILE, userId, path).then((path) => {
+			self._pictureService.get(this._constants.PHOTO_TYPE_PROFILE, userId).then((path) => {
 				if (path !== undefined)
 					self.directionallyOppositeUserProfileImageFilepath[userId] = path;
 			});

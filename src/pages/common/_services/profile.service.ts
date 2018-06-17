@@ -15,7 +15,6 @@ import { environment } from '../../../_environments/environment';
 export class ProfileService {
 
 	modelCache = {};
-	mostProbableProfilePhotoPath = {};  		// "file:///data/data/io.easyah.mobileapp/cache/eogAppProfilePic";
 
 	constructor(private _apiService: ApiService, 
 				private _userService: UserService, 
@@ -45,8 +44,6 @@ export class ProfileService {
 	}
 
 	initModel(userId, model) {
-
-		let self = this;
 
 		this._pointsService.init();
 		this._recommendationService.init();
@@ -82,7 +79,7 @@ export class ProfileService {
 		});
 
 		if (model["imageFileURI"] === undefined) {
-			this._pictureService.get(this._constants.PHOTO_TYPE_PROFILE, userId, this.getMostProbableProfilePhotoPath(userId)).then((filename) => {
+			this._pictureService.get(this._constants.PHOTO_TYPE_PROFILE, userId).then((filename) => {
 				model["imageFileSource"] = 'eog';
 				model["imageFileURI"] = filename;
 				model["imageFileURI_OriginalValue"] = filename;
@@ -192,17 +189,6 @@ export class ProfileService {
   		}
   		
   		return list.join('&');
-	}
-
-	setMostProbableProfilePhotoPath(userId, str) {
-		this.mostProbableProfilePhotoPath[userId] = str;
-	}
-
-	getMostProbableProfilePhotoPath(userId) {
-		if (this.mostProbableProfilePhotoPath[userId] === undefined)
-			this.mostProbableProfilePhotoPath[userId] = "file:///data/data/io.easyah.mobileapp/cache/eogAppProfilePic" + userId;
-
-		return this.mostProbableProfilePhotoPath[userId];
 	}
 
 }

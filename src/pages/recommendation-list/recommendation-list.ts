@@ -7,7 +7,6 @@ import { Constants } from '../../_constants/constants'
 
 import { UserService } from '../../app/_services/user.service';
 import { RecommendationService } from '../../app/_services/recommendation.service'
-import { ProfileService } from '../../pages/common/_services/profile.service'
 import { PictureService } from '../../app/_services/picture.service'
 
 import { ProfilePage } from '../profile/profile'
@@ -30,7 +29,6 @@ export class RecommendationListPage {
 	imageOrientation = undefined;
 
 	constructor(private _userService : UserService,
-				private _profileService : ProfileService,
 				private _recommendationService : RecommendationService,
 				private _pictureService: PictureService,
 				private navCtrl: NavController,
@@ -89,9 +87,7 @@ export class RecommendationListPage {
 		if (self.directionallyOppositeUserProfileImageFilepath[userId] === undefined && userId !== undefined) {
 			self.directionallyOppositeUserProfileImageFilepath[userId] = null;
 
-			let path = self._profileService.getMostProbableProfilePhotoPath(userId);
-			
-			self._pictureService.get(self._constants.PHOTO_TYPE_PROFILE, userId, path).then((path) => {
+			self._pictureService.get(self._constants.PHOTO_TYPE_PROFILE, userId).then((path) => {
 				if (path !== undefined)
 					self.directionallyOppositeUserProfileImageFilepath[userId] = path;
 			});
