@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { NavController, Navbar, Events, ModalController, AlertController } from 'ionic-angular';
+import { NavController, Navbar, ModalController } from 'ionic-angular';
 import { TutorialPage } from '../tutorial/tutorial'
 
 import { UserService } from '../../app/_services/user.service'
