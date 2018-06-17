@@ -5,13 +5,10 @@ import { LoadingController } from 'ionic-angular';
 
 import { Constants } from '../../_constants/constants'
 
-import { PrmDisplayPage } from '../promises/display.prm'
 import { ProfilePage } from '../profile/profile'
 
 import { SearchService } from '../../app/_services/search.service';
-import { ProfileService } from '../common/_services/profile.service';
 import { PictureService } from '../../app/_services/picture.service';
-import { PrmMetadataService } from '../../app/_services/prm-metadata.service';
 import { UserService } from '../../app/_services/user.service';
 
 @Component({
@@ -28,7 +25,6 @@ export class SearchPage {
 	constructor(navParams: NavParams,
 				public navCtrl: NavController,
 				private _searchService: SearchService,
-				private _profileService: ProfileService,
 				private _pictureService: PictureService,
 				private _userService: UserService,
 				private loadingCtrl: LoadingController,
@@ -49,13 +45,8 @@ export class SearchPage {
 	onSearchBtnTap(evt?) {
 		let self = this;
 
-		self.loadingDismissed = false;
 		self.loading = self.loadingCtrl.create({
 			content: 'Please wait...'
-		})
-
-		self.loading.onDidDismiss(() => {
-			self.loadingDismissed = true;
 		})
 
 		self.loading.present();
@@ -63,13 +54,20 @@ export class SearchPage {
 		this.usersResults = undefined;
 		this.prmResults = undefined;
 
+		let count = 0;
+		let func = () => {
+			count++;
+			if (count >= 2)
+				self.loading.dismiss();
+		};
+
 		this._searchService.searchPrms(this.searchString).then((data: Array<Object>) => {
 
 			if (data.length === 0) {
 				self.prmResults = data;
 
-				if (self.usersResults !== undefined)
-					self.loading.dismiss();
+				func();
+
 			} else {
 				data.map((obj) => {
 					self._userService.getUser(obj["userId"]).then((user) => {
@@ -78,22 +76,16 @@ export class SearchPage {
 
 						if (!data.some((obj) => { return obj["userId"] != undefined; })) {
 							self.prmResults = data;
+							func();
 						}
 					});
 				});
-
-				if (self.usersResults && !self.loadingDismissed) {
-					self.loading.dismiss();
-				}
 			}
 		});
 
 		this._searchService.searchUsers(this.searchString).then((data: Array<Object>) => {
 			self.usersResults = data;
-
-			if (self.prmResults && !self.loadingDismissed) {
-				self.loading.dismiss();
-			}
+			func();
 		});
 	}
 
@@ -124,14 +116,9 @@ export class SearchPage {
 
 		let self = this;
 		if (this.profileImageFilepath[user["id"]] === undefined) {
-
 			this.profileImageFilepath[user["id"]] = null;
 
-			let path = self._profileService.getMostProbableProfilePhotoPath(user["id"]);
-
-			console.log("No Profile Image loaded for user Id " + user["id"] + ". Trying to find one... " + path);			
-			
-			self._pictureService.get(this._constants.PHOTO_TYPE_PROFILE, user["id"], path).then((path) => {
+			self._pictureService.get(this._constants.PHOTO_TYPE_PROFILE, user["id"]).then((path) => {
 				if (path !== undefined)
 					self.profileImageFilepath[user["id"]] = path;
 			});
