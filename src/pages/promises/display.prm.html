@@ -19,76 +19,88 @@
 		</ion-item>
 	</ion-row>
 
-	<h1>{{ getModel()["title"] }}</h1>
-	<h4>{{ getModel()["description"] }}</h4>
-
-	<br/><br/>
-
-	<ion-list>
-		<ion-list-header class="listHeader">
-			Keywords
-		</ion-list-header>
-		<ion-item >
-			<span *ngFor="let item of model.keywords">
-				<span class="blockItem" >{{item.text}}</span>
-			</span>
-		</ion-item>
-	</ion-list>
-
-
-	<ion-list>
-		<ion-list-header class="listHeader">
-			Requirements
-		</ion-list-header>
-		<ion-item >
-			<span class="pointsSpan">{{ getRequiredPointsQuantityString() }}</span>
-			<users-line-item *ngFor="let user of getRequiredRecommendationUserObjects()" [item]="user" [clickthru]="false"></users-line-item>
-		</ion-item>
-	</ion-list>
-
-
-	<!-- TODO: This should be a 'more' link that disappears when clicked, revealing the details, and then 
-		reappers when the details are clicked, showing the 'more' link again. -->
-	<ion-list no-lines>
-		<ion-list-header class="listHeader">
-			Statistics
-		</ion-list-header>
-		<ion-item *ngIf="hasStatistics()">
-			<span>{{getFirstFulfilledText()}}<br/></span>
-			<span>{{getTotalPointsEarned()}}<br/></span>
-			<span>{{getNumberOfComplaints()}}<br/></span>
-		</ion-item>
-		<ion-item *ngIf="!hasStatistics()">
-			<span>This promise is new! It doesn't have statistics yet.<br/></span>
-		</ion-item>
-	</ion-list>
-
-	<ion-list *ngIf="isRequestMessageAvailable()" no-lines>
-		<ion-list-header class="listHeader">
-			Messages
-		</ion-list-header>
-		<ion-item *ngFor="let item of getStillMoreTimeLeftMessages()" [ngStyle]="{'color':'red'}">
-			{{item.msg}}
-		</ion-item>
-		<ion-item *ngFor="let item of getAlreadyRequestedRequestMessages()" [ngStyle]="{'color':'red'}">
-			{{item.msg}}
-		</ion-item>
-		<ion-item *ngFor="let item of getPointsRequestMessages()" [ngStyle]="{'color':'red'}">
-			You need {{item.msg}}.
-		</ion-item>
-		<ion-item *ngIf="isRecommendationsRequestMessageAvailable()">
-			You need recommendations from:
-				<ul>
-					<li *ngFor="let item of getRecommendationsRequestMessages()" [ngStyle]="{'color':'red'}">
-						{{item.msg}}
-					</li>
-				</ul>
-		</ion-item>
-	</ion-list>
 
 	<ion-row>
-		<button ion-button [hidden]="!isDeleteBtnVisible()" color="danger" (click)="onDeleteBtnTap($event)">Delete</button>			
-		<button ion-button [hidden]="!isRequestBtnVisible()" (click)="onRequestBtnTap($event)">Request</button>
-	</ion-row>
+		<div class="card">
+			<img id="prmAvatarImg" [hidden]="!isThumbnailImageVisible()" [class]="getAvatarCSSClassString()" [src]="getThumbnailImage()" (load)="loaded($event)" alt="profile_image">
+		</div>
+	</ion-row>	
+
+	<div class="fore-div">
+		<br/>
+		<ion-row>
+			<h1>{{ getModel()["title"] }}</h1>
+			<h4>{{ getModel()["description"] }}</h4>
+		</ion-row>
+
+		<br/><br/>
+
+		<ion-list>
+			<ion-list-header class="listHeader">
+				Keywords
+			</ion-list-header>
+			<ion-item >
+				<span *ngFor="let item of model.keywords">
+					<span class="blockItem" >{{item.text}}</span>
+				</span>
+			</ion-item>
+		</ion-list>
+
+
+		<ion-list>
+			<ion-list-header class="listHeader">
+				Requirements
+			</ion-list-header>
+			<ion-item >
+				<span class="pointsSpan">{{ getRequiredPointsQuantityString() }}</span>
+				<users-line-item *ngFor="let user of getRequiredRecommendationUserObjects()" [item]="user" [clickthru]="false"></users-line-item>
+			</ion-item>
+		</ion-list>
+
+
+		<!-- TODO: This should be a 'more' link that disappears when clicked, revealing the details, and then 
+			reappers when the details are clicked, showing the 'more' link again. -->
+		<ion-list no-lines>
+			<ion-list-header class="listHeader">
+				Statistics
+			</ion-list-header>
+			<ion-item *ngIf="hasStatistics()">
+				<span>{{getFirstFulfilledText()}}<br/></span>
+				<span>{{getTotalPointsEarned()}}<br/></span>
+				<span>{{getNumberOfComplaints()}}<br/></span>
+			</ion-item>
+			<ion-item *ngIf="!hasStatistics()">
+				<span>This promise is new! It doesn't have statistics yet.<br/></span>
+			</ion-item>
+		</ion-list>
+
+		<ion-list *ngIf="isRequestMessageAvailable()" no-lines>
+			<ion-list-header class="listHeader">
+				Messages
+			</ion-list-header>
+			<ion-item *ngFor="let item of getStillMoreTimeLeftMessages()" [ngStyle]="{'color':'red'}">
+				{{item.msg}}
+			</ion-item>
+			<ion-item *ngFor="let item of getAlreadyRequestedRequestMessages()" [ngStyle]="{'color':'red'}">
+				{{item.msg}}
+			</ion-item>
+			<ion-item *ngFor="let item of getPointsRequestMessages()" [ngStyle]="{'color':'red'}">
+				You need {{item.msg}}.
+			</ion-item>
+			<ion-item *ngIf="isRecommendationsRequestMessageAvailable()">
+				You need recommendations from:
+					<ul>
+						<li *ngFor="let item of getRecommendationsRequestMessages()" [ngStyle]="{'color':'red'}">
+							{{item.msg}}
+						</li>
+					</ul>
+			</ion-item>
+		</ion-list>
+
+		<ion-row>
+			<button ion-button [hidden]="!isDeleteBtnVisible()" color="danger" (click)="onDeleteBtnTap($event)">Delete</button>			
+			<button ion-button [hidden]="!isRequestBtnVisible()" (click)="onRequestBtnTap($event)">Request</button>
+		</ion-row>
+	</div>
 
 </ion-content>

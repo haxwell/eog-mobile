@@ -2,14 +2,11 @@ import { Component } from '@angular/core';
 
 import { NavController, NavParams } from 'ionic-angular';
 import { ModalController } from 'ionic-angular';
-//import { LoadingController } from 'ionic-angular';
 
-import { PrmPage } from './promises'
+import { PrmEditPage } from './edit.prm'
 import { RequestPage } from './_pages/request'
-//import { RulePage } from './_pages/rule'
 import { DeletePrmPage } from './_pages/delete.prm'
 import { OutgoingRequestMadeTutorialPage } from './_pages/outgoing-request-made-tutorial'
-//import { KeywordEntryPage } from '../keyword.entry/keyword.entry'
 import { PrmModelService } from './_services/prm.model.service'
 import { PrmMetadataService } from '../../app/_services/prm-metadata.service';
 import { PrmDetailService } from '../../app/_services/prm-detail.service';
@@ -18,6 +15,7 @@ import { UserPreferencesService } from '../../app/_services/user-preferences.ser
 import { Constants } from '../../_constants/constants';
 
 import Moment from 'moment'
+import EXIF from 'exif-js'
 
 @Component({
   selector: 'page-display-prm',
@@ -32,6 +30,7 @@ export class PrmDisplayPage {
 	callback = undefined; // TODO: necessary?
 	requiredUserObjectsLoadedCount = 0; 
 	showTutorialAfterOutgoingRequestMade = true;
+	imageOrientation = undefined;
 
 	dirty = false;
 
@@ -43,10 +42,12 @@ export class PrmDisplayPage {
 				private _prmDetailService: PrmDetailService,
 				private _userService: UserService,
 				private _userPreferencesService: UserPreferencesService,
-				//private loadingCtrl: LoadingController,
 				private _constants: Constants) {
 
 		this.model = navParams.get('prm');
+
+		console.log("In constructor for dispalyPrmPage. This is what the PRM we got looks like: ");
+		console.log(JSON.stringify(this.model));
 
 		this._prmModelService.setPrmMetadata(this.model).then((prm) => {
 			this.setModel(Object.assign({}, prm));
@@ -256,6 +257,40 @@ export class PrmDisplayPage {
 			})
 		}
 
-		self.navCtrl.push(PrmPage, {prm: self.model, callback: editPromiseCallback});
+		self.navCtrl.push(PrmEditPage, {prm: self.model, callback: editPromiseCallback});
 	}
+
+	isThumbnailImageAvailable() {
+		return this.model["imageFileURI"] !== undefined;
+	}
+
+	isThumbnailImageVisible() {
+		return this.imageOrientation !== undefined || (this.imageOrientation === undefined && this.model["imageFileURL"] === undefined)
+	}
+
+	getThumbnailImage() {
+		if (this.model["imageFileURI"] !== undefined)
+			return this.model["imageFileURI"];
+		else
+			return "assets/img/mushroom.jpg";
+	}
+
+	getAvatarCSSClassString() {
+		if (this.imageOrientation === 8)
+			return "rotate90Counterclockwise centered";
+		else if (this.imageOrientation === 3)
+			return "rotate180 centered";
+		else if (this.imageOrientation === 6)
+			return "rotate90Clockwise centered";
+		else
+			return "centered";
+	}
+
+	loaded(evt) {
+		let self = this;
+		EXIF.getData(evt.target, function() {
+			self.imageOrientation = EXIF.getTag(this, "Orientation");
+		});
+	}
+
 }
