@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 
-import { AlertController, ViewController, NavParams } from 'ionic-angular';
-import { File } from '@ionic-native/file'
+import { ViewController, NavParams } from 'ionic-angular';
 
 import { CameraService } from '../_services/camera.service';
 
@@ -14,13 +13,10 @@ export class ChoosePhotoSourcePage {
 
 	imageFileURI: string = undefined;
 	imageFileSource: string = undefined;
-	userId = undefined;
 
 	constructor(private viewCtrl: ViewController, private cameraService: CameraService,
-				private _alertCtrl: AlertController, public params: NavParams,
-				private _file: File) {
+				public params: NavParams) {
 
-		this.userId = params.get('userId') || -1;
 		this.imageFileURI = params.get('fileURI');
 		this.imageFileSource = params.get('fileSource');
 	}
