@@ -29,8 +29,8 @@ export class EasyahApp {
 
   constructor(platform: Platform,
               statusBar: StatusBar,
-              private websocketService: WebsocketService, // defined here so it will be initialized, but not used in this class
-              private userPreferencesService : UserPreferencesService, // defined here so it will be initialized, but not used in this class
+              websocketService: WebsocketService, // defined here so it will be initialized, but not used in this class
+              userPreferencesService : UserPreferencesService, // defined here so it will be initialized, but not used in this class
               private _userService : UserService,
               private _menuCtrl : MenuController,
               private _alertCtrl: AlertController,
