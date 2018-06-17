@@ -77,7 +77,7 @@ export class PrmModelService {
 		});
 	}
 
-	save(model) {
+	save(model, cb) {
 		let self = this;
 		let data = this.JSON_to_URLEncoded(model, undefined, undefined);
 
@@ -86,6 +86,10 @@ export class PrmModelService {
 			this._apiService.post(url, data)
 			.subscribe((resp) => {
 				let obj = JSON.parse(resp["_body"]);
+
+				if (cb) {
+					cb(obj);
+				}
 				
 				self._events.publish("promise:saved", obj)
 				
