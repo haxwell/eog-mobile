@@ -87,13 +87,20 @@ export class PrmModelService {
 			.subscribe((resp) => {
 				let obj = JSON.parse(resp["_body"]);
 
-				if (cb) {
-					cb(obj);
+				let func = () => {
+					console.log("prmModelService, promise saved!  " + JSON.stringify(obj));
+					self._events.publish("promise:saved", obj)
+					
+					resolve(obj);
 				}
-				
-				self._events.publish("promise:saved", obj)
-				
-				resolve(obj);
+
+				if (cb) {
+					cb(obj).then(() => {
+						func();
+					})
+				} else {
+					func();
+				}
 			});
 		});
 	}

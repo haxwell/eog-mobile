@@ -213,30 +213,38 @@ export class PrmEditPage {
 
 		self.loading.present();
 
-		self.callback(self.isDirty(), self.model).then(() => {
+//		self.callback(self.model).then(() => {
 
 			let func = (obj) => {
-				if (self.isImageChanged(self.model)) {
-					self._pictureService.save(self._constants.PHOTO_TYPE_PRM, obj["id"], self.model["imageFileURI"]).then((data) => {
-						console.log("prm " + obj["id"] + " picture is saved...");
-					})
-				}			
+				return new Promise((resolve, reject) => {
+					if (self.isImageChanged(self.model)) {
+						self._pictureService.save(self._constants.PHOTO_TYPE_PRM, obj["id"], self.model["imageFileURI"]).then((data) => {
+							console.log("prm " + obj["id"] + " picture is saved...");
+							resolve();
+						})
+					} else {
+						resolve();
+					}
+				})
 			}
 
-			// call to save the model, and then the prmModelService will call func(). This is order is important, because this may
+			// call to save the model, and then the prmModelService will call func(). This order is important, because this may
 			//  be a new object, and to save the image associated with it, we need an ID. So save, get an ID, then save the prm image
 			//  via the callback.
 			
 			self._prmModelService.save(self.model, func).then((newObj) => {
 
-				self.setDirty(false);
-				self.loading.dismiss();
-					
-				if (shouldCallNavCtrlPop)
-					self.navCtrl.pop();
+				self.callback(self.model).then(() => {
+					self.setDirty(false);
+					self.loading.dismiss();
 
+					self._pictureService.reset(self._constants.PHOTO_TYPE_PROFILE, newObj["id"]);
+
+					if (shouldCallNavCtrlPop)
+						self.navCtrl.pop();
+				})
 			})
-		});
+//		});
 	}
 
 	isImageChanged(model) {
@@ -373,8 +381,8 @@ export class PrmEditPage {
 							self.setDirty(true);						
 						})
 					} else {
-						console.log("no previous image to delete, so skipping that step...")
-						console.log("uriAndSource = " + JSON.stringify(uriAndSource))
+						console.log("no previous image was set on the model, so skipping the 'delete previous image' step...")
+						console.log("newly saved image, uriAndSource = " + JSON.stringify(uriAndSource))
 
 						self._pictureService.setMostProbablePhotoPath(self._constants.PHOTO_TYPE_PRM, model["id"], uriAndSource["imageFileURI"]);
 

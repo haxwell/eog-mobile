@@ -50,7 +50,6 @@ export class UserPreferencesService {
 						else
 							rtn = dfault;
 
-						console.log("&*&* getPreference(" + key + ") returning " + JSON.stringify(rtn));
 						resolve({pref: rtn}); 
 					}
 				)

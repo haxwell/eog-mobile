@@ -93,6 +93,10 @@ export class PrmDisplayPage {
 
 	}
 
+	ionViewWillEnter() {
+		console.log("Display PRM :: ionViewWillEnter()");
+	}
+
 	setModel(m) {
 		this.model = m;
 	}
@@ -250,9 +254,10 @@ export class PrmDisplayPage {
 	onEditPromiseBtnClick() {
 		let self = this;
 
-		let editPromiseCallback = (isDirty, prmModel) => {
+		let editPromiseCallback = (prmModel) => {
 			return new Promise((resolve, reject) => {
 				self.model = prmModel;
+				console.log("Display.PRM editPromiseCallback called with: " + JSON.stringify(self.model)) // expect that this should have the image path on it
 				resolve();
 			})
 		}
@@ -269,13 +274,21 @@ export class PrmDisplayPage {
 	}
 
 	getThumbnailImage() {
+		let rtn = undefined;
+		
 		if (this.model["imageFileURI"] !== undefined)
-			return this.model["imageFileURI"];
+			rtn = this.model["imageFileURI"];
 		else
-			return "assets/img/mushroom.jpg";
+			rtn = "assets/img/mushroom.jpg";
+
+		console.log("getThumbnailImage() returning " + rtn);
+
+		return rtn;
 	}
 
 	getAvatarCSSClassString() {
+		console.log("in displayPrm::getAvatarCSSClassString().. imageOrientation = " + this.imageOrientation);
+
 		if (this.imageOrientation === 8)
 			return "rotate90Counterclockwise centered";
 		else if (this.imageOrientation === 3)
@@ -290,6 +303,7 @@ export class PrmDisplayPage {
 		let self = this;
 		EXIF.getData(evt.target, function() {
 			self.imageOrientation = EXIF.getTag(this, "Orientation");
+			console.log("in display.prm loaded() method.. set imageOrientation to " + self.imageOrientation + " ////// " + JSON.stringify(evt));
 		});
 	}
 

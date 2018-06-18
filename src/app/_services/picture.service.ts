@@ -164,6 +164,7 @@ export class PictureService {
 	save(photoType, objId, filename) {
 		return new Promise((resolve, reject) => {
 			if (filename !== undefined) {
+				console.log("PictureService is about to upload a file....")
 				const fileTransfer: FileTransferObject = this.transfer.create();
 
 				let options: FileUploadOptions = {
@@ -175,6 +176,8 @@ export class PictureService {
 				fileTransfer.upload(filename, environment.apiUrl + "/api/resource/" + photoType + "/" + objId, options)
 				   .then((data) => {
 				     // success
+
+				     console.log("File upload from picture service was a success...");
 
 					let lastSlash = filename.lastIndexOf('/');
 					let lastQuestionMark = filename.lastIndexOf('?');
