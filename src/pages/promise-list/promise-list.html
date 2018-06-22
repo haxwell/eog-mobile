@@ -17,7 +17,7 @@
 	<ion-list *ngIf="userHasAnActivePromise()">
 		<ion-item *ngFor="let prm of getPromises()" (click)="onPromiseBtnTap(prm)">
 			<ion-avatar item-start>
-				<img id="prmAvatarImg" [hidden]="!isThumbnailImageVisible(prm)" [class]="getAvatarCSSClassString(prm)" [src]="getThumbnailImage(prm)" (load)="loaded($event, prm)" alt="profile_image">
+				<img id="prmAvatarImg" [class]="getAvatarCSSClassString(prm)" [src]="getThumbnailImage(prm)" alt="profile_image">
 			</ion-avatar>
 			<span class="prmTitle">{{prm.title}}</span><br/>
 			<span class="prmDesc">{{prm.description}}</span><br/>
