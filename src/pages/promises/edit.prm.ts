@@ -371,7 +371,6 @@ export class PrmEditPage {
 						})
 					} else {
 						console.log("no previous image was set on the model, so skipping the 'delete previous image' step...")
-						console.log("newly saved image, uriAndSource = " + JSON.stringify(uriAndSource))
 
 						self._pictureService.setMostProbablePhotoPath(self._constants.PHOTO_TYPE_PRM, model["id"], uriAndSource["imageFileURI"]);
 
