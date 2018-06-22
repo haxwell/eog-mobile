@@ -3,6 +3,7 @@ import { Events } from 'ionic-angular';
 
 import { UserService } from '../../../app/_services/user.service';
 import { ApiService } from '../../../app/_services/api.service';
+import { PictureEXIFService } from '../../../app/_services/picture-exif.service';
 
 import { environment } from '../../../_environments/environment';
 
@@ -10,6 +11,7 @@ import { environment } from '../../../_environments/environment';
 export class PrmModelService {
 	
 	constructor(private _apiService: ApiService, private _userService: UserService,
+				private _pictureEXIFService: PictureEXIFService,
 				private _events: Events
 	) {
 
@@ -74,6 +76,10 @@ export class PrmModelService {
 					resolve(prm);
 				}
 			});
+
+			this._pictureEXIFService.getEXIFMetadata(prm["imageFileURI"]).then((exifMetadata) => {
+				prm["imageOrientation"] = exifMetadata["Orientation"];
+			})
 		});
 	}
 
