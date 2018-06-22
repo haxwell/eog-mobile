@@ -3,7 +3,7 @@
 	<ion-item-sliding #slidingItem (click)="onViewPromise(prm)">
 		<button ion-item>
 			<ion-avatar item-start>
-				<img [src]="getThumbnailImage(prm)">
+				<img id="prmAvatarImg" [class]="getAvatarCSSClassString(prm)" [src]="getThumbnailImage(prm)" alt="profile_image">
 			</ion-avatar>
 
 			<ion-icon [ngStyle]="{'color':getAlreadyRequestedIconColor(prm)}" name="megaphone"> </ion-icon>

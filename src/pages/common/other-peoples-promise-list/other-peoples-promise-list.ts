@@ -67,10 +67,21 @@ export class OtherPeoplesPromiseList {
 	}
 
 	getThumbnailImage(prm) {
-		if (prm["imageFileURI"] !== undefined)
+		if (prm["imageFileURI"] !== undefined && prm["imageOrientation"] !== undefined)
 			return prm["imageFileURI"];
 		else
 			return "assets/img/mushroom.jpg";
+	}
+
+	getAvatarCSSClassString(prm) {
+		if (prm["imageOrientation"] === 8)
+			return "rotate90Counterclockwise centered";
+		else if (prm["imageOrientation"] === 3)
+			return "rotate180 centered";
+		else if (prm["imageOrientation"] === 6)
+			return "rotate90Clockwise centered";
+		else
+			return "centered";
 	}
 
 	getAlreadyRequestedIconColor(prm) {
