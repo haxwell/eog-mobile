@@ -30,7 +30,6 @@ export class PrmDisplayPage {
 	callback = undefined; // TODO: necessary?
 	requiredUserObjectsLoadedCount = 0; 
 	showTutorialAfterOutgoingRequestMade = true;
-	imageOrientation = undefined;
 
 	dirty = false;
 
@@ -258,6 +257,7 @@ export class PrmDisplayPage {
 			return new Promise((resolve, reject) => {
 				self.model = prmModel;
 				console.log("Display.PRM editPromiseCallback called with: " + JSON.stringify(self.model)) // expect that this should have the image path on it
+
 				resolve();
 			})
 		}
@@ -270,7 +270,7 @@ export class PrmDisplayPage {
 	}
 
 	isThumbnailImageVisible() {
-		return this.imageOrientation !== undefined || (this.imageOrientation === undefined && this.model["imageFileURL"] === undefined)
+		return this.model["imageOrientation"] !== undefined || (this.model["imageOrientation"] === undefined && this.model["imageFileURL"] === undefined)
 	}
 
 	getThumbnailImage() {
@@ -287,24 +287,15 @@ export class PrmDisplayPage {
 	}
 
 	getAvatarCSSClassString() {
-		console.log("in displayPrm::getAvatarCSSClassString().. imageOrientation = " + this.imageOrientation);
+		console.log("in displayPrm::getAvatarCSSClassString().. imageOrientation = " + this.model["imageOrientation"]);
 
-		if (this.imageOrientation === 8)
+		if (this.model["imageOrientation"] === 8)
 			return "rotate90Counterclockwise centered";
-		else if (this.imageOrientation === 3)
+		else if (this.model["imageOrientation"] === 3)
 			return "rotate180 centered";
-		else if (this.imageOrientation === 6)
+		else if (this.model["imageOrientation"] === 6)
 			return "rotate90Clockwise centered";
 		else
 			return "centered";
 	}
-
-	loaded(evt) {
-		let self = this;
-		EXIF.getData(evt.target, function() {
-			self.imageOrientation = EXIF.getTag(this, "Orientation");
-			console.log("in display.prm loaded() method.. set imageOrientation to " + self.imageOrientation + " ////// " + JSON.stringify(evt));
-		});
-	}
-
 }
