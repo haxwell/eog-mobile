@@ -92,10 +92,6 @@ export class PrmDisplayPage {
 
 	}
 
-	ionViewWillEnter() {
-		console.log("Display PRM :: ionViewWillEnter()");
-	}
-
 	setModel(m) {
 		this.model = m;
 	}
