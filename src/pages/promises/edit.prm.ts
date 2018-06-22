@@ -35,7 +35,6 @@ export class PrmEditPage {
 	newKeywords = [];
 	loading = undefined;
 	shouldPopOnReturnToThisView = false;
-	imageOrientation = undefined;
 
 	constructor(public navCtrl: NavController, 
 				navParams: NavParams, 
@@ -213,38 +212,36 @@ export class PrmEditPage {
 
 		self.loading.present();
 
-//		self.callback(self.model).then(() => {
 
-			let func = (obj) => {
-				return new Promise((resolve, reject) => {
-					if (self.isImageChanged(self.model)) {
-						self._pictureService.save(self._constants.PHOTO_TYPE_PRM, obj["id"], self.model["imageFileURI"]).then((data) => {
-							console.log("prm " + obj["id"] + " picture is saved...");
-							resolve();
-						})
-					} else {
+		let func = (obj) => {
+			return new Promise((resolve, reject) => {
+				if (self.isImageChanged(self.model)) {
+					self._pictureService.save(self._constants.PHOTO_TYPE_PRM, obj["id"], self.model["imageFileURI"]).then((data) => {
+						console.log("prm " + obj["id"] + " picture is saved...");
 						resolve();
-					}
-				})
-			}
-
-			// call to save the model, and then the prmModelService will call func(). This order is important, because this may
-			//  be a new object, and to save the image associated with it, we need an ID. So save, get an ID, then save the prm image
-			//  via the callback.
-			
-			self._prmModelService.save(self.model, func).then((newObj) => {
-
-				self.callback(self.model).then(() => {
-					self.setDirty(false);
-					self.loading.dismiss();
-
-					self._pictureService.reset(self._constants.PHOTO_TYPE_PROFILE, newObj["id"]);
-
-					if (shouldCallNavCtrlPop)
-						self.navCtrl.pop();
-				})
+					})
+				} else {
+					resolve();
+				}
 			})
-//		});
+		}
+
+		// call to save the model, and then the prmModelService will call func(). This order is important, because this may
+		//  be a new object, and to save the image associated with it, we need an ID. So save, get an ID, then save the prm image
+		//  via the callback.
+		
+		self._prmModelService.save(self.model, func).then((newObj) => {
+
+			self.callback(self.model).then(() => {
+				self.setDirty(false);
+				self.loading.dismiss();
+
+				self._pictureService.reset(self._constants.PHOTO_TYPE_PROFILE, newObj["id"]);
+
+				if (shouldCallNavCtrlPop)
+					self.navCtrl.pop();
+			})
+		})
 	}
 
 	isImageChanged(model) {
@@ -328,25 +325,18 @@ export class PrmEditPage {
 	}
 
 	isThumbnailImageVisible() {
-		return this.imageOrientation !== undefined;
+		return this.model["imageOrientation"] !== undefined;
 	}
 
 	getAvatarCSSClassString() {
-		if (this.imageOrientation === 8)
+		if (this.model["imageOrientation"] === 8)
 			return "rotate90Counterclockwise centered";
-		else if (this.imageOrientation === 3)
+		else if (this.model["imageOrientation"] === 3)
 			return "rotate180 centered";
-		else if (this.imageOrientation === 6)
+		else if (this.model["imageOrientation"] === 6)
 			return "rotate90Clockwise centered";
 		else
 			return "centered";
-	}
-
-	loaded(evt) {
-		let self = this;
-		EXIF.getData(evt.target, function() {
-			self.imageOrientation = EXIF.getTag(this, "Orientation");
-		});
 	}
 
 	onThumbnailClick($event) {
@@ -361,7 +351,6 @@ export class PrmEditPage {
 						uriAndSource = {};
 					}
 
-					//let model = this._profileService.getModel(this.user["id"]);
 
 					if (model["imageFileURI"] !== undefined && model["imageFileSource"] == 'camera') {
 						let lastSlash = model["imageFileURI"].lastIndexOf('/');
@@ -376,8 +365,8 @@ export class PrmEditPage {
 
 							model["imageFileURI"] = uriAndSource["imageFileURI"];
 							model["imageFileSource"] = uriAndSource["imageFileSource"];
+							model["imageOrientation"] = uriAndSource["exif"]["Orientation"];
 
-							//self._events.publish('profile:changedProfileImage', model["imageFileURI"]);
 							self.setDirty(true);						
 						})
 					} else {
@@ -388,8 +377,8 @@ export class PrmEditPage {
 
 						model["imageFileURI"] = uriAndSource["imageFileURI"];
 						model["imageFileSource"] = uriAndSource["imageFileSource"];
+						model["imageOrientation"] = uriAndSource["exif"]["Orientation"];
 
-						//self._events.publish('profile:changedProfileImage', model["imageFileURI"]);
 						self.setDirty(true);
 					}
 
@@ -466,5 +455,4 @@ export class PrmEditPage {
 
 		alert.present();
 	}
-
 }

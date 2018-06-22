@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Camera, CameraOptions } from '@ionic-native/camera';
-import { FilePath } from '@ionic-native/file-path'
+import { FilePath } from '@ionic-native/file-path';
+
+import { PictureEXIFService } from '../../../app/_services/picture-exif.service';
 
 @Injectable()
 export class CameraService {
@@ -9,7 +11,8 @@ export class CameraService {
 	imageFileURI: string = undefined;
 	
 	constructor(private _camera: Camera,
-				private _filePath: FilePath) { 
+				private _filePath: FilePath,
+				private _pictureEXIFService: PictureEXIFService) { 
 
 	}
 
@@ -29,10 +32,14 @@ export class CameraService {
 			 	mediaType: self._camera.MediaType.PICTURE
 			}
 
-			self._camera.getPicture(options).then((imageData) => {
-				if (self.isFileURI(imageData)) {
-			 		self.imageFileURI = imageData;
-			 		resolve(self.imageFileURI);
+			self._camera.getPicture(options).then((imageFileURI) => {
+				if (self.isFileURI(imageFileURI)) {
+			 		self.imageFileURI = imageFileURI;
+
+			 		this._pictureEXIFService.getEXIFMetadata(imageFileURI).then((exifMetadata) => {
+						resolve({uri: self.imageFileURI, exif: exifMetadata});
+			 		})
+
 			 	} else {
 			 		// Handle error
 			 	}
@@ -66,21 +73,29 @@ export class CameraService {
 			 	correctOrientation: true
 			}
 
-			self._camera.getPicture(options).then((imageData) => {
-				if (self.isFileURI(imageData)) {
-			 		self.imageFileURI = imageData;
-			 		resolve(self.imageFileURI);
-				} else if (self.isContentURI(imageData)) {
-					self._filePath.resolveNativePath(imageData).then((filePath) => {
+			self._camera.getPicture(options).then((imageFileURI) => {
+				if (self.isFileURI(imageFileURI)) {
+			 		self.imageFileURI = imageFileURI;
+
+			 		this._pictureEXIFService.getEXIFMetadata(imageFileURI).then((exifMetadata) => {
+			 			resolve({uri: self.imageFileURI, exif: exifMetadata});
+			 		})
+
+				} else if (self.isContentURI(imageFileURI)) {
+					self._filePath.resolveNativePath(imageFileURI).then((filePath) => {
 						self.imageFileURI = filePath;
-						resolve(self.imageFileURI);
+
+				 		this._pictureEXIFService.getEXIFMetadata(imageFileURI).then((exifMetadata) => {
+				 			resolve({uri: self.imageFileURI, exif: exifMetadata});
+				 		})
+
 					}, (err) => {
 						console.error("error getting path for the selected image :(")
 					})
 			 	} else {
 			 		// Handle error
 			 		console.error("expected content or file uri for gallery picture. got something else.")
-			 		reject(imageData)
+			 		reject(imageFileURI)
 			 	}
 			}, (err) => {
 			 	// Handle error
@@ -89,6 +104,5 @@ export class CameraService {
 			});
 		})
 	}
-
 	
 }

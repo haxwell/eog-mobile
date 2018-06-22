@@ -26,12 +26,12 @@ export class ChoosePhotoSourcePage {
 		self.imageFileURI = undefined;
 		
 		self.viewCtrl.dismiss(new Promise((resolve, reject) => {
-			self.cameraService.takePicture().then((imageFileURI: string) => { 
+			self.cameraService.takePicture().then((uriAndExif) => { 
 
-				self.imageFileURI = imageFileURI;
+				self.imageFileURI = uriAndExif["uri"];
 				console.log("just took a picture. Its at " + self.imageFileURI);
 				
-				resolve({imageFileSource: 'camera', imageFileURI: self.imageFileURI});
+				resolve({imageFileSource: 'camera', imageFileURI: self.imageFileURI, exif: uriAndExif["exif"]});
 			});
 		}));
 	}
@@ -41,12 +41,12 @@ export class ChoosePhotoSourcePage {
 		self.imageFileURI = undefined;
 
 		self.viewCtrl.dismiss(new Promise((resolve, reject) => {
-			self.cameraService.loadGalleryPicture().then((imageFileURI: string) => { 
+			self.cameraService.loadGalleryPicture().then((uriAndExif) => { 
 
-				self.imageFileURI = imageFileURI;
+				self.imageFileURI = uriAndExif["uri"];
 				console.log("just set a picture from the gallery. Its at " + self.imageFileURI);
 
-				resolve({imageFileSource: 'gallery', imageFileURI: self.imageFileURI});
+				resolve({imageFileSource: 'gallery', imageFileURI: self.imageFileURI, exif: uriAndExif["exif"]});
 			});
 		}));
 	}
