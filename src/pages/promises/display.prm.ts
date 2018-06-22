@@ -258,37 +258,30 @@ export class PrmDisplayPage {
 				self.model = prmModel;
 				console.log("Display.PRM editPromiseCallback called with: " + JSON.stringify(self.model)) // expect that this should have the image path on it
 
-				resolve();
+				if (this.callback !== undefined) 
+					this.callback(true).then(() => {
+						resolve();
+					});
+				else 
+					resolve();
 			})
 		}
 
 		self.navCtrl.push(PrmEditPage, {prm: self.model, callback: editPromiseCallback});
 	}
 
-	isThumbnailImageAvailable() {
-		return this.model["imageFileURI"] !== undefined;
-	}
-
-	isThumbnailImageVisible() {
-		return this.model["imageOrientation"] !== undefined || (this.model["imageOrientation"] === undefined && this.model["imageFileURL"] === undefined)
-	}
-
 	getThumbnailImage() {
 		let rtn = undefined;
 		
-		if (this.model["imageFileURI"] !== undefined)
+		if (this.model["imageFileURI"] !== undefined && this.model["imageOrientation"] !== undefined)
 			rtn = this.model["imageFileURI"];
 		else
 			rtn = "assets/img/mushroom.jpg";
-
-		console.log("getThumbnailImage() returning " + rtn);
 
 		return rtn;
 	}
 
 	getAvatarCSSClassString() {
-		console.log("in displayPrm::getAvatarCSSClassString().. imageOrientation = " + this.model["imageOrientation"]);
-
 		if (this.model["imageOrientation"] === 8)
 			return "rotate90Counterclockwise centered";
 		else if (this.model["imageOrientation"] === 3)
