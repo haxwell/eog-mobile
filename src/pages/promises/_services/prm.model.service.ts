@@ -50,36 +50,41 @@ export class PrmModelService {
 		//  method here. I've done this pattern (checking each) in other places too.
 
 		return new Promise((resolve, reject) => {
+			let count = 0;
+			let func = (prm) => {
+				let numPiecesOfMetadata = 4;
+
+				if (++count > numPiecesOfMetadata)
+					resolve(prm);
+			}
+
 			let url = environment.apiUrl + "/api/promises/" + prm["id"] + "/fulfillment-dates"; 
 			this._apiService.get(url)
 			.subscribe((data) => {
 				prm["fulfillment_dates"] = JSON.parse(data["_body"]);
-				if (prm["fulfillment_dates"] !== undefined && prm["num_of_complaints"] !== undefined && prm["total_points_earned"] !== undefined) {
-					resolve(prm);
-				}
+				func(prm);
 			});
 
 			url = environment.apiUrl + "/api/promises/" + prm["id"] + "/complaint-count"; 
 			this._apiService.get(url)
 			.subscribe((data) => {
 				prm["num_of_complaints"] = JSON.parse(data["_body"]);
-				if (prm["fulfillment_dates"] !== undefined && prm["num_of_complaints"] !== undefined && prm["total_points_earned"] !== undefined) {
-					resolve(prm);
-				}
+				func(prm);
 			});
 
 			url = environment.apiUrl + "/api/promises/" + prm["id"] + "/total-points-earned"; 
 			this._apiService.get(url)
 			.subscribe((data) => {
 				prm["total_points_earned"] = JSON.parse(data["_body"]);
-				if (prm["fulfillment_dates"] !== undefined && prm["num_of_complaints"] !== undefined && prm["total_points_earned"] !== undefined) {
-					resolve(prm);
-				}
+				func(prm);
 			});
 
-			this._pictureEXIFService.getEXIFMetadata(prm["imageFileURI"]).then((exifMetadata) => {
-				prm["imageOrientation"] = exifMetadata["Orientation"];
-			})
+			if (prm["imageFileURI"]) {
+				this._pictureEXIFService.getEXIFMetadata(prm["imageFileURI"]).then((exifMetadata) => {
+					prm["imageOrientation"] = exifMetadata["Orientation"];
+					func(prm);
+				})
+			}
 		});
 	}
 
