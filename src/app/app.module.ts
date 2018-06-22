@@ -66,6 +66,7 @@ import { RequestMetadataService } from './_services/request-metadata.service';
 import { DeclineReasonCodeService } from './_services/declined-reason-codes.service';
 import { ProfileService } from '../pages/common/_services/profile.service';
 import { PictureService } from './_services/picture.service';
+import { PictureEXIFService } from './_services/picture-exif.service';
 import { ProfileKeywordService } from './_services/profile-keyword.service';
 import { CameraService } from '../pages/common/_services/camera.service';
 import { NotificationService } from './_services/notification.service';
@@ -194,6 +195,7 @@ export class CustomHammerConfig extends HammerGestureConfig {
     FunctionPromiseService,
     ProfileKeywordService,
     PictureService,
+    PictureEXIFService,
     SearchService,
     PrmCollectionService,
     PrmModelService,
