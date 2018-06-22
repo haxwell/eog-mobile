@@ -17,8 +17,14 @@ export class PictureEXIFService {
 			let path = photoPath.substring(0,lastSlash+1);
 			let filename = photoPath.substring(lastSlash+1);
 
+			if (filename.lastIndexOf('?') !== -1)
+				filename = filename.substring(0, filename.lastIndexOf('?'))
+
 			this.file.readAsArrayBuffer(path, filename).then((arrBuff) => {
 				resolve(EXIF.readFromBinaryFile(arrBuff));
+			}).catch((e) => {
+				console.log("caught an error")
+				console.log(JSON.stringify(e))
 			})
 		})
 	}
