@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { UserService } from './user.service';
 import { ApiService } from './api.service';
 import { PictureService } from './picture.service';
+import { PictureEXIFService } from './picture-exif.service';
 
 import { environment } from '../../_environments/environment';
 import { Constants } from '../../_constants/constants'
@@ -22,6 +23,7 @@ export class PrmCollectionService {
 	constructor(private _apiService: ApiService, 
 				private _userService: UserService,
 				private _pictureService: PictureService,
+				private _pictureEXIFService: PictureEXIFService,
 				private _constants: Constants) {
 
 	}
@@ -56,6 +58,12 @@ export class PrmCollectionService {
 					prm["imageFileSource"] = 'eog';
 					prm["imageFileURI"] = filename;
 					prm["imageFileURI_OriginalValue"] = filename;
+
+					if (filename) {
+						self._pictureEXIFService.getEXIFMetadata(filename).then((exifMetadata) => {
+							prm["imageOrientation"] = exifMetadata["Orientation"];
+						})
+					}
 				});
 			});
 
