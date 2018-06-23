@@ -272,7 +272,7 @@ export class PrmDisplayPage {
 		if (this.model["imageFileURI"] !== undefined && this.model["imageOrientation"] !== undefined)
 			rtn = this.model["imageFileURI"];
 		else
-			rtn = "assets/img/mushroom.jpg";
+			rtn = "assets/img/logo.jpg";
 
 		return rtn;
 	}
