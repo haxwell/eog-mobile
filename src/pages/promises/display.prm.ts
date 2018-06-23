@@ -263,7 +263,7 @@ export class PrmDisplayPage {
 			})
 		}
 
-		self.navCtrl.push(PrmEditPage, {prm: self.model, callback: editPromiseCallback});
+		self.navCtrl.push(PrmEditPage, {prm: Object.assign({}, self.model), callback: editPromiseCallback});
 	}
 
 	getThumbnailImage() {
