@@ -330,13 +330,13 @@ export class PrmEditPage {
 
 	getAvatarCSSClassString() {
 		if (this.model["imageOrientation"] === 8)
-			return "rotate90Counterclockwise centered";
+			return "rotate90Counterclockwise editPrmImage centered";
 		else if (this.model["imageOrientation"] === 3)
-			return "rotate180 centered";
+			return "rotate180 editPrmImage centered";
 		else if (this.model["imageOrientation"] === 6)
-			return "rotate90Clockwise centered";
+			return "rotate90Clockwise editPrmImage centered";
 		else
-			return "centered";
+			return "editPrmImage centered";
 	}
 
 	onThumbnailClick($event) {

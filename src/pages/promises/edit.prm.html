@@ -2,73 +2,86 @@
 	<easyah-header></easyah-header>
 </ion-header>
 
-<ion-content padding>
-	<ion-list>
-		<ion-item>
-			<ion-label color="primary" stacked>Title: </ion-label>
-			<ion-input type="text" placeholder="Teach a skill..." (ionChange)="handleTitleChange($event)" [(ngModel)]="model.title" #ctrl="ngModel" required></ion-input>
-		</ion-item>
-		<ion-item>
-			<ion-label color="primary" stacked>Description: </ion-label>
-			<ion-textarea rows="5" placeholder="I have many moons experience in XYZ and I will teach..." (ionChange)="handleDescriptionChange($event)" [(ngModel)]="model.description" #ctrl="ngModel" required></ion-textarea>
-		</ion-item>
-		<ion-list-header class="listHeader">
-			Rules
-			<button class="listHeaderBtn" round ion-button (click)="onNewRuleBtnTap($event)">
-				<ion-icon name="add"></ion-icon>
-			</button>
-		</ion-list-header>
-		<ion-item>
-			<div *ngIf="getRequiredPointsQuantity() === 0">
-				Rules describe who can request this promise from you. Set some points!
-			</div>
-			<div *ngIf="getRequiredPointsQuantity() > 0">
-				<i>This promise requires {{getRequiredPointsQuantityString()}}</i>
-				<div *ngIf="areRecommendationsRequired()">
-					<i> and the following recommendations: </i><br/>
-					<span class="blockItem" *ngFor="let rec of getRequiredUserRecommendations()">
-						{{rec.userObj.realname}}<br/>
+<ion-content>
+	<ion-grid>
+		<ion-row>
+			<ion-item>
+				<ion-label color="primary" stacked>Title: </ion-label>
+				<ion-input type="text" placeholder="Teach a skill..." (ionChange)="handleTitleChange($event)" [(ngModel)]="model.title" #ctrl="ngModel" required></ion-input>
+			</ion-item>
+		</ion-row>
+		<ion-row>
+			<ion-item>
+				<ion-label color="primary" stacked>Description: </ion-label>
+				<ion-textarea rows="5" placeholder="I have many moons experience in XYZ and I will teach..." (ionChange)="handleDescriptionChange($event)" [(ngModel)]="model.description" #ctrl="ngModel" required></ion-textarea>
+			</ion-item>
+		</ion-row>
+		<ion-row>
+			<span class="displayPrmSectionHeader">
+				Rules
+				<ion-buttons>
+					<button ion-button end (click)="onNewRuleBtnTap($event)">
+						<ion-icon name="add"></ion-icon>
+					</button>
+				</ion-buttons>
+			</span>
+
+			<ion-item>
+				<span *ngIf="getRequiredPointsQuantity() === 0">
+					Rules describe who can request this promise from you. Set some points!
+				</span>
+				<span *ngIf="getRequiredPointsQuantity() > 0">
+					<i>This promise requires {{getRequiredPointsQuantityString()}}</i>
+					<span *ngIf="areRecommendationsRequired()">
+						<i> and the following recommendations: </i><br/>
+						<span class="blockItem" *ngFor="let rec of getRequiredUserRecommendations()">
+							{{rec.userObj.realname}}<br/>
+						</span>
 					</span>
-				</div>
-			</div>
+				</span>
+			</ion-item>
+		</ion-row>
 
-		</ion-item>
-	</ion-list>
-
-	<ion-list>
-		<ion-list-header class="listHeader">
-			Keywords
-			<button class="listHeaderBtn" round ion-button (click)="onAddKeywordBtnTap($event)">
-				<ion-icon name="add"></ion-icon>
-			</button>
-		</ion-list-header>
-		<ion-item *ngIf="prmHasNoKeywords()">
-			<span >
-				Keywords are descriptive words and phrases. Add some that describe this Promise!
+		<ion-row>
+			<span class="displayPrmSectionHeader">
+				Keywords
+				<ion-buttons>
+					<button ion-button (click)="onAddKeywordBtnTap($event)">
+						<ion-icon name="add"></ion-icon>
+					</button>
+				</ion-buttons>
 			</span>
-		</ion-item>
-		<ion-item *ngIf="!prmHasNoKeywords()">
-			<span *ngFor="let item of model.keywords">
-				<span class="blockItem" (press)="onIndividualKeywordPress()">{{item.text}}</span>
+			<ion-item *ngIf="prmHasNoKeywords()">
+				<span >
+					Keywords are descriptive words and phrases. Add some that describe this Promise!
+				</span>
+			</ion-item>
+			<ion-item *ngIf="!prmHasNoKeywords()">
+				<span *ngFor="let item of model.keywords">
+					<span class="blockItem" (press)="onIndividualKeywordPress()">{{item.text}}</span>
+				</span>
+			</ion-item>
+		</ion-row>
+
+		<ion-row>
+			<span class="displayPrmSectionHeader">
+				Image
+				<ion-buttons>
+					<button ion-button (click)="onThumbnailClick($event)">
+						<ion-icon name="add"></ion-icon>
+					</button>
+				</ion-buttons>
 			</span>
-		</ion-item>
-	</ion-list>
+			<ion-item *ngIf="isThumbnailImageAvailable()">
+					<img [hidden]="!isThumbnailImageVisible()" [class]="getAvatarCSSClassString()" [src]="getThumbnailImage()" alt="profile_image" (click)="onThumbnailClick($event)" (press)="onThumbnailPress($event)">
+			</ion-item>
+			<ion-item *ngIf="!isThumbnailImageAvailable()">
+					<img class="editPrmImage centered" src="assets/img/mushroom.jpg" (click)="onThumbnailClick($event)">
+			</ion-item>
+		</ion-row>	
 
-	<ion-row>
-		<ion-item *ngIf="isThumbnailImageAvailable()">
-			<ion-avatar >
-				<img id="prmAvatarImg" [hidden]="!isThumbnailImageVisible()" [class]="getAvatarCSSClassString()" [src]="getThumbnailImage()" alt="profile_image" (click)="onThumbnailClick($event)" (press)="onThumbnailPress($event)">
-			</ion-avatar>
-		</ion-item>
-		<ion-item *ngIf="!isThumbnailImageAvailable()">
-			<ion-avatar>
-				<img id="prmAvatarImg" class="centered" src="assets/img/mushroom.jpg" (click)="onThumbnailClick($event)">
-			</ion-avatar>
-		</ion-item>
-	</ion-row>	
-
-	<ion-row>
-		<button ion-button [disabled]="!isSaveBtnEnabled()" (click)="onSaveBtnTap(true)">Save</button>
-	</ion-row>
-
-</ion-content>	
+		<ion-row>
+			<button ion-button [disabled]="!isSaveBtnEnabled()" (click)="onSaveBtnTap(true)">Save</button>
+		</ion-row>
+	</ion-grid>
+</ion-content>

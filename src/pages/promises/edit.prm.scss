@@ -1,5 +1,12 @@
-ion-item {
-   white-space: normal !important;
-   max-width: none !important;
-   width: 100%;
+
+.displayPrmSectionHeader {
+	display: block;
+	padding-bottom: 1em;
+	font-size: 1.2em;
+	font-weight: 300;
+}
+
+.editPrmImage {
+	height: 5em;
+	width: 5em;
 }
