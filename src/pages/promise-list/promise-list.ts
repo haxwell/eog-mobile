@@ -41,6 +41,7 @@ export class PromiseListPage {
 
 	ngOnInit() {
 		if (this.isDirty()) {
+			this.setDirty(false);
 			this._prmcService.resetModel();
 			this.model = this._prmcService.getModel();
 		}
@@ -55,7 +56,7 @@ export class PromiseListPage {
 	}
 
 	setDirty(b) {
-		this.dirty = b || true;
+		this.dirty = b;
 	}
 
 	PrmCallback = (_params) => {
