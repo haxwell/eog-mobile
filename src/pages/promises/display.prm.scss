@@ -1,6 +1,7 @@
 .card {
     height: 100%;
     width: 100%;
+    overflow: hidden;
 }
 
 .fore-div {
@@ -18,4 +19,14 @@
 	padding-bottom: 1em;
 	font-size: 1.2em;
 	font-weight: 300;
+}
+
+#displayPrmTitle {
+	font-size: 1.6em;
+	font-weight: bold;
+}
+
+#displayPrmDescription {
+	font-size: 1.15em;
+	font-weight: bold;
 }

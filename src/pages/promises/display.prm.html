@@ -20,8 +20,14 @@
 		</ion-row>	
 
 		<ion-row>
-			<h1>{{ getModel()["title"] }}</h1>
-			<h4>{{ getModel()["description"] }}</h4>
+			<ion-item no-lines>
+				<h1 id="displayPrmTitle">{{ getModel()["title"] }}</h1>
+			</ion-item>
+		</ion-row>
+		<ion-row>
+			<ion-item no-lines>
+				<h4 id="displayPrmDescription">{{ getModel()["description"] }}</h4>
+			</ion-item>
 		</ion-row>
 
 		<ion-row>
