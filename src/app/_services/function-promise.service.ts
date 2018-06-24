@@ -4,11 +4,15 @@
 //  a new promise and new api call.
 
 // It takes an ID, the result ID, and maps it to a promise, which is the result
-// of a function.
+//  of a function.
 
 // So for instance the result ID could be the user ID, and the function, a call
-// to download a file and return the local filename. You could call that function
-// over and over, and only call the API once.
+//  to download a file and return the local filename. You could call that function
+//  over and over, and only call the API once.
+
+// Results are cached, and if the get older than a user-defined length of time,
+//  they are discarded on the subsequent call for those results. A call to the 
+//  function then occurs, and its results are cached.
 
 export class FunctionPromiseService { 
 	
