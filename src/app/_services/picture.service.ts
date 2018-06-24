@@ -82,6 +82,7 @@ export class PictureService {
 								const fileTransfer: FileTransferObject = self.transfer.create();
 
 								fileTransfer.download(url, path + filename).then((entry) => {
+									console.log("1 successfully downloaded " + (path+filename) + " from " + url)
 									var millis = new Date().getTime();
 									this._localStorageService.set(path+filename, millis);
 
@@ -102,6 +103,7 @@ export class PictureService {
 							const fileTransfer: FileTransferObject = self.transfer.create();
 
 							fileTransfer.download(url, path + filename).then((entry) => {
+								console.log("2 successfully downloaded " + (path+filename) + " from " + url)
 								var millis = new Date().getTime();
 								this._localStorageService.set(path+filename, millis);
 
