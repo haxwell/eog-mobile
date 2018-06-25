@@ -92,8 +92,6 @@ export class PrmModelService {
 	setPrmImageOrientation(prm) {
 		let self = this;
 
-		console.log("about to return prmImageOrinetation promise for prm " + prm['id']);
-
 		return new Promise((resolve, reject) => {
 
 			// TODO: This code is mainly duplicated in prm-collection.service

@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 
 import { UserService } from '../../../app/_services/user.service';
 import { ApiService } from '../../../app/_services/api.service';
-import { PictureService } from '../../../app/_services/picture.service';
+import { PrmModelService } from '../../../app/_services/prm-model.service';
+import { FunctionPromiseService } from '../../../app/_services/function-promise.service';
 
 import { environment } from '../../../_environments/environment';
 import { Constants } from '../../../_constants/constants';
@@ -10,51 +11,44 @@ import { Constants } from '../../../_constants/constants';
 @Injectable()
 export class HomeService {
 	
-	mostRecentlyCreatedPromises = undefined;
-	mostRecentlyCreatedPromisesPromise = undefined;
+	isMostRecentlyCreatedPromisesFuncInitialized = false;
 
 	constructor(private _apiService: ApiService, private _userService: UserService,
-				private _pictureService: PictureService, private _constants: Constants) {
+				private _constants: Constants,
+				private _prmModelService: PrmModelService, 
+				private _functionPromiseService: FunctionPromiseService) {
 
 	}
 
 	init() {
-		this.mostRecentlyCreatedPromises = undefined;
-		this.mostRecentlyCreatedPromisesPromise = undefined;
+		let self = this;
+		self._functionPromiseService.initFunc(this._constants.FUNCTION_KEY_MOST_RECENTLY_CREATED_PROMISES_GET, (data) => {
+			let userId = data['userId'];
+			let count = data['count'];
+
+			return new Promise((resolve, reject) => {
+				let url = environment.apiUrl + "/api/promises/recent?count=" + count + "&userId=" + userId;
+				self._apiService.get(url).subscribe((data) => {
+					let prms = JSON.parse(data["_body"]);
+
+					prms.forEach((prm) => {
+						self._prmModelService.setPrmImageOrientation(prm);
+					});
+
+					resolve(prms);
+				});
+			})
+		})
+
+		this.isMostRecentlyCreatedPromisesFuncInitialized = true;
 	}
 
 	getMostRecentlyCreatedPromises() {
 		let self = this;
-		let rtn = undefined; 
+		if (!self.isMostRecentlyCreatedPromisesFuncInitialized)
+			self.init();
 
-		if (self.mostRecentlyCreatedPromises === undefined) {
-			self.mostRecentlyCreatedPromises = null;
-
-			rtn = new Promise((resolve, reject) => {
-				let url = environment.apiUrl + "/api/promises/recent?count=3&userId=" + self._userService.getCurrentUser()["id"];
-				this._apiService.get(url).subscribe((data) => {
-					self.mostRecentlyCreatedPromises = JSON.parse(data["_body"]);
-
-					// TODO: This is duplicated in prm-collection-service.ts
-					self.mostRecentlyCreatedPromises.forEach((prm) => {
-						self._pictureService.get(self._constants.PHOTO_TYPE_PRM, prm["id"]).then((filename) => {
-							console.log("in homeService, called to get the filename for prm " + prm["id"] + ", and got " + filename)
-							prm["imageFileSource"] = 'eog';
-							prm["imageFileURI"] = filename;
-							prm["imageFileURI_OriginalValue"] = filename;
-						});
-					});
-
-					resolve(self.mostRecentlyCreatedPromises);
-				});
-			})
-
-			self.mostRecentlyCreatedPromisesPromise = rtn;
-		} else {
-			rtn = self.mostRecentlyCreatedPromisesPromise;
-		}
-		
-		return rtn;
+		let data = {userId: self._userService.getCurrentUser()['id'], count: 3};
+		return self._functionPromiseService.get(data['userId']+"mrcp", self._constants.FUNCTION_KEY_MOST_RECENTLY_CREATED_PROMISES_GET, data);
 	}
-
 }
