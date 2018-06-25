@@ -1,17 +1,21 @@
 import { Injectable } from '@angular/core';
 import { Events } from 'ionic-angular';
 
-import { UserService } from '../../../app/_services/user.service';
-import { ApiService } from '../../../app/_services/api.service';
-import { PictureEXIFService } from '../../../app/_services/picture-exif.service';
+import { UserService } from './user.service';
+import { ApiService } from './api.service';
+import { PictureService } from './picture.service';
+import { PictureEXIFService } from './picture-exif.service';
 
-import { environment } from '../../../_environments/environment';
+import { Constants } from '../../_constants/constants';
+import { environment } from '../../_environments/environment';
 
 @Injectable()
 export class PrmModelService {
 	
 	constructor(private _apiService: ApiService, private _userService: UserService,
+				private _pictureService: PictureService,
 				private _pictureEXIFService: PictureEXIFService,
+				private _constants: Constants,
 				private _events: Events
 	) {
 
@@ -79,13 +83,38 @@ export class PrmModelService {
 				func(prm);
 			});
 
-			if (prm["imageFileURI"]) {
-				this._pictureEXIFService.getEXIFMetadata(prm["imageFileURI"]).then((exifMetadata) => {
-					prm["imageOrientation"] = exifMetadata["Orientation"];
-					func(prm);
-				})
-			}
+			this.setPrmImageOrientation(prm).then((prm) => {
+				func(prm);
+			})
 		});
+	}
+
+	setPrmImageOrientation(prm) {
+		let self = this;
+
+		console.log("about to return prmImageOrinetation promise for prm " + prm['id']);
+
+		return new Promise((resolve, reject) => {
+
+			// TODO: This code is mainly duplicated in prm-collection.service
+
+			self._pictureService.get(self._constants.PHOTO_TYPE_PRM, prm["id"]).then((filename) => {
+				console.log("in prmModelService, called to get the filename for prm " + prm["id"] + ", and got " + filename)
+				prm["imageFileSource"] = 'eog';
+				prm["imageFileURI"] = filename;
+				prm["imageFileURI_OriginalValue"] = filename;
+
+				if (filename) {
+					self._pictureEXIFService.getEXIFMetadata(filename).then((exifMetadata) => {
+						prm["imageOrientation"] = exifMetadata["Orientation"];
+						resolve(prm);
+					})
+				} else {
+					resolve(prm);
+				}
+			});
+
+		})
 	}
 
 	save(model, cb) {
