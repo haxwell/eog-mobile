@@ -70,7 +70,7 @@ import { PictureEXIFService } from './_services/picture-exif.service';
 import { ProfileKeywordService } from './_services/profile-keyword.service';
 import { CameraService } from '../pages/common/_services/camera.service';
 import { NotificationService } from './_services/notification.service';
-import { PrmModelService } from '../pages/promises/_services/prm.model.service';
+import { PrmModelService } from './_services/prm-model.service';
 import { PrmCollectionService } from './_services/prm-collection.service';
 import { PrmMetadataService } from './_services/prm-metadata.service';
 import { PrmDetailService } from './_services/prm-detail.service';
