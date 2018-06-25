@@ -54,11 +54,8 @@
 		<ion-item-group *ngFor="let request of getAcceptedRequests()">
 			<ion-item-sliding #slidingItem [attr.track]="getTrack(request)" (press)="onViewPromise(request)">
 				<button ion-item>
-					<ion-avatar *ngIf="isPrmAvatarImageAvailable()" item-start>
-						<img [src]="getPrmAvatarImageFilepath()">
-					</ion-avatar>
-					<ion-avatar *ngIf="!isPrmAvatarImageAvailable()" item-start>
-						<img src="assets/img/mushroom.jpg">
+					<ion-avatar item-start>
+						<img id="prmAvatarImg" [class]="getAvatarCSSClassString(request.prm)" [src]="getThumbnailImage(request.prm)" alt="profile_image">
 					</ion-avatar>
 
 					<span class="prmTitle"><b>{{request.prm.title}}</b></span><br/>
@@ -85,11 +82,8 @@
 		<ion-item-group *ngFor="let request of getDeclinedRequests()">
 			<ion-item-sliding #slidingItem [attr.track]="getTrack(request)" (press)="onViewPromise(request)">
 				<button ion-item>
-					<ion-avatar *ngIf="isPrmAvatarImageAvailable()" item-start>
-						<img [src]="getPrmAvatarImageFilepath()">
-					</ion-avatar>
-					<ion-avatar *ngIf="!isPrmAvatarImageAvailable()" item-start>
-						<img src="assets/img/mushroom.jpg">
+					<ion-avatar item-start>
+						<img id="prmAvatarImg" [class]="getAvatarCSSClassString(request.prm)" [src]="getThumbnailImage(request.prm)" alt="profile_image">
 					</ion-avatar>
 
 					<span class="prmTitle"><b>{{request.prm.title}}</b></span><br/>
@@ -116,11 +110,8 @@
 		<ion-item-group *ngFor="let request of getCompletedPendingApprovalRequests()">
 			<ion-item-sliding #slidingItem [attr.track]="getTrack(request)" (press)="onViewPromise(request)">
 				<button ion-item>
-					<ion-avatar *ngIf="isPrmAvatarImageAvailable()" item-start>
-						<img [src]="getPrmAvatarImageFilepath()">
-					</ion-avatar>
-					<ion-avatar *ngIf="!isPrmAvatarImageAvailable()" item-start>
-						<img src="assets/img/mushroom.jpg">
+					<ion-avatar item-start>
+						<img id="prmAvatarImg" [class]="getAvatarCSSClassString(request.prm)" [src]="getThumbnailImage(request.prm)" alt="profile_image">
 					</ion-avatar>
 
 					<span class="prmTitle"><b>{{request.prm.title}}</b></span><br/>
@@ -143,11 +134,8 @@
 		<ion-item-group *ngFor="let request of getDisputedCompletedRequests()">
 			<ion-item-sliding #slidingItem [attr.track]="getTrack(request)" (press)="onViewPromise(request)">
 				<button ion-item>
-					<ion-avatar *ngIf="isPrmAvatarImageAvailable()" item-start>
-						<img [src]="getPrmAvatarImageFilepath()">
-					</ion-avatar>
-					<ion-avatar *ngIf="!isPrmAvatarImageAvailable()" item-start>
-						<img src="assets/img/mushroom.jpg">
+					<ion-avatar item-start>
+						<img id="prmAvatarImg" [class]="getAvatarCSSClassString(request.prm)" [src]="getThumbnailImage(request.prm)" alt="profile_image">
 					</ion-avatar>
 
 					<span class="prmTitle"><b>{{request.prm.title}}</b></span><br/>
