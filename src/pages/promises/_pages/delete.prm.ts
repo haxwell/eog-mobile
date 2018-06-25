@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 
 import { NavController, NavParams, ViewController, Events } from 'ionic-angular';
 
-import { PrmModelService } 	from '../_services/prm.model.service';
+import { PrmModelService } 	from '../../../app/_services/prm-model.service';
 import { RequestsService } 	from '../../../app/_services/requests.service';
 import { RequestMetadataService } 	from '../../../app/_services/request-metadata.service';
 

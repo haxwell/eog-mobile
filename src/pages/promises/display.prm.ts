@@ -7,7 +7,7 @@ import { PrmEditPage } from './edit.prm'
 import { RequestPage } from './_pages/request'
 import { DeletePrmPage } from './_pages/delete.prm'
 import { OutgoingRequestMadeTutorialPage } from './_pages/outgoing-request-made-tutorial'
-import { PrmModelService } from './_services/prm.model.service'
+import { PrmModelService } from '../../app/_services/prm-model.service';
 import { PrmMetadataService } from '../../app/_services/prm-metadata.service';
 import { PrmDetailService } from '../../app/_services/prm-detail.service';
 import { UserService } from '../../app/_services/user.service';

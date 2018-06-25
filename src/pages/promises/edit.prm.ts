@@ -11,7 +11,7 @@ import { RulePage } from './_pages/rule'
 import { KeywordEntryPage } from '../keyword.entry/keyword.entry'
 import { ChoosePhotoSourcePage } from '../common/choose-photo-source/choose-photo-source'
 
-import { PrmModelService } from './_services/prm.model.service'
+import { PrmModelService } from '../../app/_services/prm-model.service'
 import { PrmDetailService } from '../../app/_services/prm-detail.service';
 import { UserService } from '../../app/_services/user.service';
 import { PictureService } from '../../app/_services/picture.service';
