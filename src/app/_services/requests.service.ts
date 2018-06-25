@@ -4,6 +4,8 @@ import { Events } from 'ionic-angular';
 import { UserService } from './user.service';
 import { ApiService } from './api.service';
 import { DeclineReasonCodeService } from './declined-reason-codes.service';
+import { PrmModelService } from './prm-model.service';
+import { FunctionPromiseService } from './function-promise.service';
 
 import { environment } from '../../_environments/environment';
 
@@ -14,9 +16,13 @@ export class RequestsService {
 	
 	archivedUserRequestsForPrmPromiseCache = {};
 
+	isGetModelFuncInitialized = false;
+
 	constructor(private _apiService: ApiService, 
 				private _userService: UserService, 
 				private _declineReasonCodeService: DeclineReasonCodeService,
+				private _prmModelService: PrmModelService,
+				private _functionPromiseService: FunctionPromiseService,
 				private _constants: Constants,
 				private _events: Events) {
 
@@ -65,34 +71,60 @@ export class RequestsService {
 		});
 	}
 
-	getModel(direction) {
+	/**
+	 * This sets a function in the FunctionPromiseService. When a call to getModel() is made, getModel() calls the FunctionPromiseService,
+	 *  which prevents this function from being called several times in a row in a given time period. It does this by allowing one call
+	 *  in that time period; the other calls receive cached data.
+	 *
+	 */
+	initGetModelFunc() {
 		let self = this;
-		return new Promise((resolve, reject) => {
-			let user = this._userService.getCurrentUser();
-			let url = environment.apiUrl + "/api/user/" + user["id"] + "/requests/" + direction;
-			
-			self._apiService.get(url).subscribe((obj) => {
-				let arr = JSON.parse(obj["_body"]);
+		self._functionPromiseService.initFunc(self._constants.FUNCTION_KEY_REQUESTS_BY_USER_AND_DIRECTION_GET, (data) => {
+			return new Promise((resolve, reject) => {
+				let userId = data["userId"];
+				let direction = data["direction"];
 
-				arr.forEach((request) => { 
-					self.changePromiseAttributeToPrm(request); 
-				});
+				let url = environment.apiUrl + "/api/user/" + userId + "/requests/" + direction;
+				
+				self._apiService.get(url).subscribe((obj) => {
+					let arr = JSON.parse(obj["_body"]);
 
-				self._declineReasonCodeService.getDeclineReasonCodes().then((drcs: Array<Object>) => {
-					arr.map((req) => { 
-						if (req["declinedReasonCode"] === null) {
-							req["declinedReasonCode"] = {id: undefined, text: undefined};
-						} else {
-							let drc = drcs.find((obj) => { return obj["id"] === req["declinedReasonCode"] });
-							req["declinedReasonCode"] = {id: drc["id"], text: drc["text"]};
-						}
+					console.log("*** API call for current user " + direction + " requests succeeded.")
+
+					arr.forEach((request) => { 
+						self.changePromiseAttributeToPrm(request); 
+
+						console.log("about to call prmModelService for setPrmImageOrientation")
+						this._prmModelService.setPrmImageOrientation(request.prm);
 					});
 
-					resolve(arr);
-				});
-			});
-		})
+					self._declineReasonCodeService.getDeclineReasonCodes().then((drcs: Array<Object>) => {
+						arr.map((req) => { 
+							if (req["declinedReasonCode"] === null) {
+								req["declinedReasonCode"] = {id: undefined, text: undefined};
+							} else {
+								let drc = drcs.find((obj) => { return obj["id"] === req["declinedReasonCode"] });
+								req["declinedReasonCode"] = {id: drc["id"], text: drc["text"]};
+							}
+						});
 
+						resolve(arr);
+					});
+				});
+			})
+		});
+
+		self.isGetModelFuncInitialized = true;
+	}
+
+	getModel(direction) {
+		let self = this;
+
+		if (!self.isGetModelFuncInitialized)
+			self.initGetModelFunc();
+
+		let data = {userId: self._userService.getCurrentUser()['id'], direction: direction};
+		return self._functionPromiseService.get(data['userId']+direction, self._constants.FUNCTION_KEY_REQUESTS_BY_USER_AND_DIRECTION_GET, data);
 	}
 
 	// hack
@@ -110,6 +142,7 @@ export class RequestsService {
 	}
 
 	getOutgoingRequestsForCurrentUser() {
+		console.log("in requestsService::getOutgoingRequestsforCurrentUser...")
 		return (this.getModel(this._constants.OUTGOING));
 	}
 
