@@ -220,15 +220,9 @@ export class PictureService {
 	}
 
 	getMostProbablePhotoPath(photoType, objId) {
-		if (this.mostProbablePhotoPath[photoType+objId] === undefined) {
-			window.resolveLocalFileSystemURL(this.file.cacheDirectory, (dirEntry) => {
-				this.mostProbablePhotoPath[photoType+objId] = dirEntry.name + (photoType+objId);
-			})
-		}
-
-//        if (this.mostProbablePhotoPath[photoType+objId] === undefined) {
- //           this.mostProbablePhotoPath[photoType+objId] = this.file.cacheDirectory + (photoType+objId);
-   //     }
+        if (this.mostProbablePhotoPath[photoType+objId] === undefined) {
+            this.mostProbablePhotoPath[photoType+objId] = this.file.cacheDirectory + (photoType+objId);
+        }
 
 		return this.mostProbablePhotoPath[photoType+objId];
 	}
