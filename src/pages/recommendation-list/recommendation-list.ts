@@ -111,12 +111,8 @@ export class RecommendationListPage {
 	}
 
 	getAvatarCSSClassString() {
-		if (this.imageOrientation === 8)
-			return "rotate90Counterclockwise";
-		else if (this.imageOrientation === 3)
-			return "rotate180 centered";
-		else if (this.imageOrientation === 6)
-			return "rotate90Clockwise";
+		// This didn't have the centered classs as default either.. everything okay?
+		return this._pictureService.getOrientationCSS(this);
 	}
 
 	loaded(evt) {

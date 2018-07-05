@@ -329,14 +329,7 @@ export class PrmEditPage {
 	}
 
 	getAvatarCSSClassString() {
-		if (this.model["imageOrientation"] === 8)
-			return "rotate90Counterclockwise editPrmImage centered";
-		else if (this.model["imageOrientation"] === 3)
-			return "rotate180 editPrmImage centered";
-		else if (this.model["imageOrientation"] === 6)
-			return "rotate90Clockwise editPrmImage centered";
-		else
-			return "editPrmImage centered";
+		return this._pictureService.getOrientationCSS(this.model, "editPrmImage");
 	}
 
 	onThumbnailClick($event) {

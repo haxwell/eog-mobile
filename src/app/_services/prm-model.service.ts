@@ -104,6 +104,8 @@ export class PrmModelService {
 
 				if (filename) {
 					self._pictureEXIFService.getEXIFMetadata(filename).then((exifMetadata) => {
+                            console.log("***** In prmMODELService, getting EXIF metadata for " + filename);
+                            console.log(JSON.stringify(exifMetadata));
 						prm["imageOrientation"] = exifMetadata["Orientation"];
 						resolve(prm);
 					})

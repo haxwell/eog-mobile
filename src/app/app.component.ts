@@ -24,6 +24,7 @@ import { ProfilePage } from '../pages/profile/profile';
 export class EasyahApp {
   rootPage:any = LoginPage;
   exitFunction = undefined;  
+  isAndroidFunction = undefined;
 
   @ViewChild(Nav) navCtrl: Nav;
 
@@ -39,6 +40,10 @@ export class EasyahApp {
 
     this.exitFunction = () => {
       platform.exitApp();
+    }
+
+    this.isAndroidFunction = () => {
+      return platform.is('android');
     }
 
     platform.ready().then(() => {
@@ -119,6 +124,10 @@ export class EasyahApp {
       this._uciService.resetNotificationUnseenChanges();
       this.navCtrl.push(NotificationListPage, {});
     }
+  }
+
+  isLogoutBtnVisible() {
+    return this.isAndroidFunction();
   }
 
   onLogoutBtnClick() {

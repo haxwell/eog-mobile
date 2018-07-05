@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Events } from 'ionic-angular';
 
 import { ProfileService } from '../_services/profile.service'
+import { PictureService } from '../../../app/_services/picture.service'
 
 import EXIF from 'exif-js'
 
@@ -16,6 +17,7 @@ export class ProfileHeader {
 	imageOrientation = undefined;
 
 	constructor(private _profileService: ProfileService, 
+				private _pictureService: PictureService,
 				private _events: Events) {
 
 		let self = this;
@@ -50,14 +52,7 @@ export class ProfileHeader {
 	}
 
 	getAvatarCSSClassString() {
-		if (this.imageOrientation === 8)
-			return "rotate90Counterclockwise centered";
-		else if (this.imageOrientation === 3)
-			return "rotate180 centered";
-		else if (this.imageOrientation === 6)
-			return "rotate90Clockwise centered";
-		else
-			return "centered";
+		return this._pictureService.getOrientationCSS(this);
 	}
 
 	loaded(evt) {

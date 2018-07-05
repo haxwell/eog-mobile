@@ -7,6 +7,7 @@ import { Constants } from '../../../_constants/constants'
 
 import { PrmMetadataService } from '../../../app/_services/prm-metadata.service';
 import { PointsService } from '../../../app/_services/points.service';
+import { PictureService } from '../../../app/_services/picture.service';
 import { RecommendationService } from '../../../app/_services/recommendation.service';
 
 @Component({
@@ -30,6 +31,7 @@ export class OtherPeoplesPromiseList {
 				private _constants: Constants,
 				private _prmMetadataService: PrmMetadataService,
 				private _pointsService: PointsService,
+				private _pictureService: PictureService,
 				private _recommendationService: RecommendationService,
                 _events: Events) {
 
@@ -74,14 +76,7 @@ export class OtherPeoplesPromiseList {
 	}
 
 	getAvatarCSSClassString(prm) {
-		if (prm["imageOrientation"] === 8)
-			return "rotate90Counterclockwise centered";
-		else if (prm["imageOrientation"] === 3)
-			return "rotate180 centered";
-		else if (prm["imageOrientation"] === 6)
-			return "rotate90Clockwise centered";
-		else
-			return "centered";
+		return this._pictureService.getOrientationCSS(prm);
 	}
 
 	getAlreadyRequestedIconColor(prm) {
