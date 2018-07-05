@@ -1,3 +1,12 @@
+USEFUL COMMANDS
+-----------
+adb devices -l     # list the android devices connected to the machine
+ionic cordova run android --device && date      # deploy easyah to the android, and display the timestamp when its done
+ionic cordova build --release android      # build an apk for preparation in releasing Easyah to Google Play (see RELEASING_README)
+ionic serve     # do a local, in-browser run of Easyah
+
+
+----------
 For the error deploying with stompjs:
 
     "main": "./lib/stomp.min.js"
