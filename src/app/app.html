@@ -14,7 +14,9 @@
           <ion-item [ngStyle]="{'background-color':getSelectedColor('KeywordListPage')}" (click)="onYourKeywordsClicked()">Your Keywords</ion-item>
           <ion-item [ngStyle]="{'background-color':getSelectedColor('NotificationListPage')}" (click)="onYourNotificationsClicked()">Notifications <ion-icon [hidden]="!areNotificationUnseenChanges()" name="bulb"></ion-icon></ion-item>
 
-      		<ion-item [hidden]="isLogoutBtnVisible()" (click)="onLogoutBtnClick()">Log Out</ion-item>
+          <ion-item [ngStyle]="{'background-color':getSelectedColor('AboutEasyahPage')}" (click)="onAboutEasyahClicked()">About Easyah </ion-item>
+
+      		<ion-item [hidden]="!isLogoutBtnVisible()" (click)="onLogoutBtnClick()">Log Out</ion-item>
     	</ion-list>
   	</ion-content>
 </ion-menu>

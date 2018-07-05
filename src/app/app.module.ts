@@ -16,6 +16,7 @@ import { FilePath } from '@ionic-native/file-path'
 import { EasyahApp } from './app.component';
 import { EasyahHeader } from '../pages/common/easyah-header/easyah-header';
 import { LoginPage } from '../pages/login/login';
+import { AboutEasyahPage } from '../pages/about-easyah/about-easyah';
 import { TutorialPage } from '../pages/tutorial/tutorial';
 import { CreateAccountPage } from '../pages/login/_pages/create.account';
 import { HomePage } from '../pages/home/home';
@@ -93,6 +94,7 @@ export class CustomHammerConfig extends HammerGestureConfig {
     EasyahApp,
     EasyahHeader,
     LoginPage,
+    AboutEasyahPage,
     CreateAccountPage,
     HomePage,
     TutorialPage,
@@ -143,6 +145,7 @@ export class CustomHammerConfig extends HammerGestureConfig {
     EasyahApp,
     EasyahHeader,
     LoginPage,
+    AboutEasyahPage,
     CreateAccountPage,
     HomePage,
     TutorialPage,
