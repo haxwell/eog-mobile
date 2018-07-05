@@ -118,12 +118,8 @@ export class NotificationListPage {
 	}
 
 	getAvatarCSSClassString() {
-		if (this.imageOrientation === 8)
-			return "rotate90Counterclockwise";
-		else if (this.imageOrientation === 3)
-			return "rotate180 centered";
-		else if (this.imageOrientation === 6)
-			return "rotate90Clockwise";
+		// this did not have "centered" as a default css class.. everything still look okay?
+		return this._pictureService.getOrientationCSS(this);
 	}
 
 	loaded(evt) {

@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Platform } from 'ionic-angular';
 
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
 import { File } from '@ionic-native/file'
@@ -17,8 +18,10 @@ export class PictureService {
 
 	_functionPromiseService = new FunctionPromiseService();
 	mostProbablePhotoPath = {};
+	platformName = undefined;
 
-	constructor(private _apiService: ApiService,
+	constructor(private _platform: Platform,
+				private _apiService: ApiService,
 				private _constants: Constants,
 				private transfer: FileTransfer,
 				private _localStorageService: LocalStorageService,
@@ -217,9 +220,29 @@ export class PictureService {
 	}
 
 	getMostProbablePhotoPath(photoType, objId) {
-		if (this.mostProbablePhotoPath[photoType+objId] === undefined)
-			this.mostProbablePhotoPath[photoType+objId] = "file:///data/data/io.easyah.mobileapp/cache/" + (photoType+objId);
+        if (this.mostProbablePhotoPath[photoType+objId] === undefined) {
+            this.mostProbablePhotoPath[photoType+objId] = this.file.cacheDirectory + (photoType+objId);
+        }
 
 		return this.mostProbablePhotoPath[photoType+objId];
+	}
+
+	getOrientationCSS(objWithImageOrientationAttr: any, additionalCSSClassList?: string) {
+		let obj = objWithImageOrientationAttr;
+
+		let rtn = "";
+
+		if (this._platform.is('android')) {
+			if (obj["imageOrientation"] === 8)
+				 rtn = "rotate90Counterclockwise";
+			else if (obj["imageOrientation"] === 3)
+				rtn = "rotate180";
+			else if (obj["imageOrientation"] === 6)
+				rtn = "rotate90Clockwise";
+		}
+
+		rtn += " centered " + additionalCSSClassList || '';
+
+		return rtn;
 	}
 }
