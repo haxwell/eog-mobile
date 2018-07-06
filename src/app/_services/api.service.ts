@@ -31,7 +31,7 @@ export class ApiService {
 
 	getWithUsernameAndPassword(url: string, uName: string, uPW: string) {
 		let headers: Headers = this.getHeaders(uName, uPW);
-		return this._http.get(url, {headers: headers});
+		return this._http.get(url, {headers: headers}).timeout(5000);
 	}
 
 	getUnsecuredAPI(url: string, data: string) {
