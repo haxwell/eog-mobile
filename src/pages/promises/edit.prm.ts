@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 
 import { File } from '@ionic-native/file'
 
+import { Events } from 'ionic-angular';
+import { Platform } from 'ionic-angular';
 import { NavController, NavParams } from 'ionic-angular';
 import { ModalController } from 'ionic-angular';
 import { LoadingController } from 'ionic-angular';
@@ -15,10 +17,9 @@ import { PrmModelService } from '../../app/_services/prm-model.service'
 import { PrmDetailService } from '../../app/_services/prm-detail.service';
 import { UserService } from '../../app/_services/user.service';
 import { PictureService } from '../../app/_services/picture.service';
+import { EventSubscriberService } from '../../app/_services/event-subscriber.service';
 
 import { Constants } from '../../_constants/constants';
-
-import EXIF from 'exif-js'
 
 @Component({
   selector: 'page-prm-edit',
@@ -44,9 +45,12 @@ export class PrmEditPage {
 				private _prmDetailService: PrmDetailService,
 				private _userService: UserService,
 				private _pictureService: PictureService,
+				private _eventSubscriberService: EventSubscriberService,
 				private loadingCtrl: LoadingController,
 				private _constants: Constants,
-				private _file: File) {
+				private _file: File,
+				private _events: Events,
+				private _platform: Platform) {
 
 		let tmp = navParams.get('prm');
 
@@ -101,58 +105,120 @@ export class PrmEditPage {
 
 	ionViewCanLeave() {
 		let self = this;
-		
-		return new Promise((resolve, reject) => { 
-			if (self.isDirty()) {
-				if (self.isSaveBtnEnabled()) {
-				    let confirmAlert = this._alertCtrl.create({
-				      title: 'Save changes?',
-				      message: "This promise is ready to go. Do you want to save it?",
-				      buttons: [{
-				        text: "No, don't save.",
-				        role: 'cancel',
-				        handler: () => {
-							self.setDirty(false);
-							self.setShouldPopOnReturnToThisView();
-							resolve();
-						}
-				      }, {
-				        text: 'Yes, save it!',
-				        handler: () => {
-							self.setDirty(false);
-				          	self.onSaveBtnTap(false);
-				          	self.setShouldPopOnReturnToThisView();
-							resolve();
-				        }
-				      }]
-				    });
-				    confirmAlert.present();
+
+		if (this._platform.is('android')) {
+			return new Promise((resolve, reject) => { 
+				if (self.isDirty()) {
+					if (self.isSaveBtnEnabled()) {
+					    let confirmAlert = this._alertCtrl.create({
+					      title: 'Save changes?',
+					      message: "This promise is ready to go. Do you want to save it?",
+					      buttons: [{
+					        text: "No, don't save.",
+					        role: 'cancel',
+					        handler: () => {
+								self.setDirty(false);
+								self.setShouldPopOnReturnToThisView();
+								resolve();
+							}
+					      }, {
+					        text: 'Yes, save it!',
+					        handler: () => {
+								self.setDirty(false);
+					          	self.onSaveBtnTap(false);
+					          	self.setShouldPopOnReturnToThisView();
+								resolve();
+					        }
+					      }]
+					    });
+					    confirmAlert.present();
+					} else {
+					    let confirmAlert = this._alertCtrl.create({
+					      title: 'Save changes?',
+					      message: "You'll lose the changes you made. Exit anyway?",
+					      buttons: [{
+					        text: "No, don't exit!",
+					        role: 'cancel',
+					        handler: () => {
+					        	reject();
+							}
+					      }, {
+					        text: 'Yes, lose changes',
+					        handler: () => {
+								self.setDirty(false);
+								self.setShouldPopOnReturnToThisView();
+								resolve();
+					        }
+					      }]
+					    });
+					    confirmAlert.present();
+					}
 				} else {
-				    let confirmAlert = this._alertCtrl.create({
-				      title: 'Save changes?',
-				      message: "You'll lose the changes you made. Exit anyway?",
-				      buttons: [{
-				        text: "No, don't exit!",
-				        role: 'cancel',
-				        handler: () => {
-				        	reject();
-						}
-				      }, {
-				        text: 'Yes, lose changes',
-				        handler: () => {
-							self.setDirty(false);
-							self.setShouldPopOnReturnToThisView();
-							resolve();
-				        }
-				      }]
-				    });
-				    confirmAlert.present();
+					self.setShouldPopOnReturnToThisView();
+					resolve();
 				}
-			} else {
-				self.setShouldPopOnReturnToThisView();
-				resolve();
+			})
+		} else { // is NOT Android
+
+			if (!this.isDirty()) {
+				return new Promise((resolve, reject) => {resolve(true);})
+			} else { 
+
+				this._eventSubscriberService.subscribe("ios-edit-prm-exit", (data) => {
+					data["clearDirtyFunc"]();
+					self.navCtrl.pop();		
+				});
+
+				this._eventSubscriberService.subscribe("ios-edit-prm-save-then-exit", (data) => {
+					self.onSaveBtnTap(false);
+					data["clearDirtyFunc"]();
+					self.navCtrl.pop();
+				});
+
+				this._eventSubscriberService.subscribe("ios-confirm-exit-on-edit-prm", (data) => {
+					if (data["isSaveBtnEnabled"]) {
+					    let confirmAlert = this._alertCtrl.create({
+					      title: 'Save changes?',
+					      message: "This promise is ready to go. Do you want to save it?",
+					      buttons: [{
+					        text: "No, don't save.",
+					        role: 'cancel',
+					        handler: () => {
+					        	self._events.publish("ios-edit-prm-exit", data)
+							}
+					      }, {
+					        text: 'Yes, save it!',
+					        handler: () => {
+					        	self._events.publish("ios-edit-prm-save-then-exit", data)
+					        }
+					      }]
+					    });
+					    confirmAlert.present();
+					} else {
+					    let confirmAlert = this._alertCtrl.create({
+					      title: 'Save changes?',
+					      message: "You'll lose the changes you made. Exit anyway?",
+					      buttons: [{
+					        text: "No, don't exit!",
+					        role: 'cancel',
+					        handler: () => {
+					        	//self._events.publish("ios-edit-prm-dont-exit")
+							}
+					      }, {
+					        text: 'Yes, lose changes',
+					        handler: () => {
+					        	self._events.publish("ios-edit-prm-exit", data)
+					        }
+					      }]
+					    });
+					    confirmAlert.present();
+					}
+				})
+
+				this._events.publish("ios-confirm-exit-on-edit-prm", {clearDirtyFunc: () => { this.setDirty(false); }, isSaveBtnEnabled: this.isSaveBtnEnabled()});
+				return new Promise((resolve, reject) => {resolve(false);})
 			}
-		})
+		}
 	}
 
 	setModel(m) {

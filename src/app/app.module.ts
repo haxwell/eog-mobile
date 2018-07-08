@@ -60,6 +60,7 @@ import { UserService } from './_services/user.service';
 import { UserMetadataService } from './_services/user-metadata.service';
 import { SearchService } from './_services/search.service';
 import { PointsService } from './_services/points.service';
+import { EventSubscriberService } from './_services/event-subscriber.service';
 import { FunctionPromiseService } from './_services/function-promise.service';
 import { RecommendationService } from './_services/recommendation.service';
 import { RequestsService } from './_services/requests.service';
@@ -215,6 +216,7 @@ export class CustomHammerConfig extends HammerGestureConfig {
     PushMessagingService,
     UnseenChangesIndicatorService,
     HomeService,
+    EventSubscriberService,
     {provide: HAMMER_GESTURE_CONFIG,    useClass: CustomHammerConfig},
     {provide: ErrorHandler,             useClass: IonicErrorHandler}
   ]
