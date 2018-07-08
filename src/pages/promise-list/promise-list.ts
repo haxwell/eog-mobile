@@ -8,8 +8,6 @@ import { PrmDisplayPage } from '../promises/display.prm'
 import { PrmCollectionService } from '../../app/_services/prm-collection.service'
 import { PictureService } from '../../app/_services/picture.service'
 
-import EXIF from 'exif-js';
-
 @Component({
   selector: 'promise-list',
   templateUrl: 'promise-list.html'
@@ -110,8 +108,6 @@ export class PromiseListPage {
 	}
 
 	getAvatarCSSClassString(prm) {
-        console.log("In getAvatarCSSClassString... the prm looks like: " + JSON.stringify(prm));
-
         return this._pictureService.getOrientationCSS(prm);
 	}
 }

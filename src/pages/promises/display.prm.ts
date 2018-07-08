@@ -17,7 +17,6 @@ import { PictureService } from '../../app/_services/picture.service'
 import { Constants } from '../../_constants/constants';
 
 import Moment from 'moment'
-import EXIF from 'exif-js'
 
 @Component({
   selector: 'page-display-prm',
@@ -47,9 +46,6 @@ export class PrmDisplayPage {
 				private _constants: Constants) {
 
 		this.model = navParams.get('prm');
-
-		console.log("In constructor for dispalyPrmPage. This is what the PRM we got looks like: ");
-		console.log(JSON.stringify(this.model));
 
 		this._prmModelService.setPrmMetadata(this.model).then((prm) => {
 			this.setModel(Object.assign({}, prm));
