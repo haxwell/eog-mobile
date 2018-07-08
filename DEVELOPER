@@ -20,3 +20,9 @@ UNIT TESTS
 -----
 
     To run all tests, type 'npm test'
+
+------
+BUILDING XCODE RELEASE
+------
+
+CDVPlugin.h missing - https://stackoverflow.com/questions/10714600/cdvplugin-h-file-not-found-in-cordova-as-component-cleaver
