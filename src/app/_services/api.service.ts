@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import { Headers } from '@angular/http';
 import { Events } from 'ionic-angular';
+import { Platform } from 'ionic-angular';
 
 @Injectable()
 export class ApiService {
 	
 	currentUser = undefined;
 
-	constructor(private _http: Http, private _events: Events) {
+	constructor(private _http: Http, private _events: Events, private _platform: Platform) {
 		this._events.subscribe('app:login', (currentUser) => { this.currentUser = currentUser; });
 	}
 
@@ -31,7 +32,11 @@ export class ApiService {
 
 	getWithUsernameAndPassword(url: string, uName: string, uPW: string) {
 		let headers: Headers = this.getHeaders(uName, uPW);
-		return this._http.get(url, {headers: headers}).timeout(5000);
+		
+		if (this._platform.is('ios'))
+			return this._http.get(url, {headers: headers}).timeout(5000);
+		else
+			return this._http.get(url, {headers: headers});
 	}
 
 	getUnsecuredAPI(url: string, data: string) {
