@@ -85,12 +85,11 @@ export class UserService {
 
 		self.promise = new Promise(
 			(resolve, reject) => {
-				this._apiService.getWithUsernameAndPassword(url, username, password).toPromise().then(
+				this._apiService.getWithUsernameAndPassword(url, username, password).subscribe(
 					(userObj) => { 
 						console.log("Credentials Valid!");
 						resolve(JSON.parse(userObj["_body"]));
-					 }).catch((err) => {
-					 	console.log("ERROR validating credientials! " + JSON.stringify(err));
+					 }, (err) => {
 					 	reject(err);
 					 });
 			});
