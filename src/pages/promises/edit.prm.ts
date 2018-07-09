@@ -3,7 +3,6 @@ import { Component } from '@angular/core';
 import { File } from '@ionic-native/file'
 
 import { Events } from 'ionic-angular';
-import { Platform } from 'ionic-angular';
 import { NavController, NavParams } from 'ionic-angular';
 import { ModalController } from 'ionic-angular';
 import { LoadingController } from 'ionic-angular';
@@ -14,7 +13,6 @@ import { KeywordEntryPage } from '../keyword.entry/keyword.entry'
 import { ChoosePhotoSourcePage } from '../common/choose-photo-source/choose-photo-source'
 
 import { PrmModelService } from '../../app/_services/prm-model.service'
-import { PrmDetailService } from '../../app/_services/prm-detail.service';
 import { UserService } from '../../app/_services/user.service';
 import { PictureService } from '../../app/_services/picture.service';
 import { EventSubscriberService } from '../../app/_services/event-subscriber.service';
@@ -35,24 +33,24 @@ export class PrmEditPage {
 	requestMsgs = undefined;
 	newKeywords = [];
 	loading = undefined;
-	shouldPopOnReturnToThisView = false;
 
 	constructor(public navCtrl: NavController, 
-				navParams: NavParams, 
+				private _navParams: NavParams, 
 				private modalCtrl: ModalController,
 				private _alertCtrl: AlertController,
 				private _prmModelService: PrmModelService,
-				private _prmDetailService: PrmDetailService,
 				private _userService: UserService,
 				private _pictureService: PictureService,
 				private _eventSubscriberService: EventSubscriberService,
 				private loadingCtrl: LoadingController,
 				private _constants: Constants,
 				private _file: File,
-				private _events: Events,
-				private _platform: Platform) {
+				private _events: Events) {
 
-		let tmp = navParams.get('prm');
+	}
+
+	ngOnInit() {
+		let tmp = this._navParams.get('prm');
 
 		this.model = tmp || this._prmModelService.getDefaultModel();
 
@@ -66,19 +64,6 @@ export class PrmEditPage {
 
 		this.model["keywords"].sort((a, b) => { let aText = a.text.toLowerCase(); let bText = b.text.toLowerCase(); if (aText > bText) return 1; else if (aText < bText) return -1; else return 0; })
 
-/*
-//		This should never be the case. You can't edit another user's prm
-
-        if (this.model["userId"] !== this._userService.getCurrentUser()["id"] && 
-        	this.model["directionallyOppositeUser"] === undefined) {
-		        let getUserPromise = this._userService.getUser(this.model["userId"]);
-		        getUserPromise.then((user) => {
-		            this.model["directionallyOppositeUser"] = user;
-		            delete this.model["userId"];
-		        });
-        }
-*/
-
 		if (this.areRecommendationsRequired(this.model)) {
 			this.model["requiredUserRecommendations"].forEach((rec) => {
 				this._userService.getUser(rec["requiredRecommendUserId"]).then((user) => {
@@ -87,138 +72,75 @@ export class PrmEditPage {
 			});
 		}
 
-		if (tmp !== undefined && tmp["userId"] !== this._userService.getCurrentUser()["id"] )
-			this.requestMsgs = this._prmDetailService.getPrmDetailMessages(tmp);
-
-		this.callback = navParams.get('callback') || function() { return new Promise((resolve, reject) => { resolve(); }) };
-	}
-
-	ngOnInit() {
-
-	}
-
-	ionViewDidEnter() {
-		if (this.shouldPopOnReturnToThisView) {
-			this.navCtrl.pop();
-		}
+		this.callback = this._navParams.get('callback') || function() { return new Promise((resolve, reject) => { resolve(); }) };
 	}
 
 	ionViewCanLeave() {
 		let self = this;
+		if (!this.isDirty()) {
+			return new Promise((resolve, reject) => {resolve(true);})
+		} else { 
 
-		if (this._platform.is('android')) {
-			return new Promise((resolve, reject) => { 
-				if (self.isDirty()) {
-					if (self.isSaveBtnEnabled()) {
-					    let confirmAlert = this._alertCtrl.create({
-					      title: 'Save changes?',
-					      message: "This promise is ready to go. Do you want to save it?",
-					      buttons: [{
-					        text: "No, don't save.",
-					        role: 'cancel',
-					        handler: () => {
-								self.setDirty(false);
-								self.setShouldPopOnReturnToThisView();
-								resolve();
-							}
-					      }, {
-					        text: 'Yes, save it!',
-					        handler: () => {
-								self.setDirty(false);
-					          	self.onSaveBtnTap(false);
-					          	self.setShouldPopOnReturnToThisView();
-								resolve();
-					        }
-					      }]
-					    });
-					    confirmAlert.present();
-					} else {
-					    let confirmAlert = this._alertCtrl.create({
-					      title: 'Save changes?',
-					      message: "You'll lose the changes you made. Exit anyway?",
-					      buttons: [{
-					        text: "No, don't exit!",
-					        role: 'cancel',
-					        handler: () => {
-					        	reject();
-							}
-					      }, {
-					        text: 'Yes, lose changes',
-					        handler: () => {
-								self.setDirty(false);
-								self.setShouldPopOnReturnToThisView();
-								resolve();
-					        }
-					      }]
-					    });
-					    confirmAlert.present();
-					}
+			this._eventSubscriberService.subscribe("ios-edit-prm-exit", (data) => {
+				data["clearDirtyFunc"]();
+				self.navCtrl.pop();		
+			});
+
+			this._eventSubscriberService.subscribe("ios-edit-prm-save-then-exit", (data) => {
+				self.onSaveBtnTap(false);
+				data["clearDirtyFunc"]();
+				self.navCtrl.pop();
+			});
+
+			this._eventSubscriberService.subscribe("ios-confirm-exit-on-edit-prm", (data) => {
+				if (data["isSaveBtnEnabled"]) {
+				    let confirmAlert = this._alertCtrl.create({
+				      title: 'Save changes?',
+				      message: "This promise is ready to go. Do you want to save it?",
+				      buttons: [{
+				        text: "No, don't save.",
+				        role: 'cancel',
+				        handler: () => {
+				        	self._events.publish("ios-edit-prm-exit", data)
+						}
+				      }, {
+				        text: 'Yes, save it!',
+				        handler: () => {
+				        	self._events.publish("ios-edit-prm-save-then-exit", data)
+				        }
+				      }]
+				    });
+				    confirmAlert.present();
 				} else {
-					self.setShouldPopOnReturnToThisView();
-					resolve();
+				    let confirmAlert = this._alertCtrl.create({
+				      title: 'Save changes?',
+				      message: "You'll lose the changes you made. Exit anyway?",
+				      buttons: [{
+				        text: "No, don't exit!",
+				        role: 'cancel',
+				        handler: () => {
+				        	// do nothing
+						}
+				      }, {
+				        text: 'Yes, lose changes',
+				        handler: () => {
+				        	self._events.publish("ios-edit-prm-exit", data)
+				        }
+				      }]
+				    });
+				    confirmAlert.present();
 				}
 			})
-		} else { // is NOT Android
 
-			if (!this.isDirty()) {
-				return new Promise((resolve, reject) => {resolve(true);})
-			} else { 
-
-				this._eventSubscriberService.subscribe("ios-edit-prm-exit", (data) => {
-					data["clearDirtyFunc"]();
-					self.navCtrl.pop();		
-				});
-
-				this._eventSubscriberService.subscribe("ios-edit-prm-save-then-exit", (data) => {
-					self.onSaveBtnTap(false);
-					data["clearDirtyFunc"]();
-					self.navCtrl.pop();
-				});
-
-				this._eventSubscriberService.subscribe("ios-confirm-exit-on-edit-prm", (data) => {
-					if (data["isSaveBtnEnabled"]) {
-					    let confirmAlert = this._alertCtrl.create({
-					      title: 'Save changes?',
-					      message: "This promise is ready to go. Do you want to save it?",
-					      buttons: [{
-					        text: "No, don't save.",
-					        role: 'cancel',
-					        handler: () => {
-					        	self._events.publish("ios-edit-prm-exit", data)
-							}
-					      }, {
-					        text: 'Yes, save it!',
-					        handler: () => {
-					        	self._events.publish("ios-edit-prm-save-then-exit", data)
-					        }
-					      }]
-					    });
-					    confirmAlert.present();
-					} else {
-					    let confirmAlert = this._alertCtrl.create({
-					      title: 'Save changes?',
-					      message: "You'll lose the changes you made. Exit anyway?",
-					      buttons: [{
-					        text: "No, don't exit!",
-					        role: 'cancel',
-					        handler: () => {
-					        	//self._events.publish("ios-edit-prm-dont-exit")
-							}
-					      }, {
-					        text: 'Yes, lose changes',
-					        handler: () => {
-					        	self._events.publish("ios-edit-prm-exit", data)
-					        }
-					      }]
-					    });
-					    confirmAlert.present();
-					}
-				})
-
-				this._events.publish("ios-confirm-exit-on-edit-prm", {clearDirtyFunc: () => { this.setDirty(false); }, isSaveBtnEnabled: this.isSaveBtnEnabled()});
-				return new Promise((resolve, reject) => {resolve(false);})
-			}
+			this._events.publish("ios-confirm-exit-on-edit-prm", {clearDirtyFunc: () => { this.setDirty(false); }, isSaveBtnEnabled: this.isSaveBtnEnabled()});
+			return new Promise((resolve, reject) => {resolve(false);})
 		}
+	}
+
+	ionViewDidLeave() {
+		this._eventSubscriberService.reset("ios-confirm-exit-on-edit-prm");
+		this._eventSubscriberService.reset("ios-edit-prm-save-then-exit");
+		this._eventSubscriberService.reset("ios-edit-prm-exit");
 	}
 
 	setModel(m) {
@@ -227,10 +149,6 @@ export class PrmEditPage {
 
 	isDirty() {
 		return this.dirty;
-	}
-
-	setShouldPopOnReturnToThisView() {
-		this.shouldPopOnReturnToThisView = true;
 	}
 
 	setDirty(b) {
