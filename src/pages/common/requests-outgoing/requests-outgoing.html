@@ -130,7 +130,7 @@
 			</ion-label>
 		</ion-item-divider>
 		<ion-item-group *ngFor="let request of getNotCompleteAwaitingResolution()">
-			<ion-item-sliding #slidingItem  [attr.track]="notCompleteAwaitingResolution" (press)="onViewPromise(request)">
+			<ion-item-sliding #slidingItem [attr.track]="getTrack(request)" (press)="onViewPromise(request)">
 				<button ion-item>
 					<ion-avatar item-start>
 						<img id="prmAvatarImg" [class]="getAvatarCSSClassString(request.prm)" [src]="getThumbnailImage(request.prm)" alt="profile_image">
@@ -146,7 +146,7 @@
 					<button ion-button color="danger" (click)="onPermanentlyDismissBtnTap(request)">Permanently Dismiss</button>
 				</ion-item-options>
 				<ion-item-options side="right">
-					<button ion-button color="secondary" (click)="onCompleteBtnTap(request)">Mark as Complete</button>
+					<button ion-button color="secondary" (click)="onCompleteOutgoingBtnTap(request)">Mark as Complete</button>
 				</ion-item-options>
 
 			</ion-item-sliding>

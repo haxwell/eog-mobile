@@ -223,13 +223,6 @@ export class RequestsOutgoingView {
 		modal.present();
 	}
 
-	onCompleteBtnTap(request) {
-		let self = this;
-		let modal = this.modalCtrl.create(CompleteRequestPage, {request: request});
-		modal.onDidDismiss(data => { self.ngOnInit() });
-		modal.present();
-	}
-
 	onCompleteOutgoingBtnTap(request) {
 		let self = this;
 		let modal = this.modalCtrl.create(CompleteOutgoingRequestPage, {request: request});
