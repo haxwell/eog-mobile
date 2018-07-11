@@ -1,3 +1,7 @@
+*******************************
+   A N D R O I D
+*******************************
+
 USEFUL COMMANDS
 -----------
 adb devices -l     # list the android devices connected to the machine
@@ -21,8 +25,12 @@ UNIT TESTS
 
     To run all tests, type 'npm test'
 
-------
+********************************
+   I  O  S
+********************************
+
 BUILDING XCODE RELEASE
 ------
+ionic cordova build --release ios       # build ./platforms/ios/Easyah.xcworkspace which can be imported to XCode to build AppStore binary
 
 CDVPlugin.h missing - https://stackoverflow.com/questions/10714600/cdvplugin-h-file-not-found-in-cordova-as-component-cleaver
