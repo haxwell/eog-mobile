@@ -3,8 +3,9 @@ import { Injectable } from '@angular/core';
 import { ToastController } from 'ionic-angular';
 import { Events } from 'ionic-angular';
 
-import { RequestsService } from '../../app/_services/requests.service';
-import { DeclineReasonCodeService } from '../../app/_services/declined-reason-codes.service';
+import { RequestsService } from './requests.service';
+import { DeclineReasonCodeService } from './declined-reason-codes.service';
+import { PrmModelService } from './prm-model.service';
 
 import { Constants } from '../../_constants/constants';
 import { environment } from '../../_environments/environment';
@@ -18,6 +19,7 @@ export class WebsocketService {
 
 	constructor(private _requestsService: RequestsService,
 				private _declineReasonCodeService: DeclineReasonCodeService,
+				private _prmModelService: PrmModelService,
 				private toastCtrl: ToastController,
 				private _constants: Constants,
 				public _events: Events) { 
@@ -60,6 +62,8 @@ export class WebsocketService {
 			
 			console.log("websocket.service received notice of a REQUEST event")
 			console.log(JSON.stringify(request))
+
+			this._prmModelService.setPrmImageOrientation(request.prm);
 
 			if (request["deliveringStatusId"] === this._constants.REQUEST_STATUS_PENDING && request["requestingStatusId"] === null) {
 				this.handleRequestReceived(data)
