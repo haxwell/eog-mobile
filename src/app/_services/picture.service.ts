@@ -92,7 +92,7 @@ export class PictureService {
 								    resolve(path + filename);
 						  		}, (err) => {
 						    		// handle error
-						    		console.log("Error downloading file, url = " + url + ", path+filename = " path+filename)
+						    		console.log("Error downloading file, url = " + url + ", path+filename = " + (path+filename))
 						    		console.log(JSON.stringify(err))
 						    		reject();
 						  		});
@@ -115,7 +115,7 @@ export class PictureService {
 							    resolve(path + filename);
 					  		}, (err) => {
 					    		// handle error
-					    		console.log("Error downloading file, url = " + url + ", path+filename = " path+filename)
+					    		console.log("Error downloading file, url = " + url + ", path+filename = " + (path+filename))
 					    		console.log(JSON.stringify(err))
 					    		reject();
 					  		});
