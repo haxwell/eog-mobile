@@ -136,9 +136,11 @@ export class PictureService {
 								resolve(undefined);
 							} 
 						}).catch(err => { 
-							// If not on the phone, return undefined
-							console.log("Error checking if exists file: " + path + ", " + filename)
-							console.log(JSON.stringify(err))
+							if (err["code"] !== 1 || err["message"] !== "NOT_FOUND_ERR") {
+								console.log("Error checking if exists file: " + path + ", " + filename)
+								console.log(JSON.stringify(err))
+							}
+
 							resolve(undefined)
 						})
 					}
@@ -233,10 +235,13 @@ export class PictureService {
 						}
 
 					}).catch(err => { 
-						// If not on the phone, return undefined
-						console.log("Error checking if [" + self.file.cacheDirectory + "/" + photoTypeFilename + "] exists");
-						console.log(JSON.stringify(err))
-						reject()
+						if (err["code"] === 1 && err["message"] === "NOT_FOUND_ERR")
+							func();
+						else {
+							console.log("Error checking if [" + self.file.cacheDirectory + "/" + photoTypeFilename + "] exists. This is more than the file not existing... :(");
+							console.log(JSON.stringify(err))
+							reject();
+						}
 					})				     
 
 				}, (err) => {
