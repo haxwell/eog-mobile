@@ -85,13 +85,15 @@ export class PictureService {
 								const fileTransfer: FileTransferObject = self.transfer.create();
 
 								fileTransfer.download(url, path + filename).then((entry) => {
-									console.log("1 successfully downloaded " + (path+filename) + " from " + url)
+									//console.log("1 successfully downloaded " + (path+filename) + " from " + url)
 									var millis = new Date().getTime();
 									this._localStorageService.set(path+filename, millis);
 
 								    resolve(path + filename);
-						  		}, (error) => {
+						  		}, (err) => {
 						    		// handle error
+						    		console.log("Error downloading file, url = " + url + ", path+filename = " path+filename)
+						    		console.log(JSON.stringify(err))
 						    		reject();
 						  		});
 
@@ -106,13 +108,15 @@ export class PictureService {
 							const fileTransfer: FileTransferObject = self.transfer.create();
 
 							fileTransfer.download(url, path + filename).then((entry) => {
-								console.log("2 successfully downloaded " + (path+filename) + " from " + url)
+								//console.log("2 successfully downloaded " + (path+filename) + " from " + url)
 								var millis = new Date().getTime();
 								this._localStorageService.set(path+filename, millis);
 
 							    resolve(path + filename);
-					  		}, (error) => {
+					  		}, (err) => {
 					    		// handle error
+					    		console.log("Error downloading file, url = " + url + ", path+filename = " path+filename)
+					    		console.log(JSON.stringify(err))
 					    		reject();
 					  		});
 						})
@@ -131,8 +135,10 @@ export class PictureService {
 								// there's no photo, so we can resolve undefined.
 								resolve(undefined);
 							} 
-						}).catch(e => { 
+						}).catch(err => { 
 							// If not on the phone, return undefined
+							console.log("Error checking if exists file: " + path + ", " + filename)
+							console.log(JSON.stringify(err))
 							resolve(undefined)
 						})
 					}
@@ -167,6 +173,7 @@ export class PictureService {
 	}
 
 	save(photoType, objId, filename) {
+		let self = this;
 		return new Promise((resolve, reject) => {
 			if (filename !== undefined) {
 				console.log("PictureService is about to upload a file....")
@@ -180,34 +187,64 @@ export class PictureService {
 
 				fileTransfer.upload(filename, environment.apiUrl + "/api/resource/" + photoType + "/" + objId, options)
 				   .then((data) => {
-				     // success
+				    // success
+				    // console.log("File upload from picture service was a success...");
 
-				     console.log("File upload from picture service was a success...");
+				    let photoTypeFilename = "eogApp" +photoType+ "Pic" + objId
 
-					let lastSlash = filename.lastIndexOf('/');
-					let lastQuestionMark = filename.lastIndexOf('?');
+				    let func = () => { 
+						let lastSlash = filename.lastIndexOf('/');
+						let lastQuestionMark = filename.lastIndexOf('?');
 
-					if (lastQuestionMark === -1) 
-						lastQuestionMark = filename.length;
+						if (lastQuestionMark === -1) 
+							lastQuestionMark = filename.length;
 
-				     let path = filename.substring(0,lastSlash+1);
-				     let relativeFilename = filename.substring(lastSlash+1, lastQuestionMark);
+					    let path = filename.substring(0,lastSlash+1);
+					    let relativeFilename = filename.substring(lastSlash+1, lastQuestionMark);
 
-				     this.file.copyFile(path, // path
-				     					relativeFilename, // relative filename
-				     					this.file.cacheDirectory, // to path
-				     					"eogApp" +photoType+ "Pic" + objId // to relative filename
-				     					).then(() => {
-				     	this.reset(photoType, objId);
-				     	resolve({path: path, relativeFilename: relativeFilename});
-				     }).catch(e => { 
-				     	reject();
-				     });
+					    //console.log("copying file to cache directory. from [" + path + ", " + relativeFilename + "] to [" + this.file.cacheDirectory + "]");
 
-				   }, (err) => {
-				     // error
-				     reject();
-				   });
+					    this.file.copyFile(path, // path
+					     					relativeFilename, // relative filename
+					     					this.file.cacheDirectory, // to path
+					     					photoTypeFilename // to relative filename
+					     					).then(() => {
+					     	this.reset(photoType, objId);
+					     	resolve({path: path, relativeFilename: relativeFilename});
+					    }).catch(err => { 
+					     	console.log("Error copying file. filename = " + filename)
+					     	console.log(JSON.stringify(err));
+					     	reject();
+					    });
+				    }
+
+					self.file.checkFile(this.file.cacheDirectory, photoTypeFilename).then((isFileExists) => {
+						if (isFileExists) {
+							// we need to remove this file, and replace it with this currently-being-saved picture 
+							self.file.removeFile(this.file.cacheDirectory, photoTypeFilename).then((promiseResult) => {
+								func();
+							}).catch((err) => {
+								console.log("Error removing existing file in the process of replacing it with a new file of the same name, in picture.service")
+								console.log(JSON.stringify(err))
+								reject();
+							})
+						} else {
+							func();
+						}
+
+					}).catch(err => { 
+						// If not on the phone, return undefined
+						console.log("Error checking if [" + self.file.cacheDirectory + "/" + photoTypeFilename + "] exists");
+						console.log(JSON.stringify(err))
+						reject()
+					})				     
+
+				}, (err) => {
+					// error
+					console.log("Error uploading file in pictureService::save()")
+					console.log(JSON.stringify(err));
+					reject();
+				});
 			} else {
 				this.reset(photoType, objId);
 				resolve(undefined);

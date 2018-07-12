@@ -224,7 +224,14 @@ export class PrmEditPage {
 
 				if (shouldCallNavCtrlPop)
 					self.navCtrl.pop();
+			}).catch((err) => {
+				console.log("Error calling edit prm callback");
+				console.log(JSON.stringify(err));
 			})
+
+		}).catch((err) => {
+			console.log("Error calling prmModelService::save()")
+			console.log(JSON.stringify(err))
 		})
 	}
 

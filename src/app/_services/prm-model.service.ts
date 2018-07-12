@@ -126,17 +126,23 @@ export class PrmModelService {
 
 				let func = () => {
 					self._events.publish("promise:saved", obj)
-					
 					resolve(obj);
 				}
 
 				if (cb) {
 					cb(obj).then(() => {
 						func();
+					}).catch((err) => {
+						console.log("error in prmModelService calling the callback");
+						console.log(JSON.stringify(err));
 					})
 				} else {
 					func();
 				}
+			},
+			(err) => {
+				console.log("Error calling API POST for " + url)
+				console.log(JSON.stringify(err))
 			});
 		});
 	}
