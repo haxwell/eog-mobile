@@ -41,6 +41,8 @@
     "cordova-android": "7.1.0",
     "cordova-ios": "4.5.4",
     "cordova-plugin-camera": "^2.4.1",
+    "cordova-plugin-compat": "^1.2.0",
+    "cordova-plugin-console": "^1.1.0",
     "cordova-plugin-device": "^1.1.7",
     "cordova-plugin-file": "^6.0.1",
     "cordova-plugin-file-transfer": "^1.7.1",
@@ -53,7 +55,7 @@
     "ionicons": "3.0.0",
     "moment": "^2.18.1",
     "net": "^1.0.2",
-    "phonegap-plugin-push": "^2.2.2",
+    "phonegap-plugin-push": "^2.2.3",
     "rxjs": "5.5.11",
     "sockjs": "^0.3.18",
     "stompjs": "^2.3.3",
@@ -94,7 +96,10 @@
       "cordova-plugin-statusbar": {},
       "cordova-plugin-whitelist": {},
       "ionic-plugin-keyboard": {},
-      "cordova-plugin-camera": {},
+      "cordova-plugin-camera": {
+        "CAMERA_USAGE_DESCRIPTION": " ",
+        "PHOTOLIBRARY_USAGE_DESCRIPTION": " "
+      },
       "cordova-plugin-file-transfer": {},
       "cordova-plugin-file": {},
       "phonegap-plugin-push": {

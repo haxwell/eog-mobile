@@ -5,6 +5,7 @@ import { LoadingController } from 'ionic-angular';
 import { Events } from 'ionic-angular';
 
 import { RequestsService } from '../../../app/_services/requests.service'
+import { PictureService } from '../../../app/_services/picture.service'
 
 import { Constants } from '../../../_constants/constants'
 
@@ -33,6 +34,7 @@ export class RequestsOutgoingView {
 				private loadingCtrl: LoadingController,
 				private modalCtrl: ModalController,
 				private _requestsService: RequestsService,
+				private _pictureService: PictureService,
 				private _constants: Constants,
 				private _events: Events) { 
 
@@ -195,14 +197,7 @@ export class RequestsOutgoingView {
 	}
 
 	getAvatarCSSClassString(prm) {
-		if (prm["imageOrientation"] === 8)
-			return "rotate90Counterclockwise centered";
-		else if (prm["imageOrientation"] === 3)
-			return "rotate180 centered";
-		else if (prm["imageOrientation"] === 6)
-			return "rotate90Clockwise centered";
-		else
-			return "centered";
+		return this._pictureService.getOrientationCSS(prm);
 	}
 
 	hasRequestMessage(req) {
@@ -224,13 +219,6 @@ export class RequestsOutgoingView {
 	onPermanentlyDismissBtnTap(request) {
 		let self = this;
 		let modal = this.modalCtrl.create(PermanentlyDismissUnresolvedRequestPage, {request: request});
-		modal.onDidDismiss(data => { self.ngOnInit() });
-		modal.present();
-	}
-
-	onCompleteBtnTap(request) {
-		let self = this;
-		let modal = this.modalCtrl.create(CompleteRequestPage, {request: request});
 		modal.onDidDismiss(data => { self.ngOnInit() });
 		modal.present();
 	}

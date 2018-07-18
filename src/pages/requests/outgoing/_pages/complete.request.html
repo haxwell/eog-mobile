@@ -7,8 +7,15 @@
 </ion-header>
 
 <ion-content padding>
-		<ion-label>You are about to indicate that you are satisfied with a request someone did for you.</ion-label>
-		<ion-label>If you are not satisfied, click Cancel below.</ion-label>
+		<div *ngIf="!isRequestInDispute()">
+			<ion-label>You are about to indicate that you are satisfied with a request someone did for you.</ion-label>
+			<ion-label>If you are not satisfied, click Cancel below. Then, slide the request to the left, and click the Disapprove button.</ion-label>
+		</div>
+		<div *ngIf="isRequestInDispute()">
+			<ion-label>This resolution of this request had been in dispute. You are about to indicate that it has been resolved, and you are sufficiently satisfied with how it turned out.</ion-label>
+			<ion-label>If that is not the case, click Cancel below.</ion-label>
+		</div>
+
 		<br/>
 		<ion-label><b>{{request.title}}</b></ion-label>
 		<hr/>

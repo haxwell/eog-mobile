@@ -54,7 +54,6 @@ export class PrmCollectionService {
 
 			model["prms"].forEach((prm) => {
 				self._pictureService.get(self._constants.PHOTO_TYPE_PRM, prm["id"]).then((filename) => {
-					console.log("in prmCollectionService, called to get the filename for prm " + prm["id"] + ", and got " + filename)
 					prm["imageFileSource"] = 'eog';
 					prm["imageFileURI"] = filename;
 					prm["imageFileURI_OriginalValue"] = filename;

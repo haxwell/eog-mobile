@@ -57,10 +57,8 @@ export class LoginPage {
 
         self.loading.dismiss();
         this.navCtrl.push(HomePage);
-
-
-      }, 
-      (err) => {
+      })
+      .catch((err) => {
           self.loading.dismiss();
           let okAlert = self._alertCtrl.create({
                   title: 'Sad face..',

@@ -97,7 +97,6 @@ export class PrmModelService {
 			// TODO: This code is mainly duplicated in prm-collection.service
 
 			self._pictureService.get(self._constants.PHOTO_TYPE_PRM, prm["id"]).then((filename) => {
-				console.log("in prmModelService, called to get the filename for prm " + prm["id"] + ", and got " + filename)
 				prm["imageFileSource"] = 'eog';
 				prm["imageFileURI"] = filename;
 				prm["imageFileURI_OriginalValue"] = filename;
@@ -126,19 +125,24 @@ export class PrmModelService {
 				let obj = JSON.parse(resp["_body"]);
 
 				let func = () => {
-					console.log("prmModelService, promise saved!  " + JSON.stringify(obj));
 					self._events.publish("promise:saved", obj)
-					
 					resolve(obj);
 				}
 
 				if (cb) {
 					cb(obj).then(() => {
 						func();
+					}).catch((err) => {
+						console.log("error in prmModelService calling the callback");
+						console.log(JSON.stringify(err));
 					})
 				} else {
 					func();
 				}
+			},
+			(err) => {
+				console.log("Error calling API POST for " + url)
+				console.log(JSON.stringify(err))
 			});
 		});
 	}

@@ -4,6 +4,7 @@ import { LoadingController } from 'ionic-angular';
 import { Events } from 'ionic-angular';
 
 import { RequestsService } from '../../../app/_services/requests.service'
+import { PictureService } from '../../../app/_services/picture.service'
 
 import { Constants } from '../../../_constants/constants'
 
@@ -32,6 +33,7 @@ export class RequestsIncomingView {
 				private modalCtrl: ModalController,
 				private loadingCtrl: LoadingController,
 				private _requestsService: RequestsService,
+				private _pictureService: PictureService,
 				private _constants: Constants,
 				_events: Events) {
 		
@@ -221,14 +223,7 @@ export class RequestsIncomingView {
 	}
 
 	getAvatarCSSClassString(prm) {
-		if (prm["imageOrientation"] === 8)
-			return "rotate90Counterclockwise centered";
-		else if (prm["imageOrientation"] === 3)
-			return "rotate180 centered";
-		else if (prm["imageOrientation"] === 6)
-			return "rotate90Clockwise centered";
-		else
-			return "centered";
+		return this._pictureService.getOrientationCSS(prm);
 	}
 
 	hasRequestMessage(req) {

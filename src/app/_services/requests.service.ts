@@ -89,12 +89,9 @@ export class RequestsService {
 				self._apiService.get(url).subscribe((obj) => {
 					let arr = JSON.parse(obj["_body"]);
 
-					console.log("*** API call for current user " + direction + " requests succeeded.")
-
 					arr.forEach((request) => { 
 						self.changePromiseAttributeToPrm(request); 
 
-						console.log("about to call prmModelService for setPrmImageOrientation")
 						this._prmModelService.setPrmImageOrientation(request.prm);
 					});
 
@@ -142,7 +139,6 @@ export class RequestsService {
 	}
 
 	getOutgoingRequestsForCurrentUser() {
-		console.log("in requestsService::getOutgoingRequestsforCurrentUser...")
 		return (this.getModel(this._constants.OUTGOING));
 	}
 

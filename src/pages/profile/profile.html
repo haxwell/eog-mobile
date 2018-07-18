@@ -13,25 +13,14 @@
 			</ion-row>
 
 			<ion-row>
-				<ion-item *ngIf="isThumbnailImageAvailable() && !isFromGallery()">
-					<ion-avatar >
-						<img id="profileAvatarImg" [hidden]="!isThumbnailImageVisible()" [class]="getAvatarCSSClassString()" [src]="getThumbnailImage()" (load)="loaded($event)" alt="profile_image" >
-					</ion-avatar>
-				</ion-item>
-				<ion-item *ngIf="isThumbnailImageAvailable() && isFromGallery()">
-					<ion-avatar >
-						<img id="profileAvatarImg" [hidden]="!isThumbnailImageVisible()" [class]="getAvatarCSSClassString()" [src]="getThumbnailImage()" (load)="loaded($event)" alt="profile_image" >
-					</ion-avatar>
-				</ion-item>
-				<ion-item *ngIf="!isThumbnailImageAvailable()">
-					<ion-avatar>
-						<img id="profileAvatarImg" class="centered" src="assets/img/mushroom.jpg" >
-					</ion-avatar>
-				</ion-item>
+				<div class="card">
+					<img id="profileDisplayHeaderImg" [class]="getAvatarCSSClassString()" [src]="getThumbnailImage()" alt="profile_image">
+				</div>
 			</ion-row>
 
 			<ion-row>
 				<div class="centered">
+					<br/>
 					<span class="cornfieldBlueColor profileName">{{getModelAttr('realname')}}</span>
 					<br/>
 					<span class="cornfieldBlueColor profileDescription">{{getModelAttr('description')}}</span>

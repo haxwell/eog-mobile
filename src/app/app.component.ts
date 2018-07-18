@@ -9,6 +9,7 @@ import { UserPreferencesService } from './_services/user-preferences.service';
 import { UnseenChangesIndicatorService } from './_services/unseen-changes-indicator.service';
 
 import { LoginPage } from '../pages/login/login';
+import { AboutEasyahPage } from '../pages/about-easyah/about-easyah';
 import { HomePage } from '../pages/home/home';
 import { RequestsOutgoingView } from '../pages/common/requests-outgoing/requests-outgoing';
 import { RequestsIncomingView } from '../pages/common/requests-incoming/requests-incoming';
@@ -24,6 +25,7 @@ import { ProfilePage } from '../pages/profile/profile';
 export class EasyahApp {
   rootPage:any = LoginPage;
   exitFunction = undefined;  
+  isAndroidFunction = undefined;
 
   @ViewChild(Nav) navCtrl: Nav;
 
@@ -39,6 +41,10 @@ export class EasyahApp {
 
     this.exitFunction = () => {
       platform.exitApp();
+    }
+
+    this.isAndroidFunction = () => {
+      return platform.is('android');
     }
 
     platform.ready().then(() => {
@@ -119,6 +125,18 @@ export class EasyahApp {
       this._uciService.resetNotificationUnseenChanges();
       this.navCtrl.push(NotificationListPage, {});
     }
+  }
+
+  onAboutEasyahClicked() {
+    var view = this.navCtrl.getActive();
+    if (view.component.name != "AboutEasyahPage") {
+      this._menuCtrl.close();
+      this.navCtrl.push(AboutEasyahPage, {});
+    }
+  }
+
+  isLogoutBtnVisible() {
+    return this.isAndroidFunction();
   }
 
   onLogoutBtnClick() {

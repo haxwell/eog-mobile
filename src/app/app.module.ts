@@ -16,6 +16,7 @@ import { FilePath } from '@ionic-native/file-path'
 import { EasyahApp } from './app.component';
 import { EasyahHeader } from '../pages/common/easyah-header/easyah-header';
 import { LoginPage } from '../pages/login/login';
+import { AboutEasyahPage } from '../pages/about-easyah/about-easyah';
 import { TutorialPage } from '../pages/tutorial/tutorial';
 import { CreateAccountPage } from '../pages/login/_pages/create.account';
 import { HomePage } from '../pages/home/home';
@@ -59,6 +60,7 @@ import { UserService } from './_services/user.service';
 import { UserMetadataService } from './_services/user-metadata.service';
 import { SearchService } from './_services/search.service';
 import { PointsService } from './_services/points.service';
+import { EventSubscriberService } from './_services/event-subscriber.service';
 import { FunctionPromiseService } from './_services/function-promise.service';
 import { RecommendationService } from './_services/recommendation.service';
 import { RequestsService } from './_services/requests.service';
@@ -93,6 +95,7 @@ export class CustomHammerConfig extends HammerGestureConfig {
     EasyahApp,
     EasyahHeader,
     LoginPage,
+    AboutEasyahPage,
     CreateAccountPage,
     HomePage,
     TutorialPage,
@@ -143,6 +146,7 @@ export class CustomHammerConfig extends HammerGestureConfig {
     EasyahApp,
     EasyahHeader,
     LoginPage,
+    AboutEasyahPage,
     CreateAccountPage,
     HomePage,
     TutorialPage,
@@ -212,6 +216,7 @@ export class CustomHammerConfig extends HammerGestureConfig {
     PushMessagingService,
     UnseenChangesIndicatorService,
     HomeService,
+    EventSubscriberService,
     {provide: HAMMER_GESTURE_CONFIG,    useClass: CustomHammerConfig},
     {provide: ErrorHandler,             useClass: IonicErrorHandler}
   ]

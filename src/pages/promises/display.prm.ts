@@ -12,10 +12,11 @@ import { PrmMetadataService } from '../../app/_services/prm-metadata.service';
 import { PrmDetailService } from '../../app/_services/prm-detail.service';
 import { UserService } from '../../app/_services/user.service';
 import { UserPreferencesService } from '../../app/_services/user-preferences.service';
+import { PictureService } from '../../app/_services/picture.service'
+
 import { Constants } from '../../_constants/constants';
 
 import Moment from 'moment'
-import EXIF from 'exif-js'
 
 @Component({
   selector: 'page-display-prm',
@@ -40,13 +41,11 @@ export class PrmDisplayPage {
 				private _prmMetadataService: PrmMetadataService,
 				private _prmDetailService: PrmDetailService,
 				private _userService: UserService,
+				private _pictureService: PictureService,
 				private _userPreferencesService: UserPreferencesService,
 				private _constants: Constants) {
 
 		this.model = navParams.get('prm');
-
-		console.log("In constructor for dispalyPrmPage. This is what the PRM we got looks like: ");
-		console.log(JSON.stringify(this.model));
 
 		this._prmModelService.setPrmMetadata(this.model).then((prm) => {
 			this.setModel(Object.assign({}, prm));
@@ -278,13 +277,6 @@ export class PrmDisplayPage {
 	}
 
 	getAvatarCSSClassString() {
-		if (this.model["imageOrientation"] === 8)
-			return "rotate90Counterclockwise centered";
-		else if (this.model["imageOrientation"] === 3)
-			return "rotate180 centered";
-		else if (this.model["imageOrientation"] === 6)
-			return "rotate90Clockwise centered";
-		else
-			return "centered";
+		return this._pictureService.getOrientationCSS(this.model);
 	}
 }
