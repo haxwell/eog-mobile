@@ -78,4 +78,19 @@ export class LoginPage {
     this.navCtrl.push(CreateAccountPage);
   }
 
+  onLostPasswordClick(event) {
+          let self = this;
+          let okAlert = self._alertCtrl.create({
+                  title: 'Temp',
+                  subTitle: "Lost Password!!",
+                  buttons: [{
+                    text: 'OK',
+                    handler: () => { }
+                  }]
+                })
+
+          okAlert.present();
+
+  }
+
 }

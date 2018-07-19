@@ -10,7 +10,11 @@
 				<ion-input type="password" [(ngModel)]="user.password" #ctrl="ngModel" (keyup.enter)="onLoginBtnTap($event)" required></ion-input>
 
 				<button class="wideButton" ion-button (click)="onLoginBtnTap($event)">Login</button>
-				<button class="wideButton" ion-button (click)="onCreateAccountBtnTap($event)">Create Account</button>	
+				<button class="wideButton" ion-button (click)="onCreateAccountBtnTap($event)">Create Account</button>
+
+				<div id="lostPasswordBtn">
+					<button class="wideButton" ion-button clear (click)="onLostPasswordClick($event)">Lost Your Password?</button>
+				</div>
 			</ion-col>
 		</ion-row>
 	</ion-grid>
