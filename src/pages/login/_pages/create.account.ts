@@ -99,8 +99,8 @@ export class CreateAccountPage {
 			return;			
 		}
 
-		self._userService.isUsernameAvailable(self.user["name"]).then((isUsernameAvailable) => {
-			if (isUsernameAvailable) {
+		self._userService.isUserInformationUnique(self.user).then((userInfo) => {
+			if (userInfo == true) {
 				if (!self.codeAlreadySent) {
 					let alert = this._alertCtrl.create({
 						title: 'Ready for a text?',
@@ -126,7 +126,7 @@ export class CreateAccountPage {
 			} else {
 				let alert = this._alertCtrl.create({
 					title: 'Doh!',
-					message: "Sorry, that username is already taken :(",
+					message: "Sorry, that " + userInfo + " is already taken :(",
 					buttons: [
 						{
 							text: 'OK', role: 'cancel', handler: () => {

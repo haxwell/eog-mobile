@@ -62,15 +62,49 @@ export class UserService {
 		this.tutorialHasBeenShown = b;
 	}
 
-	isUsernameAvailable(username) {
+	//////////////////////////
+	// BEGIN DEPRECATED BLOCK - v0.0.17
+		isUsernameAvailable(username) {
+			return this.isUserObjectAttributeAvailable("isUsernameAvailable", username);
+		}
+
+		isEmailAddressAvailable(emailAddr) {
+			return this.isUserObjectAttributeAvailable("isEmailAddressAvailable", emailAddr);
+		}	
+
+		isPhoneNumberAvailable(phone) {
+			return this.isUserObjectAttributeAvailable("isPhoneNumberAvailable", phone);
+		}
+
+		isUserObjectAttributeAvailable(apiMethod, value) {
+			let self = this;
+			let url = environment.apiUrl + "/api/users/" + apiMethod + "?q=" + value;
+
+			self.promise = new Promise(
+				(resolve, reject) => {
+					this._apiService.getUnsecuredAPI(url, '').subscribe(
+						(data) => {
+							resolve(JSON.parse(data["_body"]));
+						}, (err) => {
+							reject(err);
+						})
+				});
+
+			return self.promise;
+		}
+	// END DEPRECATED BLOCK - v0.0.17
+	////////////////////////
+
+	isUserInformationUnique(user) {
 		let self = this;
-		let url = environment.apiUrl + "/api/users/isUsernameAvailable?q=" + username;
+		let url = environment.apiUrl + "/api/users/isUserInformationUnique?name=" + user["name"] + "&email=" + user["email"] + "&phone=" + user["phone"];
 
 		self.promise = new Promise(
 			(resolve, reject) => {
 				this._apiService.getUnsecuredAPI(url, '').subscribe(
 					(data) => {
-						resolve(JSON.parse(data["_body"]));
+						let rtn = JSON.parse(data["_body"]);
+						resolve(rtn["response"]);
 					}, (err) => {
 						reject(err);
 					})
