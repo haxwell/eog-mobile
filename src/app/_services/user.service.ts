@@ -134,19 +134,19 @@ export class UserService {
 	//
 	// We call an api, to send a code to a phone number.
 	sendCodeToPhoneNumber(phoneNumber) {
-		let url = environment.apiUrl + "/api/sendNewUserChallengeCodeToPhoneNumber";
+		let url = environment.apiUrl + "/api/sendSMSChallengeCodeToPhoneNumber";
 
 		// assume phoneNumber looks like '3035551212'
-		let data = "phoneNumber=" + "1" + phoneNumber;
+		let data = "phoneNumber=" + phoneNumber;
 
 		this._apiService.postUnsecuredAPI(url, data).subscribe(() => { 
-			console.log("Just requested new user challenge code be sent to " + "1" + phoneNumber);
+			console.log("Just requested an SMS challenge code be sent to " + phoneNumber);
 		});
 	}
 
-	isAValidNewUserCreateCode(phoneNumber, code) {
-		let data = "code=" + code + "&phoneNumber=" + "1" + phoneNumber;
-		let url = environment.apiUrl + "/api/isAValidNewUserCreateCode";
+	isAValidSMSChallengeCode(phoneNumber, code) {
+		let data = "code=" + code + "&phoneNumber=" + phoneNumber;
+		let url = environment.apiUrl + "/api/isAValidSMSChallengeCode";
 
 		return new Promise(
 			(resolve, reject) => {
@@ -245,5 +245,37 @@ export class UserService {
 		} else {
 			return false;
 		}
+	}
+
+	changeLostPassword(smsChallengeCode, phoneNumber, newPassword) {
+		
+		let rtn = new Promise((resolve, reject) => {
+			let self = this;
+			let url = environment.apiUrl + "/api/users/changeLostPassword";
+
+			let data = {pw: newPassword, smsChallengeCode: smsChallengeCode, phoneNumber: phoneNumber}
+			let postData = this.JSON_to_URLEncoded(data, undefined, undefined);
+
+			self._apiService.postUnsecuredAPI(url, postData).subscribe((resp) => {
+					resolve(JSON.parse(resp["_body"]));
+				}, (err) => {
+					console.log(JSON.stringify(err)); 
+					reject(err);
+				});
+		});
+
+		return rtn;
+	}
+
+	JSON_to_URLEncoded(element,key,list){
+  		var list = list || [];
+  		if(typeof(element)=='object'){
+    		for (var idx in element)
+      			this.JSON_to_URLEncoded(element[idx],key?key+'['+idx+']':idx,list);
+  		} else {
+    		list.push(key+'='+encodeURIComponent(element));
+  		}
+  		
+  		return list.join('&');
 	}
 }
