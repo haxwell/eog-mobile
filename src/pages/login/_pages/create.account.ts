@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
 
 import { LoadingController } from 'ionic-angular';
-import { NavController, NavParams, AlertController } from 'ionic-angular';
+import { NavController, NavParams, ModalController, AlertController } from 'ionic-angular';
 
 import { UserService } from '../../../app/_services/user.service';
+
+import { NewAccountTutorialPage } from './new-account-tutorial-page'
 
 @Component({
   selector: 'page-login-create-account',
@@ -19,6 +21,7 @@ export class CreateAccountPage {
 
 	constructor(public navCtrl: NavController, 
 				private _alertCtrl: AlertController,
+				private _modalCtrl: ModalController,
 				private _loadingCtrl: LoadingController,
 				public params: NavParams,
 				private _userService: UserService) {
@@ -28,6 +31,14 @@ export class CreateAccountPage {
 	ngOnInit() {
 
 	}
+
+	ionViewWillEnter() {
+        let self = this;
+
+        let modal = self._modalCtrl.create(NewAccountTutorialPage, { });
+      
+        modal.present();
+    }
 
 	setChangedAttr(key, value) {
 		this.user[key] = value;

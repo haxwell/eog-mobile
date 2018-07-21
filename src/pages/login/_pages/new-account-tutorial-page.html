@@ -1,0 +1,30 @@
+<ion-header no-border>
+	<ion-navbar>
+	</ion-navbar>
+</ion-header>
+
+<ion-content no-bounce>
+	<ion-slides #slides (ionSlideWillChange)="onSlideChangeStart($event)" pager>
+		<ion-slide>
+			Welcome! Welcome!<br/><br/>
+			Easyah is about increasing collaboration and making good things happen between people. To do that, folks need to communicate. <br/><br/>
+			The two most common ways nowadays are through email and by phone.<br/><br/>
+			Just so you know, we require both your email address, and phone number to create an account.<br/><br/>
+		</ion-slide>
+		<ion-slide>
+			We ask for your email address so that people (including us) can communicate with you quickly and easily.<br/><br/>
+			We will email you a few times per year, and if you choose to interact with another user, your email may be available to them.<br/><br/>
+		</ion-slide>
+		<ion-slide>	
+			We use your phone number, not only to allow communication, but to help ensure that each person creates only a single account.<br/><br/>
+			Still, we would NEVER call you NOR give out your phone number without your EXPLICIT permission.<br/><br/>
+			Easyah will keep your phone number private, until you allow us to reveal it.<br/><br/>
+			We believe in privacy and transparency, and wanted to let you know why we ask for that info when you create an account.<br/><br/>
+			
+			<button ion-button icon-end large clear (click)="continueWithLoginProcess()">
+				Continue
+				<ion-icon name="arrow-forward"></ion-icon>
+			</button>				
+		</ion-slide>
+	</ion-slides>
+</ion-content>	
