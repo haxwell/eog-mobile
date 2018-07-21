@@ -8,6 +8,7 @@ import { Constants } from '../../_constants/constants'
 
 import { ProfileService } from '../../pages/common/_services/profile.service'
 import { PictureService } from '../../app/_services/picture.service'
+import { UserService } from '../../app/_services/user.service'
 import { UserMetadataService } from '../../app/_services/user-metadata.service'
 import { ContactInfoVisibilityService } from './_services/contact-info-visibility.service'
 
@@ -30,6 +31,7 @@ export class ProfileEditPage {
 	loading = undefined;
 	isExiting = false;
 	cancelBtnPressed = false;
+	verifyPhoneOnSave = false;
 
 	imageOrientation = undefined;
 
@@ -43,6 +45,7 @@ export class ProfileEditPage {
 				public alertCtrl: AlertController,
 				private _profileService: ProfileService,
 				private _pictureService: PictureService,
+				private _userService: UserService,
 				private _userMetadataService: UserMetadataService,
 				private _contactInfoVisibilityService: ContactInfoVisibilityService,
 				private _constants: Constants,
@@ -114,10 +117,8 @@ export class ProfileEditPage {
 					},
 				}, {
 					text: 'Yes', handler: () => {
-						self.setDirty(false);
+						self.isExiting = false;
 						self.onSaveBtnTap();
-
-						self.navCtrl.pop();
 					},
 				}]
 			});
@@ -138,13 +139,22 @@ export class ProfileEditPage {
 	}
 
 	isSaveBtnEnabled() {
-		return this.isDirty();
+		let model = this._profileService.getModel(this.user["id"]);
+
+		return this.isDirty() && model["phone"].length == 10;
 	}
 
 	onSaveBtnTap() {
 		let self = this;
+		let model = this._profileService.getModel(this.user["id"]);
+
+		if (this.verifyPhoneOnSave) {
+			this.verifyPhone(model["phone"]);
+			return;
+		}
+
 		self.loading = self.loadingCtrl.create({
-			content: this._profileService.isProfileImageChanged(this.model) ?
+			content: this._profileService.isProfileImageChanged(model) ?
 					'Please wait... Uploading as fast as your data connection will allow..' :
 					'Please wait...'
 		})
@@ -153,22 +163,114 @@ export class ProfileEditPage {
 
 		self._contactInfoVisibilityService.saveContactInfoVisibilityByUserId(self.user["id"], self.contactInfoVisibilityId);
 
-		this._profileService.save(this.model).then(() => {
-			self.setDirty(false);
-			self.loading.dismiss();
-			
-			if (!self.isExiting)
-				self.navCtrl.pop();
-		})
+		this._profileService.save(model).then(() => {
+				self.setDirty(false);
+				self.loading.dismiss();
+				
+				if (!self.isExiting)
+					self.navCtrl.pop();
+			}, (err) => {
+              let errr = self.alertCtrl.create({
+                title: 'Arggh!',
+                message: "Something bad happened on the server. We hate when that happens. Please email us at info@easyah.io and let us know.",
+                buttons: [{
+                  text: 'OK',
+                  handler: () => {
+                    self.loading.dismiss();
+                  }
+                }]
+              })
+              
+              errr.present();
+            }
+		)
+	}
+
+	verifyPhone(phoneNumber) {
+	    let self = this;
+
+	    let vpAlert = self.alertCtrl.create({
+            title: 'New Phone Number',
+            subTitle: 'We will need to verify your new number before we can save it.<br/><br/>We will send a text to your phone at ' + phoneNumber + '. Proceed?',
+            buttons: [{
+            	text: 'Cancel',
+            	role: 'cancel'
+            }, {
+            	text: 'OK',
+             	handler: (data) => {
+       				self._userService.sendCodeToPhoneNumber(phoneNumber);
+            		self.verifyPhone2(phoneNumber);
+				}
+            }]
+        })
+
+	    vpAlert.present();
+	}
+
+	verifyPhone2(phoneNumber) {
+		let self = this;
+
+        let alert = self.alertCtrl.create({
+	      title: "What's in the text?",
+	      inputs: [{
+	      	name: 'code',
+	      	placeholder: '..code from text msg..',
+	      	type: 'number'
+	      }],
+	      buttons: [{
+	        text: 'Cancel',
+	        role: 'cancel'
+	      }, {
+	      	text: 'Send Txt Again',
+	      	handler: () => {
+				self._userService.sendCodeToPhoneNumber(phoneNumber);
+	      	}
+	      }, {
+	        text: 'Got it!',
+	        handler: (data) => {
+	            if (data.code !== undefined && data.code.length > 0) {
+
+	            	self._userService.isAValidSMSChallengeCode(phoneNumber, data.code).then((b) => {
+	            		if (b["_body"] == 'true') {
+	            			this.verifyPhoneOnSave = false;
+	            			this.onSaveBtnTap();
+	            		} else {
+	            			let err = self.alertCtrl.create({
+	            				title: 'Aargh...',
+	            				message: "That wasn't a valid code.......",
+	            				buttons: [{
+	            					text: 'Grr.',
+	            					handler: () => {
+	            						// do nothing
+	            					}
+	            				}]
+	            			});
+	            			
+	            			err.present();
+	            		}
+	            	});
+
+	            } else {
+	            	return false;
+	            }
+	        }
+	      }]
+	    });
+
+	    alert.present();
 	}
 
 	setChangedAttr(key, value) {
+		let rtn = false;
+
 		let model = this._profileService.getModel(this.user["id"]);
 		if (model[key] !== value) {
 			model[key] = value;
-//			this._events.publish('profile:changedContactInfo', model);
 			this.setDirty(true);
+			rtn = true;
 		}
+
+		return rtn;
 	}
 
 	onRealNameChange(event) {
@@ -184,7 +286,8 @@ export class ProfileEditPage {
 	}
 
 	onPhoneChange(event) {
-		this.setChangedAttr("phone", event._value);	
+		if (this.setChangedAttr("phone", event._value))
+			this.verifyPhoneOnSave = true;
 	}
 
 /*
