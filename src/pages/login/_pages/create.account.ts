@@ -172,7 +172,7 @@ export class CreateAccountPage {
 	            	self.loading.present();
 
 	            	self._userService.isAValidSMSChallengeCode(self.user["phone"], data.code).then((b) => {
-	            		if (b["_body"] === 'true') {
+	            		if (b) {
 							if (self.referringUsername !== undefined && self.referringUsername.length > 0)
 								self.user["referringUsername"] = self.referringUsername;
 							else

@@ -231,7 +231,7 @@ export class ProfileEditPage {
 	            if (data.code !== undefined && data.code.length > 0) {
 
 	            	self._userService.isAValidSMSChallengeCode(phoneNumber, data.code).then((b) => {
-	            		if (b["_body"] == 'true') {
+	            		if (b) {
 	            			this.verifyPhoneOnSave = false;
 	            			this.onSaveBtnTap();
 	            		} else {

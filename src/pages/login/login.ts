@@ -166,7 +166,7 @@ export class LoginPage {
                 self.loading.present();
 
                 self._userService.isAValidSMSChallengeCode(phoneNumber, data.code).then((b) => {
-                  if (b["_body"] === 'true') {
+                  if (b) {
 
                       // present dialog allowing user to enter new password
 

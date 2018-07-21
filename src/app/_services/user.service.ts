@@ -157,8 +157,8 @@ export class UserService {
 			(resolve, reject) => {
 				this._apiService.postUnsecuredAPI(url, data).subscribe(
 					(b) => { 
-					 	resolve(b);
-					 }, (err) => {
+					 	resolve(b["_body"] === 'true');
+					}, (err) => {
 						reject(err);
 					});
 			});
