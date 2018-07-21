@@ -72,16 +72,6 @@ export class ProfileService {
 			model["keywords"] = obj["keywords"];
 			model["keywords"].sort((a, b) => { let aText = a.text.toLowerCase(); let bText = b.text.toLowerCase(); if (aText > bText) return 1; else if (aText < bText) return -1; else return 0; })
 
-			/* 
-				TODO: Find a better way to do this. Something better than a hardcoded list of social media platforms.
-
-			model["facebookUrl"] = obj["facebookUrl"] || undefined;
-			model["youtubeUrl"] = obj["youtubeUrl"] || undefined;
-			model["instagramUrl"] = obj["instagramUrl"] || undefined;
-			model["githubUrl"] = obj["githubUrl"] || undefined;
-			model["linkedinUrl"] = obj["linkedinUrl"] || undefined;
-			*/
-
 			model["requestCount"] = obj["requestCount"];
 			model["disputedRequestCount"] = obj["disputedRequestCount"];
 			model["mostRecentDisputedRequestTimestamp"] = obj["mostRecentDisputedRequestTimestamp"] || undefined;
@@ -150,14 +140,6 @@ export class ProfileService {
 		tmp["email"] = model["email"];
 		tmp["keywords"] = model["keywords"];
 		tmp["description"] = model["description"];
-
-/*
-		tmp["facebookUrl"] = model["facebookUrl"];
-		tmp["youtubeUrl"] = model["youtubeUrl"];
-		tmp["instagramUrl"] = model["instagramUrl"];
-		tmp["githubUrl"] = model["githubUrl"];
-		tmp["linkedinUrl"] = model["linkedinUrl"];
-*/
 
 		let data = this.JSON_to_UrlEncoded(tmp, undefined, undefined);
 		console.log(data);

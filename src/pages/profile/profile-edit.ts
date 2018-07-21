@@ -290,28 +290,6 @@ export class ProfileEditPage {
 			this.verifyPhoneOnSave = true;
 	}
 
-/*
-	onFacebookChange(event) {
-		this.setChangedAttr("facebookUrl", event._value);	
-	}
-
-	onLinkedinChange(event) {
-		this.setChangedAttr("linkedinUrl", event._value);	
-	}
-
-	onYoutubeChange(event) {
-		this.setChangedAttr("youtubeUrl", event._value);	
-	}
-
-	onInstagramChange(event) {
-		this.setChangedAttr("instagramUrl", event._value);	
-	}
-
-	onGithubChange(event) {
-		this.setChangedAttr("githubUrl", event._value);	
-	}
-*/
-
 	getModelAttr(key) {
 		return this.model[key];
 	}
