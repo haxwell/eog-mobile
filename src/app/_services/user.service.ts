@@ -43,7 +43,9 @@ export class UserService {
 					(userObj) => { 
 						self.users[userId] = JSON.parse(userObj["_body"]);
 						resolve(self.users[userId]);
-					 });
+					}, (err) => {
+						reject(err);
+					});
 			});
 
 			self.usersPromise[userId] = rtn;
@@ -66,38 +68,34 @@ export class UserService {
 		this.tutorialHasBeenShown = b;
 	}
 
-	//////////////////////////
-	// BEGIN DEPRECATED BLOCK - v0.0.17
-		isUsernameAvailable(username) {
-			return this.isUserObjectAttributeAvailable("isUsernameAvailable", username);
-		}
+	isUsernameAvailable(username) {
+		return this.isUserObjectAttributeAvailable("isUsernameAvailable", username);
+	}
 
-		isEmailAddressAvailable(emailAddr) {
-			return this.isUserObjectAttributeAvailable("isEmailAddressAvailable", emailAddr);
-		}	
+	isEmailAddressAvailable(emailAddr) {
+		return this.isUserObjectAttributeAvailable("isEmailAddressAvailable", emailAddr);
+	}	
 
-		isPhoneNumberAvailable(phone) {
-			return this.isUserObjectAttributeAvailable("isPhoneNumberAvailable", phone);
-		}
+	isPhoneNumberAvailable(phone) {
+		return this.isUserObjectAttributeAvailable("isPhoneNumberAvailable", phone);
+	}
 
-		isUserObjectAttributeAvailable(apiMethod, value) {
-			let self = this;
-			let url = environment.apiUrl + "/api/users/" + apiMethod + "?q=" + value;
+	isUserObjectAttributeAvailable(apiMethod, value) {
+		let self = this;
+		let url = environment.apiUrl + "/api/users/" + apiMethod + "?q=" + value;
 
-			self.promise = new Promise(
-				(resolve, reject) => {
-					this._apiService.getUnsecuredAPI(url, '').subscribe(
-						(data) => {
-							resolve(JSON.parse(data["_body"]));
-						}, (err) => {
-							reject(err);
-						})
-				});
+		self.promise = new Promise(
+			(resolve, reject) => {
+				this._apiService.getUnsecuredAPI(url, '').subscribe(
+					(data) => {
+						resolve(JSON.parse(data["_body"]));
+					}, (err) => {
+						reject(err);
+					})
+			});
 
-			return self.promise;
-		}
-	// END DEPRECATED BLOCK - v0.0.17
-	////////////////////////
+		return self.promise;
+	}
 
 	isUserInformationUnique(user) {
 		let self = this;
@@ -145,6 +143,9 @@ export class UserService {
 
 		this._apiService.postUnsecuredAPI(url, data).subscribe(() => { 
 			console.log("Just requested an SMS challenge code be sent to " + phoneNumber);
+		}, (err) => {
+			console.log("UserService SendCodeToPhoneNumber ERROR");
+			console.log(JSON.stringify(err));
 		});
 	}
 
@@ -157,7 +158,9 @@ export class UserService {
 				this._apiService.postUnsecuredAPI(url, data).subscribe(
 					(b) => { 
 					 	resolve(b);
-					 });
+					 }, (err) => {
+						reject(err);
+					});
 			});
 	}
 
@@ -195,7 +198,9 @@ export class UserService {
 					(userId) => { 
 						console.log("Credentials Saved! " + JSON.stringify(data));
 						resolve(JSON.parse(userId["_body"]));
-					 });
+					}, (err) => {
+						reject(err);
+					});
 			});
 
 		return self.promise;
@@ -214,6 +219,8 @@ export class UserService {
 					this._apiService.get(url).subscribe(
 						(base64ImageString) => {
 							resolve(base64ImageString);
+						}, (err) => {
+							reject(err);
 						});
 					});
 
@@ -228,7 +235,7 @@ export class UserService {
 
 			return new Promise((resolve, reject) => {
 				this._apiService.post(url, data).subscribe(
-					(val) => { resolve(val); }
+					(val) => { resolve(val); }, (err) => { reject(err);	}
 				)
 			});
 		} else {
@@ -243,7 +250,7 @@ export class UserService {
 
 			return new Promise((resolve, reject) => {
 				this._apiService.get(url).subscribe(
-					(val) => { resolve(val["_body"] === '' || val["_body"] === 'true' ); }
+					(val) => { resolve(val["_body"] === '' || val["_body"] === 'true' ); }, (err) => { reject(err); }
 				)
 			});
 		} else {

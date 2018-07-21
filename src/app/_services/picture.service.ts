@@ -145,8 +145,9 @@ export class PictureService {
 						})
 					}
 
-				}, () => 	{ 
+				}, (err) => 	{ 
 					console.log("ERROR #photo-rxp9r");
+					reject(err);
 				})
 			});
 
@@ -170,6 +171,8 @@ export class PictureService {
 			let url = environment.apiUrl + "/api/resource/" + photoType + "/" + objId;
 			this._apiService.delete(url).subscribe((data) => {
 				resolve(data);
+			}, (err) => {
+				reject(err);
 			})
 		});
 	}

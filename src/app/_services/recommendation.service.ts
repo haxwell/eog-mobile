@@ -50,6 +50,8 @@ export class RecommendationService {
 
 				if (++numTimesAPICallHasReturned >= 2)
 					resolve(true);
+			}, (err) => {
+				reject(err);
 			});
 
 			url = environment.apiUrl + "/api/user/" + _userId + "/recommendations/outgoing";
@@ -58,6 +60,8 @@ export class RecommendationService {
 
 				if (++numTimesAPICallHasReturned >= 2)
 					resolve(true);
+			}, (err) => {
+				reject(err);
 			});
 		});
 	}
@@ -119,6 +123,8 @@ export class RecommendationService {
 			.subscribe((obj) => {
 				self._events.publish('recommendation:sent', {receivingUserId: receivingUserId})
 				resolve(JSON.parse(obj["_body"]));
+			}, (err) => {
+				reject(err);
 			});
 		});
 	}
@@ -132,6 +138,8 @@ export class RecommendationService {
 				let url = environment.apiUrl + "/api/user/" + receivingUserId + "/recommendations/receive/" + user["id"];
 				this._apiService.get(url).subscribe((obj) => {
 					resolve(JSON.parse(obj["_body"]));
+				}, (err) => {
+					reject(err);
 				});
 			}
 			else {

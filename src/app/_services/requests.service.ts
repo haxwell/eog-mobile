@@ -44,6 +44,8 @@ export class RequestsService {
 				let model = self.changePromiseAttributeToPrm( JSON.parse(obj["_body"]) );
 				self._events.publish('request:saved', {request: model});
 				resolve(model);
+			}, (err) => {
+				reject(err);
 			});
 		});
 	}
@@ -67,6 +69,8 @@ export class RequestsService {
 			this._apiService.get(url).subscribe((obj) => {
 				let model = JSON.parse(obj["_body"]);
 				resolve(model);
+			}, (err) => {
+				reject(err);
 			});
 		});
 	}
@@ -107,6 +111,8 @@ export class RequestsService {
 
 						resolve(arr);
 					});
+				}, (err) => {
+					reject(err);
 				});
 			})
 		});
@@ -160,6 +166,8 @@ export class RequestsService {
 				this._events.publish('request:statusChanged', {request: this.changePromiseAttributeToPrm(model)});
 				
 				resolve(model);
+			}, (err) => {
+				reject(err);
 			});
 		});
 	}

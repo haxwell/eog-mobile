@@ -38,6 +38,8 @@ export class PointsService {
 						rtn.map((obj) => { if (obj["escrowedRequestId"] === null) sum += obj["quantity"]; });
 
 						resolve(sum);
+					}, (err) => {
+						reject(err);
 					});
 				} else {
 					resolve(0)
@@ -61,6 +63,8 @@ export class PointsService {
 						rtn.map((obj) => { sum += obj["quantity"]; });
 
 						resolve(sum);
+					}, (err) => {
+						reject(err);
 					});
 				} else {
 					resolve(0);
@@ -81,6 +85,8 @@ export class PointsService {
 				.subscribe((obj) => {
 					self._events.publish("points:sent", {receivingUserId: receivingUserId});
 					resolve(JSON.parse(obj["_body"]));
+				}, (err) => {
+					reject(err);
 				});
 			}
 		});
@@ -94,6 +100,8 @@ export class PointsService {
 				this._apiService.get(url)
 				.subscribe((obj) => {
 					resolve(JSON.parse(obj["_body"]));
+				}, (err) => {
+					reject(err);
 				});
 			}
 		});

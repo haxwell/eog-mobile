@@ -42,7 +42,7 @@ export class PushMessagingService {
 			let url = environment.apiUrl + "/api/users/" + user["id"] + "/deviceId";
 			let postData = this.JSON_to_URLEncoded({deviceId: data.registrationId}, undefined, undefined);
 
-			self._apiService.post(url, postData).subscribe((resp) => { }, (err) => { console.log(JSON.stringify(err)); })
+			self._apiService.post(url, postData).subscribe((resp) => { }, (err) => { console.log("ERROR in Push Messaging Registraction"); console.log(JSON.stringify(err)); })
 	    });
 
 	    pushObject.on('notification').subscribe((data: any) => {

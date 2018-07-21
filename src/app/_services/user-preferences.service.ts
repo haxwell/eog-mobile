@@ -28,7 +28,7 @@ export class UserPreferencesService {
 
 			return new Promise((resolve, reject) => {
 				this._apiService.post(url, data).subscribe(
-					(val) => { resolve(val); }
+					(val) => { resolve(val) }, (err) => { reject(err); }
 				)
 			});
 		} else {
@@ -58,6 +58,8 @@ export class UserPreferencesService {
 						rtn = dfault;
 
 					resolve({pref: rtn}); 
+				}, (err) => {
+					reject(err);
 				}
 			)
 		});

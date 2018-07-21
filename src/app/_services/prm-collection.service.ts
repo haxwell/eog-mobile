@@ -67,6 +67,9 @@ export class PrmCollectionService {
 			});
 
 			model["prms"].sort((a, b) => { let aText = a.title.toLowerCase(); let bText = b.title.toLowerCase(); if (aText > bText) return 1; else if (aText < bText) return -1; else return 0; })
+		}, (err) => {
+			console.log("PrmCollectionService ERROR");
+			console.log(JSON.stringify(err));
 		});		
 	}
 

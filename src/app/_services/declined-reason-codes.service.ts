@@ -22,6 +22,8 @@ export class DeclineReasonCodeService {
 			this._apiService.get(url).subscribe((data) => {
 				self.declineReasonCodes = JSON.parse(data["_body"]);
 				resolve(self.declineReasonCodes);
+			}, (err) => {
+				reject(err);
 			});
 		});
 

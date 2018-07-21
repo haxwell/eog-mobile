@@ -46,6 +46,8 @@ export class SearchService {
 				});
 
 				resolve(rtn);
+			}, (err) => {
+				reject(err);
 			});
 		});
 	}
@@ -57,6 +59,8 @@ export class SearchService {
 			.subscribe((searchObj) => {
 				let rtn = JSON.parse(searchObj["_body"]);
 				resolve(rtn);
+			}, (err) => {
+				reject(err);
 			});
 		});
 	}

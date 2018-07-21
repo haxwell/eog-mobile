@@ -32,13 +32,19 @@ export class DeclineRequestPage {
 		let url = environment.apiUrl + "/api/declineReasonCodes";
 		this._apiService.get(url).subscribe((data) => {
 			self.declineReasonCodes = JSON.parse(data["_body"]);
+		}, (err) => {
+			console.log("DeclineRequestPage ERROR");
+			console.log(JSON.stringify(err));
 		});
 
 		url = environment.apiUrl + "/api/requestAgainDelayCodes";
 		this._apiService.get(url).subscribe((data) => {
 			self.requestAgainDelayCodes = JSON.parse(data["_body"]);
 			self.selectedRequestAgainDelayId = self.requestAgainDelayCodes.find((obj) => { return obj["milliseconds"] === 1;})["id"];
-		})
+		}, (err) => {
+			console.log("DeclineRequestPage ERROR");
+			console.log(JSON.stringify(err));
+		});
 	}
 
 	isSaveBtnAvailable() {

@@ -36,6 +36,8 @@ export class HomeService {
 					});
 
 					resolve(prms);
+				}, (err) => {
+					reject(err);
 				});
 			})
 		})

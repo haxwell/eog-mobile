@@ -41,6 +41,8 @@ export class PrmModelService {
 			this._apiService.get(url)
 			.subscribe((prmObj) => {
 				resolve(JSON.parse(prmObj["_body"]));
+			}, (err) => {
+				reject(err);
 			});
 		});
 	}
@@ -67,6 +69,8 @@ export class PrmModelService {
 			.subscribe((data) => {
 				prm["fulfillment_dates"] = JSON.parse(data["_body"]);
 				func(prm);
+			}, (err) => {
+				reject(err);
 			});
 
 			url = environment.apiUrl + "/api/promises/" + prm["id"] + "/complaint-count"; 
@@ -74,6 +78,8 @@ export class PrmModelService {
 			.subscribe((data) => {
 				prm["num_of_complaints"] = JSON.parse(data["_body"]);
 				func(prm);
+			}, (err) => {
+				reject(err);
 			});
 
 			url = environment.apiUrl + "/api/promises/" + prm["id"] + "/total-points-earned"; 
@@ -81,6 +87,8 @@ export class PrmModelService {
 			.subscribe((data) => {
 				prm["total_points_earned"] = JSON.parse(data["_body"]);
 				func(prm);
+			}, (err) => {
+				reject(err);
 			});
 
 			this.setPrmImageOrientation(prm).then((prm) => {
@@ -143,6 +151,7 @@ export class PrmModelService {
 			(err) => {
 				console.log("Error calling API POST for " + url)
 				console.log(JSON.stringify(err))
+				reject(err);
 			});
 		});
 	}
@@ -170,6 +179,8 @@ export class PrmModelService {
 				self._events.publish("promise:deleted", obj)
 				
 				resolve(obj);
+			}, (err) => {
+				reject(err);
 			});
 		});	
 	}

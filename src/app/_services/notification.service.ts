@@ -42,6 +42,8 @@ export class NotificationService {
 						})
 
 						resolve(this.notifications);
+					 }, (err) => {
+					 	reject(err);
 					 });
 			});
 
@@ -58,6 +60,8 @@ export class NotificationService {
 			let url = environment.apiUrl + "/api/notifications/" + notification["id"];
 			this._apiService.delete(url).subscribe(() => { 
 					resolve();
+			}, (err) => {
+				reject(err);
 			});
 		});
 	}
@@ -69,6 +73,8 @@ export class NotificationService {
 
 			this._apiService.delete(url).subscribe(() => { 
 					resolve();
+			}, (err) => {
+				reject(err);
 			});
 		})
 	}

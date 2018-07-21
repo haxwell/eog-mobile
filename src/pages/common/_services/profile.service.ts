@@ -75,6 +75,9 @@ export class ProfileService {
 			model["requestCount"] = obj["requestCount"];
 			model["disputedRequestCount"] = obj["disputedRequestCount"];
 			model["mostRecentDisputedRequestTimestamp"] = obj["mostRecentDisputedRequestTimestamp"] || undefined;
+		}, (err) => {
+			console.log("ProfileService ERROR");
+			console.log(JSON.stringify(err));
 		});
 
 		if (model["imageFileURI"] === undefined) {
@@ -118,6 +121,9 @@ export class ProfileService {
 						model["currentUserCanSeePhoneInfo"] = self._contactInfoVisibilityService.isPhoneAllowed(visId);
 					})
 				}
+			}, (err) => {
+				console.log("ProfileService ContactInfoVisibility ERROR");
+				console.log(JSON.stringify(err));
 			});
 		}
 		
@@ -163,18 +169,7 @@ export class ProfileService {
 						self.init(user["id"]);
 						userUpdateFunc();
 					}, (err) => {
-		              let errr = self.alertCtrl.create({
-		                title: 'Arggh!',
-		                message: "Something bad happened on the server. We hate when that happens. Please email us at info@easyah.io and let us know.",
-		                buttons: [{
-		                  text: 'OK',
-		                  handler: () => {
-		                    reject();
-		                  }
-		                }]
-		              })
-		              
-		              errr.present();
+						reject(err);
 		            });
 
 				} else

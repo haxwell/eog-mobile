@@ -34,6 +34,9 @@ export class ProfileKeywordService {
 			let obj = JSON.parse(data["_body"]);
 			model["keywords"] = obj["keywords"];
 			model["keywords"].sort((a, b) => { let aText = a.text.toLowerCase(); let bText = b.text.toLowerCase(); if (aText > bText) return 1; else if (aText < bText) return -1; else return 0; })
+		}, (err) => {
+			console.log("ProfileKeywordService ERROR");
+			console.log(JSON.stringify(err));
 		});		
 	}
 
@@ -50,6 +53,8 @@ export class ProfileKeywordService {
 			self._apiService.post(url, data)
 			.subscribe((resp) => {
 
+			}, (err) => {
+				reject(err);
 			});
 		})
 	}
