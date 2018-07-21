@@ -236,11 +236,6 @@ export class ProfileEditPage {
 	        text: 'Cancel',
 	        role: 'cancel'
 	      }, {
-	      	text: 'Send Txt Again',
-	      	handler: () => {
-				self._userService.sendCodeToPhoneNumber(phoneNumber);
-	      	}
-	      }, {
 	        text: 'Got it!',
 	        handler: (data) => {
 	            if (data.code !== undefined && data.code.length > 0) {
