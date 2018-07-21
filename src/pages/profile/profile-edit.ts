@@ -9,6 +9,7 @@ import { Constants } from '../../_constants/constants'
 import { ProfileService } from '../../pages/common/_services/profile.service'
 import { PictureService } from '../../app/_services/picture.service'
 import { UserMetadataService } from '../../app/_services/user-metadata.service'
+import { ContactInfoVisibilityService } from './_services/contact-info-visibility.service'
 
 import { ChoosePhotoSourcePage } from '../../pages/common/choose-photo-source/choose-photo-source'
 
@@ -32,6 +33,9 @@ export class ProfileEditPage {
 
 	imageOrientation = undefined;
 
+	contactInfoVisibilityId = undefined;
+	contactInfoVisibilityChoices = undefined;
+
 	constructor(navParams: NavParams,
 				public navCtrl: NavController,
 				public modalCtrl: ModalController,
@@ -40,6 +44,7 @@ export class ProfileEditPage {
 				private _profileService: ProfileService,
 				private _pictureService: PictureService,
 				private _userMetadataService: UserMetadataService,
+				private _contactInfoVisibilityService: ContactInfoVisibilityService,
 				private _constants: Constants,
 				private _file: File) {
 
@@ -51,7 +56,10 @@ export class ProfileEditPage {
 	}
 
 	ngOnInit() {
-
+		this.contactInfoVisibilityChoices = this._contactInfoVisibilityService.getContactInfoVisibilityChoices();
+		this._contactInfoVisibilityService.getContactInfoVisibilityId(this.user["id"]).then((visId) => {
+			this.contactInfoVisibilityId = visId;
+		})
 	}	
 
 	isDirty() {
@@ -143,6 +151,8 @@ export class ProfileEditPage {
 
 		self.loading.present();
 
+		self._contactInfoVisibilityService.saveContactInfoVisibilityByUserId(self.user["id"], self.contactInfoVisibilityId);
+
 		this._profileService.save(this.model).then(() => {
 			self.setDirty(false);
 			self.loading.dismiss();
@@ -177,6 +187,7 @@ export class ProfileEditPage {
 		this.setChangedAttr("phone", event._value);	
 	}
 
+/*
 	onFacebookChange(event) {
 		this.setChangedAttr("facebookUrl", event._value);	
 	}
@@ -196,6 +207,7 @@ export class ProfileEditPage {
 	onGithubChange(event) {
 		this.setChangedAttr("githubUrl", event._value);	
 	}
+*/
 
 	getModelAttr(key) {
 		return this.model[key];

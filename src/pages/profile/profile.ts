@@ -8,6 +8,7 @@ import { RecommendationService } from '../../app/_services/recommendation.servic
 import { PointsService } from '../../app/_services/points.service'
 import { PictureService } from '../../app/_services/picture.service'
 import { UserService } from '../../app/_services/user.service'
+import { ContactInfoVisibilityService } from './_services/contact-info-visibility.service'
 
 import { ProfileEditPage } from './profile-edit'
 
@@ -33,6 +34,8 @@ export class ProfilePage {
 
 	imageOrientation = undefined;
 
+	contactInfoVisibilityId = undefined;
+
 	constructor(public navCtrl: NavController,
 				navParams: NavParams, 
 				public modalCtrl: ModalController,
@@ -42,6 +45,7 @@ export class ProfilePage {
 				private _recommendationService: RecommendationService,
 				private _pointsService: PointsService,
 				private _pictureService: PictureService,
+				private _contactInfoVisibilityService: ContactInfoVisibilityService,
 				private _events: Events,
 				private _constants: Constants) {
 
@@ -65,6 +69,11 @@ export class ProfilePage {
 
 		this.setCurrentUserCanSendPointToProfileUser();
 		this.setCurrentUserCanSendRecommendationToProfileUser();
+
+		let self = this;
+		this._contactInfoVisibilityService.getContactInfoVisibilityId(this.user["id"]).then((visId: number) => {
+			self.contactInfoVisibilityId = visId;
+		})
 	}
 
 	ionViewWillEnter() {
@@ -75,8 +84,12 @@ export class ProfilePage {
 		return this._userService.getCurrentUser()["id"] === this.user["id"];
 	}
 
-	isCurrentUserAllowedToSeeContactInfo() {
-		return this._profileService.getModel(this.user["id"])["currentUserCanSeeContactInfo"];
+	isCurrentUserAllowedToSeeEmailInfo() {
+		return this._profileService.getModel(this.user["id"])["currentUserCanSeeEmailInfo"];
+	}
+
+	isCurrentUserAllowedToSeePhoneInfo() {
+		return this._profileService.getModel(this.user["id"])["currentUserCanSeePhoneInfo"];
 	}
 
 	onSendRecommendationBtnTap() {
@@ -168,14 +181,14 @@ export class ProfilePage {
 			return val;
 	}
 
-	getDisputedRequestPercentage() {
+	getSuccessfulRequestPercentage() {
 		let drc = this._profileService.getModel(this.user["id"])["disputedRequestCount"];
 		let rc = this._profileService.getModel(this.user["id"])["requestCount"];
 
 		if (drc === undefined || rc === undefined || drc === 0)
 			return 0;
 		else
-			return (drc / rc) * 100;
+			return 100 - ((drc / rc) * 100);
 	}
 
 	getHowLongAgoForMostRecentDisputedRequest() {
@@ -184,5 +197,14 @@ export class ProfilePage {
 			return "Never";
 		else
 			return Moment(val).fromNow();
+	}
+
+	getContactInfoVisibilityDisplayString() {
+		let self = this;
+		let visObj = self._contactInfoVisibilityService.getContactInfoVisibilityChoices().find(
+			(obj) => { return obj["id"] === self.contactInfoVisibilityId; });
+
+		if (visObj)
+			return visObj["text"];
 	}
 }

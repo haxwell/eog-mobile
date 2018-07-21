@@ -8,6 +8,9 @@ import { ApiService } from '../../../app/_services/api.service';
 import { PointsService } from '../../../app/_services/points.service';
 import { PictureService } from '../../../app/_services/picture.service';
 import { RecommendationService } from '../../../app/_services/recommendation.service';
+import { UserPreferencesService } from '../../../app/_services/user-preferences.service';
+import { ContactInfoVisibilityService } from '../../../pages/profile/_services/contact-info-visibility.service';
+
 
 import { environment } from '../../../_environments/environment';
 
@@ -21,6 +24,8 @@ export class ProfileService {
 				private _pointsService: PointsService,
 				private _recommendationService: RecommendationService,
 				private _pictureService: PictureService,
+				private _userPreferencesService: UserPreferencesService,
+				private _contactInfoVisibilityService: ContactInfoVisibilityService,
 				private _constants : Constants,
 				private _events: Events) {
 
@@ -67,11 +72,15 @@ export class ProfileService {
 			model["keywords"] = obj["keywords"];
 			model["keywords"].sort((a, b) => { let aText = a.text.toLowerCase(); let bText = b.text.toLowerCase(); if (aText > bText) return 1; else if (aText < bText) return -1; else return 0; })
 
+			/* 
+				TODO: Find a better way to do this. Something better than a hardcoded list of social media platforms.
+
 			model["facebookUrl"] = obj["facebookUrl"] || undefined;
 			model["youtubeUrl"] = obj["youtubeUrl"] || undefined;
 			model["instagramUrl"] = obj["instagramUrl"] || undefined;
 			model["githubUrl"] = obj["githubUrl"] || undefined;
 			model["linkedinUrl"] = obj["linkedinUrl"] || undefined;
+			*/
 
 			model["requestCount"] = obj["requestCount"];
 			model["disputedRequestCount"] = obj["disputedRequestCount"];
@@ -103,13 +112,22 @@ export class ProfileService {
 		});
 
 		let currentUser = this._userService.getCurrentUser();
-		if (currentUser["id"] === userId)
-			model["currentUserCanSeeContactInfo"] = true;
+		if (currentUser["id"] === userId) {
+			model["currentUserCanSeeEmailInfo"] = true;
+			model["currentUserCanSeePhoneInfo"] = true;
+		}
 		else {
+			let self = this;
 			url = environment.apiUrl + "/api/user/" + userId + "/requests/inprogress/user/" + currentUser["id"];
-			this._apiService.get(url).subscribe((prmsObj) => {
+			self._apiService.get(url).subscribe((prmsObj) => {
 				var b = JSON.parse(prmsObj["_body"]).length > 0;
-				model["currentUserCanSeeContactInfo"] = b;
+				
+				if (b) {
+					self._contactInfoVisibilityService.getContactInfoVisibilityId(userId).then((visId) => {
+						model["currentUserCanSeeEmailInfo"] = self._contactInfoVisibilityService.isEmailAllowed(visId);
+						model["currentUserCanSeePhoneInfo"] = self._contactInfoVisibilityService.isPhoneAllowed(visId);
+					})
+				}
 			});
 		}
 		

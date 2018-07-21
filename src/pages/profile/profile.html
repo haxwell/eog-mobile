@@ -29,23 +29,27 @@
 			<ion-row>
 				<br/>
 			</ion-row>
-			<ion-row *ngIf="isCurrentUserAllowedToSeeContactInfo()">
+			<ion-row>
 				<table class="centered">
 					<tr>
-						<td>
-							<ion-icon class="cornfieldBlueColor profileIcon" name="phone-portrait"></ion-icon>
-						</td>
-						<td [ngStyle]="{'padding':'0 0 0 1.5em'}">
-							<span class="cornfieldBlueColor">{{getModelAttr('phone')}}</span>
-						</td>
+						<span *ngIf="isCurrentUserAllowedToSeePhoneInfo()">
+							<td>
+								<ion-icon class="cornfieldBlueColor profileIcon" name="phone-portrait"></ion-icon>
+							</td>
+							<td [ngStyle]="{'padding':'0 0 0 1.5em'}">
+								<span class="cornfieldBlueColor">{{getModelAttr('phone')}}</span>
+							</td>
+						</span>
 						<td [ngStyle]="{'padding':'0 1.5em 0 1.5em'}">
 						</td>
-						<td>
-							<ion-icon class="cornfieldBlueColor profileIcon" name="mail"></ion-icon>
-						</td>
-						<td [ngStyle]="{'padding':'0 0 0 1.5em'}">
-							<span class="cornfieldBlueColor">{{getModelAttr('email')}}</span>
-						</td>
+						<span *ngIf="isCurrentUserAllowedToSeeEmailInfo()">						
+							<td>
+								<ion-icon class="cornfieldBlueColor profileIcon" name="mail"></ion-icon>
+							</td>
+							<td [ngStyle]="{'padding':'0 0 0 1.5em'}">
+								<span class="cornfieldBlueColor">{{getModelAttr('email')}}</span>
+							</td>
+						</span>
 					</tr>
 				</table>
 			</ion-row>		
@@ -59,7 +63,8 @@
 	</ion-row>
 
 	<br/>
-	<ion-row *ngIf="!isCurrentUsersProfile()">
+	<!-- <ion-row *ngIf="!isCurrentUsersProfile()"> -->
+	<ion-row>
 		<div class="centered">
 			<ion-list>
 				<ion-list-header class="listHeader">
@@ -71,7 +76,7 @@
 							<span class="displayBlock">{{getAllTimePointCount()}}</span> All Time Points
 						</td>
 						<td class="ptsTdElement">
-							<span class="displayBlock">{{getDisputedRequestPercentage()}}%</span> Disputed Request %
+							<span class="displayBlock">{{getSuccessfulRequestPercentage()}}%</span> Successful Request %
 						</td>
 						<td class="ptsTdElement">
 							<span class="displayBlock">{{getHowLongAgoForMostRecentDisputedRequest()}}</span> Most Recent Dispute
@@ -85,6 +90,7 @@
 	<div [ngStyle]="{'padding-top':'2em'}">
 	</div>
 
+	<!--
 	<div *ngIf="isCurrentUserAllowedToSeeContactInfo()">
 		<ion-row>
 			<ion-item>
@@ -117,5 +123,17 @@
 			</ion-item>		
 		</ion-row>
 	</div>
+	-->
+
+	<ion-row *ngIf="isCurrentUsersProfile()">
+		<div class="centered">
+			<ion-list>
+				<ion-list-header class="listHeader">
+					Communication Settings
+				</ion-list-header>
+				When you accept a promise, the other user can see your [ {{getContactInfoVisibilityDisplayString()}} ].
+			</ion-list>
+		</div>
+	</ion-row>
 
 </ion-content>

@@ -45,6 +45,7 @@
 					<ion-label color="primary" stacked>Email Address</ion-label>
 					<ion-input type="text" (ionChange)="onEmailChange($event)" [value]="getModelAttr('email')" required></ion-input>
 				</ion-item>
+				<!--
 				<ion-item>
 					<ion-label color="primary" stacked>Facebook</ion-label>
 					<ion-input type="text" (ionChange)="onFacebookChange($event)" [value]="getModelAttr('facebookUrl')" required></ion-input>
@@ -65,7 +66,22 @@
 					<ion-label color="primary" stacked>GitHub</ion-label>
 					<ion-input type="text" (ionChange)="onGithubChange($event)" [value]="getModelAttr('githubUrl')" required></ion-input>
 				</ion-item>
+				-->
 			</ion-col>
 		</ion-row>
+		<ion-row>
+			<ion-item id="profileSectionHeader">Communication Settings</ion-item>
+		</ion-row>
+		<ion-row>
+			<ion-item>
+				<ion-label>When you accept another user's request, that user can see your contact info. What should they see?</ion-label>
+			</ion-item>				
+			<ion-item>
+				<ion-select [(ngModel)]="contactInfoVisibilityId" (ionChange)="setDirty(true)">
+					<ion-option *ngFor="let choice of contactInfoVisibilityChoices" [value]="choice.id">{{choice.text}}</ion-option>
+				</ion-select>
+			</ion-item>
+		</ion-row>
+
 
 </ion-content>
