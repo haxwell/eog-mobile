@@ -191,6 +191,8 @@ export class ProfileService {
 
 				} else
 					userUpdateFunc();
+			}, (err) => {
+				reject(err);
 			});
 		});
 	}
