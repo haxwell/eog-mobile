@@ -180,14 +180,20 @@ export class ProfileService {
 					self._pictureService.save(this._constants.PHOTO_TYPE_PROFILE, user["id"], model["imageFileURI"]).then((data) => {
 						self.init(user["id"]);
 						userUpdateFunc();
-					});
-
-					// TODO: Add a catch here, what if the saving of the picture fails? Need to throw that up
-					//  the chain so that whatever is calling this can update the UI, let the user know whatever.
-					//  As a reminder, the impetus for this, I was uploading a file that turned out to be too big
-					//  and caused a 500 error on the server. ProfilePictureService caught the error, logged it,
-					//  and called the reject() method on the promise, but this code doesn't recognize the reject()ion
-					//  and leaves the "Uploading..." spinner in place, waiting for a response that's never coming.
+					}, (err) => {
+		              let errr = self.alertCtrl.create({
+		                title: 'Arggh!',
+		                message: "Something bad happened on the server. We hate when that happens. Please email us at info@easyah.io and let us know.",
+		                buttons: [{
+		                  text: 'OK',
+		                  handler: () => {
+		                    reject();
+		                  }
+		                }]
+		              })
+		              
+		              errr.present();
+		            });
 
 				} else
 					userUpdateFunc();
