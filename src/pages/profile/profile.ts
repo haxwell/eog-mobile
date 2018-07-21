@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, ModalController, NavParams } from 'ionic-angular';
+import { NavController, ModalController, NavParams, AlertController } from 'ionic-angular';
 import { Events } from 'ionic-angular';
 
 import { ProfileService } from '../../pages/common/_services/profile.service'
@@ -39,6 +39,7 @@ export class ProfilePage {
 	constructor(public navCtrl: NavController,
 				navParams: NavParams, 
 				public modalCtrl: ModalController,
+				private _alertCtrl: AlertController,
 				private _userService: UserService,
 				private _profileService: ProfileService,
 				private _userMetadataService: UserMetadataService,
@@ -207,4 +208,118 @@ export class ProfilePage {
 		if (visObj)
 			return visObj["text"];
 	}
+
+	onChangePasswordBtnClick(event) {
+	    let self = this;
+	    let cpwAlert = self._alertCtrl.create({
+	            title: '',
+	            subTitle: "Enter your current password...",
+		        inputs: [{
+		        	name: 'currentPassword',
+		        	placeholder: '..current password..'
+		        }],
+	            buttons: [{
+	            	text: "Cancel",
+	            	role: 'cancel'
+	            }, {
+	            	text: 'OK',
+	             	handler: (data) => {
+	                	let cu = this._userService.getCurrentUser();
+	                	if (cu["password"] == data.currentPassword)
+	                		this.onChangePasswordBtnClick2(data.currentPassword);
+	                	else {
+				         	let okAlert = self._alertCtrl.create({
+				                	title: 'Sad face..',
+				                	subTitle: "Incorrect password",
+				                	buttons: [{
+				                    	text: 'OK',
+				                    	handler: () => { }
+				                  	}]
+				                })
+
+				        	okAlert.present();
+				        }
+	            	}
+	            }]
+	        })
+
+	    cpwAlert.present();
+	}
+
+	onChangePasswordBtnClick2(currentPassword) {
+		let self = this;
+          let pwAlert = self._alertCtrl.create({
+            title: "Enter Your New Password",
+            inputs: [{
+              name: 'pw1',
+              placeholder: '..new password..'
+            }, {
+              name: 'pw2',
+              placeholder: '..verify password..'
+            }],
+            buttons: [{
+              text: 'Cancel',
+              role: 'cancel'
+            }, {
+				text: 'OK',
+            	handler: (data2) => {
+                	if (data2.pw1 && data2.pw1.length > 5 && data2.pw1 == data2.pw2) {
+	                  		let cu = self._userService.getCurrentUser();
+
+	                  		self._userService.changeCurrentPassword(currentPassword, data2.pw2).then((response) => {
+
+			                if (response) {
+			                    let done = self._alertCtrl.create({
+			                      title: 'Yay!',
+			                      message: "Your password has been changed.",
+			                      buttons: [{
+			                        text: 'OK',
+			                        handler: () => {
+		                        		cu["password"] = data2.pw2;
+		                        		self._events.publish("app:currentUserPasswordChanged", cu)
+			                        }
+			                      }]
+			                    })
+			                    
+			                    done.present();
+			                } else {
+			                    let done = self._alertCtrl.create({
+			                      title: 'Hmmm...!',
+			                      message: "Could not change your password... Try again.",
+			                      buttons: [{
+			                        text: 'OK',
+			                        handler: () => {
+
+			                        }
+			                      }]
+			                    })
+			                    
+			                    done.present();
+			                }
+
+	                    }, (err) => {
+	                      
+	                      let errr = self._alertCtrl.create({
+	                        title: 'Arggh!',
+	                        message: "Something bad happened on the server. We hate when that happens. Please email us at info@easyah.io and let us know.",
+	                        buttons: [{
+	                          text: 'OK',
+	                          handler: () => {
+	                            
+	                          }
+	                        }]
+	                      })
+	                      
+	                      errr.present();
+	                    })
+	                } else {
+	                	return false; // pw data is invalid.. don't let the OK button be active
+	                }
+            	}
+            }]
+        })
+
+        pwAlert.present();
+	}
+
 }

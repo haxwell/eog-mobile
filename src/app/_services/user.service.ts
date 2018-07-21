@@ -25,6 +25,10 @@ export class UserService {
 		this._events.subscribe('app:login', (currentUser) => {
 			this.currentUser = currentUser;
 		})
+
+		this._events.subscribe('app:currentUserPasswordChanged', (currentUser) => {
+			this.currentUser = currentUser;
+		})
 	}
 
 	getUser(userId, force?: boolean) {
@@ -265,6 +269,27 @@ export class UserService {
 		});
 
 		return rtn;
+	}
+
+	changeCurrentPassword(currentPassword, newPassword) {
+
+		let rtn = new Promise((resolve, reject) => {
+			let self = this;
+			let url = environment.apiUrl + "/api/users/" + this.currentUser["id"] + "/changePrevPassword";
+
+			let data = {current_pw: currentPassword, new_pw: newPassword};
+			let postData = this.JSON_to_URLEncoded(data, undefined, undefined);
+
+			self._apiService.post(url, postData).subscribe((resp) => {
+					resolve(JSON.parse(resp["_body"]));
+				}, (err) => {
+					console.log(JSON.stringify(err)); 
+					reject(err);
+				});
+		});
+
+		return rtn;
+
 	}
 
 	JSON_to_URLEncoded(element,key,list){
