@@ -36,27 +36,31 @@ export class UserPreferencesService {
 		}
 	}
 
-	getPreference(key, dfault) {
+	getPreference(key, dfault?: any) {
 		if (this.currentUser) {
-			let url = environment.apiUrl + "/api/user/" + this.currentUser["id"] + "/preferences/" + key;
-
-			return new Promise((resolve, reject) => {
-				this._apiService.get(url).subscribe(
-					(val) => {
-						let rtn = undefined;
-
-						if (val["_body"])
-							rtn = val["body"];
-						else
-							rtn = dfault;
-
-						resolve({pref: rtn}); 
-					}
-				)
-			});
+			return this.getPreferenceByUserId(this.currentUser["id"], key, dfault)
 		} else {
 			return undefined;
 		}
+	}
+
+	getPreferenceByUserId(userId, key, dfault?: any) {
+		let url = environment.apiUrl + "/api/user/" + userId + "/preferences/" + key;
+
+		return new Promise((resolve, reject) => {
+			this._apiService.get(url).subscribe(
+				(val) => {
+					let rtn = undefined;
+
+					if (val["_body"])
+						rtn = val["_body"] * 1;
+					else
+						rtn = dfault;
+
+					resolve({pref: rtn}); 
+				}
+			)
+		});
 	}
 
 }
