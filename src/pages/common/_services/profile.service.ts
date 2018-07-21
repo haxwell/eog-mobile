@@ -151,11 +151,13 @@ export class ProfileService {
 		tmp["keywords"] = model["keywords"];
 		tmp["description"] = model["description"];
 
+/*
 		tmp["facebookUrl"] = model["facebookUrl"];
 		tmp["youtubeUrl"] = model["youtubeUrl"];
 		tmp["instagramUrl"] = model["instagramUrl"];
 		tmp["githubUrl"] = model["githubUrl"];
 		tmp["linkedinUrl"] = model["linkedinUrl"];
+*/
 
 		let data = this.JSON_to_UrlEncoded(tmp, undefined, undefined);
 		console.log(data);
