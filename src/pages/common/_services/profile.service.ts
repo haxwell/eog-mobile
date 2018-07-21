@@ -88,14 +88,6 @@ export class ProfileService {
 			})
   		} 
 
-  		// TODO --- REMOVE THIS. Its In Prm-Service now ---
-		url = environment.apiUrl + "/api/user/" + userId + "/promises";
-		this._apiService.get(url).subscribe((prmsObj) => {
-			model["prms"] = JSON.parse(prmsObj["_body"]);
-			model["prms"].sort((a, b) => { let aText = a.title.toLowerCase(); let bText = b.title.toLowerCase(); if (aText > bText) return 1; else if (aText < bText) return -1; else return 0; })
-		});
-		// END TODO
-
 		this._pointsService.getCurrentAvailableUserPoints().then((pts) => {
 			model["points"]["available"] = pts;
 		});
