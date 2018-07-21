@@ -8,6 +8,7 @@
 			<ion-row >
 				<ion-item no-lines>
 					<button ion-button (click)="onGoBackBtnTap($event)">Go Back</button>
+					<button *ngIf="isCurrentUsersProfile()" ion-button item-right (click)="onChangePasswordBtnClick($event)">Change Password</button>
 					<button *ngIf="isCurrentUsersProfile()" round ion-button item-right (click)="onEditProfileBtnClick($event)"><ion-icon class="whiteText profileIcon" name="create"></ion-icon></button>
 				</ion-item>
 			</ion-row>

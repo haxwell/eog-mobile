@@ -11,6 +11,7 @@ export class ApiService {
 
 	constructor(private _http: Http, private _events: Events, private _platform: Platform) {
 		this._events.subscribe('app:login', (currentUser) => { this.currentUser = currentUser; });
+		this._events.subscribe('app:currentUserPasswordChanged', (currentUser) => {	this.currentUser = currentUser;	})
 	}
 
 	getHeaders(username, password) {
