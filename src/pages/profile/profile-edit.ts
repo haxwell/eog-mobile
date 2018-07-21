@@ -189,22 +189,37 @@ export class ProfileEditPage {
 	verifyPhone(phoneNumber) {
 	    let self = this;
 
-	    let vpAlert = self.alertCtrl.create({
-            title: 'New Phone Number',
-            subTitle: 'We will need to verify your new number before we can save it.<br/><br/>We will send a text to your phone at ' + phoneNumber + '. Proceed?',
-            buttons: [{
-            	text: 'Cancel',
-            	role: 'cancel'
-            }, {
-            	text: 'OK',
-             	handler: (data) => {
-       				self._userService.sendCodeToPhoneNumber(phoneNumber);
-            		self.verifyPhone2(phoneNumber);
-				}
-            }]
-        })
+	    self._userService.isPhoneNumberAvailable(phoneNumber).then((isAvailable) => {
+	    	if (isAvailable) {
+			    let vpAlert = self.alertCtrl.create({
+		            title: 'New Phone Number',
+		            subTitle: 'We will need to verify your new number before we can save it.<br/><br/>We will send a text to your phone at ' + phoneNumber + '. Proceed?',
+		            buttons: [{
+		            	text: 'Cancel',
+		            	role: 'cancel'
+		            }, {
+		            	text: 'OK',
+		             	handler: (data) => {
+		       				self._userService.sendCodeToPhoneNumber(phoneNumber);
+		            		self.verifyPhone2(phoneNumber);
+						}
+		            }]
+		        })
 
-	    vpAlert.present();
+			    vpAlert.present();
+			} else {
+				let alert = self.alertCtrl.create({
+					title: 'Doh!',
+					message: "Sorry, that phone number is already taken :(",
+					buttons: [{
+						text: 'OK',
+						role: 'cancel',
+					}]
+				})
+
+				alert.present();
+			}
+	    })
 	}
 
 	verifyPhone2(phoneNumber) {
