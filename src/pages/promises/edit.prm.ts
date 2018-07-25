@@ -203,10 +203,6 @@ export class PrmEditPage {
 		return this.model["directionallyOppositeUser"] !== undefined ? this.model["directionallyOppositeUser"]["realname"] : "";
 	}
 
-	getRequestMessages() {
-		return this.requestMsgs;
-	}
-
 	isSaveBtnEnabled() {
 		return this.isDirty() && 
 			(this.model["requiredPointsQuantity"] !== undefined && this.model["requiredPointsQuantity"] > 0) &&
