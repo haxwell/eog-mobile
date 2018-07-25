@@ -38,10 +38,8 @@ export class RequestsOutgoingView {
 				private _constants: Constants,
 				private _events: Events) { 
 
-		let func = (req) => {
-			this._requestsService.getOutgoingRequestsForCurrentUser().then((data: Array<Object>) => {
-				this.model = data;
-			});
+		let func = (data) => {
+			this.replaceModelElement(data["request"]);
 		};
 
 		this._events.subscribe('request:saved', func);
