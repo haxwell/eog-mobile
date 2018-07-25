@@ -11,7 +11,7 @@
 			<ion-icon *ngIf="hasPrmBeenPreviouslyRequested(prm)" [ngStyle]="{'color':getSufficientTimeIconColor(prm)}" name="clock"></ion-icon>
 			<ion-icon *ngIf="areRecommendationsRequired(prm)" [ngStyle]="{'color':getNecessaryRecommendationsIconColor(prm)}" name="people"></ion-icon>
 
-			<span class="prmTitle">{{prm.title}}</span>
+			<span class="prmTitle">{{prm.title}}</span> - <span class="prmQuantity">{{prm.quantity}} {{prm.quantityDescription}}</span><br/>
 			<span class="prmDesc">{{prm.description}}</span>
 		</button>
 

@@ -1,0 +1,29 @@
+<ion-header>
+	<easyah-header></easyah-header>
+</ion-header>
+
+<ion-content padding>
+	<ion-grid>
+		<ion-row>
+			<button ion-button (click)="onGoBackBtnTap($event)">Go Back</button>
+		</ion-row>
+		<ion-row>
+			<ion-col >
+				<img id="login-logo-img" src="assets/img/logo.jpg">
+			</ion-col>
+		</ion-row>
+		<hr/>
+		<ion-row>
+			<div class="centered">
+				Easyah has several tutorials which pop up at useful occasions throughout the app. But you don't have to wait for them!<br/>
+				You can walk through any of the tutorials by clicking the appropriate button in this list.<br/><br/>
+				Enjoy!<br/><br/>
+			</div>
+		</ion-row>
+		<ion-row>
+			<button class="wideButton" ion-button (click)="onWelcomeTutorialBtnTap($event)">Welcome / Basic Concepts</button>
+			<button class="wideButton" ion-button (click)="onIncomingTutorialBtnTap($event)">You've Accepted an Incoming Request</button>
+			<button class="wideButton" ion-button (click)="onOutgoingTutorialBtnTap($event)">You've Made an Outgoing Request</button>
+		</ion-row>
+	</ion-grid>
+</ion-content>

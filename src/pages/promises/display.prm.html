@@ -26,6 +26,11 @@
 		</ion-row>
 		<ion-row>
 			<ion-item no-lines>
+				Offering <span id="displayPrmQuantity">{{ getModel()["quantity"] }} {{ getModel()["quantityDescription"] }}</span>
+			</ion-item>
+		</ion-row>
+		<ion-row>
+			<ion-item no-lines>
 				<h4 id="displayPrmDescription">{{ getModel()["description"] }}</h4>
 			</ion-item>
 		</ion-row>

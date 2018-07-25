@@ -27,6 +27,7 @@
 					</ion-avatar>
 
 					<span class="prmTitle"><b>{{request.prm.title}}</b></span><br/>
+					<span class="prmQuantity">{{request.prm.quantity}} {{request.prm.quantityDescription}}</span><br/>
 					<span *ngIf="hasRequestMessage(request)" class="douMsg">{{getRequestMessage(request)}}<br/></span>
 					<span *ngIf="!hasRequestMessage(request)" class="douMsg">--<br/></span>
 					<span class="douName">{{request.directionallyOppositeUser.realname}}</span><br/>
@@ -57,6 +58,7 @@
 					</ion-avatar>
 
 					<span class="prmTitle"><b>{{request.prm.title}}</b></span><br/>
+					<span class="prmQuantity">{{request.prm.quantity}} {{request.prm.quantityDescription}}</span><br/>
 					<span *ngIf="hasRequestMessage(request)" class="douMsg">{{getRequestMessage(request)}}<br/></span>
 					<span *ngIf="!hasRequestMessage(request)" class="douMsg">--<br/></span>
 					<span class="douName">{{request.directionallyOppositeUser.realname}}</span><br/>
@@ -85,6 +87,7 @@
 					</ion-avatar>
 
 					<span class="prmTitle"><b>{{request.prm.title}}</b></span><br/>
+					<span class="prmQuantity">{{request.prm.quantity}} {{request.prm.quantityDescription}}</span><br/>
 					<span *ngIf="hasRequestMessage(request)" class="douMsg">{{getRequestMessage(request)}}<br/></span>
 					<span *ngIf="!hasRequestMessage(request)" class="douMsg">--<br/></span>
 					<span class="douName">{{request.directionallyOppositeUser.realname}}</span><br/>
@@ -112,6 +115,7 @@
 					</ion-avatar>
 
 					<span class="prmTitle"><b>{{request.prm.title}}</b></span><br/>
+					<span class="prmQuantity">{{request.prm.quantity}} {{request.prm.quantityDescription}}</span><br/>
 					<span *ngIf="hasRequestMessage(request)" class="douMsg">{{getRequestMessage(request)}}<br/></span>
 					<span *ngIf="!hasRequestMessage(request)" class="douMsg">--<br/></span>
 					<span class="douName">{{request.directionallyOppositeUser.realname}}</span><br/>
@@ -137,6 +141,7 @@
 					</ion-avatar>
 
 					<span class="prmTitle"><b>{{request.prm.title}}</b></span><br/>
+					<span class="prmQuantity">{{request.prm.quantity}} {{request.prm.quantityDescription}}</span><br/>
 					<!-- <span class="douMsg">This is where the message from the other user will go. Right in this line. It may be a long message. Like this one.</span><br/> -->
 					<span class="douName">{{request.directionallyOppositeUser.realname}}</span><br/>
 				</button>

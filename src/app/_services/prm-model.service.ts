@@ -28,6 +28,8 @@ export class PrmModelService {
 		rtn["userId"] = user["id"];
 		rtn["description"] = '';
 		rtn["title"] = '';
+		rtn["quantity"] = 0;
+		rtn["quantityDescription"] = '';
 		rtn["keywords"] = [];
 		rtn["requiredPointsQuantity"] = 0;
 		rtn["requiredUserRecommendations"] = [];

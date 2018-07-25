@@ -19,7 +19,7 @@
 			<ion-avatar item-start>
 				<img id="prmAvatarImg" [class]="getAvatarCSSClassString(prm)" [src]="getThumbnailImage(prm)" alt="profile_image">
 			</ion-avatar>
-			<span class="prmTitle">{{prm.title}}</span><br/>
+			<span class="prmTitle">{{prm.title}}</span> - <span class="prmQuantity">{{prm.quantity}} {{prm.quantityDescription}}</span><br/>
 			<span class="prmDesc">{{prm.description}}</span><br/>
 			<div class="promiseDetail">
 				<span id="prmReqdPtsId" class="prmReqdPts">{{getPointRecommendationCountPhrase(prm)}}<br/></span>
