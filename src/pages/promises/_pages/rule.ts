@@ -18,6 +18,8 @@ export class RulePage {
 	searchResultList: Array<Object> = [];
 	userList: Array<Object> = [];
 
+	permitOnlyEditsToPoints = undefined;
+
 	constructor(public navCtrl: NavController,
 				navParams: NavParams,
 				private viewCtrl: ViewController, 
@@ -28,6 +30,8 @@ export class RulePage {
 
 		if (tmp !== undefined) 
 			this.requiredUserRecommendations = tmp.slice();
+
+		this.permitOnlyEditsToPoints = navParams.get('permitOnlyEditsToPoints');
 	}
 
 	onSearchUserBtnTap(evt) {
@@ -67,7 +71,7 @@ export class RulePage {
 	}
 
 	isSearchBtnEnabled() {
-		return this.searchString.length > 2;
+		return this.searchString.length > 2 && this.permitOnlyEditsToPoints !== true;
 	}
 
 	isSaveBtnEnabled() {
@@ -79,23 +83,27 @@ export class RulePage {
 	}
 
 	onIndividualSearchResultTap(item) {
-		this.requiredUserRecommendations.push({id: -1, requiredRecommendUserId: item["id"], userObj: item});
-		this.searchResultList = this.searchResultList.filter((obj) => { return obj["id"] !== item["id"]; });
+		if (this.permitOnlyEditsToPoints !== true) {
+			this.requiredUserRecommendations.push({id: -1, requiredRecommendUserId: item["id"], userObj: item});
+			this.searchResultList = this.searchResultList.filter((obj) => { return obj["id"] !== item["id"]; });
 
-		this.origSearchResultsAlreadyRequiredCount++;
-		this.updateSearchResultListCountString();
+			this.origSearchResultsAlreadyRequiredCount++;
+			this.updateSearchResultListCountString();
+		}
 	}
 
 	onIndividualRequiredUserPress(item) {
-		this.requiredUserRecommendations = this.requiredUserRecommendations.filter((obj) => { return obj["userObj"]["id"] !== item["userObj"]["id"]; });
-		this.searchResultList.push(item["userObj"]);
+		if (this.permitOnlyEditsToPoints !== true) {
+			this.requiredUserRecommendations = this.requiredUserRecommendations.filter((obj) => { return obj["userObj"]["id"] !== item["userObj"]["id"]; });
+			this.searchResultList.push(item["userObj"]);
 
-		this.origSearchResultsAlreadyRequiredCount--;
-		this.updateSearchResultListCountString();		
+			this.origSearchResultsAlreadyRequiredCount--;
+			this.updateSearchResultListCountString();
+		}
 	}
 
 	getSearchResultList() {
-		if (this.searchResultList === undefined || this.searchResultList.length === 0)
+		if (this.searchResultList === undefined || this.searchResultList.length === 0 || this.permitOnlyEditsToPoints)
 			return undefined;
 
 		return this.searchResultList;

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 import { NavController, NavParams } from 'ionic-angular';
-import { ModalController } from 'ionic-angular';
+import { ModalController, AlertController } from 'ionic-angular';
 
 import { PrmEditPage } from './edit.prm'
 import { RequestPage } from './_pages/request'
@@ -12,7 +12,8 @@ import { PrmMetadataService } from '../../app/_services/prm-metadata.service';
 import { PrmDetailService } from '../../app/_services/prm-detail.service';
 import { UserService } from '../../app/_services/user.service';
 import { UserPreferencesService } from '../../app/_services/user-preferences.service';
-import { PictureService } from '../../app/_services/picture.service'
+import { PictureService } from '../../app/_services/picture.service';
+import { RequestsService } from '../../app/_services/requests.service';
 
 import { Constants } from '../../_constants/constants';
 
@@ -37,11 +38,13 @@ export class PrmDisplayPage {
 	constructor(public navCtrl: NavController, 
 				navParams: NavParams, 
 				private modalCtrl: ModalController,
+				private alertCtrl: AlertController,
 				private _prmModelService: PrmModelService,
 				private _prmMetadataService: PrmMetadataService,
 				private _prmDetailService: PrmDetailService,
 				private _userService: UserService,
 				private _pictureService: PictureService,
+				private _requestsService: RequestsService,
 				private _userPreferencesService: UserPreferencesService,
 				private _constants: Constants) {
 
@@ -262,7 +265,30 @@ export class PrmDisplayPage {
 			})
 		}
 
-		self.navCtrl.push(PrmEditPage, {prm: Object.assign({}, self.model), callback: editPromiseCallback});
+		self._requestsService.getIncomingRequestsForCurrentUser().then((data: Array<Object>) => {
+			let reqsForThisPrm = data.filter((obj) => { return obj["prm"]["id"] === self.model["id"]; });
+
+			if (reqsForThisPrm !== undefined && reqsForThisPrm.length > 0) {
+				// this promise has outstanding requests (pending and/or in-progress)
+				//  the user can only change the number of points required
+
+				let okAlert = self.alertCtrl.create({
+				      title: 'Just FYI',
+				      subTitle: "This promise has requests that are pending or in-progress.<br/><br/>You will only be able to edit the picture, and the number of points that it requires. Edits to points will only apply to future requests.",
+				      buttons: [{
+				        text: 'OK',
+				        handler: () => {
+							self.navCtrl.push(PrmEditPage, {prm: Object.assign({}, self.model), callback: editPromiseCallback, prmHasIncomingReqs: true});
+				        }
+					}]
+				})
+
+				okAlert.present();
+
+			} else {
+				self.navCtrl.push(PrmEditPage, {prm: Object.assign({}, self.model), callback: editPromiseCallback});
+			}
+		})
 	}
 
 	getThumbnailImage() {

@@ -341,14 +341,10 @@ export class PrmEditPage {
 	}
 
 	getThumbnailImage() {
-		if (this.model["imageFileURI"] !== undefined)
+		if (this.model["imageFileURI"] !== undefined && this.model["imageOrientation"] !== undefined)
 			return this.model["imageFileURI"];
 		else
 			return "assets/img/mushroom.jpg";
-	}
-
-	isThumbnailImageVisible() {
-		return this.model["imageOrientation"] !== undefined;
 	}
 
 	getAvatarCSSClassString() {
@@ -356,122 +352,118 @@ export class PrmEditPage {
 	}
 
 	onThumbnailClick($event) {
-		if (this.permitOnlyEditsToPoints !== true) {
-			let self = this;
-			let model = this.model;
-			let modal = this.modalCtrl.create(ChoosePhotoSourcePage, {fileURI: this.model["imageFileURI"], fileSource: this.model["imageFileSource"]});
-			
-			modal.onDidDismiss((promise) => {
-				if (promise) {
-					promise.then((uriAndSource) => { 
-						if (uriAndSource === undefined) {
-							uriAndSource = {};
-						}
+		let self = this;
+		let model = this.model;
+		let modal = this.modalCtrl.create(ChoosePhotoSourcePage, {fileURI: this.model["imageFileURI"], fileSource: this.model["imageFileSource"]});
+		
+		modal.onDidDismiss((promise) => {
+			if (promise) {
+				promise.then((uriAndSource) => { 
+					if (uriAndSource === undefined) {
+						uriAndSource = {};
+					}
 
 
-						if (model["imageFileURI"] !== undefined && model["imageFileSource"] == 'camera') {
-							let lastSlash = model["imageFileURI"].lastIndexOf('/');
-							let path = model["imageFileURI"].substring(0,lastSlash+1);
-							let filename = model["imageFileURI"].substring(lastSlash+1);
+					if (model["imageFileURI"] !== undefined && model["imageFileSource"] == 'camera') {
+						let lastSlash = model["imageFileURI"].lastIndexOf('/');
+						let path = model["imageFileURI"].substring(0,lastSlash+1);
+						let filename = model["imageFileURI"].substring(lastSlash+1);
 
-							self._file.removeFile(path, filename).then((data) => {
-								self._pictureService.setMostProbablePhotoPath(self._constants.PHOTO_TYPE_PRM, model["id"], uriAndSource["imageFileURI"]);
-
-								console.log("User saved a new prm image. [" + model["imageFileURI"] + "] is no longer the image to use, so it has been removed." );
-								console.log("setting prm model to [" + uriAndSource["imageFileURI"] + "]");
-
-								model["imageFileURI"] = uriAndSource["imageFileURI"];
-								model["imageFileSource"] = uriAndSource["imageFileSource"];
-								model["imageOrientation"] = uriAndSource["exif"]["Orientation"];
-
-								self.setDirty(true);						
-							})
-						} else {
-							console.log("no previous image was set on the model, so skipping the 'delete previous image' step...")
-
+						self._file.removeFile(path, filename).then((data) => {
 							self._pictureService.setMostProbablePhotoPath(self._constants.PHOTO_TYPE_PRM, model["id"], uriAndSource["imageFileURI"]);
+
+							console.log("User saved a new prm image. [" + model["imageFileURI"] + "] is no longer the image to use, so it has been removed." );
+							console.log("setting prm model to [" + uriAndSource["imageFileURI"] + "]");
 
 							model["imageFileURI"] = uriAndSource["imageFileURI"];
 							model["imageFileSource"] = uriAndSource["imageFileSource"];
 							model["imageOrientation"] = uriAndSource["exif"]["Orientation"];
 
-							self.setDirty(true);
-						}
+							self.setDirty(true);						
+						})
+					} else {
+						console.log("no previous image was set on the model, so skipping the 'delete previous image' step...")
 
-					});
-				}
-			});
-			
-			modal.present();
-		}
+						self._pictureService.setMostProbablePhotoPath(self._constants.PHOTO_TYPE_PRM, model["id"], uriAndSource["imageFileURI"]);
+
+						model["imageFileURI"] = uriAndSource["imageFileURI"];
+						model["imageFileSource"] = uriAndSource["imageFileSource"];
+						model["imageOrientation"] = uriAndSource["exif"]["Orientation"];
+
+						self.setDirty(true);
+					}
+
+				});
+			}
+		});
+		
+		modal.present();
 	}
 
 	onThumbnailPress($event) {
-		if (this.permitOnlyEditsToPoints !== true) {
-			let self = this;
+		let self = this;
 
-			let alert = this._alertCtrl.create({
-				title: 'Delete Photo?',
-				message: 'Do you want to DELETE the picture on this promise?',
-				buttons: [
-					{
-						text: 'No', role: 'cancel', handler: () => {
-							// do nothing
-						},
-					}, {
-						text: 'Yes', handler: () => {
-							//let self = this;
+		let alert = this._alertCtrl.create({
+			title: 'Delete Photo?',
+			message: 'Do you want to DELETE the picture on this promise?',
+			buttons: [
+				{
+					text: 'No', role: 'cancel', handler: () => {
+						// do nothing
+					},
+				}, {
+					text: 'Yes', handler: () => {
+						//let self = this;
 
-							let func = () => {
-								//let model = self._profileService.getModel(self.user["id"]);
+						let func = () => {
+							//let model = self._profileService.getModel(self.user["id"]);
 
-								self.model["imageFileURI"] = undefined;
-								self.model["imageFileSource"] = undefined;
+							self.model["imageFileURI"] = undefined;
+							self.model["imageFileSource"] = undefined;
 
-								self._pictureService.setMostProbablePhotoPath(self._constants.PHOTO_TYPE_PRM, self.model["id"], self.model["imageFileURI"]);
+							self._pictureService.setMostProbablePhotoPath(self._constants.PHOTO_TYPE_PRM, self.model["id"], self.model["imageFileURI"]);
+						}
+
+						console.log('deleting photo ' + self.model["id"]);
+
+						self._pictureService.delete(self._constants.PHOTO_TYPE_PROFILE, self.model["id"]).then(() => { 
+
+							let model = self._prmModelService.get(self.model["id"]);
+
+							if (model["imageFileSource"] === 'camera' || model["imageFileSource"] === 'eog') {
+								
+								console.log("This image came from the camera, or the api.. deleting off the phone now. path=" + model['imageFileURI'] + "]")
+
+								let lastSlash = model["imageFileURI"].lastIndexOf('/');
+								let path = model["imageFileURI"].substring(0,lastSlash+1);
+								let filename = model["imageFileURI"].substring(lastSlash+1);
+
+								self._file.removeFile(path, filename).then((data) => {
+									console.log("Call to pictureService to DELETE photo for "+model['id']+" successful! Image was from camera or the eog api, so it was removed from phone.");
+
+									func();
+									
+								}).catch(() => {
+									console.log("Caught error trying to remove file from phone");
+
+									func();
+								});
+							} else {
+								console.log("Call to pictureService to DELETE photo for "+model['id']+" successful! Image was from phone's gallery, so did not try to remove it.");
+
+								func();								
 							}
 
-							console.log('deleting photo ' + self.model["id"]);
+						}).catch(() => {
+							console.log("An error occurred deleting the image from the server. Probably, it didn't exist there. Noting it, in case things look wonky..")
 
-							self._pictureService.delete(self._constants.PHOTO_TYPE_PROFILE, self.model["id"]).then(() => { 
+							func();
+						});
+					},
+				}
+			]
+		});
 
-								let model = self._prmModelService.get(self.model["id"]);
-
-								if (model["imageFileSource"] === 'camera' || model["imageFileSource"] === 'eog') {
-									
-									console.log("This image came from the camera, or the api.. deleting off the phone now. path=" + model['imageFileURI'] + "]")
-
-									let lastSlash = model["imageFileURI"].lastIndexOf('/');
-									let path = model["imageFileURI"].substring(0,lastSlash+1);
-									let filename = model["imageFileURI"].substring(lastSlash+1);
-
-									self._file.removeFile(path, filename).then((data) => {
-										console.log("Call to pictureService to DELETE photo for "+model['id']+" successful! Image was from camera or the eog api, so it was removed from phone.");
-
-										func();
-										
-									}).catch(() => {
-										console.log("Caught error trying to remove file from phone");
-
-										func();
-									});
-								} else {
-									console.log("Call to pictureService to DELETE photo for "+model['id']+" successful! Image was from phone's gallery, so did not try to remove it.");
-
-									func();								
-								}
-
-							}).catch(() => {
-								console.log("An error occurred deleting the image from the server. Probably, it didn't exist there. Noting it, in case things look wonky..")
-
-								func();
-							});
-						},
-					}
-				]
-			});
-
-			alert.present();
-		}
+		alert.present();
 	}
 }

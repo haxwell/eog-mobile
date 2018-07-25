@@ -88,9 +88,6 @@
 			<ion-item *ngIf="isThumbnailImageAvailable()">
 					<img [hidden]="!isThumbnailImageVisible()" [class]="getAvatarCSSClassString()" [src]="getThumbnailImage()" alt="profile_image" (click)="onThumbnailClick($event)" (press)="onThumbnailPress($event)">
 			</ion-item>
-			<ion-item *ngIf="!isThumbnailImageAvailable()">
-					<img class="editPrmImage centered" src="assets/img/mushroom.jpg" (click)="onThumbnailClick($event)">
-			</ion-item>
 		</ion-row>	
 
 		<ion-row>
