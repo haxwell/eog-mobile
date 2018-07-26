@@ -19,7 +19,7 @@ export class FunctionPromiseService {
 	results = {};
 	funcs = {};
 
-	freshnessLengthInMillis = 30 * 1000; // thirty seconds
+	freshnessLengthInMillis = 10 * 1000; // ten seconds
 
 	constructor() {
 
