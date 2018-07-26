@@ -109,7 +109,10 @@ export class RequestsOutgoingView {
 					return obj["deliveringStatusId"] === this._constants.REQUEST_STATUS_COMPLETED && obj["requestingStatusId"] === this._constants.REQUEST_STATUS_COMPLETED;
 				});
 			len -= this.getNumberOfMatchingElements((obj) => { 
-					return obj["deliveringStatusId"] === this._constants.REQUEST_STATUS_DECLINED && obj["requestingStatusId"] === this._constants.REQUEST_STATUS_COMPLETED;
+					return obj["deliveringStatusId"] === this._constants.REQUEST_STATUS_DECLINED && obj["requestingStatusId"] === this._constants.REQUEST_STATUS_REQUESTOR_ACKNOWLEDGED;
+				});
+			len -= this.getNumberOfMatchingElements((obj) => { 
+					return obj["deliveringStatusId"] === this._constants.REQUEST_STATUS_DECLINED_AND_HIDDEN && obj["requestingStatusId"] === this._constants.REQUEST_STATUS_REQUESTOR_ACKNOWLEDGED;
 				});
 
 			rtn = len <= 0;
@@ -142,8 +145,9 @@ export class RequestsOutgoingView {
 		if (this.model) {
 			let rtn = this.model.filter(
 				(obj) => { 
-					return 	obj["deliveringStatusId"] === this._constants.REQUEST_STATUS_DECLINED || 
-							obj["deliveringStatusId"] === this._constants.REQUEST_STATUS_DECLINED_AND_HIDDEN;
+					return 	(obj["deliveringStatusId"] === this._constants.REQUEST_STATUS_DECLINED || 
+							obj["deliveringStatusId"] === this._constants.REQUEST_STATUS_DECLINED_AND_HIDDEN) &&
+							obj["requestingStatusId"] !== this._constants.REQUEST_STATUS_REQUESTOR_ACKNOWLEDGED;
 				}
 			);
 			return ((rtn.length > 0) ? rtn : undefined);
@@ -245,7 +249,7 @@ export class RequestsOutgoingView {
 	onAcknowledgeDeclinedRequestBtnTap(request) {
 		let self = this;
 		self._requestsService.acknowledgeDeclinedRequest(request).then((data) => {
-			self.ngOnInit();
+			self.replaceModelElement(data);
 		});
 	}
 

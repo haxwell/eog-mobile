@@ -56,7 +56,7 @@ export class DeclineRequestPage {
 		this.request["requestAgainDelayCode"] = this.selectedRequestAgainDelayId;
 		this._requestsService.declineIncomingRequest(this.request).then((obj) => {
 			console.log(obj);
-			this.viewCtrl.dismiss();
+			this.viewCtrl.dismiss(obj);
 		})
 	}
 

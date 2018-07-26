@@ -252,7 +252,7 @@ export class RequestsIncomingView {
 	onDeclineBtnTap(request) {
 		let self = this;
 		let modal = this.modalCtrl.create(DeclineRequestPage, {request: request});
-		modal.onDidDismiss(data => { self.ngOnInit() });
+		modal.onDidDismiss(data => { self.replaceModelElement(data) });
 		modal.present();
 	}
 
@@ -271,8 +271,9 @@ export class RequestsIncomingView {
 	}
 
 	onHideRequestBtnTap(request) {
-		this._requestsService.hideIncomingAndDeclinedRequest(request).then(() => {
-			this.ngOnInit();
+		let self = this;
+		this._requestsService.hideIncomingAndDeclinedRequest(request).then((data) => {
+			self.replaceModelElement(data);
 		});
 	}
 }
