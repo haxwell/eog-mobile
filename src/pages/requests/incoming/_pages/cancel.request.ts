@@ -28,8 +28,7 @@ export class CancelRequestPage {
 	onSaveBtnTap(evt) {
 		if (this.isSaveBtnEnabled()) {
 			this._requestsService.cancelIncomingRequest(this.request).then((obj) => {
-				console.log(obj);
-				this.viewCtrl.dismiss();
+				this.viewCtrl.dismiss(obj);
 			})
 		}
 	}

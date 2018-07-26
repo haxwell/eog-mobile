@@ -25,7 +25,7 @@ export class UnseenChangesIndicatorService {
 		this._events.subscribe("request:accepted", funcOutgoing)
 		this._events.subscribe("request:declined", funcOutgoing)
 		this._events.subscribe("request:completed", funcOutgoing)
-		this._events.subscribe("request:cancelled", funcOutgoing)
+		this._events.subscribe("request:outgoing:cancelled", funcOutgoing)
 		this._events.subscribe("request:notYetAccepted:cancelledByRequestor", funcNotification)
 		this._events.subscribe("request:accepted:cancelledByRequestor", funcNotification)
 		this._events.subscribe("request:completedAndApproved", funcNotification)

@@ -38,7 +38,7 @@ export class NotificationListPage {
 		this._events.subscribe("request:accepted", func)
 		this._events.subscribe("request:declined", func)
 		this._events.subscribe("request:completed", func)
-		this._events.subscribe("request:cancelled", func)
+		this._events.subscribe("request:outgoing:cancelled", func)
 		this._events.subscribe("request:completedAndApproved", func)
 		this._events.subscribe("request:isInDispute", func)
 		this._events.subscribe("request:inamicablyResolved", func)

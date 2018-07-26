@@ -34,13 +34,17 @@ export class CancelOutgoingRequestPage {
 
 	onSaveBtnTap(evt) {
 		let self = this;
-		self._requestsService.cancelOutgoingRequest(this.request).then((obj) => {
-			self._events.publish("outgoing:request:cancelled", undefined);
-			self.viewCtrl.dismiss();
+		self._requestsService.cancelOutgoingRequest(this.request).then((data) => {
+			
+			// in the case of an outgoing request being cancelled, if it is not accepted by the delivering side, 
+			//  then no object is returned from the server, so data == undefined
+
+			self._events.publish("request:outgoing:cancelled", {request: data});
+			self.viewCtrl.dismiss(true);
 		})
 	}
 
 	onCancelBtnTap(evt) {
-		this.viewCtrl.dismiss();
+		this.viewCtrl.dismiss(false);
 	}
 }

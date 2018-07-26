@@ -130,16 +130,6 @@ export class WebsocketService {
 		this._events.publish('request:received', data);
 	}
 
-	handlePendingRequestCanceled(data) {
-		let request = data["request"];
-		let dou_realname = request["directionallyOppositeUser"]["realname"];
-
-		data["message"] = dou_realname + ' cancelled their request for your Promise, ' + request["prm"]["title"] + ', before you got to act on it.';
-
-		this.presentToast(data["message"]);
-		this._events.publish('outgoing:request:cancelled', data);
-	}
-
 	handleRequestAccepted(data) {
 		let request = data["request"];
 		let dou_realname = request["directionallyOppositeUser"]["realname"];
@@ -207,6 +197,16 @@ export class WebsocketService {
 		this._events.publish('request:notYetAccepted:cancelledByRequestor', data);
 	}
 
+	handlePendingRequestCanceled(data) {
+		let request = data["request"];
+		let dou_realname = request["directionallyOppositeUser"]["realname"];
+
+		data["message"] = dou_realname + ' cancelled their request for your Promise, ' + request["prm"]["title"] + ', before you got to act on it.';
+
+		this.presentToast(data["message"]);
+		this._events.publish('request:incoming:cancelled', data);
+	}
+
 	handleRequestCancelled(data) {
 		let request = data["request"];
 		let dou_realname = request["directionallyOppositeUser"]["realname"];
@@ -214,7 +214,7 @@ export class WebsocketService {
 		data["message"] = dou_realname + ' just cancelled your request, ' + request["prm"]["title"];
 
 		this.presentToast(data["message"]);
-		this._events.publish('request:cancelled', data);
+		this._events.publish('request:outgoing:cancelled', data);
 	}
 
 	handleRequestCompletedAndApproved(data) {

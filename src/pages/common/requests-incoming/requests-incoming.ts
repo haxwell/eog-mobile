@@ -42,7 +42,7 @@ export class RequestsIncomingView {
 		};
 
 		_events.subscribe('request:received', func);
-		_events.subscribe('request:cancelled', func);
+		_events.subscribe('request:incoming:cancelled', func);
 		_events.subscribe('request:notYetAccepted:cancelledByRequestor', func);
 		_events.subscribe('request:accepted:cancelledByRequestor', func);
 		_events.subscribe('request:completedAndApproved', func);
@@ -245,7 +245,7 @@ export class RequestsIncomingView {
 	onAcceptBtnTap(request) {
 		let self = this;
 		let modal = this.modalCtrl.create(AcceptRequestPage, {request: request});
-		modal.onDidDismiss(data => { self.ngOnInit() });
+		modal.onDidDismiss(data => { self.replaceModelElement(data) });
 		modal.present();
 	}
 
@@ -259,14 +259,14 @@ export class RequestsIncomingView {
 	onCancelBtnTap(request) {
 		let self = this;
 		let modal = this.modalCtrl.create(CancelRequestPage, {request: request});
-		modal.onDidDismiss(data => { self.ngOnInit() });
+		modal.onDidDismiss(data => { self.replaceModelElement(data) });
 		modal.present();
 	}
 
 	onCompleteBtnTap(request) {
 		let self = this;
 		let modal = this.modalCtrl.create(CompleteRequestPage, {request: request});
-		modal.onDidDismiss(data => { self.ngOnInit() });
+		modal.onDidDismiss(data => { self.replaceModelElement(data) });
 		modal.present();
 	}
 

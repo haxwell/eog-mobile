@@ -31,8 +31,7 @@ export class ProfilePoints {
 		this._events.subscribe('points:received', () => { console.log("*=*= ProfilePoints dialog: points:received"); this.ngOnInit(); });
 		this._events.subscribe('request:saved', () => { console.log("*=*= ProfilePoints dialog: request:saved"); this.ngOnInit(); });
 		this._events.subscribe('request:declined', () => { console.log("*=*= ProfilePoints dialog: request:declined"); this.ngOnInit(); });
-		this._events.subscribe('request:cancelled', () => { console.log("*=*= ProfilePoints dialog: request:cancelled"); this.ngOnInit(); });
-		this._events.subscribe('outgoing:request:cancelled', () => { console.log("*=*= ProfilePoints dialog: outgoing:request:cancelled"); this.ngOnInit(); });
+		this._events.subscribe('request:outgoing:cancelled', () => { console.log("*=*= ProfilePoints dialog: request:outgoing:cancelled"); this.ngOnInit(); });
 		this._events.subscribe('request:completedAndApproved', () => { console.log("*=*= ProfilePoints dialog: request:completedAndApproved"); this.ngOnInit(); });
 		this._events.subscribe('request:inamicablyResolved', () => { console.log("*=*= ProfilePoints dialog: request:inamicablyResolved"); this.ngOnInit(); });
 		this._events.subscribe('request:markedApprovedAfterCompletion', () => { console.log("*=*= ProfilePoints dialog: request:markedApprovedAfterCompletion"); this.ngOnInit(); });

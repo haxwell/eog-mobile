@@ -30,7 +30,7 @@ export class CompleteOutgoingRequestPage {
 
 	onSaveBtnTap(evt) {
 		this._requestsService.completeOutgoingRequest(this.request).then((obj) => {
-			this.viewCtrl.dismiss();
+			this.viewCtrl.dismiss(obj);
 		})
 	}
 

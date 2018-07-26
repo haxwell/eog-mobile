@@ -28,8 +28,7 @@ export class NotCompleteOutgoingRequestPage {
 	onSaveBtnTap(evt) {
 		if (this.isSaveBtnEnabled()) {
 			this._requestsService.notCompleteOutgoingRequest(this.request).then((obj) => {
-				console.log(obj);
-				this.viewCtrl.dismiss();
+				this.viewCtrl.dismiss(obj);
 			});
 		}
 	}

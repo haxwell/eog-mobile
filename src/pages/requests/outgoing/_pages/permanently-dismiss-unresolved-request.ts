@@ -23,8 +23,7 @@ export class PermanentlyDismissUnresolvedRequestPage {
 
 	onSaveBtnTap(evt) {
 		this._requestsService.notCompleteOutgoingRequest(this.request).then((obj) => {
-			console.log(obj);
-			this.viewCtrl.dismiss();
+			this.viewCtrl.dismiss(obj);
 		});
 	}
 

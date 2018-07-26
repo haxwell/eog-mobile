@@ -45,7 +45,7 @@ export class RequestsOutgoingView {
 		this._events.subscribe('request:saved', func);
 		this._events.subscribe('request:accepted', func);
 		this._events.subscribe('request:completed', func);
-		this._events.subscribe('request:cancelled', func);
+		this._events.subscribe('request:outgoing:cancelled', func);
 		this._events.subscribe('request:declined', func);
 		this._events.subscribe('request:deleted', func);
 		this._events.subscribe('request:inamicablyResolved', func);
@@ -81,6 +81,11 @@ export class RequestsOutgoingView {
 	replaceModelElement(request) {
 		let temp = this.model.filter((obj) => { return obj["id"] !== request["id"]; });
 		temp.push(request);
+		this.model = temp;
+	}
+
+	clearModelElement(request) {
+		let temp = this.model.filter((obj) => { return obj["id"] !== request["id"]; });
 		this.model = temp;
 	}
 
@@ -132,7 +137,14 @@ export class RequestsOutgoingView {
 	}
 
 	getAcceptedRequests() {
-		return this.filterModelByDeliveringStatus(this._constants.REQUEST_STATUS_ACCEPTED);
+		let self = this;
+
+		if (this.model) {
+			let rtn = this.model.filter((obj) => { return obj["deliveringStatusId"] === self._constants.REQUEST_STATUS_ACCEPTED && obj["requestingStatusId"] !== self._constants.REQUEST_STATUS_CANCELLED });
+			return rtn.length > 0 ? rtn : undefined			
+		}
+
+		return undefined;
 	}
 
 	getCancelledRequests() {
@@ -221,28 +233,28 @@ export class RequestsOutgoingView {
 	onPermanentlyDismissBtnTap(request) {
 		let self = this;
 		let modal = this.modalCtrl.create(PermanentlyDismissUnresolvedRequestPage, {request: request});
-		modal.onDidDismiss(data => { self.ngOnInit() });
+		modal.onDidDismiss(data => { self.replaceModelElement(data) });
 		modal.present();
 	}
 
 	onCompleteOutgoingBtnTap(request) {
 		let self = this;
 		let modal = this.modalCtrl.create(CompleteOutgoingRequestPage, {request: request});
-		modal.onDidDismiss(data => { self.ngOnInit(); self._events.publish('request:markedApprovedAfterCompletion'); });
+		modal.onDidDismiss(data => { self.replaceModelElement(data); self._events.publish('request:markedApprovedAfterCompletion'); });
 		modal.present();
 	}
 
 	onNotCompleteBtnTap(request) {
 		let self = this;
 		let modal = this.modalCtrl.create(NotCompleteOutgoingRequestPage, {request: request});
-		modal.onDidDismiss(data => { self.ngOnInit() });
+		modal.onDidDismiss(data => { self.replaceModelElement(data) });
 		modal.present();
 	}
 
 	onCancelBtnTap(request) {
 		let self = this;
 		let modal = this.modalCtrl.create(CancelOutgoingRequestPage, {request: request});
-		modal.onDidDismiss(data => { self.ngOnInit() });
+		modal.onDidDismiss(data => { if (data === true) self.clearModelElement(request); });
 		modal.present();
 	}
 

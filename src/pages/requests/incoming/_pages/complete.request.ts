@@ -57,8 +57,7 @@ export class CompleteRequestPage {
 		if (this.isSaveBtnEnabled()) {
 			this.request["requestAgainDelayCode"] = this.getSelectedRequestAgainDelayId(); 
 			this._requestsService.completeIncomingRequest(this.request).then((obj) => {
-				console.log(obj);
-				this.viewCtrl.dismiss();			
+				this.viewCtrl.dismiss(obj);			
 			});
 		}
 	}

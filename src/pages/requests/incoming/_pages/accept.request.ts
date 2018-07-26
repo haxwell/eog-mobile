@@ -40,12 +40,12 @@ export class AcceptRequestPage {
 				let modal = self._modalCtrl.create(AcceptRequestTutorialPage, { });
                   
                 modal.onDidDismiss((data) => { 
-					self.viewCtrl.dismiss();
+					self.viewCtrl.dismiss(obj);
 				});
 
 				modal.present();			
 			} else {
-				self.viewCtrl.dismiss();
+				self.viewCtrl.dismiss(obj);
 			}
 		})
 	}
