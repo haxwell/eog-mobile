@@ -5,6 +5,7 @@ import { NavController, NavParams, ViewController } from 'ionic-angular';
 import { environment } from '../../../../_environments/environment';
 
 import { RequestsService } 	from '../../../../app/_services/requests.service';
+import { DeclineReasonCodeService } from '../../../../app/_services/declined-reason-codes.service';
 import { ApiService } 	from '../../../../app/_services/api.service';
 
 @Component({
@@ -23,6 +24,7 @@ export class DeclineRequestPage {
 				public params: NavParams,
 				private viewCtrl: ViewController, 
 				private _requestsService: RequestsService,
+				private _declinedReasonCodeService: DeclineReasonCodeService,
 				private _apiService: ApiService) {
 		this.request = params.get('request');
 	}
@@ -52,11 +54,15 @@ export class DeclineRequestPage {
 	}
 
 	onSaveBtnTap(evt) {
+		let self = this;
 		this.request["declinedReasonCode"] = this.selectedDeclineReasonId;
 		this.request["requestAgainDelayCode"] = this.selectedRequestAgainDelayId;
 		this._requestsService.declineIncomingRequest(this.request).then((obj) => {
-			console.log(obj);
-			this.viewCtrl.dismiss(obj);
+			self._declinedReasonCodeService.getDeclineReasonCodes().then((codes) => {
+				let x = codes.filter((code) => { return code["id"] === obj["declinedReasonCode"]});
+				obj["declinedReasonCode"] = x[0];
+				self.viewCtrl.dismiss(obj);
+			})
 		})
 	}
 
