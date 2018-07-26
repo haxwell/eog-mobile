@@ -182,20 +182,20 @@ export class ProfilePage {
 			return val;
 	}
 
-	getSuccessfulRequestPercentage() {
+	getSuccessfulRequestPercentageAsString() {
 		let drc = this._profileService.getModel(this.user["id"])["disputedRequestCount"];
 		let rc = this._profileService.getModel(this.user["id"])["requestCount"];
 
 		if (drc === undefined || rc === undefined || drc === 0)
-			return 0;
+			return "--";
 		else
-			return 100 - ((drc / rc) * 100);
+			return "" + (100 - ((drc / rc) * 100)) + "%";
 	}
 
 	getHowLongAgoForMostRecentDisputedRequest() {
 		let val = this._profileService.getModel(this.user["id"])["mostRecentDisputedRequestTimestamp"]
 		if (val === undefined)
-			return "Never";
+			return "--";
 		else
 			return Moment(val).fromNow();
 	}
