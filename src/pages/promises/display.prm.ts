@@ -267,10 +267,11 @@ export class PrmDisplayPage {
 
 		self._requestsService.getIncomingRequestsForCurrentUser().then((data: Array<Object>) => {
 			let reqsForThisPrm = data.filter((obj) => { return obj["prm"]["id"] === self.model["id"]; });
+			reqsForThisPrm = reqsForThisPrm.filter((obj) => { return obj["deliveringStatusId"] !== this._constants.REQUEST_STATUS_DECLINED_AND_HIDDEN && obj["deliveringStatusId"] !== this._constants.REQUEST_STATUS_DECLINED; })
 
 			if (reqsForThisPrm !== undefined && reqsForThisPrm.length > 0) {
 				// this promise has outstanding requests (pending and/or in-progress)
-				//  the user can only change the number of points required
+				//  the user can only change the picture, and number of points required
 
 				let okAlert = self.alertCtrl.create({
 				      title: 'Just FYI',
