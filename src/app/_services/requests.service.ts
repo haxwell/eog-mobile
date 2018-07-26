@@ -192,10 +192,6 @@ export class RequestsService {
 		return this.setRequestStatusByUserIdAndDirection(request, this._constants.REQUEST_STATUS_ACCEPTED, this._constants.INCOMING);
 	}
 
-	acceptOutgoingRequest(request) {
-		return this.setRequestStatusByUserIdAndDirection(request, this._constants.REQUEST_STATUS_ACCEPTED, this._constants.OUTGOING);
-	}
-
 	cancelOutgoingRequest(request) {
 		return this.setRequestStatusByUserIdAndDirection(request, this._constants.REQUEST_STATUS_CANCELLED, this._constants.OUTGOING);
 	}
