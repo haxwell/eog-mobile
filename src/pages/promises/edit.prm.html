@@ -86,7 +86,7 @@
 				</ion-buttons>
 			</span>
 			<ion-item *ngIf="isThumbnailImageAvailable()">
-					<img [hidden]="!isThumbnailImageVisible()" [class]="getAvatarCSSClassString()" [src]="getThumbnailImage()" alt="profile_image" (click)="onThumbnailClick($event)" (press)="onThumbnailPress($event)">
+					<img [class]="getAvatarCSSClassString()" [src]="getThumbnailImage()" alt="profile_image" (click)="onThumbnailClick($event)" (press)="onThumbnailPress($event)">
 			</ion-item>
 		</ion-row>	
 
