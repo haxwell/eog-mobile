@@ -185,14 +185,14 @@ export class ProfilePage {
 	getSuccessfulRequestPercentageAsString() {
 		
 		let drc = this._profileService.getModel(this.user["id"])["disputedRequestCount"];
-		let rc = this._profileService.getModel(this.user["id"])["requestCount"];
+		let arc = this._profileService.getModel(this.user["id"])["archivedRequestCount"];
 
-		if (drc === undefined || rc === undefined || rc === 0)
+		if (drc === undefined || arc === undefined || arc === 0)
 			return "--";
 		else if (drc === 0)
 			return "100%";
 		else
-			return "" + (100 - ((drc / rc) * 100)) + "%";
+			return "" + (100 - ((drc / arc) * 100)) + "%";
 	}
 
 	getHowLongAgoForMostRecentDisputedRequest() {

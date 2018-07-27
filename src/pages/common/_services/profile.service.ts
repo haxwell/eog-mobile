@@ -72,7 +72,7 @@ export class ProfileService {
 			model["keywords"] = obj["keywords"];
 			model["keywords"].sort((a, b) => { let aText = a.text.toLowerCase(); let bText = b.text.toLowerCase(); if (aText > bText) return 1; else if (aText < bText) return -1; else return 0; })
 
-			model["requestCount"] = obj["requestCount"];
+			model["archivedRequestCount"] = obj["archivedRequestCount"];
 			model["disputedRequestCount"] = obj["disputedRequestCount"];
 			model["mostRecentDisputedRequestTimestamp"] = obj["mostRecentDisputedRequestTimestamp"] || undefined;
 		}, (err) => {
