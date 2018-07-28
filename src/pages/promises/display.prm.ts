@@ -162,7 +162,11 @@ export class PrmDisplayPage {
 	}
 
 	hasStatistics() {
-		return this.model["fulfillment_dates"] !== undefined && this.model["fulfillment_dates"].length > 0;
+		let rtn = (this.model["fulfillment_dates"] !== undefined && this.model["fulfillment_dates"].length > 0) ||
+				(this.model["num_of_complaints"] !== undefined && this.model["num_of_complaints"] > 0) ||
+				(this.model["total_points_earned"] != undefined && this.model["total_points_earned"] > 0);
+
+		return rtn;
 	}
 
 	getFirstFulfilledText() {
