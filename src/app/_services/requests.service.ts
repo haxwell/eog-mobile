@@ -82,6 +82,9 @@ export class RequestsService {
 	 *
 	 */
 	initGetModelFunc() {
+
+		// This is the GET of request information.
+
 		let self = this;
 		self._functionPromiseService.initFunc(self._constants.FUNCTION_KEY_REQUESTS_BY_USER_AND_DIRECTION_GET, (data) => {
 			return new Promise((resolve, reject) => {
@@ -149,10 +152,14 @@ export class RequestsService {
 	}
 
 	setRequestStatusByUserIdAndDirection(request, status, direction) {
+
+		// This is the POST of request information.
+
 		return new Promise((resolve, reject) => {
 			let user = this._userService.getCurrentUser();
 			
 			// TODO: How can this operation be made more secure?
+			//  - one suggestion, use HTTPS
 			let url = environment.apiUrl + "/api/user/" + user["id"] + "/requests/" + direction;
 
 			let data =	"requestId=" + request["id"] + "&newStatus=" + status + "&requestAgainDelayCode=" + request["requestAgainDelayCode"] + "&declinedReasonCode=" + request["declinedReasonCode"];
@@ -163,9 +170,11 @@ export class RequestsService {
 				if (obj["_body"] && obj["_body"].length > 0)
 					model = JSON.parse(obj["_body"]);
 
-				this._events.publish('request:statusChanged', {request: this.changePromiseAttributeToPrm(model)});
-				
-				resolve(model);
+				this._prmModelService.setPrmImageOrientation(model.promise).then((prm) => {
+					this._events.publish('request:statusChanged', {request: this.changePromiseAttributeToPrm(model)});
+					resolve(model);
+				})
+
 			}, (err) => {
 				reject(err);
 			});
