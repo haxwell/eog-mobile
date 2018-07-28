@@ -116,7 +116,7 @@ export class RequestsIncomingView {
 						return obj["deliveringStatusId"] === this._constants.REQUEST_STATUS_PENDING && obj["requestingStatusId"] === this._constants.REQUEST_STATUS_CANCELLED;
 					});
 			len -= this.getNumberOfMatchingElements((obj) => { 
-						return obj["deliveringStatusId"] === this._constants.REQUEST_STATUS_CANCELLED && obj["requestingStatusId"] === null;
+						return obj["deliveringStatusId"] === this._constants.REQUEST_STATUS_CANCELLED;
 					});
 			len -= this.getNumberOfMatchingElements((obj) => { 
 						return obj["deliveringStatusId"] === this._constants.REQUEST_STATUS_COMPLETED && obj["requestingStatusId"] === this._constants.REQUEST_STATUS_COMPLETED;

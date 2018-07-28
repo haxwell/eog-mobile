@@ -114,10 +114,16 @@ export class RequestsOutgoingView {
 					return obj["deliveringStatusId"] === this._constants.REQUEST_STATUS_COMPLETED && obj["requestingStatusId"] === this._constants.REQUEST_STATUS_COMPLETED;
 				});
 			len -= this.getNumberOfMatchingElements((obj) => { 
+					return obj["deliveringStatusId"] === this._constants.REQUEST_STATUS_RESOLVED_BUT_DISPUTED && obj["requestingStatusId"] === this._constants.REQUEST_STATUS_NOT_COMPLETED;
+				});
+			len -= this.getNumberOfMatchingElements((obj) => { 
 					return obj["deliveringStatusId"] === this._constants.REQUEST_STATUS_DECLINED && obj["requestingStatusId"] === this._constants.REQUEST_STATUS_REQUESTOR_ACKNOWLEDGED;
 				});
 			len -= this.getNumberOfMatchingElements((obj) => { 
 					return obj["deliveringStatusId"] === this._constants.REQUEST_STATUS_DECLINED_AND_HIDDEN && obj["requestingStatusId"] === this._constants.REQUEST_STATUS_REQUESTOR_ACKNOWLEDGED;
+				});
+			len -= this.getNumberOfMatchingElements((obj) => { 
+					return obj["deliveringStatusId"] === this._constants.REQUEST_STATUS_CANCELLED && obj["requestingStatusId"] === this._constants.REQUEST_STATUS_REQUESTOR_ACKNOWLEDGED;
 				});
 
 			rtn = len <= 0;
@@ -148,7 +154,14 @@ export class RequestsOutgoingView {
 	}
 
 	getCancelledRequests() {
-		return this.filterModelByDeliveringStatus(this._constants.REQUEST_STATUS_CANCELLED);
+		let self = this;
+
+		if (this.model) {
+			let rtn = this.model.filter((obj) => { return obj["deliveringStatusId"] === self._constants.REQUEST_STATUS_CANCELLED && obj["requestingStatusId"] !== self._constants.REQUEST_STATUS_REQUESTOR_ACKNOWLEDGED });
+			return rtn.length > 0 ? rtn : undefined			
+		}
+
+		return undefined;
 	}
 
 	getDeclinedRequests() {
@@ -268,7 +281,7 @@ export class RequestsOutgoingView {
 	onAcknowledgeCancelledRequestBtnTap(request) {
 		let self = this;
 		self._requestsService.acknowledgeCancelledRequest(request).then((data) => {
-			//self.ngOnInit();
+			self.replaceModelElement(data);
 		});
 	}
 

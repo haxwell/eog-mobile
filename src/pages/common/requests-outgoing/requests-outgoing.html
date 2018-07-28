@@ -127,6 +127,31 @@
 			</ion-item-sliding>
 		</ion-item-group >
 	</ion-list>
+	<ion-list *ngIf="getCancelledRequests()">
+		<ion-item-divider sticky>
+			<ion-label>
+				These requests were accepted, but the other side cancelled :(
+			</ion-label>
+		</ion-item-divider>
+		<ion-item-group *ngFor="let request of getCancelledRequests()">
+			<ion-item-sliding #slidingItem [attr.track]="getTrack(request)" (press)="onViewPromise(request)">
+				<button ion-item>
+					<ion-avatar item-start>
+						<img id="prmAvatarImg" [class]="getAvatarCSSClassString(request.prm)" [src]="getThumbnailImage(request.prm)" alt="profile_image">
+					</ion-avatar>
+
+					<span class="prmTitle"><b>{{request.prm.title}}</b></span><br/>
+					<span class="prmQuantity">{{request.prm.quantity}} {{request.prm.quantityDescription}}</span><br/>
+					<span *ngIf="hasRequestMessage(request)" class="douMsg">{{getRequestMessage(request)}}<br/></span>
+					<span *ngIf="!hasRequestMessage(request)" class="douMsg">--<br/></span>
+					<span class="douName">{{request.directionallyOppositeUser.realname}}</span><br/>
+				</button>
+				<ion-item-options side="left">
+					<button ion-button color="secondary" (click)="onAcknowledgeCancelledRequestBtnTap(request)">OK.. Got It.</button>
+				</ion-item-options>
+			</ion-item-sliding>
+		</ion-item-group >
+	</ion-list>
 	<ion-list *ngIf="getNotCompleteAwaitingResolution()">
 		<ion-item-divider sticky>
 			<ion-label>

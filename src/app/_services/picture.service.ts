@@ -58,11 +58,14 @@ export class PictureService {
 
 			let rtn = new Promise((resolve, reject) => {
 
+				if (!photoPath)
+					resolve(undefined);
+
 				if (!objId)
-					reject();
+					resolve(undefined);
 
 				if (photoType != self._constants.PHOTO_TYPE_PROFILE && photoType != self._constants.PHOTO_TYPE_PRM)
-					reject();
+					resolve(undefined);
 
 				let lastSlash = photoPath.lastIndexOf('/');
 				let path = photoPath.substring(0,lastSlash+1);
@@ -85,7 +88,6 @@ export class PictureService {
 								const fileTransfer: FileTransferObject = self.transfer.create();
 
 								fileTransfer.download(url, path + filename).then((entry) => {
-									//console.log("1 successfully downloaded " + (path+filename) + " from " + url)
 									var millis = new Date().getTime();
 									this._localStorageService.set(path+filename, millis);
 
@@ -94,7 +96,7 @@ export class PictureService {
 						    		// handle error
 						    		console.log("Error downloading file, url = " + url + ", path+filename = " + (path+filename))
 						    		console.log(JSON.stringify(err))
-						    		reject();
+						    		resolve(undefined);
 						  		});
 
 							} else {
@@ -108,7 +110,6 @@ export class PictureService {
 							const fileTransfer: FileTransferObject = self.transfer.create();
 
 							fileTransfer.download(url, path + filename).then((entry) => {
-								//console.log("2 successfully downloaded " + (path+filename) + " from " + url)
 								var millis = new Date().getTime();
 								this._localStorageService.set(path+filename, millis);
 
@@ -117,7 +118,7 @@ export class PictureService {
 					    		// handle error
 					    		console.log("Error downloading file, url = " + url + ", path+filename = " + (path+filename))
 					    		console.log(JSON.stringify(err))
-					    		reject();
+					    		resolve(undefined);
 					  		});
 						})
 
@@ -147,7 +148,8 @@ export class PictureService {
 
 				}, (err) => 	{ 
 					console.log("ERROR #photo-rxp9r");
-					reject(err);
+					console.log(err);
+					resolve(undefined);
 				})
 			});
 
@@ -266,7 +268,13 @@ export class PictureService {
 
 	getMostProbablePhotoPath(photoType, objId) {
         if (this.mostProbablePhotoPath[photoType+objId] === undefined) {
-            this.mostProbablePhotoPath[photoType+objId] = this.file.cacheDirectory + (photoType+objId);
+            let cacheDirectory = undefined;
+
+            if (this._platform.is('android') || this._platform.is('ios')) {
+            	this.mostProbablePhotoPath[photoType+objId] = this.file.cacheDirectory + (photoType+objId);
+            } else {
+            	this.mostProbablePhotoPath[photoType+objId] = undefined;
+            }
         }
 
 		return this.mostProbablePhotoPath[photoType+objId];

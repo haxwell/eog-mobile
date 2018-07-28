@@ -39,7 +39,9 @@ export class CancelOutgoingRequestPage {
 			// in the case of an outgoing request being cancelled, if it is not accepted by the delivering side, 
 			//  then no object is returned from the server, so data == undefined
 
-			self._events.publish("request:outgoing:cancelled", {request: data});
+			let rtnObj = self.isRequestAccepted() ? data : self.request;
+
+			self._events.publish("request:outgoing:cancelled", {request: rtnObj});
 			self.viewCtrl.dismiss(true);
 		})
 	}

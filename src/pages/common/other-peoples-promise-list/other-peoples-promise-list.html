@@ -6,12 +6,14 @@
 				<img id="prmAvatarImg" [class]="getAvatarCSSClassString(prm)" [src]="getThumbnailImage(prm)" alt="profile_image">
 			</ion-avatar>
 
+			<span class="prmTitle">{{prm.title}}</span><br/>
+			
 			<ion-icon [ngStyle]="{'color':getAlreadyRequestedIconColor(prm)}" name="megaphone"> </ion-icon>
 			<ion-icon [ngStyle]="{'color':getSufficientPointsIconColor(prm)}" name="pricetag"></ion-icon>
 			<ion-icon *ngIf="hasPrmBeenPreviouslyRequested(prm)" [ngStyle]="{'color':getSufficientTimeIconColor(prm)}" name="clock"></ion-icon>
 			<ion-icon *ngIf="areRecommendationsRequired(prm)" [ngStyle]="{'color':getNecessaryRecommendationsIconColor(prm)}" name="people"></ion-icon>
 
-			<span class="prmTitle">{{prm.title}}</span> - <span class="prmQuantity">{{prm.quantity}} {{prm.quantityDescription}}</span><br/>
+			- <span class="prmQuantity">{{prm.quantity}} {{prm.quantityDescription}}</span><br/>
 			<span class="prmDesc">{{prm.description}}</span>
 		</button>
 

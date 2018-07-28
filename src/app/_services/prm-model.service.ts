@@ -119,6 +119,8 @@ export class PrmModelService {
 				} else {
 					resolve(prm);
 				}
+			}, (err) => {
+				resolve(undefined);
 			});
 
 		})
