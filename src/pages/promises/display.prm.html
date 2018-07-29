@@ -72,19 +72,19 @@
 			<ion-item>
 				<span class="displayPrmSectionHeader">Messages</span>
 				<span *ngFor="let item of getStillMoreTimeLeftMessages()" [ngStyle]="{'color':'red'}">
-					{{item.msg}}
+					{{item.msg}}<br/>
 				</span>
 				<span *ngFor="let item of getAlreadyRequestedRequestMessages()" [ngStyle]="{'color':'red'}">
-					{{item.msg}}
+					{{item.msg}}<br/>
 				</span>
 				<span *ngFor="let item of getPointsRequestMessages()" [ngStyle]="{'color':'red'}">
-					You need {{item.msg}}.
+					You need {{item.msg}}.<br/>
 				</span>
 				<span *ngIf="isRecommendationsRequestMessageAvailable()">
 					You need recommendations from:
 						<ul>
 							<li *ngFor="let item of getRecommendationsRequestMessages()" [ngStyle]="{'color':'red'}">
-								{{item.msg}}
+								{{item.msg}}<br/>
 							</li>
 						</ul>
 				</span>

@@ -39,7 +39,11 @@ export class PrmDetailService {
 			this._prmMetadataService.getMetadataValue(_prm, this._constants.FUNCTION_KEY_USER_HAS_SUFFICIENT_POINTS).then((bool) => {
 				if (bool === false) {
 					this._pointsService.getCurrentAvailableUserPoints().then((data) => {
-						_msgs.push({type: 'points', msg: (_prm["requiredPointsQuantity"] - data) + ' more points'});
+						let _msg = (_prm["requiredPointsQuantity"] - data) + ' more point'; 
+						if (_prm["requiredPointsQuantity"] - data > 1)
+							_msg += 's';
+
+						_msgs.push({type: 'points', msg: _msg});
 					});
 				}
 			})
