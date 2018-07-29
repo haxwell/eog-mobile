@@ -38,3 +38,39 @@ change config.xml and package.json to have the next version number. So when this
 git tag -a vZ.Y.X -m "vZ.Y.X .... ..... "
 git push --tags
 
+--
+Building and releasing an IOS version
+---
+
+If you're reading this, we'll assume you just pulled a clean clone.
+
+Create the environment.ts file: cp src/_environments/environment.staging.ts src/_environments/environment.ts
+
+Run 'ionic cordova build ios --release'
+
+cp ./resources/ios/icon/AppIcon* ./platforms/ios/Easyah/Images.xcassets/AppIcon.appiconset/
+cp ./resources/ios/icon/icon-20.png ./platforms/ios/Easyah/Images.xcassets/AppIcon.appiconset/
+
+Open the project in XCode: open ./platforms/ios/Easyah.xcworkspace/
+
+In the Project Navigator, click on the Easyah entry.
+
+The setting for General > Signing, select the Team (TODO: add clarifying detail about how certificates, and Apple IDs, etc relate to the value you choose here.) For me, the value is only one, Johnathan James.
+
+Set the Build number appropriately. If in doubt, choose 1.
+
+Set the Deployment Target to 11.0.
+
+Set the Active Scheme appropriately. If in doubt, choose Iphone 8.
+
+Command-B, to build the project.
+
+Look at the list of warnings etc that are generated. If there are any saying Update To Recommended Settings, go ahead and update.
+
+Set your scheme to Generic IOS Device
+
+In Project Settings, set Signing (Debug) and Signing (Release) to your provisioning profile. I believe its correct when the line 'Signing Certificate' reads 'iPhone Developer: ....'
+
+Go to Product > Archive
+
+The archive should build and you should see it in the Organizer window.
