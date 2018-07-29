@@ -23,25 +23,20 @@ export class ProfilePoints {
 				,private _profileService : ProfileService
 				,private _userService : UserService ) {
 
-//		let func = (data) => {
-//			this.ngOnInit();
-//		};
-
-		this._events.subscribe('app:login', () => { console.log("*=*= ProfilePoints dialog: app:login"); this.ngOnInit(); });
-		this._events.subscribe('points:received', () => { console.log("*=*= ProfilePoints dialog: points:received"); this.ngOnInit(); });
-		this._events.subscribe('request:saved', () => { console.log("*=*= ProfilePoints dialog: request:saved"); this.ngOnInit(); });
-		this._events.subscribe('request:declined', () => { console.log("*=*= ProfilePoints dialog: request:declined"); this.ngOnInit(); });
-		this._events.subscribe('request:outgoing:cancelled', () => { console.log("*=*= ProfilePoints dialog: request:outgoing:cancelled"); this.ngOnInit(); });
-		this._events.subscribe('request:completedAndApproved', () => { console.log("*=*= ProfilePoints dialog: request:completedAndApproved"); this.ngOnInit(); });
-		this._events.subscribe('request:inamicablyResolved', () => { console.log("*=*= ProfilePoints dialog: request:inamicablyResolved"); this.ngOnInit(); });
-		this._events.subscribe('request:markedApprovedAfterCompletion', () => { console.log("*=*= ProfilePoints dialog: request:markedApprovedAfterCompletion"); this.ngOnInit(); });
+		this._events.subscribe('app:login', () => { this.ngOnInit(); });
+		this._events.subscribe('points:received', () => { this.ngOnInit(); });
+		this._events.subscribe('request:saved', () => { this.ngOnInit(); });
+		this._events.subscribe('request:declined', () => { this.ngOnInit(); });
+		this._events.subscribe('request:outgoing:cancelled', () => { this.ngOnInit(); });
+		this._events.subscribe('request:accepted:cancelledByRequestor', () => { this.ngOnInit(); });
+		this._events.subscribe('request:completedAndApproved', () => { this.ngOnInit(); });
+		this._events.subscribe('request:inamicablyResolved', () => { this.ngOnInit(); });
+		this._events.subscribe('request:markedApprovedAfterCompletion', () => { this.ngOnInit(); });
 	}
 
 	ngOnInit() {
 		this.totalPoints = '-';
 		this.availablePoints = '-';
-
-		console.log("ProfilePoints::ngOnInit() --- just entered");
 
 		this._pointsService.init();
 
