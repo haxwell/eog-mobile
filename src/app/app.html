@@ -1,4 +1,4 @@
-<ion-menu [content]="mycontent">
+<ion-menu *ngIf="isLoggedIn()" [content]="mycontent">
 	<ion-content>
 		<profile-header id="profile-header" (click)="onShowProfile()"></profile-header>
 		<ion-list>
