@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="io.easyah.mobileapp" version="0.0.17" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="io.easyah.mobileapp" version="0.0.18" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Easyah</name>
     <description>Easyah makes it easier for people to collaborate on big ideas.</description>
     <author email="johnathan@jj-ccs.com" href="">Johnathan E. James</author>
