@@ -10,7 +10,7 @@ fi
 GIT_STATUS_LINE_COUNT=$(git status | wc -l)
 GIT_IS_ON_DEVELOP_BRANCH=$(git status)
 
-if [[ $GIT_IS_ON_DEVELOP_BRANCH = *"On branch develop" ]] && [ $GIT_STATUS_LINE_COUNT -eq "3" ]; then
+if [[ $GIT_IS_ON_DEVELOP_BRANCH = "On branch develop"* ]] && [[ $GIT_IS_ON_DEVELOP_BRANCH = *"working tree clean" ]]; then
 
 ENV_STAGING="staging"
 ENV_PROD="prod"
