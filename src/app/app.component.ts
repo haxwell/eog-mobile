@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 
-import { Platform, Nav, MenuController, AlertController } from 'ionic-angular';
+import { Platform, Nav, MenuController, AlertController, Events } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 
 import { UserService } from './_services/user.service';
@@ -26,6 +26,7 @@ export class EasyahApp {
   rootPage:any = LoginPage;
   exitFunction = undefined;  
   isAndroidFunction = undefined;
+  _isLoggedIn = false;
 
   @ViewChild(Nav) navCtrl: Nav;
 
@@ -36,8 +37,11 @@ export class EasyahApp {
               private _userService : UserService,
               private _menuCtrl : MenuController,
               private _alertCtrl: AlertController,
-              private _uciService: UnseenChangesIndicatorService
+              private _uciService: UnseenChangesIndicatorService, 
+              private _events: Events
   ) {
+
+    this._events.subscribe('app:login', (currentUser) => { this._isLoggedIn = true; })
 
     this.exitFunction = () => {
       platform.exitApp();
@@ -53,6 +57,10 @@ export class EasyahApp {
       statusBar.styleDefault();
     });
   
+  }
+
+  isLoggedIn() {
+    return this._isLoggedIn;
   }
 
   getUser() {
