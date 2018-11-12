@@ -7,34 +7,34 @@ if [[ $PWD != *"$BIN" ]]; then
     exit 1
 fi
 
-GIT_STATUS_LINE_COUNT=$(git status | wc -l)
-GIT_IS_ON_DEVELOP_BRANCH=$(git status)
+GIT_STATUS=$(git status)
+if [[ $GIT_STATUS = "On branch develop"* ]] && [[ $GIT_STATUS = *"working tree clean" ]]; then
 
-if [[ $GIT_IS_ON_DEVELOP_BRANCH = "On branch develop"* ]] && [[ $GIT_IS_ON_DEVELOP_BRANCH = *"working tree clean" ]]; then
+    ENV_STAGING="staging"
+    ENV_PROD="prod"
 
-ENV_STAGING="staging"
-ENV_PROD="prod"
+    while getopts e:t: option
+    do
+        case "${option}"
+            in
+            e) ENV=${OPTARG};;
+            t) TAG_THIS_VERSION=${OPTARG};;
+        esac
+    done
 
-while getopts e:t: option
-do
-    case "${option}"
-        in
-        e) ENV=${OPTARG};;
-        t) TAG_THIS_VERSION=${OPTARG};;
-    esac
-done
+    if [ -z $ENV ]; then
+        echo "(1) Usage: automated-build -e [staging|prod]"
+        echo "  if you are deployig to prod, you can add '-t true' to merge to master and up the version."
+        exit 1
+    fi
 
-if [ -z $ENV ]; then
-    echo "(1) Usage: automated-build -e [staging|prod]"
-    exit 1
-fi
+    if [ $ENV != $ENV_STAGING ] && [ $ENV != $ENV_PROD ]; then
+        echo "(2) Usage: automated-build -e [staging|prod]"
+        echo "  if you are deployig to prod, you can add '-t true' to merge to master and up the version."
+        exit 1
+    fi
 
-if [ $ENV != $ENV_STAGING ] && [ $ENV != $ENV_PROD ]; then
-    echo "(2) Usage: automated-build -e [staging|prod]"
-    exit 1
-fi
-
-cd ..
+    cd ..
 
     rm --force platforms/android/app/build/outputs/apk/release/app-release-unsigned.apk
 
@@ -82,9 +82,11 @@ cd ..
 
         fi
     fi
+
+    cd -
+
 else
     echo "Error: The repository is not on the 'develop' branch, or the branch is not clean."
 fi
 
-cd -
 
