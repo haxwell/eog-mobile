@@ -7,6 +7,11 @@ if [[ $PWD != *"$BIN" ]]; then
     exit 1
 fi
 
+GIT_STATUS_LINE_COUNT=$(git status | wc -l)
+GIT_IS_ON_DEVELOP_BRANCH=$(git status)
+
+if [[ $GIT_IS_ON_DEVELOP_BRANCH = *"On branch develop" ]] && [ $GIT_STATUS_LINE_COUNT -eq "3" ]; then
+
 ENV_STAGING="staging"
 ENV_PROD="prod"
 
@@ -31,7 +36,7 @@ fi
 
 cd ..
 
-    rm platforms/android/app/build/outputs/apk/release/app-release-unsigned.apk
+    rm --force platforms/android/app/build/outputs/apk/release/app-release-unsigned.apk
 
     echo "Environment is set to [ "$ENV" ]"
     echo "Building the release APK...."
@@ -56,12 +61,18 @@ cd ..
 
         if [ $ENV = $ENV_PROD ] && [ $TAG_THIS_VERSION = "true" ]; then
             VERSION=$(sed -nE 's/^\s*"version": "(.*?)",$/\1/p' package.json)
-            NEXT_VERSION=$(./bin/increment_version.awk $VERSION)
-            echo "Tagging this version as [ "$VERSION" ]..."
+            echo "Merging the develop branch into master... Tagging this version as [ "$VERSION" ]..."
 
+            git checkout master
+            git merge develop
+            /usr/bin/git push
+            
             git tag -a v$VERSION -m "v$VERSION, tagged automatically by the wonderful automated-build script."
             git push --tags
 
+            git checkout develop
+
+            NEXT_VERSION=$(./bin/increment_version.awk $VERSION)
             sed -i 's/version":"'$VERSION'/version":"'$NEXT_VERSION'/' package.json
             sed -i 's/version": "'$VERSION'/version": "'$NEXT_VERSION'/' package.json
             sed -i 's/version="'$VERSION'/version="'$NEXT_VERSION'/' config.xml
@@ -71,6 +82,9 @@ cd ..
 
         fi
     fi
+else
+    echo "Error: The repository is not on the 'develop' branch, or the branch is not clean."
+fi
 
 cd -
 
