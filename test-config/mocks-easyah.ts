@@ -23,3 +23,9 @@ export class OfferCollectionServiceMock {
 		return {};
 	}
 }
+
+export class OfferModelServiceMock {
+	public setOfferImageOrientation(offer) : any {
+
+	}
+}

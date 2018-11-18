@@ -11,6 +11,8 @@ import { ProfilePoints } from '../pages/common/profile-points/profile-points';
 import { ApiService } from './_services/api.service';
 import { Constants } from '../_constants/constants';
 import { DeclineReasonCodeService } from './_services/declined-reason-codes.service';
+import { FunctionPromiseService } from './_services/function-promise.service';
+import { OfferModelService } from './_services/offer-model.service';
 import { PointsService } from './_services/points.service';
 import { ProfileService } from '../pages/common/_services/profile.service';
 import { PictureService } from './_services/picture.service';
@@ -31,6 +33,7 @@ import {
 import {
   ApiServiceMock,
   UserServiceMock,
+  OfferModelServiceMock,
   PictureServiceMock
 } from '../../test-config/mocks-easyah';
 
@@ -48,6 +51,8 @@ describe('EasyahApp Component', () => {
         { provide: ApiService, useClass: ApiServiceMock },
         Constants,
         DeclineReasonCodeService,
+        FunctionPromiseService,
+        { provide: OfferModelService, useClass: OfferModelServiceMock },
         PointsService,
         ProfileService,
         { provide: PictureService, useClass: PictureServiceMock },
