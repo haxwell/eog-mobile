@@ -4,7 +4,7 @@ import { NavController, NavParams, ViewController } from 'ionic-angular';
 import { SearchService } from '../../../app/_services/search.service';
 
 @Component({
-  selector: 'page-prm-detail-rule',
+  selector: 'page-offer-detail-rule',
   templateUrl: 'rule.html'
 })
 export class RulePage {

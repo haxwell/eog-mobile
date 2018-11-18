@@ -16,15 +16,15 @@
 		</ion-row>
 	</ion-grid>
 
-	<ion-list #recentPrmList>
+	<ion-list #recentOfferList>
 		<ion-item-divider sticky>
 			<ion-label>
-				Promises Recently Created By Others
+				Offers Recently Created By Others
 			</ion-label>
 		</ion-item-divider>
 
-		<other-peoples-promise-list [prms]="getMostRecentlyCreatedPromises()">
-		</other-peoples-promise-list>
+		<other-peoples-offer-list [offers]="getMostRecentlyCreatedOffers()">
+		</other-peoples-offer-list>
 	</ion-list>
 
 </ion-content>

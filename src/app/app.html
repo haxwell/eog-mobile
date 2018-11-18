@@ -9,7 +9,7 @@
       		<profile-points></profile-points>
 
           <ion-item [ngStyle]="{'background-color':getSelectedColor('ProfilePage')}" (click)="onShowProfile()">About You</ion-item>
-          <ion-item [ngStyle]="{'background-color':getSelectedColor('PromiseListPage')}" (click)="onYourPromisesClicked()">Your Promises</ion-item>
+          <ion-item [ngStyle]="{'background-color':getSelectedColor('OfferListPage')}" (click)="onYourOffersClicked()">Your Offers</ion-item>
           <ion-item [ngStyle]="{'background-color':getSelectedColor('RecommendationListPage')}" (click)="onYourRecommendationsClicked()">Your Recommendations</ion-item>
           <ion-item [ngStyle]="{'background-color':getSelectedColor('KeywordListPage')}" (click)="onYourKeywordsClicked()">Your Keywords</ion-item>
           <ion-item [ngStyle]="{'background-color':getSelectedColor('NotificationListPage')}" (click)="onYourNotificationsClicked()">Notifications <ion-icon [hidden]="!areNotificationUnseenChanges()" name="bulb"></ion-icon></ion-item>

@@ -4,7 +4,7 @@ import { Events } from 'ionic-angular';
 import { UserService } from './user.service';
 import { ApiService } from './api.service';
 import { DeclineReasonCodeService } from './declined-reason-codes.service';
-import { PrmModelService } from './prm-model.service';
+import { OfferModelService } from './offer-model.service';
 import { FunctionPromiseService } from './function-promise.service';
 
 import { environment } from '../../_environments/environment';
@@ -14,14 +14,14 @@ import { Constants } from '../../_constants/constants'
 @Injectable()
 export class RequestsService {
 	
-	archivedUserRequestsForPrmPromiseCache = {};
+	archivedUserRequestsForOfferPromiseCache = {};
 
 	isGetModelFuncInitialized = false;
 
 	constructor(private _apiService: ApiService, 
 				private _userService: UserService, 
 				private _declineReasonCodeService: DeclineReasonCodeService,
-				private _prmModelService: PrmModelService,
+				private _offerModelService: OfferModelService,
 				private _functionPromiseService: FunctionPromiseService,
 				private _constants: Constants,
 				private _events: Events) {
@@ -29,7 +29,7 @@ export class RequestsService {
 
 	}
 
-	saveNew(prm, requestingMessage) {
+	saveNew(offer, requestingMessage) {
 		return new Promise((resolve, reject) => {
 			let user = this._userService.getCurrentUser();
 			let url = environment.apiUrl + "/api/requests";
@@ -37,11 +37,11 @@ export class RequestsService {
 			if (requestingMessage === undefined)
 				requestingMessage = '';
 
-			let data =	"requestingUserId=" + user["id"] + "&requestedPromiseId=" + prm["id"] + "&requestingMessage=" + requestingMessage;
+			let data =	"requestingUserId=" + user["id"] + "&requestedOfferId=" + offer["id"] + "&requestingMessage=" + requestingMessage;
 			
 			let self = this;
 			self._apiService.post(url, data).subscribe((obj) => {
-				let model = self.changePromiseAttributeToPrm( JSON.parse(obj["_body"]) );
+				let model = self.changePromiseAttributeToOffer( JSON.parse(obj["_body"]) );
 				self._events.publish('request:saved', {request: model});
 				resolve(model);
 			}, (err) => {
@@ -50,21 +50,21 @@ export class RequestsService {
 		});
 	}
 
-	getArchivedUserRequestsForPrm(prm) {
+	getArchivedUserRequestsForOffer(offer) {
 
-		if (this.archivedUserRequestsForPrmPromiseCache[prm["id"]] === undefined) {
-			this.archivedUserRequestsForPrmPromiseCache[prm["id"]] = null;
-			this.initArchivedUserRequestsForPrmPromiseCache(prm); 
+		if (this.archivedUserRequestsForOfferPromiseCache[offer["id"]] === undefined) {
+			this.archivedUserRequestsForOfferPromiseCache[offer["id"]] = null;
+			this.initArchivedUserRequestsForOfferPromiseCache(offer); 
 		}
 
-		return this.archivedUserRequestsForPrmPromiseCache[prm["id"]];
+		return this.archivedUserRequestsForOfferPromiseCache[offer["id"]];
 	}
 
-	initArchivedUserRequestsForPrmPromiseCache(prm) {
+	initArchivedUserRequestsForOfferPromiseCache(offer) {
 		let self = this;
-		self.archivedUserRequestsForPrmPromiseCache[prm["id"]] = new Promise((resolve, reject) => {
+		self.archivedUserRequestsForOfferPromiseCache[offer["id"]] = new Promise((resolve, reject) => {
 			let user = this._userService.getCurrentUser();
-			let url = environment.apiUrl + "/api/user/" + user["id"] + "/requests/promises/" + prm["id"] + "/archived";
+			let url = environment.apiUrl + "/api/user/" + user["id"] + "/requests/promises/" + offer["id"] + "/archived";
 
 			this._apiService.get(url).subscribe((obj) => {
 				let model = JSON.parse(obj["_body"]);
@@ -97,9 +97,9 @@ export class RequestsService {
 					let arr = JSON.parse(obj["_body"]);
 
 					arr.forEach((request) => { 
-						self.changePromiseAttributeToPrm(request); 
+						self.changePromiseAttributeToOffer(request); 
 
-						this._prmModelService.setPrmImageOrientation(request.prm);
+						this._offerModelService.setOfferImageOrientation(request.offer);
 					});
 
 					self._declineReasonCodeService.getDeclineReasonCodes().then((drcs: Array<Object>) => {
@@ -134,11 +134,15 @@ export class RequestsService {
 	}
 
 	// hack
-	changePromiseAttributeToPrm(request) {
-		if (request !== undefined) {
-			request["prm"] = Object.assign({}, request["promise"]);
-			delete request["promise"];					
-		}
+	changePromiseAttributeToOffer(request) {
+		
+		// Commented out v0.0.20 - with the change of terminology, promise to offer, I don't think this is necessary.
+		//  if things still work, well then.. delete it.
+
+		// if (request !== undefined) {
+		//	request["offer"] = Object.assign({}, request["promise"]);
+		//	delete request["promise"];					
+		//}
 
 		return request;
 	}
@@ -171,8 +175,8 @@ export class RequestsService {
 					model = JSON.parse(obj["_body"]);
 
 				if (model)
-					this._prmModelService.setPrmImageOrientation(model.promise).then((prm) => {
-						resolve(this.changePromiseAttributeToPrm(model));
+					this._offerModelService.setOfferImageOrientation(model.promise).then((offer) => {
+						resolve(this.changePromiseAttributeToOffer(model));
 					})
 				else {
 					resolve(undefined);

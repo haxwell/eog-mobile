@@ -7,9 +7,9 @@
 </ion-header>
 
 <ion-content padding>
-	<ion-label>You are about to DECLINE a request to fulfill a Promise.</ion-label>
+	<ion-label>You are about to DECLINE a request to fulfill an offer.</ion-label>
 	<br/>
-	<ion-label><b>{{request.prm.title}}</b></ion-label>
+	<ion-label><b>{{request.offer.title}}</b></ion-label>
 
 	<ion-row>
 		<ion-label>Please select a reason why you are declining...</ion-label>
@@ -22,7 +22,7 @@
 	</ion-row>		
 
 	<ion-row>
-		<ion-label>How much time should pass before this user can request this promise again?</ion-label>
+		<ion-label>How much time should pass before this user can request this offer again?</ion-label>
 		<ion-item>
 			<ion-select [(ngModel)]="selectedRequestAgainDelayId" >
 				<ion-option *ngFor="let delay of requestAgainDelayCodes" [value]="delay.id">{{delay.text}}</ion-option>

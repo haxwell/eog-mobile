@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { PrmMetadataService } from './prm-metadata.service';
+import { OfferMetadataService } from './offer-metadata.service';
 import { PointsService } from './points.service';
 import { RecommendationService } from './recommendation.service';
 import { UserService } from './user.service';
@@ -8,9 +8,9 @@ import { UserService } from './user.service';
 import { Constants } from '../../_constants/constants';
 
 @Injectable()
-export class PrmDetailService {
+export class OfferDetailService {
 	
-	constructor(private _prmMetadataService: PrmMetadataService,
+	constructor(private _offerMetadataService: OfferMetadataService,
 				private _pointsService: PointsService,
 				private _recommendationService: RecommendationService,
 				private _userService: UserService,
@@ -18,29 +18,29 @@ export class PrmDetailService {
 
 	}
 
-	getPrmDetailMessages(_prm) {
+	getOfferDetailMessages(_offer) {
 		let _msgs = [];
 
-		// Only return detail messages if the promise exists, and belongs to another user.
+		// Only return detail messages if the offer exists, and belongs to another user.
 		
-		if (_prm !== undefined && _prm["userId"] !== this._userService.getCurrentUser()["id"]) {
+		if (_offer !== undefined && _offer["userId"] !== this._userService.getCurrentUser()["id"]) {
 			let self = this;
 
-			this._prmMetadataService.getMetadataValue(_prm, this._constants.FUNCTION_KEY_USER_HAS_CURRENTLY_REQUESTED_PRM).then((bool) => {
+			this._offerMetadataService.getMetadataValue(_offer, this._constants.FUNCTION_KEY_USER_HAS_CURRENTLY_REQUESTED_OFFER).then((bool) => {
 				if (bool === true)
-					_msgs.push({type: 'alreadyRequested', msg: 'You have already requested this Promise.'});			
+					_msgs.push({type: 'alreadyRequested', msg: 'You have already requested this Offer.'});			
 			})
 
-			this._prmMetadataService.getMetadataValue(_prm, this._constants.FUNCTION_KEY_USER_IS_PAST_REQUEST_AGAIN_DATE).then((bool) => {
+			this._offerMetadataService.getMetadataValue(_offer, this._constants.FUNCTION_KEY_USER_IS_PAST_REQUEST_AGAIN_DATE).then((bool) => {
 				if (bool === false)
-					_msgs.push({type: 'timeRemaining', msg: 'The author set a time limit before you can request this Promise again. You still have time remaining.'});
+					_msgs.push({type: 'timeRemaining', msg: 'The author set a time limit before you can request this Offer again. You still have time remaining.'});
 			}) 
 				
-			this._prmMetadataService.getMetadataValue(_prm, this._constants.FUNCTION_KEY_USER_HAS_SUFFICIENT_POINTS).then((bool) => {
+			this._offerMetadataService.getMetadataValue(_offer, this._constants.FUNCTION_KEY_USER_HAS_SUFFICIENT_POINTS).then((bool) => {
 				if (bool === false) {
 					this._pointsService.getCurrentAvailableUserPoints().then((data) => {
-						let _msg = (_prm["requiredPointsQuantity"] - data) + ' more point'; 
-						if (_prm["requiredPointsQuantity"] - data > 1)
+						let _msg = (_offer["requiredPointsQuantity"] - data) + ' more point'; 
+						if (_offer["requiredPointsQuantity"] - data > 1)
 							_msg += 's';
 
 						_msgs.push({type: 'points', msg: _msg});
@@ -48,11 +48,11 @@ export class PrmDetailService {
 				}
 			})
 
-			this._prmMetadataService.getMetadataValue(_prm, this._constants.FUNCTION_KEY_PRM_REQUIRES_RECOMMENDATIONS).then((bool) => {
+			this._offerMetadataService.getMetadataValue(_offer, this._constants.FUNCTION_KEY_OFFER_REQUIRES_RECOMMENDATIONS).then((bool) => {
 				if (bool === true) {
-					this._prmMetadataService.getMetadataValue(_prm, this._constants.FUNCTION_KEY_USER_HAS_NECESSARY_RECOMMENDATIONS).then((bool2) => {
+					this._offerMetadataService.getMetadataValue(_offer, this._constants.FUNCTION_KEY_USER_HAS_NECESSARY_RECOMMENDATIONS).then((bool2) => {
 						if (bool2 === false) {
-							let tmpReqdRecs = _prm["requiredUserRecommendations"].slice();
+							let tmpReqdRecs = _offer["requiredUserRecommendations"].slice();
 							self._recommendationService.getIncomingRecommendations().then((list: Array<Object>) => {
 
 								// inefficient O(n2) algorithm.. but the lists should 

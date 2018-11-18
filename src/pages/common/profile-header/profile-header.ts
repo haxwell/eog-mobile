@@ -3,6 +3,7 @@ import { Events } from 'ionic-angular';
 
 import { ProfileService } from '../_services/profile.service'
 import { PictureService } from '../../../app/_services/picture.service'
+import { UserService } from '../../../app/_services/user.service'
 
 import EXIF from 'exif-js'
 
@@ -18,14 +19,12 @@ export class ProfileHeader {
 
 	constructor(private _profileService: ProfileService, 
 				private _pictureService: PictureService,
-				private _events: Events) {
+				private _userService: UserService) {
 
-		let self = this;
-		self._events.subscribe('app:login', (currentUser) => { this.userId = currentUser["id"]; });
 	}
 
 	ngOnInit() {
-
+		this.userId = this._userService.getCurrentUser()["id"];
 	}
 
 	isThumbnailImageAvailable() {

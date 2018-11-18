@@ -11,7 +11,7 @@ import { UserService } 		from '../../../app/_services/user.service'
 })
 export class RequestPage {
 
-	prm = undefined;
+	offer = undefined;
 	message = undefined;
 	callback = undefined;
 	
@@ -20,7 +20,7 @@ export class RequestPage {
 				private viewCtrl: ViewController, 
 				private _requestsService: RequestsService,
 				private _userService: UserService) {
-		this.prm = params.get('prm');
+		this.offer = params.get('offer');
 		this.callback = params.get('callback') || undefined;
 	}
 
@@ -40,7 +40,7 @@ export class RequestPage {
 
 	initRequiredUserRecommendationsAsUserObjects() {
 		let self = this;
-		self.prm["requiredUserRecommendations"].map((obj) => {
+		self.offer["requiredUserRecommendations"].map((obj) => {
 			self._userService.getUser(obj["requiredRecommendUserId"]).then((user) => {
 				if (self.requiredUserRecommendationsAsUserObjects === null) 
 					self.requiredUserRecommendationsAsUserObjects = [];
@@ -55,7 +55,7 @@ export class RequestPage {
 	}
 
 	onSaveBtnTap(evt) {
-		this._requestsService.saveNew(this.prm, this.message).then((data) => {
+		this._requestsService.saveNew(this.offer, this.message).then((data) => {
 			if (this.callback)
 				this.callback(true).then(() => {
 					this.viewCtrl.dismiss({ });

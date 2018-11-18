@@ -17,28 +17,28 @@ export class SearchService {
 
 	}
 
-	searchPrms(qStr) {
+	searchOffers(qStr) {
 		let self = this;
 		return new Promise((resolve, reject) => {
 			let user = self._userService.getCurrentUser();
-			let url = environment.apiUrl + "/api/promises?q=" + qStr;
+			let url = environment.apiUrl + "/api/offers?q=" + qStr;
 			self._apiService.get(url)
 			.subscribe((searchObj) => {
 				let rtn = JSON.parse(searchObj["_body"]);
 
 				rtn = rtn.filter((obj) => { return obj["userId"] !== user["id"]; });
 
-				// TODO: This is duplicated in prm-collection-service.ts
-				rtn.forEach((prm) => {
-					self._pictureService.get(self._constants.PHOTO_TYPE_PRM, prm["id"]).then((filename) => {
-						console.log("in search.ts, called to get the filename for prm " + prm["id"] + ", and got " + filename)
-						prm["imageFileSource"] = 'eog';
-						prm["imageFileURI"] = filename;
-						prm["imageFileURI_OriginalValue"] = filename;
+				// TODO: This is duplicated in offer-collection-service.ts
+				rtn.forEach((offer) => {
+					self._pictureService.get(self._constants.PHOTO_TYPE_OFFER, offer["id"]).then((filename) => {
+						console.log("in search.ts, called to get the filename for offer " + offer["id"] + ", and got " + filename)
+						offer["imageFileSource"] = 'eog';
+						offer["imageFileURI"] = filename;
+						offer["imageFileURI_OriginalValue"] = filename;
 
 						if (filename) {
 							self._pictureEXIFService.getEXIFMetadata(filename).then((exifMetadata) => {
-								prm["imageOrientation"] = exifMetadata["Orientation"];
+								offer["imageOrientation"] = exifMetadata["Orientation"];
 							})
 						}
 

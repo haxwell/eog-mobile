@@ -12,7 +12,7 @@ import { RulePage } from './_pages/rule'
 import { KeywordEntryPage } from '../keyword.entry/keyword.entry'
 import { ChoosePhotoSourcePage } from '../common/choose-photo-source/choose-photo-source'
 
-import { PrmModelService } from '../../app/_services/prm-model.service'
+import { OfferModelService } from '../../app/_services/offer-model.service'
 import { UserService } from '../../app/_services/user.service';
 import { PictureService } from '../../app/_services/picture.service';
 import { EventSubscriberService } from '../../app/_services/event-subscriber.service';
@@ -20,11 +20,11 @@ import { EventSubscriberService } from '../../app/_services/event-subscriber.ser
 import { Constants } from '../../_constants/constants';
 
 @Component({
-  selector: 'page-prm-edit',
-  templateUrl: 'edit.prm.html'
+  selector: 'page-offer-edit',
+  templateUrl: 'edit.offer.html'
 })
 
-export class PrmEditPage {
+export class OfferEditPage {
 
 	model = {};
 	callback = undefined;
@@ -40,7 +40,7 @@ export class PrmEditPage {
 				private _navParams: NavParams, 
 				private modalCtrl: ModalController,
 				private _alertCtrl: AlertController,
-				private _prmModelService: PrmModelService,
+				private _offerModelService: OfferModelService,
 				private _userService: UserService,
 				private _pictureService: PictureService,
 				private _eventSubscriberService: EventSubscriberService,
@@ -52,15 +52,15 @@ export class PrmEditPage {
 	}
 
 	ngOnInit() {
-		let tmp = this._navParams.get('prm');
+		let tmp = this._navParams.get('offer');
 
-		this.model = tmp || this._prmModelService.getDefaultModel();
+		this.model = tmp || this._offerModelService.getDefaultModel();
 
 		if (tmp === undefined) {
 			this.new = true;
 		} else {
-			this._prmModelService.setPrmMetadata(tmp).then((prm) => {
-				this.setModel(Object.assign({}, prm));
+			this._offerModelService.setOfferMetadata(tmp).then((offer) => {
+				this.setModel(Object.assign({}, offer));
 			});
 		}
 
@@ -76,7 +76,7 @@ export class PrmEditPage {
 
 		this.callback = this._navParams.get('callback') || function() { return new Promise((resolve, reject) => { resolve(); }) };
 
-		this.permitOnlyEditsToPoints = this._navParams.get('prmHasIncomingReqs') || false;
+		this.permitOnlyEditsToPoints = this._navParams.get('offerHasIncomingReqs') || false;
 	}
 
 	ionViewCanLeave() {
@@ -85,32 +85,32 @@ export class PrmEditPage {
 			return new Promise((resolve, reject) => {resolve(true);})
 		} else { 
 
-			this._eventSubscriberService.subscribe("ios-edit-prm-exit", (data) => {
+			this._eventSubscriberService.subscribe("ios-edit-offer-exit", (data) => {
 				data["clearDirtyFunc"]();
 				self.navCtrl.pop();		
 			});
 
-			this._eventSubscriberService.subscribe("ios-edit-prm-save-then-exit", (data) => {
+			this._eventSubscriberService.subscribe("ios-edit-offer-save-then-exit", (data) => {
 				self.onSaveBtnTap(false);
 				data["clearDirtyFunc"]();
 				self.navCtrl.pop();
 			});
 
-			this._eventSubscriberService.subscribe("ios-confirm-exit-on-edit-prm", (data) => {
+			this._eventSubscriberService.subscribe("ios-confirm-exit-on-edit-offer", (data) => {
 				if (data["isSaveBtnEnabled"]) {
 				    let confirmAlert = this._alertCtrl.create({
 				      title: 'Save changes?',
-				      message: "This promise is ready to go. Do you want to save it?",
+				      message: "This offer is ready to go. Do you want to save it?",
 				      buttons: [{
 				        text: "No, don't save.",
 				        role: 'cancel',
 				        handler: () => {
-				        	self._events.publish("ios-edit-prm-exit", data)
+				        	self._events.publish("ios-edit-offer-exit", data)
 						}
 				      }, {
 				        text: 'Yes, save it!',
 				        handler: () => {
-				        	self._events.publish("ios-edit-prm-save-then-exit", data)
+				        	self._events.publish("ios-edit-offer-save-then-exit", data)
 				        }
 				      }]
 				    });
@@ -128,7 +128,7 @@ export class PrmEditPage {
 				      }, {
 				        text: 'Yes, lose changes',
 				        handler: () => {
-				        	self._events.publish("ios-edit-prm-exit", data)
+				        	self._events.publish("ios-edit-offer-exit", data)
 				        }
 				      }]
 				    });
@@ -136,15 +136,15 @@ export class PrmEditPage {
 				}
 			})
 
-			this._events.publish("ios-confirm-exit-on-edit-prm", {clearDirtyFunc: () => { this.setDirty(false); }, isSaveBtnEnabled: this.isSaveBtnEnabled()});
+			this._events.publish("ios-confirm-exit-on-edit-offer", {clearDirtyFunc: () => { this.setDirty(false); }, isSaveBtnEnabled: this.isSaveBtnEnabled()});
 			return new Promise((resolve, reject) => {resolve(false);})
 		}
 	}
 
 	ionViewDidLeave() {
-		this._eventSubscriberService.reset("ios-confirm-exit-on-edit-prm");
-		this._eventSubscriberService.reset("ios-edit-prm-save-then-exit");
-		this._eventSubscriberService.reset("ios-edit-prm-exit");
+		this._eventSubscriberService.reset("ios-confirm-exit-on-edit-offer");
+		this._eventSubscriberService.reset("ios-edit-offer-save-then-exit");
+		this._eventSubscriberService.reset("ios-edit-offer-exit");
 	}
 
 	setModel(m) {
@@ -195,11 +195,11 @@ export class PrmEditPage {
 		return this.permitOnlyEditsToPoints == false;
 	}
 
-	prmHasNoKeywords() {
+	offerHasNoKeywords() {
 		return this.model["keywords"] === undefined || this.model["keywords"].length === 0;
 	}
 
-	getPrmOwnerName() {
+	getOfferOwnerName() {
 		return this.model["directionallyOppositeUser"] !== undefined ? this.model["directionallyOppositeUser"]["realname"] : "";
 	}
 
@@ -226,8 +226,8 @@ export class PrmEditPage {
 		let func = (obj) => {
 			return new Promise((resolve, reject) => {
 				if (self.isImageChanged(self.model)) {
-					self._pictureService.save(self._constants.PHOTO_TYPE_PRM, obj["id"], self.model["imageFileURI"]).then((data) => {
-						console.log("prm " + obj["id"] + " picture is saved...");
+					self._pictureService.save(self._constants.PHOTO_TYPE_OFFER, obj["id"], self.model["imageFileURI"]).then((data) => {
+						console.log("offer " + obj["id"] + " picture is saved...");
 						resolve();
 					})
 				} else {
@@ -236,11 +236,11 @@ export class PrmEditPage {
 			})
 		}
 
-		// call to save the model, and then the prmModelService will call func(). This order is important, because this may
-		//  be a new object, and to save the image associated with it, we need an ID. So save, get an ID, then save the prm image
+		// call to save the model, and then the offerModelService will call func(). This order is important, because this may
+		//  be a new object, and to save the image associated with it, we need an ID. So save, get an ID, then save the offer image
 		//  via the callback.
 		
-		self._prmModelService.save(self.model, func).then((newObj) => {
+		self._offerModelService.save(self.model, func).then((newObj) => {
 
 			self.callback(self.model).then(() => {
 				self.setDirty(false);
@@ -251,19 +251,19 @@ export class PrmEditPage {
 				if (shouldCallNavCtrlPop)
 					self.navCtrl.pop();
 			}).catch((err) => {
-				console.log("Error calling edit prm callback");
+				console.log("Error calling edit offer callback");
 				console.log(JSON.stringify(err));
 			})
 
 		}).catch((err) => {
-			console.log("Error calling prmModelService::save()")
+			console.log("Error calling offerModelService::save()")
 			console.log(JSON.stringify(err))
 		})
 	}
 
 	isImageChanged(model) {
 		let rtn = this.model["imageFileURI_OriginalValue"] != model["imageFileURI"];
-		console.log("edit-prm::isImageChanged() returning " + rtn);
+		console.log("edit-offer::isImageChanged() returning " + rtn);
 		return rtn;
 	}
 
@@ -328,7 +328,7 @@ export class PrmEditPage {
 		return rtn;
 	}
 
-	areRecommendationsRequired(prm) {
+	areRecommendationsRequired(offer) {
 		return (this.model["requiredUserRecommendations"] && this.model["requiredUserRecommendations"].length > 0);
 	}
 
@@ -344,7 +344,7 @@ export class PrmEditPage {
 	}
 
 	getAvatarCSSClassString() {
-		return this._pictureService.getOrientationCSS(this.model, "editPrmImage");
+		return this._pictureService.getOrientationCSS(this.model, "editOfferImage");
 	}
 
 	onThumbnailClick($event) {
@@ -352,9 +352,9 @@ export class PrmEditPage {
 		let model = this.model;
 		let modal = this.modalCtrl.create(ChoosePhotoSourcePage, {fileURI: this.model["imageFileURI"], fileSource: this.model["imageFileSource"]});
 		
-		modal.onDidDismiss((promise) => {
-			if (promise) {
-				promise.then((uriAndSource) => { 
+		modal.onDidDismiss((offer) => {
+			if (offer) {
+				offer.then((uriAndSource) => { 
 					if (uriAndSource === undefined) {
 						uriAndSource = {};
 					}
@@ -366,10 +366,10 @@ export class PrmEditPage {
 						let filename = model["imageFileURI"].substring(lastSlash+1);
 
 						self._file.removeFile(path, filename).then((data) => {
-							self._pictureService.setMostProbablePhotoPath(self._constants.PHOTO_TYPE_PRM, model["id"], uriAndSource["imageFileURI"]);
+							self._pictureService.setMostProbablePhotoPath(self._constants.PHOTO_TYPE_OFFER, model["id"], uriAndSource["imageFileURI"]);
 
-							console.log("User saved a new prm image. [" + model["imageFileURI"] + "] is no longer the image to use, so it has been removed." );
-							console.log("setting prm model to [" + uriAndSource["imageFileURI"] + "]");
+							console.log("User saved a new offer image. [" + model["imageFileURI"] + "] is no longer the image to use, so it has been removed." );
+							console.log("setting offer model to [" + uriAndSource["imageFileURI"] + "]");
 
 							model["imageFileURI"] = uriAndSource["imageFileURI"];
 							model["imageFileSource"] = uriAndSource["imageFileSource"];
@@ -380,7 +380,7 @@ export class PrmEditPage {
 					} else {
 						console.log("no previous image was set on the model, so skipping the 'delete previous image' step...")
 
-						self._pictureService.setMostProbablePhotoPath(self._constants.PHOTO_TYPE_PRM, model["id"], uriAndSource["imageFileURI"]);
+						self._pictureService.setMostProbablePhotoPath(self._constants.PHOTO_TYPE_OFFER, model["id"], uriAndSource["imageFileURI"]);
 
 						model["imageFileURI"] = uriAndSource["imageFileURI"];
 						model["imageFileSource"] = uriAndSource["imageFileSource"];
@@ -401,7 +401,7 @@ export class PrmEditPage {
 
 		let alert = this._alertCtrl.create({
 			title: 'Delete Photo?',
-			message: 'Do you want to DELETE the picture on this promise?',
+			message: 'Do you want to DELETE the picture on this offer?',
 			buttons: [
 				{
 					text: 'No', role: 'cancel', handler: () => {
@@ -417,14 +417,14 @@ export class PrmEditPage {
 							self.model["imageFileURI"] = undefined;
 							self.model["imageFileSource"] = undefined;
 
-							self._pictureService.setMostProbablePhotoPath(self._constants.PHOTO_TYPE_PRM, self.model["id"], self.model["imageFileURI"]);
+							self._pictureService.setMostProbablePhotoPath(self._constants.PHOTO_TYPE_OFFER, self.model["id"], self.model["imageFileURI"]);
 						}
 
 						console.log('deleting photo ' + self.model["id"]);
 
 						self._pictureService.delete(self._constants.PHOTO_TYPE_PROFILE, self.model["id"]).then(() => { 
 
-							let model = self._prmModelService.get(self.model["id"]);
+							let model = self._offerModelService.get(self.model["id"]);
 
 							if (model["imageFileSource"] === 'camera' || model["imageFileSource"] === 'eog') {
 								

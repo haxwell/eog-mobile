@@ -64,7 +64,7 @@ export class PictureService {
 				if (!objId)
 					resolve(undefined);
 
-				if (photoType != self._constants.PHOTO_TYPE_PROFILE && photoType != self._constants.PHOTO_TYPE_PRM)
+				if (photoType != self._constants.PHOTO_TYPE_PROFILE && photoType != self._constants.PHOTO_TYPE_OFFER)
 					resolve(undefined);
 
 				let lastSlash = photoPath.lastIndexOf('/');

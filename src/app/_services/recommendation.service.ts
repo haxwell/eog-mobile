@@ -66,7 +66,7 @@ export class RecommendationService {
 		});
 	}
 
-	getUserHasNecessaryRecommendations(_prm) {
+	getUserHasNecessaryRecommendations(_offer) {
 		let self = this;
 
 		let _userId = this._userService.getCurrentUser()["id"];
@@ -76,12 +76,12 @@ export class RecommendationService {
 				let count = 0;
 
 				self.getIncomingRecommendations().then((incomingRecommendations: Array<Object>) => {
-					_prm["requiredUserRecommendations"].map((obj) => {
+					_offer["requiredUserRecommendations"].map((obj) => {
 						if (incomingRecommendations.some((obj2) => { return obj2["escrowedRequestId"] === null && (obj2["providingUserId"] === obj["requiredRecommendUserId"] || _userId === obj["requiredRecommendUserId"]); }))
 							count++;
 					});
 
-					resolve((count === _prm["requiredUserRecommendations"].length));							
+					resolve((count === _offer["requiredUserRecommendations"].length));							
 				});
 			});
 		})

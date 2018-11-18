@@ -4,7 +4,7 @@ import { NavController, ModalController } from 'ionic-angular';
 
 import { TutorialPage } from '../../tutorial/tutorial'
 import { AcceptRequestTutorialPage } from '../../requests/incoming/_pages/accept.request.tutorial';
-import { OutgoingRequestMadeTutorialPage } from '../../promises/_pages/outgoing-request-made-tutorial';
+import { OutgoingRequestMadeTutorialPage } from '../../offers/_pages/outgoing-request-made-tutorial';
 
 @Component({
     selector: 'page-tutorials-list',

@@ -9,11 +9,11 @@ import { environment } from '../../_environments/environment';
 import { Constants } from '../../_constants/constants'
 
 @Injectable()
-export class PrmCollectionService { 
+export class OfferCollectionService { 
 
 	/**
 	 *
-	 * Returns a collection of promises owned by the current user.
+	 * Returns a collection of offers owned by the current user.
 	 *
 	 */
 	
@@ -48,27 +48,27 @@ export class PrmCollectionService {
 
 	init(model, user) {
 		let self = this;
-		let url = environment.apiUrl + "/api/user/" + user["id"] + "/promises";
-		self._apiService.get(url).subscribe((prmsObj) => {
-			model["prms"] = JSON.parse(prmsObj["_body"]);
+		let url = environment.apiUrl + "/api/user/" + user["id"] + "/offers";
+		self._apiService.get(url).subscribe((offersObj) => {
+			model["offers"] = JSON.parse(offersObj["_body"]);
 
-			model["prms"].forEach((prm) => {
-				self._pictureService.get(self._constants.PHOTO_TYPE_PRM, prm["id"]).then((filename) => {
-					prm["imageFileSource"] = 'eog';
-					prm["imageFileURI"] = filename;
-					prm["imageFileURI_OriginalValue"] = filename;
+			model["offers"].forEach((offer) => {
+				self._pictureService.get(self._constants.PHOTO_TYPE_OFFER, offer["id"]).then((filename) => {
+					offer["imageFileSource"] = 'eog';
+					offer["imageFileURI"] = filename;
+					offer["imageFileURI_OriginalValue"] = filename;
 
 					if (filename) {
 						self._pictureEXIFService.getEXIFMetadata(filename).then((exifMetadata) => {
-							prm["imageOrientation"] = exifMetadata["Orientation"];
+							offer["imageOrientation"] = exifMetadata["Orientation"];
 						})
 					}
 				});
 			});
 
-			model["prms"].sort((a, b) => { let aText = a.title.toLowerCase(); let bText = b.title.toLowerCase(); if (aText > bText) return 1; else if (aText < bText) return -1; else return 0; })
+			model["offers"].sort((a, b) => { let aText = a.title.toLowerCase(); let bText = b.title.toLowerCase(); if (aText > bText) return 1; else if (aText < bText) return -1; else return 0; })
 		}, (err) => {
-			console.log("PrmCollectionService ERROR");
+			console.log("offerCollectionService ERROR");
 			console.log(JSON.stringify(err));
 		});		
 	}

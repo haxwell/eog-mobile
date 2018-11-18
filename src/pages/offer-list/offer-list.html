@@ -1,0 +1,36 @@
+<ion-header>
+	<easyah-header></easyah-header>
+</ion-header>
+
+<ion-content padding>
+	<ion-row>
+		<ion-col>
+			<h1 id="pageHeaderText">Your Offers...<br/></h1>
+		</ion-col>
+	</ion-row>
+	<ion-row >
+		<button round ion-button (click)="onNewOfferBtnTap()">
+			<ion-icon name="add"></ion-icon>
+		</button>
+	</ion-row>
+
+	<ion-list *ngIf="userHasAnActiveOffer()">
+		<ion-item *ngFor="let offer of getOffers()" (click)="onOfferBtnTap(offer)">
+			<ion-avatar item-start>
+				<img id="offerAvatarImg" [class]="getAvatarCSSClassString(offer)" [src]="getThumbnailImage(offer)" alt="profile_image">
+			</ion-avatar>
+			<span class="offerTitle">{{offer.title}}</span><br/>
+			<span class="offerQuantity">{{offer.quantity}} {{offer.quantityDescription}}</span><br/>
+			<span class="offerDesc">{{offer.description}}</span><br/>
+			<div class="offerDetail">
+				<span id="offerReqdPtsId" class="offerReqdPts">{{getPointRecommendationCountPhrase(offer)}}<br/></span>
+				<span *ngFor="let keyword of offer.keywords"><span class="smallKeyword">{{keyword.text}}</span></span>
+			</div>
+		</ion-item>
+	</ion-list>
+	<ion-list *ngIf="!userHasAnActiveOffer()">
+		<ion-item>
+			The offers you create will appear here! 
+		</ion-item>
+	</ion-list>
+</ion-content>

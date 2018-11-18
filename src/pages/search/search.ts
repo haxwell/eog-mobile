@@ -17,7 +17,7 @@ import { UserService } from '../../app/_services/user.service';
 })
 export class SearchPage {
 	searchString = '';
-	prmResults = undefined;
+	offerResults = undefined;
 	usersResults = undefined;
 	loading = undefined;
 	loadingDismissed = false;
@@ -52,7 +52,7 @@ export class SearchPage {
 		self.loading.present();
 
 		this.usersResults = undefined;
-		this.prmResults = undefined;
+		this.offerResults = undefined;
 
 		let count = 0;
 		let func = () => {
@@ -61,10 +61,10 @@ export class SearchPage {
 				self.loading.dismiss();
 		};
 
-		this._searchService.searchPrms(this.searchString).then((data: Array<Object>) => {
+		this._searchService.searchOffers(this.searchString).then((data: Array<Object>) => {
 
 			if (data.length === 0) {
-				self.prmResults = data;
+				self.offerResults = data;
 
 				func();
 
@@ -75,7 +75,7 @@ export class SearchPage {
 						delete obj["userId"];
 
 						if (!data.some((obj) => { return obj["userId"] != undefined; })) {
-							self.prmResults = data;
+							self.offerResults = data;
 							func();
 						}
 					});
@@ -93,8 +93,8 @@ export class SearchPage {
 		this.searchString = event._value;
 	}
 
-	getPromiseResults() {
-		return this.prmResults;
+	getOfferResults() {
+		return this.offerResults;
 	}
 
 	getUsersResults() {
@@ -127,7 +127,7 @@ export class SearchPage {
 		return rtn; 
 	}
 
-	onViewUser(user) {
-		this.navCtrl.push(ProfilePage, {user: user});
+	onViewUser(_user) {
+		this.navCtrl.push(ProfilePage, {user: _user});
 	}
 }

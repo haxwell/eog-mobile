@@ -1,0 +1,21 @@
+<ion-item-group *ngFor="let offer of getListOfOffers()">
+
+	<ion-item-sliding #slidingItem (click)="onViewOffer(offer)">
+		<button ion-item>
+			<ion-avatar item-start>
+				<img id="offerAvatarImg" [class]="getAvatarCSSClassString(offer)" [src]="getThumbnailImage(offer)" alt="profile_image">
+			</ion-avatar>
+
+			<span class="offerTitle">{{offer.title}}</span><br/>
+			
+			<ion-icon [ngStyle]="{'color':getAlreadyRequestedIconColor(offer)}" name="megaphone"> </ion-icon>
+			<ion-icon [ngStyle]="{'color':getSufficientPointsIconColor(offer)}" name="pricetag"></ion-icon>
+			<ion-icon *ngIf="hasOfferBeenPreviouslyRequested(offer)" [ngStyle]="{'color':getSufficientTimeIconColor(offer)}" name="clock"></ion-icon>
+			<ion-icon *ngIf="areRecommendationsRequired(offer)" [ngStyle]="{'color':getNecessaryRecommendationsIconColor(offer)}" name="people"></ion-icon>
+
+			- <span class="offerQuantity">{{offer.quantity}} {{offer.quantityDescription}}</span><br/>
+			<span class="offerDesc">{{offer.description}}</span>
+		</button>
+
+	</ion-item-sliding>
+</ion-item-group>

@@ -47,8 +47,8 @@ describe('DomainObjectMetadata Service', () => {
 
   it('should return undefined if called before setting any functions', () => {
     let service = component.getService();
-    let prm = service.getMetadataValue(domainObject1, "a_fake_function_key");
-    expect(prm).toBe(undefined);
+    let offer = service.getMetadataValue(domainObject1, "a_fake_function_key");
+    expect(offer).toBe(undefined);
   })
 
   it('should return undefined if called with a function key that has not been defined', () => {
@@ -57,8 +57,8 @@ describe('DomainObjectMetadata Service', () => {
 
   	service.addMetadataCalculationFunction(functionKey, jasmine.createSpy("func"));
 
-    let prm = service.getMetadataValue(domainObject1, "a_fake_function_key");
-    expect(prm).toBe(undefined);
+    let offer = service.getMetadataValue(domainObject1, "a_fake_function_key");
+    expect(offer).toBe(undefined);
   })
 
   it('should return valid Promise if called with a function key that has been defined', () => {
@@ -70,10 +70,10 @@ describe('DomainObjectMetadata Service', () => {
 	  });
 
     let oldValue = domainObject1["text"];
-    let prm = service.getMetadataValue(domainObject1, functionKey);
-    expect(prm).not.toBe(undefined);
-    expect(prm instanceof Promise).toBe(true);
-    prm.then((domainObject) => { expect(domainObject["text"]).toBe(oldValue + "happy"); });
+    let offer = service.getMetadataValue(domainObject1, functionKey);
+    expect(offer).not.toBe(undefined);
+    expect(offer instanceof Promise).toBe(true);
+    offer.then((domainObject) => { expect(domainObject["text"]).toBe(oldValue + "happy"); });
   })
 
   let _func1 = (len, func) => {
@@ -118,19 +118,19 @@ describe('DomainObjectMetadata Service', () => {
 
   	service.addMetadataCalculationFunction(functionKey, spy);
 
-    let prm = service.getMetadataValue(domainObject1, functionKey);
+    let offer = service.getMetadataValue(domainObject1, functionKey);
     expect(spy).toHaveBeenCalled();
-    expect(prm).not.toBe(undefined);
-    expect(prm instanceof Promise).toBe(true);
+    expect(offer).not.toBe(undefined);
+    expect(offer instanceof Promise).toBe(true);
 
     service.init();
 
     spy.calls.reset();
 
-    prm = service.getMetadataValue(domainObject1, functionKey);
+    offer = service.getMetadataValue(domainObject1, functionKey);
     expect(spy).toHaveBeenCalled();
-    expect(prm).not.toBe(undefined); // this would be undefined if the function did not exist, as a previous test confirms
-    expect(prm instanceof Promise).toBe(true);
+    expect(offer).not.toBe(undefined); // this would be undefined if the function did not exist, as a previous test confirms
+    expect(offer instanceof Promise).toBe(true);
   })
 
   it('should reset a single object when markDirty() is called', () => {
@@ -141,26 +141,26 @@ describe('DomainObjectMetadata Service', () => {
 
   	service.addMetadataCalculationFunction(functionKey, spy);
 
-    let prm = service.getMetadataValue(domainObject1, functionKey);
+    let offer = service.getMetadataValue(domainObject1, functionKey);
     expect(spy).toHaveBeenCalled();
-    expect(prm).not.toBe(undefined);
-    expect(prm instanceof Promise).toBe(true);
+    expect(offer).not.toBe(undefined);
+    expect(offer instanceof Promise).toBe(true);
 
-    prm = service.getMetadataValue(domainObject2, functionKey);
+    offer = service.getMetadataValue(domainObject2, functionKey);
     expect(spy).toHaveBeenCalled();
-    expect(prm).not.toBe(undefined);
-    expect(prm instanceof Promise).toBe(true);
+    expect(offer).not.toBe(undefined);
+    expect(offer instanceof Promise).toBe(true);
 
     service.markDirty({ domainObject: domainObject1 });
 
     spy.calls.reset();
 
-    prm = service.getMetadataValue(domainObject1, functionKey);
+    offer = service.getMetadataValue(domainObject1, functionKey);
     expect(spy).toHaveBeenCalled();
 
 	spy.calls.reset();
 
-	prm = service.getMetadataValue(domainObject2, functionKey);
+	offer = service.getMetadataValue(domainObject2, functionKey);
     expect(spy).not.toHaveBeenCalled();
   })
 

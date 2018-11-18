@@ -13,7 +13,7 @@ import { AboutEasyahPage } from '../pages/about-easyah/about-easyah';
 import { HomePage } from '../pages/home/home';
 import { RequestsOutgoingView } from '../pages/common/requests-outgoing/requests-outgoing';
 import { RequestsIncomingView } from '../pages/common/requests-incoming/requests-incoming';
-import { PromiseListPage } from '../pages/promise-list/promise-list';
+import { OfferListPage } from '../pages/offer-list/offer-list';
 import { KeywordListPage } from '../pages/keyword-list/keyword-list';
 import { RecommendationListPage } from '../pages/recommendation-list/recommendation-list';
 import { NotificationListPage } from '../pages/notification-list/notification-list';
@@ -102,11 +102,11 @@ export class EasyahApp {
     }
   }
 
-  onYourPromisesClicked() {
+  onYourOffersClicked() {
     var view = this.navCtrl.getActive();
-    if (view.component.name != "PromiseListPage") {
+    if (view.component.name != "OfferListPage") {
       this._menuCtrl.close();
-      this.navCtrl.push(PromiseListPage, {});
+      this.navCtrl.push(OfferListPage, {});
     }
   }
 

@@ -104,8 +104,8 @@ export class ProfileService {
 		else {
 			let self = this;
 			url = environment.apiUrl + "/api/user/" + userId + "/requests/inprogress/user/" + currentUser["id"];
-			self._apiService.get(url).subscribe((prmsObj) => {
-				var b = JSON.parse(prmsObj["_body"]).length > 0;
+			self._apiService.get(url).subscribe((offersObj) => {
+				var b = JSON.parse(offersObj["_body"]).length > 0;
 				
 				if (b) {
 					self._contactInfoVisibilityService.getContactInfoVisibilityId(userId).then((visId) => {

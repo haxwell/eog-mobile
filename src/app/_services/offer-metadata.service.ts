@@ -13,7 +13,7 @@ import { Constants } from '../../_constants/constants'
 import Moment from 'moment'
 
 @Injectable()
-export class PrmMetadataService extends DomainObjectMetadataService {
+export class OfferMetadataService extends DomainObjectMetadataService {
 	
 	constructor(protected _pointsService: PointsService,
 				protected _recommendationService: RecommendationService,
@@ -53,23 +53,23 @@ export class PrmMetadataService extends DomainObjectMetadataService {
 
 		this.addMetadataCalculationFunction(
 			this._constants.FUNCTION_KEY_USER_HAS_SUFFICIENT_POINTS, 
-			(prm) => {
+			(offer) => {
 				return new Promise((resolve, reject) => {
 					this._pointsService.getCurrentAvailableUserPoints().then((data) => {
-						resolve(prm["requiredPointsQuantity"] <= data);
+						resolve(offer["requiredPointsQuantity"] <= data);
 					});
 				})
 			}); 
 
 		this.addMetadataCalculationFunction(
-			this._constants.FUNCTION_KEY_USER_HAS_CURRENTLY_REQUESTED_PRM, 
-			(prm) => {
+			this._constants.FUNCTION_KEY_USER_HAS_CURRENTLY_REQUESTED_OFFER,
+			(offer) => {
 				return new Promise((resolve, reject) => {
-					if (prm["id"] === undefined)
+					if (offer["id"] === undefined)
 						resolve(false);
 					else {
 						this._requestsService.getOutgoingRequestsForCurrentUser().then((data: Array<Object>) => {
-							let rsv = data.some((obj) => { return obj["prm"]["id"] === prm["id"]; });
+							let rsv = data.some((obj) => { return obj["offer"]["id"] === offer["id"]; });
 							resolve(rsv);
 						});
 					}
@@ -78,9 +78,9 @@ export class PrmMetadataService extends DomainObjectMetadataService {
 
 		this.addMetadataCalculationFunction(
 			this._constants.FUNCTION_KEY_USER_HAS_NECESSARY_RECOMMENDATIONS, 
-			(prm) => {
+			(offer) => {
 				return new Promise((resolve, reject) => {
-					this._recommendationService.getUserHasNecessaryRecommendations(prm).then((data) => {
+					this._recommendationService.getUserHasNecessaryRecommendations(offer).then((data) => {
 						resolve(data);
 					});
 				})
@@ -88,12 +88,12 @@ export class PrmMetadataService extends DomainObjectMetadataService {
 
 		this.addMetadataCalculationFunction(
 			this._constants.FUNCTION_KEY_USER_IS_PAST_REQUEST_AGAIN_DATE, 
-			(prm) => {
+			(offer) => {
 				return new Promise((resolve, reject) => {
-					if (prm["id"] === undefined)
+					if (offer["id"] === undefined)
 						resolve(null);
 					else {
-						this._requestsService.getArchivedUserRequestsForPrm(prm).then((archivedRequests: Array<Object>) => {
+						this._requestsService.getArchivedUserRequestsForOffer(offer).then((archivedRequests: Array<Object>) => {
 							if (archivedRequests.length > 0) {
 								resolve(archivedRequests.some((request) => {
 									let canRequestAgainDate = request["canRequestAgainDate"];
@@ -101,20 +101,20 @@ export class PrmMetadataService extends DomainObjectMetadataService {
 									return (Moment(canRequestAgainDate) < Moment(new Date().getTime()));
 									}));
 							} else
-								resolve(null); // there is no CAN_REQUEST_AGAIN_DATE for this prm and user
+								resolve(null); // there is no CAN_REQUEST_AGAIN_DATE for this offer and user
 						});
 					}
 				})
 			});
 
 		this.addMetadataCalculationFunction(
-			this._constants.FUNCTION_KEY_USER_HAS_PREVIOUSLY_REQUESTED_PRM, 
-			(prm) => {
+			this._constants.FUNCTION_KEY_USER_HAS_PREVIOUSLY_REQUESTED_OFFER, 
+			(offer) => {
 				return new Promise((resolve, reject) => {
-					if (prm["id"] === undefined)
+					if (offer["id"] === undefined)
 						resolve(false);
 					else {					
-						this._requestsService.getArchivedUserRequestsForPrm(prm).then((data: Array<Object>) => {
+						this._requestsService.getArchivedUserRequestsForOffer(offer).then((data: Array<Object>) => {
 							resolve(data.length > 0);
 						});
 					}
@@ -122,31 +122,31 @@ export class PrmMetadataService extends DomainObjectMetadataService {
 			});
 
 		this.addMetadataCalculationFunction(
-			this._constants.FUNCTION_KEY_PRM_REQUIRES_RECOMMENDATIONS, 
-			(prm) => {
+			this._constants.FUNCTION_KEY_OFFER_REQUIRES_RECOMMENDATIONS, 
+			(offer) => {
 				return new Promise((resolve, reject) => {
-					resolve(prm["requiredUserRecommendations"] !== undefined && prm["requiredUserRecommendations"].length > 0);
+					resolve(offer["requiredUserRecommendations"] !== undefined && offer["requiredUserRecommendations"].length > 0);
 				});
 			});
 
 		this.addMetadataCalculationFunction(
-			self._constants.FUNCTION_KEY_PRM_IS_REQUESTABLE, 
-			(prm) => {
+			self._constants.FUNCTION_KEY_OFFER_IS_REQUESTABLE, 
+			(offer) => {
 				return new Promise((resolve, reject) => {
 
 					let user = this._userService.getCurrentUser();
-					if (prm["userId"] !== user["id"]) {
+					if (offer["userId"] !== user["id"]) {
 
 						let calcFunc1: (Number) => Promise<Object> = 
 							self.getCalcFunctionObject(this._constants.FUNCTION_KEY_USER_HAS_NECESSARY_RECOMMENDATIONS)["func"];
 
-						calcFunc1(prm).then((data1) => {
+						calcFunc1(offer).then((data1) => {
 							if (data1 === true) {
-								self.getCalcFunctionObject(self._constants.FUNCTION_KEY_USER_HAS_SUFFICIENT_POINTS)["func"](prm).then((data2) => {
+								self.getCalcFunctionObject(self._constants.FUNCTION_KEY_USER_HAS_SUFFICIENT_POINTS)["func"](offer).then((data2) => {
 									if (data2 === true) {
-										self.getCalcFunctionObject(self._constants.FUNCTION_KEY_USER_HAS_CURRENTLY_REQUESTED_PRM)["func"](prm).then((data3) => {
+										self.getCalcFunctionObject(self._constants.FUNCTION_KEY_USER_HAS_CURRENTLY_REQUESTED_OFFER)["func"](offer).then((data3) => {
 											if (data3 === false) {
-												self.getCalcFunctionObject(self._constants.FUNCTION_KEY_USER_IS_PAST_REQUEST_AGAIN_DATE)["func"](prm).then((data4) => {
+												self.getCalcFunctionObject(self._constants.FUNCTION_KEY_USER_IS_PAST_REQUEST_AGAIN_DATE)["func"](offer).then((data4) => {
 													if (data4 === true || data4 === null) {
 														resolve(true);
 													}

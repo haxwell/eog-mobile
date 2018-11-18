@@ -5,7 +5,7 @@ import { Events } from 'ionic-angular';
 
 import { RequestsService } from './requests.service';
 import { DeclineReasonCodeService } from './declined-reason-codes.service';
-import { PrmModelService } from './prm-model.service';
+import { OfferModelService } from './offer-model.service';
 
 import { Constants } from '../../_constants/constants';
 import { environment } from '../../_environments/environment';
@@ -19,7 +19,7 @@ export class WebsocketService {
 
 	constructor(private _requestsService: RequestsService,
 				private _declineReasonCodeService: DeclineReasonCodeService,
-				private _prmModelService: PrmModelService,
+				private _offerModelService: OfferModelService,
 				private toastCtrl: ToastController,
 				private _constants: Constants,
 				public _events: Events) { 
@@ -58,12 +58,12 @@ export class WebsocketService {
 			data["request"]["directionallyOppositeUser"] = Object.assign({}, data["directionallyOppositeUser"]);
 			delete data["directionallyOppositeUser"];
 
-			let request = this._requestsService.changePromiseAttributeToPrm(data["request"]); 
+			let request = this._requestsService.changePromiseAttributeToOffer(data["request"]); 
 			
 			console.log("websocket.service received notice of a REQUEST event")
 			console.log(JSON.stringify(request))
 
-			this._prmModelService.setPrmImageOrientation(request.prm);
+			this._offerModelService.setOfferImageOrientation(request.offer);
 
 			if (request["deliveringStatusId"] === this._constants.REQUEST_STATUS_PENDING && request["requestingStatusId"] === null) {
 				this.handleRequestReceived(data)
@@ -124,7 +124,7 @@ export class WebsocketService {
 		let request = data["request"];
 		let dou_realname = request["directionallyOppositeUser"]["realname"];
 
-		data["message"] = dou_realname + ' wants to take you up on your Promise, ' + request["prm"]["title"];
+		data["message"] = dou_realname + ' wants to take you up on your Offer, ' + request["offer"]["title"];
 
 		this.presentToast(data["message"]);
 		this._events.publish('request:received', data);
@@ -134,7 +134,7 @@ export class WebsocketService {
 		let request = data["request"];
 		let dou_realname = request["directionallyOppositeUser"]["realname"];
 
-		data["message"] = dou_realname + ' just accepted your request, ' + request["prm"]["title"];
+		data["message"] = dou_realname + ' just accepted your request, ' + request["offer"]["title"];
 
 		this.presentToast(data["message"]);
 		this._events.publish('request:accepted', data);
@@ -144,7 +144,7 @@ export class WebsocketService {
 		let request = data["request"];
 		let dou_realname = request["directionallyOppositeUser"]["realname"];
 
-		data["message"] = dou_realname + ' just cancelled a request that you had accepted (' + request["prm"]["title"] + '). ';
+		data["message"] = dou_realname + ' just cancelled a request that you had accepted (' + request["offer"]["title"] + '). ';
 		if (data["pointsSent"]) {
 			data["message"] += 'You got ' + data["pointsSent"] + ' point';
 
@@ -171,7 +171,7 @@ export class WebsocketService {
 			}
 		});
 
-		data["message"] = dou_realname + ' has declined your request, ' + request["prm"]["title"] + ".";
+		data["message"] = dou_realname + ' has declined your request, ' + request["offer"]["title"] + ".";
 
 		this.presentToast(data["message"]);
 		this._events.publish('request:declined', data);
@@ -181,7 +181,7 @@ export class WebsocketService {
 		let request = data["request"];
 		let dou_realname = request["directionallyOppositeUser"]["realname"];
 
-		data["message"] = dou_realname + ' just marked your request, ' + request["prm"]["title"] + ' as completed.';
+		data["message"] = dou_realname + ' just marked your request, ' + request["offer"]["title"] + ' as completed.';
 
 		this.presentToast(data["message"]);
 		this._events.publish('request:completed', data);
@@ -191,7 +191,7 @@ export class WebsocketService {
 		//let request = data["request"];
 		//let dou_realname = request["directionallyOppositeUser"]["realname"];
 
-		//data["message"] = dou_realname + ' just cancelled their as-yet-unaccepted request to you, ' + request["prm"]["title"];
+		//data["message"] = dou_realname + ' just cancelled their as-yet-unaccepted request to you, ' + request["offer"]["title"];
 
 		//this.presentToast(data["message"]);
 		this._events.publish('request:notYetAccepted:cancelledByRequestor', data);
@@ -201,7 +201,7 @@ export class WebsocketService {
 		let request = data["request"];
 		let dou_realname = request["directionallyOppositeUser"]["realname"];
 
-		data["message"] = dou_realname + ' cancelled their request for your Promise, ' + request["prm"]["title"] + ', before you got to act on it.';
+		data["message"] = dou_realname + ' cancelled their request for your Offer, ' + request["offer"]["title"] + ', before you got to act on it.';
 
 		this.presentToast(data["message"]);
 		this._events.publish('request:incoming:cancelled', data);
@@ -211,7 +211,7 @@ export class WebsocketService {
 		let request = data["request"];
 		let dou_realname = request["directionallyOppositeUser"]["realname"];
 
-		data["message"] = dou_realname + ' just cancelled your request, ' + request["prm"]["title"];
+		data["message"] = dou_realname + ' just cancelled your request, ' + request["offer"]["title"];
 
 		this.presentToast(data["message"]);
 		this._events.publish('request:outgoing:cancelled', data);
@@ -221,7 +221,7 @@ export class WebsocketService {
 		let request = data["request"];
 		let dou_realname = request["directionallyOppositeUser"]["realname"];
 
-		data["message"] = dou_realname + ' approved your completion, and sent you ' + data["pointsSent"] + ' points for ' + request["prm"]["title"] + '.';
+		data["message"] = dou_realname + ' approved your completion, and sent you ' + data["pointsSent"] + ' points for ' + request["offer"]["title"] + '.';
 
 		this.presentToast(data["message"]);
 		this._events.publish('request:completedAndApproved', data);
@@ -231,7 +231,7 @@ export class WebsocketService {
 		let request = data["request"];
 		let dou_realname = request["directionallyOppositeUser"]["realname"];
 
-		data["message"] = dou_realname + ' disagrees that your Promise, ' + request["prm"]["title"] + ' was completed. Get in touch with them!';
+		data["message"] = dou_realname + ' disagrees that your Offer, ' + request["offer"]["title"] + ' was completed. Get in touch with them!';
 
 		this.presentToast(data["message"]);
 		this._events.publish('request:isInDispute', data);
@@ -241,7 +241,7 @@ export class WebsocketService {
 		let request = data["request"];
 		let dou_realname = request["directionallyOppositeUser"]["realname"];
 
-		data["message"] = dou_realname + ' inamicably resolved the request, ' + request["prm"]["title"] + '. It is done. ';
+		data["message"] = dou_realname + ' inamicably resolved the request, ' + request["offer"]["title"] + '. It is done. ';
 		if (data["pointsSent"]) {
 			data["message"] += 'You got ' + data["pointsSent"] + ' point';
 
@@ -259,7 +259,7 @@ export class WebsocketService {
 		let request = data["request"];
 		let dou_realname = request["directionallyOppositeUser"]["realname"];
 
-		data["message"] = dou_realname + ' deleted their Promise, ' + request["prm"]["title"] + ', so your request was removed, too.';
+		data["message"] = dou_realname + ' deleted their Offer, ' + request["offer"]["title"] + ', so your request was removed, too.';
 
 		this.presentToast(data["message"]);
 		this._events.publish('request:deleted', data);

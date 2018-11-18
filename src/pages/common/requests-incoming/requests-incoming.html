@@ -23,14 +23,14 @@
 			</ion-label>
 		</ion-item-divider>
 		<ion-item-group *ngFor="let request of getPendingRequests()">
-			<ion-item-sliding #slidingItem [attr.track]="getTrack(request)" (press)="onViewPromise(request)">
+			<ion-item-sliding #slidingItem [attr.track]="getTrack(request)" (press)="onViewOffer(request)">
 				<button ion-item>
 					<ion-avatar item-start>
-						<img id="prmAvatarImg" [class]="getAvatarCSSClassString(request.prm)" [src]="getThumbnailImage(request.prm)" alt="profile_image">
+						<img id="offerAvatarImg" [class]="getAvatarCSSClassString(request.offer)" [src]="getThumbnailImage(request.offer)" alt="profile_image">
 					</ion-avatar>
 
-					<span class="prmTitle"><b>{{request.prm.title}}</b></span><br/>
-					<span class="prmQuantity">{{request.prm.quantity}} {{request.prm.quantityDescription}}</span><br/>
+					<span class="offerTitle"><b>{{request.offer.title}}</b></span><br/>
+					<span class="offerQuantity">{{request.offer.quantity}} {{request.offer.quantityDescription}}</span><br/>
 					<span *ngIf="hasRequestMessage(request)" class="douMsg">{{getRequestMessage(request)}}<br/></span>
 					<span *ngIf="!hasRequestMessage(request)" class="douMsg">--<br/></span>
 					<span class="douName">{{request.directionallyOppositeUser.realname}}</span><br/>
@@ -53,14 +53,14 @@
 			</ion-label>
 		</ion-item-divider>
 		<ion-item-group *ngFor="let request of getAcceptedRequests()">
-			<ion-item-sliding #slidingItem [attr.track]="getTrack(request)" (press)="onViewPromise(request)">
+			<ion-item-sliding #slidingItem [attr.track]="getTrack(request)" (press)="onViewOffer(request)">
 				<button ion-item>
 					<ion-avatar item-start>
-						<img id="prmAvatarImg" [class]="getAvatarCSSClassString(request.prm)" [src]="getThumbnailImage(request.prm)" alt="profile_image">
+						<img id="offerAvatarImg" [class]="getAvatarCSSClassString(request.offer)" [src]="getThumbnailImage(request.offer)" alt="profile_image">
 					</ion-avatar>
 
-					<span class="prmTitle"><b>{{request.prm.title}}</b></span><br/>
-					<span class="prmQuantity">{{request.prm.quantity}} {{request.prm.quantityDescription}}</span><br/>
+					<span class="offerTitle"><b>{{request.offer.title}}</b></span><br/>
+					<span class="offerQuantity">{{request.offer.quantity}} {{request.offer.quantityDescription}}</span><br/>
 					<span *ngIf="hasRequestMessage(request)" class="douMsg">{{getRequestMessage(request)}}<br/></span>
 					<span *ngIf="!hasRequestMessage(request)" class="douMsg">--<br/></span>
 					<span class="douName">{{request.directionallyOppositeUser.realname}}</span><br/>
@@ -82,14 +82,14 @@
 			</ion-label>
 		</ion-item-divider>
 		<ion-item-group *ngFor="let request of getDeclinedRequests()">
-			<ion-item-sliding #slidingItem [attr.track]="getTrack(request)" (press)="onViewPromise(request)">
+			<ion-item-sliding #slidingItem [attr.track]="getTrack(request)" (press)="onViewOffer(request)">
 				<button ion-item>
 					<ion-avatar item-start>
-						<img id="prmAvatarImg" [class]="getAvatarCSSClassString(request.prm)" [src]="getThumbnailImage(request.prm)" alt="profile_image">
+						<img id="offerAvatarImg" [class]="getAvatarCSSClassString(request.offer)" [src]="getThumbnailImage(request.offer)" alt="profile_image">
 					</ion-avatar>
 
-					<span class="prmTitle"><b>{{request.prm.title}}</b></span><br/>
-					<span class="prmQuantity">{{request.prm.quantity}} {{request.prm.quantityDescription}}</span><br/>
+					<span class="offerTitle"><b>{{request.offer.title}}</b></span><br/>
+					<span class="offerQuantity">{{request.offer.quantity}} {{request.offer.quantityDescription}}</span><br/>
 					<span *ngIf="hasRequestMessage(request)" class="douMsg">{{getRequestMessage(request)}}<br/></span>
 					<span *ngIf="!hasRequestMessage(request)" class="douMsg">--<br/></span>
 					<span class="douName">{{request.directionallyOppositeUser.realname}}</span><br/>
@@ -111,14 +111,14 @@
 			</ion-label>
 		</ion-item-divider>
 		<ion-item-group *ngFor="let request of getCompletedPendingApprovalRequests()">
-			<ion-item-sliding #slidingItem [attr.track]="getTrack(request)" (press)="onViewPromise(request)">
+			<ion-item-sliding #slidingItem [attr.track]="getTrack(request)" (press)="onViewOffer(request)">
 				<button ion-item>
 					<ion-avatar item-start>
-						<img id="prmAvatarImg" [class]="getAvatarCSSClassString(request.prm)" [src]="getThumbnailImage(request.prm)" alt="profile_image">
+						<img id="offerAvatarImg" [class]="getAvatarCSSClassString(request.offer)" [src]="getThumbnailImage(request.offer)" alt="profile_image">
 					</ion-avatar>
 
-					<span class="prmTitle"><b>{{request.prm.title}}</b></span><br/>
-					<span class="prmQuantity">{{request.prm.quantity}} {{request.prm.quantityDescription}}</span><br/>
+					<span class="offerTitle"><b>{{request.offer.title}}</b></span><br/>
+					<span class="offerQuantity">{{request.offer.quantity}} {{request.offer.quantityDescription}}</span><br/>
 					<span *ngIf="hasRequestMessage(request)" class="douMsg">{{getRequestMessage(request)}}<br/></span>
 					<span *ngIf="!hasRequestMessage(request)" class="douMsg">--<br/></span>
 					<span class="douName">{{request.directionallyOppositeUser.realname}}</span><br/>
@@ -136,14 +136,14 @@
 			</ion-label>
 		</ion-item-divider>
 		<ion-item-group *ngFor="let request of getDisputedCompletedRequests()">
-			<ion-item-sliding #slidingItem [attr.track]="getTrack(request)" (press)="onViewPromise(request)">
+			<ion-item-sliding #slidingItem [attr.track]="getTrack(request)" (press)="onViewOffer(request)">
 				<button ion-item>
 					<ion-avatar item-start>
-						<img id="prmAvatarImg" [class]="getAvatarCSSClassString(request.prm)" [src]="getThumbnailImage(request.prm)" alt="profile_image">
+						<img id="offerAvatarImg" [class]="getAvatarCSSClassString(request.offer)" [src]="getThumbnailImage(request.offer)" alt="profile_image">
 					</ion-avatar>
 
-					<span class="prmTitle"><b>{{request.prm.title}}</b></span><br/>
-					<span class="prmQuantity">{{request.prm.quantity}} {{request.prm.quantityDescription}}</span><br/>
+					<span class="offerTitle"><b>{{request.offer.title}}</b></span><br/>
+					<span class="offerQuantity">{{request.offer.quantity}} {{request.offer.quantityDescription}}</span><br/>
 					<span *ngIf="hasRequestMessage(request)" class="douMsg">{{getRequestMessage(request)}}<br/></span>
 					<span *ngIf="!hasRequestMessage(request)" class="douMsg">--<br/></span>
 					<span class="douName">{{request.directionallyOppositeUser.realname}}</span><br/>

@@ -29,7 +29,7 @@ import { ProfileHeader } from '../pages/common/profile-header/profile-header';
 import { ChoosePhotoSourcePage } from '../pages/common/choose-photo-source/choose-photo-source';
 import { SearchPage } from '../pages/search/search';
 import { SocialNetworkCRUDPage } from '../pages/profile/_pages/social-network-CRUD';
-import { RequestPage } from '../pages/promises/_pages/request';
+import { RequestPage } from '../pages/offers/_pages/request';
 import { AcceptRequestPage } from '../pages/requests/incoming/_pages/accept.request';
 import { AcceptRequestTutorialPage } from '../pages/requests/incoming/_pages/accept.request.tutorial';
 import { DeclineRequestPage } from '../pages/requests/incoming/_pages/decline.request';
@@ -40,19 +40,19 @@ import { NotCompleteOutgoingRequestPage } from '../pages/requests/outgoing/_page
 import { PermanentlyDismissUnresolvedRequestPage } from '../pages/requests/outgoing/_pages/permanently-dismiss-unresolved-request';
 import { CancelOutgoingRequestPage } from '../pages/requests/outgoing/_pages/cancel.request';
 import { RequestContactInfoPage } from '../pages/requests/_pages/contact.info';
-import { OtherPeoplesPromiseList } from '../pages/common/other-peoples-promise-list/other-peoples-promise-list';
-import { PrmEditPage } from '../pages/promises/edit.prm';
-import { PrmDisplayPage } from '../pages/promises/display.prm';
-import { OutgoingRequestMadeTutorialPage } from '../pages/promises/_pages/outgoing-request-made-tutorial';
-import { DeletePrmPage } from '../pages/promises/_pages/delete.prm';
+import { OtherPeoplesOfferList } from '../pages/common/other-peoples-offer-list/other-peoples-offer-list';
+import { OfferEditPage } from '../pages/offers/edit.offer';
+import { OfferDisplayPage } from '../pages/offers/display.offer';
+import { OutgoingRequestMadeTutorialPage } from '../pages/offers/_pages/outgoing-request-made-tutorial';
+import { DeleteOfferPage } from '../pages/offers/_pages/delete.offer';
 import { RequestsIncomingView } from '../pages/common/requests-incoming/requests-incoming';
 import { RequestsOutgoingView } from '../pages/common/requests-outgoing/requests-outgoing';
-import { PromiseListPage } from '../pages/promise-list/promise-list';
+import { OfferListPage } from '../pages/offer-list/offer-list';
 import { KeywordListPage } from '../pages/keyword-list/keyword-list';
 import { RecommendationListPage } from '../pages/recommendation-list/recommendation-list';
 import { NotificationListPage } from '../pages/notification-list/notification-list';
 import { UsersLineItem } from '../pages/common/users-line-item/users-line-item';
-import { RulePage } from '../pages/promises/_pages/rule';
+import { RulePage } from '../pages/offers/_pages/rule';
 import { KeywordEntryPage } from '../pages/keyword.entry/keyword.entry';
 import { ProfilePoints } from '../pages/common/profile-points/profile-points';
 
@@ -76,10 +76,10 @@ import { PictureEXIFService } from './_services/picture-exif.service';
 import { ProfileKeywordService } from './_services/profile-keyword.service';
 import { CameraService } from '../pages/common/_services/camera.service';
 import { NotificationService } from './_services/notification.service';
-import { PrmModelService } from './_services/prm-model.service';
-import { PrmCollectionService } from './_services/prm-collection.service';
-import { PrmMetadataService } from './_services/prm-metadata.service';
-import { PrmDetailService } from './_services/prm-detail.service';
+import { OfferModelService } from './_services/offer-model.service';
+import { OfferCollectionService } from './_services/offer-collection.service';
+import { OfferMetadataService } from './_services/offer-metadata.service';
+import { OfferDetailService } from './_services/offer-detail.service';
 import { UserPreferencesService } from './_services/user-preferences.service';
 import { UnseenChangesIndicatorService } from './_services/unseen-changes-indicator.service';
 import { HomeService } from '../pages/home/_services/home.service';
@@ -110,15 +110,15 @@ export class CustomHammerConfig extends HammerGestureConfig {
     ProfileEditPage,
     ProfileHeader,
     ChoosePhotoSourcePage,
-    PrmEditPage,
-    PrmDisplayPage,
-    OtherPeoplesPromiseList,
+    OfferEditPage,
+    OfferDisplayPage,
+    OtherPeoplesOfferList,
     OutgoingRequestMadeTutorialPage,
-    DeletePrmPage,
+    DeleteOfferPage,
     RulePage,
     RequestsIncomingView,    
     RequestsOutgoingView,
-    PromiseListPage,
+    OfferListPage,
     KeywordListPage,
     RecommendationListPage,
     NotificationListPage,
@@ -164,15 +164,15 @@ export class CustomHammerConfig extends HammerGestureConfig {
     ProfileEditPage,
     ProfileHeader,
     ChoosePhotoSourcePage,
-    PrmEditPage,
-    PrmDisplayPage,
-    OtherPeoplesPromiseList,
+    OfferEditPage,
+    OfferDisplayPage,
+    OtherPeoplesOfferList,
     OutgoingRequestMadeTutorialPage,
-    PromiseListPage,
+    OfferListPage,
     KeywordListPage,
     RecommendationListPage,
     NotificationListPage,
-    DeletePrmPage,
+    DeleteOfferPage,
     RulePage,
     RequestsIncomingView,
     RequestsOutgoingView,
@@ -211,10 +211,10 @@ export class CustomHammerConfig extends HammerGestureConfig {
     PictureService,
     PictureEXIFService,
     SearchService,
-    PrmCollectionService,
-    PrmModelService,
-    PrmMetadataService,
-    PrmDetailService,
+    OfferCollectionService,
+    OfferModelService,
+    OfferMetadataService,
+    OfferDetailService,
     ProfileService,
     ContactInfoVisibilityService,
     CameraService,

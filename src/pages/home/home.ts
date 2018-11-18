@@ -14,7 +14,7 @@ export class HomePage {
     @ViewChild(Navbar) navBar: Navbar;
 
     showTutorialPromise = undefined;
-    mostRecentlyCreatedPromises = undefined;
+    mostRecentlyCreatedOffers = undefined;
 
     constructor(public navCtrl: NavController,
                 private _modalCtrl: ModalController, 
@@ -28,8 +28,8 @@ export class HomePage {
         let self = this;
         self.showTutorialPromise = self._userService.getShowTutorialOnLogin();
 
-        self._homeService.getMostRecentlyCreatedPromises().then((data) => {
-            self.mostRecentlyCreatedPromises = data;
+        self._homeService.getMostRecentlyCreatedOffers().then((data) => {
+            self.mostRecentlyCreatedOffers = data;
         });
     }
 
@@ -50,8 +50,8 @@ export class HomePage {
         }
     }
 
-    getMostRecentlyCreatedPromises() {
-        return this.mostRecentlyCreatedPromises;
+    getMostRecentlyCreatedOffers() {
+        return this.mostRecentlyCreatedOffers;
     }
 
 }

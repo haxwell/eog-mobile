@@ -4,11 +4,11 @@ import { ViewController, NavController, NavParams } from 'ionic-angular';
 import { mockView, mockNavController } from 'ionic-angular/util/mock-providers';
 
 import { EasyahHeader } from '../../pages/common/easyah-header/easyah-header';
-import { PromiseListPage } from './promise-list';
-import { PrmEditPage } from '../promises/edit.prm';
-import { PrmDisplayPage } from '../promises/display.prm';
+import { OfferListPage } from './offer-list';
+import { OfferEditPage } from '../offers/edit.offer';
+import { OfferDisplayPage } from '../offers/display.offer';
 
-import { PrmCollectionService } from '../../app/_services/prm-collection.service';
+import { OfferCollectionService } from '../../app/_services/offer-collection.service';
 import { UserService } from '../../app/_services/user.service';
 
 import {
@@ -17,10 +17,10 @@ import {
 
 import {
   UserServiceMock,
-  PrmCollectionServiceMock
+  OfferCollectionServiceMock
 } from '../../../test-config/mocks-easyah';
 
-describe('PromiseListPage Component', () => {
+describe('OfferListPage Component', () => {
   let fixture;
   let component;
   const mockNavCtrl = mockNavController();
@@ -29,12 +29,12 @@ describe('PromiseListPage Component', () => {
     //NavParamsMock.setParams('keywordArray', []);
 
     TestBed.configureTestingModule({
-      declarations: [PromiseListPage, EasyahHeader],
+      declarations: [OfferListPage, EasyahHeader],
       imports: [
-        IonicModule.forRoot(PromiseListPage)
+        IonicModule.forRoot(OfferListPage)
       ],
       providers: [
-      	{ provide: PrmCollectionService, useClass: PrmCollectionServiceMock },
+      	{ provide: OfferCollectionService, useClass: OfferCollectionServiceMock },
       	{ provide: UserService, useClass: UserServiceMock },
         { provide: ViewController, useValue: mockView() },
         { provide: NavController, useValue: mockNavCtrl },
@@ -47,7 +47,7 @@ describe('PromiseListPage Component', () => {
 
     // TODO: test passing in a set of keywords
 
-    fixture = TestBed.createComponent(PromiseListPage);
+    fixture = TestBed.createComponent(OfferListPage);
     fixture.detectChanges();
 
     component = fixture.componentInstance;
@@ -59,25 +59,25 @@ describe('PromiseListPage Component', () => {
   });
 
   it('should be created', () => {
-    expect(component instanceof PromiseListPage).toBe(true);
+    expect(component instanceof OfferListPage).toBe(true);
   });
 
-  it('should show the PrmEditPage dialog when the New Promise button is tapped', () => {
+  it('should show the OfferEditPage dialog when the New Offer button is tapped', () => {
   	spyOn(mockNavCtrl, 'push');
 
-  	component.onNewPromiseBtnTap();
+  	component.onNewOfferBtnTap();
 
-  	expect(mockNavCtrl.push).toHaveBeenCalledWith(PrmEditPage, {prm: undefined, callback: jasmine.any(Function)});
+  	expect(mockNavCtrl.push).toHaveBeenCalledWith(OfferEditPage, {offer: undefined, callback: jasmine.any(Function)});
   })
 
-  it('should show the PrmDisplayPage when an individual Promise is tapped', () => {
+  it('should show the OfferDisplayPage when an individual Offer is tapped', () => {
   	spyOn(mockNavCtrl, 'push');
 
-  	let _prm = {id: -1, text: 'text'};
+  	let _offer = {id: -1, text: 'text'};
 
-  	component.onPromiseBtnTap(_prm);
+  	component.onOfferBtnTap(_offer);
 
-  	expect(mockNavCtrl.push).toHaveBeenCalledWith(PrmDisplayPage, {prm: _prm, callback: jasmine.any(Function)});
+  	expect(mockNavCtrl.push).toHaveBeenCalledWith(OfferDisplayPage, {offer: _offer, callback: jasmine.any(Function)});
   })
 
 });

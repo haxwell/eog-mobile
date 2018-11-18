@@ -8,36 +8,36 @@
 		<ion-row>
 			<ion-item no-lines>
 				<button ion-button (click)="onGoBackBtnTap($event)">Go Back</button>
-				<button *ngIf="isCurrentUsersPromise()" round ion-button item-right (click)="onEditPromiseBtnClick($event)"><ion-icon class="whiteText profileIcon" name="create"></ion-icon></button>
+				<button *ngIf="isCurrentUsersOffer()" round ion-button item-right (click)="onEditOfferBtnClick($event)"><ion-icon class="whiteText profileIcon" name="create"></ion-icon></button>
 			</ion-item>
 		</ion-row>
 
 
 		<ion-row>
 			<div class="card">
-				<img id="prmDisplayHeaderImg" [class]="getAvatarCSSClassString()" [src]="getThumbnailImage()" alt="profile_image">
+				<img id="offerDisplayHeaderImg" [class]="getAvatarCSSClassString()" [src]="getThumbnailImage()" alt="profile_image">
 			</div>
 		</ion-row>	
 
 		<ion-row>
 			<ion-item no-lines>
-				<h1 id="displayPrmTitle">{{ getModel()["title"] }}</h1>
+				<h1 id="displayOfferTitle">{{ getModel()["title"] }}</h1>
 			</ion-item>
 		</ion-row>
 		<ion-row>
 			<ion-item no-lines>
-				Offering <span id="displayPrmQuantity">{{ getModel()["quantity"] }} {{ getModel()["quantityDescription"] }}</span>
+				Offering <span id="displayOfferQuantity">{{ getModel()["quantity"] }} {{ getModel()["quantityDescription"] }}</span>
 			</ion-item>
 		</ion-row>
 		<ion-row>
 			<ion-item no-lines>
-				<h4 id="displayPrmDescription">{{ getModel()["description"] }}</h4>
+				<h4 id="displayOfferDescription">{{ getModel()["description"] }}</h4>
 			</ion-item>
 		</ion-row>
 
 		<ion-row>
 			<ion-item>
-				<span class="displayPrmSectionHeader">Keywords</span>
+				<span class="displayOfferSectionHeader">Keywords</span>
 				<span *ngFor="let item of model.keywords">
 					<span class="blockItem" >{{item.text}}</span>
 				</span>
@@ -46,7 +46,7 @@
 		
 		<ion-row>
 			<ion-item>
-				<span class="displayPrmSectionHeader">Requirements</span>
+				<span class="displayOfferSectionHeader">Requirements</span>
 				<span class="pointsSpan">{{ getRequiredPointsQuantityString() }}</span>
 				<users-line-item *ngFor="let user of getRequiredRecommendationUserObjects()" [item]="user" [clickthru]="false"></users-line-item>
 			</ion-item>
@@ -56,21 +56,21 @@
 			<ion-item>
 				<!-- TODO: This should be a 'more' link that disappears when clicked, revealing the details, and then 
 					reappers when the details are clicked, showing the 'more' link again. -->
-				<span class="displayPrmSectionHeader">Statistics</span>
+				<span class="displayOfferSectionHeader">Statistics</span>
 				<span *ngIf="hasStatistics()">
 					<span>{{getFirstFulfilledText()}}<br/></span>
 					<span>{{getTotalPointsEarned()}}<br/></span>
 					<span>{{getNumberOfComplaints()}}<br/></span>
 				</span>
 				<span *ngIf="!hasStatistics()">
-					<span>This promise is new! It doesn't have statistics yet.<br/></span>
+					<span>This offer is new! It doesn't have statistics yet.<br/></span>
 				</span>
 			</ion-item>		
 		</ion-row>
 
 		<ion-row *ngIf="isRequestMessageAvailable()">
 			<ion-item>
-				<span class="displayPrmSectionHeader">Messages</span>
+				<span class="displayOfferSectionHeader">Messages</span>
 				<span *ngFor="let item of getStillMoreTimeLeftMessages()" [ngStyle]="{'color':'red'}">
 					{{item.msg}}<br/>
 				</span>

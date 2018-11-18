@@ -7,10 +7,10 @@
 </ion-header>
 
 <ion-content padding>
-	<ion-label>You are about to request a User do their Promise for you.</ion-label>
-	<ion-label><b>{{prm.title}}</b></ion-label>
-	<ion-label *ngIf="!getRequiredUserRecommendations()">This will require {{prm.requiredPointsQuantity}} points from you.</ion-label>
-	<ion-label *ngIf="getRequiredUserRecommendations()">This will require {{prm.requiredPointsQuantity}} points, and the following recommendations from you.</ion-label>
+	<ion-label>You are about to request that someone do their offer for you.</ion-label>
+	<ion-label><b>{{offer.title}}</b></ion-label>
+	<ion-label *ngIf="!getRequiredUserRecommendations()">This will require {{offer.requiredPointsQuantity}} points from you.</ion-label>
+	<ion-label *ngIf="getRequiredUserRecommendations()">This will require {{offer.requiredPointsQuantity}} points, and the following recommendations from you.</ion-label>
 	<users-line-item *ngFor="let user of getRequiredUserRecommendations()" [item]="user" [clickthru]="false"></users-line-item>
 	<hr/>
 

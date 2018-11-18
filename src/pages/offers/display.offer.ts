@@ -3,13 +3,13 @@ import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { ModalController, AlertController } from 'ionic-angular';
 
-import { PrmEditPage } from './edit.prm'
+import { OfferEditPage } from './edit.offer'
 import { RequestPage } from './_pages/request'
-import { DeletePrmPage } from './_pages/delete.prm'
+import { DeleteOfferPage } from './_pages/delete.offer'
 import { OutgoingRequestMadeTutorialPage } from './_pages/outgoing-request-made-tutorial'
-import { PrmModelService } from '../../app/_services/prm-model.service';
-import { PrmMetadataService } from '../../app/_services/prm-metadata.service';
-import { PrmDetailService } from '../../app/_services/prm-detail.service';
+import { OfferModelService } from '../../app/_services/offer-model.service';
+import { OfferMetadataService } from '../../app/_services/offer-metadata.service';
+import { OfferDetailService } from '../../app/_services/offer-detail.service';
 import { UserService } from '../../app/_services/user.service';
 import { UserPreferencesService } from '../../app/_services/user-preferences.service';
 import { PictureService } from '../../app/_services/picture.service';
@@ -20,11 +20,11 @@ import { Constants } from '../../_constants/constants';
 import Moment from 'moment'
 
 @Component({
-  selector: 'page-display-prm',
-  templateUrl: 'display.prm.html'
+  selector: 'page-display-offer',
+  templateUrl: 'display.offer.html'
 })
 
-export class PrmDisplayPage {
+export class OfferDisplayPage {
 
 	model = undefined;
 	requestMsgs = undefined;
@@ -39,27 +39,27 @@ export class PrmDisplayPage {
 				navParams: NavParams, 
 				private modalCtrl: ModalController,
 				private alertCtrl: AlertController,
-				private _prmModelService: PrmModelService,
-				private _prmMetadataService: PrmMetadataService,
-				private _prmDetailService: PrmDetailService,
+				private _offerModelService: OfferModelService,
+				private _offerMetadataService: OfferMetadataService,
+				private _offerDetailService: OfferDetailService,
 				private _userService: UserService,
 				private _pictureService: PictureService,
 				private _requestsService: RequestsService,
 				private _userPreferencesService: UserPreferencesService,
 				private _constants: Constants) {
 
-		this.model = navParams.get('prm');
+		this.model = navParams.get('offer');
 
-		this._prmModelService.setPrmMetadata(this.model).then((prm) => {
-			this.setModel(Object.assign({}, prm));
+		this._offerModelService.setOfferMetadata(this.model).then((offer) => {
+			this.setModel(Object.assign({}, offer));
 		});
 
 		this.model["keywords"].sort((a, b) => { let aText = a.text.toLowerCase(); let bText = b.text.toLowerCase(); if (aText > bText) return 1; else if (aText < bText) return -1; else return 0; })
 
         if (this.model["userId"] !== this._userService.getCurrentUser()["id"] && 
         	this.model["directionallyOppositeUser"] === undefined) {
-		        let getUserPromise = this._userService.getUser(this.model["userId"]);
-		        getUserPromise.then((user) => {
+		        let getUserOffer = this._userService.getUser(this.model["userId"]);
+		        getUserOffer.then((user) => {
 		            this.model["directionallyOppositeUser"] = user;
 		            delete this.model["userId"];
 		        });
@@ -74,7 +74,7 @@ export class PrmDisplayPage {
 			});
 		}
 
-		this.requestMsgs = this._prmDetailService.getPrmDetailMessages(this.model);
+		this.requestMsgs = this._offerDetailService.getOfferDetailMessages(this.model);
 
 		this.callback = navParams.get('callback') || function() { return new Promise((resolve, reject) => { resolve(); }) };
 	}
@@ -82,9 +82,9 @@ export class PrmDisplayPage {
 	ngOnInit() {
 		let self = this;
 
-		self._prmMetadataService.init();
+		self._offerMetadataService.init();
 
-		self._prmMetadataService.getMetadataValue(self.model, self._constants.FUNCTION_KEY_PRM_IS_REQUESTABLE).then((bool) => { 
+		self._offerMetadataService.getMetadataValue(self.model, self._constants.FUNCTION_KEY_OFFER_IS_REQUESTABLE).then((bool) => { 
 			self._isRequestBtnVisible = bool;
 		});
 
@@ -180,7 +180,7 @@ export class PrmDisplayPage {
 		if (this.model["num_of_complaints"] !== undefined) 
 			return this.model["num_of_complaints"] + " complaints.";
 		else
-			return "No complaints about this promise.";
+			return "No complaints about this offer.";
 	}
 
 	getTotalPointsEarned() {
@@ -200,7 +200,7 @@ export class PrmDisplayPage {
 
 	onDeleteBtnTap(evt) {
 		let self = this;
-		let modal = this.modalCtrl.create(DeletePrmPage, {prm: this.model});
+		let modal = this.modalCtrl.create(DeleteOfferPage, {offer: this.model});
 		modal.onDidDismiss(data => { self.callback(data).then(() => { if (data === true) self.navCtrl.pop(); }) } );
 		modal.present();
 	}
@@ -219,7 +219,7 @@ export class PrmDisplayPage {
 
 	onRequestBtnTap(evt) {
 		let self = this;
-		let modal = self.modalCtrl.create(RequestPage, {prm: self.model, callback: self.requestCallback});
+		let modal = self.modalCtrl.create(RequestPage, {offer: self.model, callback: self.requestCallback});
 		modal.onDidDismiss(data => { 
 			if (data !== undefined) {
 				if (self.showTutorialAfterOutgoingRequestMade) {
@@ -244,21 +244,21 @@ export class PrmDisplayPage {
 		this.navCtrl.pop();
 	}
 
-	areRecommendationsRequired(prm) {
+	areRecommendationsRequired(offer) {
 		return (this.model["requiredUserRecommendations"] && this.model["requiredUserRecommendations"].length > 0);
 	}
 
-	isCurrentUsersPromise() {
+	isCurrentUsersOffer() {
 		return this.model["userId"] === this._userService.getCurrentUser()["id"];
 	}
 
-	onEditPromiseBtnClick() {
+	onEditOfferBtnClick() {
 		let self = this;
 
-		let editPromiseCallback = (prmModel) => {
+		let editOfferCallback = (offerModel) => {
 			return new Promise((resolve, reject) => {
-				self.model = prmModel;
-				console.log("Display.PRM editPromiseCallback called with: " + JSON.stringify(self.model)) // expect that this should have the image path on it
+				self.model = offerModel;
+				console.log("Display.OFFER editOfferCallback called with: " + JSON.stringify(self.model)) // expect that this should have the image path on it
 
 				if (this.callback !== undefined) 
 					this.callback(true).then(() => {
@@ -270,20 +270,20 @@ export class PrmDisplayPage {
 		}
 
 		self._requestsService.getIncomingRequestsForCurrentUser().then((data: Array<Object>) => {
-			let reqsForThisPrm = data.filter((obj) => { return obj["prm"]["id"] === self.model["id"]; });
-			reqsForThisPrm = reqsForThisPrm.filter((obj) => { return obj["deliveringStatusId"] !== this._constants.REQUEST_STATUS_DECLINED_AND_HIDDEN && obj["deliveringStatusId"] !== this._constants.REQUEST_STATUS_DECLINED; })
+			let reqsForThisOffer = data.filter((obj) => { return obj["offer"]["id"] === self.model["id"]; });
+			reqsForThisOffer = reqsForThisOffer.filter((obj) => { return obj["deliveringStatusId"] !== this._constants.REQUEST_STATUS_DECLINED_AND_HIDDEN && obj["deliveringStatusId"] !== this._constants.REQUEST_STATUS_DECLINED; })
 
-			if (reqsForThisPrm !== undefined && reqsForThisPrm.length > 0) {
-				// this promise has outstanding requests (pending and/or in-progress)
+			if (reqsForThisOffer !== undefined && reqsForThisOffer.length > 0) {
+				// this offer has outstanding requests (pending and/or in-progress)
 				//  the user can only change the picture, and number of points required
 
 				let okAlert = self.alertCtrl.create({
 				      title: 'Just FYI',
-				      subTitle: "This promise has requests that are pending or in-progress.<br/><br/>You will only be able to edit the picture, and the number of points that it requires. Edits to points will only apply to future requests.",
+				      subTitle: "This offer has requests that are pending or in-progress.<br/><br/>You will only be able to edit the picture, and the number of points that it requires. Edits to points will only apply to future requests.",
 				      buttons: [{
 				        text: 'OK',
 				        handler: () => {
-							self.navCtrl.push(PrmEditPage, {prm: Object.assign({}, self.model), callback: editPromiseCallback, prmHasIncomingReqs: true});
+							self.navCtrl.push(OfferEditPage, {offer: Object.assign({}, self.model), callback: editOfferCallback, offerHasIncomingReqs: true});
 				        }
 					}]
 				})
@@ -291,7 +291,7 @@ export class PrmDisplayPage {
 				okAlert.present();
 
 			} else {
-				self.navCtrl.push(PrmEditPage, {prm: Object.assign({}, self.model), callback: editPromiseCallback});
+				self.navCtrl.push(OfferEditPage, {offer: Object.assign({}, self.model), callback: editOfferCallback});
 			}
 		})
 	}

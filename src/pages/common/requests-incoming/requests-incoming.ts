@@ -8,8 +8,8 @@ import { PictureService } from '../../../app/_services/picture.service'
 
 import { Constants } from '../../../_constants/constants'
 
-/* TODO: Move Promises to the Common area. Since it is called from this common component. */
-import { PrmDisplayPage } from '../../promises/display.prm'
+/* TODO: Move Offers to the Common area. Since it is called from this common component. */
+import { OfferDisplayPage } from '../../offers/display.offer'
 
 import { AcceptRequestPage } from '../../../pages/requests/incoming/_pages/accept.request'
 import { DeclineRequestPage } from '../../../pages/requests/incoming/_pages/decline.request'
@@ -51,7 +51,7 @@ export class RequestsIncomingView {
 		_events.subscribe('request:declined:acknowledged', func);
 		_events.subscribe('request:cancelled:acknowledged', func);
 
-		_events.subscribe('prm:deletedByCurrentUser', () => { 
+		_events.subscribe('offer:deletedByCurrentUser', () => { 
 			this.ngOnInit();
 		});
 	}
@@ -215,15 +215,15 @@ export class RequestsIncomingView {
 		return count;
 	}
 
-	getThumbnailImage(prm) {
-		if (prm["imageFileURI"] !== undefined && prm["imageOrientation"] !== undefined)
-			return prm["imageFileURI"];
+	getThumbnailImage(offer) {
+		if (offer["imageFileURI"] !== undefined && offer["imageOrientation"] !== undefined)
+			return offer["imageFileURI"];
 		else
 			return "assets/img/mushroom.jpg";
 	}
 
-	getAvatarCSSClassString(prm) {
-		return this._pictureService.getOrientationCSS(prm);
+	getAvatarCSSClassString(offer) {
+		return this._pictureService.getOrientationCSS(offer);
 	}
 
 	hasRequestMessage(req) {
@@ -238,8 +238,8 @@ export class RequestsIncomingView {
 		this.navCtrl.push(ProfilePage, { user: request["directionallyOppositeUser"], readOnly: true });
 	}
 
-	onViewPromise(request) {
-		this.navCtrl.push(PrmDisplayPage, { prm: request.prm });
+	onViewOffer(request) {
+		this.navCtrl.push(OfferDisplayPage, { offer: request.offer });
 	}
 
 	onAcceptBtnTap(request) {

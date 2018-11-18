@@ -10,7 +10,7 @@ import { Constants } from '../../_constants/constants';
 import { environment } from '../../_environments/environment';
 
 @Injectable()
-export class PrmModelService {
+export class OfferModelService {
 	
 	constructor(private _apiService: ApiService, private _userService: UserService,
 				private _pictureService: PictureService,
@@ -37,19 +37,19 @@ export class PrmModelService {
 		return rtn;
 	}
 
-	get(prmId) {
+	get(offerId) {
 		return new Promise((resolve, reject) => {
-			let url = environment.apiUrl + "/api/promises/" + prmId; 
+			let url = environment.apiUrl + "/api/offers/" + offerId; 
 			this._apiService.get(url)
-			.subscribe((prmObj) => {
-				resolve(JSON.parse(prmObj["_body"]));
+			.subscribe((offerObj) => {
+				resolve(JSON.parse(offerObj["_body"]));
 			}, (err) => {
 				reject(err);
 			});
 		});
 	}
 
-	setPrmMetadata(prm) {
+	setOfferMetadata(offer) {
 
 		// TODO:
 		// There's a piece of the framework here.. An object which takes tuples of apiURLs,domainObjects, and DO-property-names
@@ -59,65 +59,65 @@ export class PrmModelService {
 
 		return new Promise((resolve, reject) => {
 			let count = 0;
-			let func = (prm) => {
+			let func = (offer) => {
 				let numPiecesOfMetadata = 4;
 
 				if (++count > numPiecesOfMetadata)
-					resolve(prm);
+					resolve(offer);
 			}
 
-			let url = environment.apiUrl + "/api/promises/" + prm["id"] + "/fulfillment-dates"; 
+			let url = environment.apiUrl + "/api/offers/" + offer["id"] + "/fulfillment-dates"; 
 			this._apiService.get(url)
 			.subscribe((data) => {
-				prm["fulfillment_dates"] = JSON.parse(data["_body"]);
-				func(prm);
+				offer["fulfillment_dates"] = JSON.parse(data["_body"]);
+				func(offer);
 			}, (err) => {
 				reject(err);
 			});
 
-			url = environment.apiUrl + "/api/promises/" + prm["id"] + "/complaint-count"; 
+			url = environment.apiUrl + "/api/offers/" + offer["id"] + "/complaint-count"; 
 			this._apiService.get(url)
 			.subscribe((data) => {
-				prm["num_of_complaints"] = JSON.parse(data["_body"]);
-				func(prm);
+				offer["num_of_complaints"] = JSON.parse(data["_body"]);
+				func(offer);
 			}, (err) => {
 				reject(err);
 			});
 
-			url = environment.apiUrl + "/api/promises/" + prm["id"] + "/total-points-earned"; 
+			url = environment.apiUrl + "/api/offers/" + offer["id"] + "/total-points-earned"; 
 			this._apiService.get(url)
 			.subscribe((data) => {
-				prm["total_points_earned"] = JSON.parse(data["_body"]);
-				func(prm);
+				offer["total_points_earned"] = JSON.parse(data["_body"]);
+				func(offer);
 			}, (err) => {
 				reject(err);
 			});
 
-			this.setPrmImageOrientation(prm).then((prm) => {
-				func(prm);
+			this.setOfferImageOrientation(offer).then((offer) => {
+				func(offer);
 			})
 		});
 	}
 
-	setPrmImageOrientation(prm) {
+	setOfferImageOrientation(offer) {
 		let self = this;
 
 		return new Promise((resolve, reject) => {
 
-			// TODO: This code is mainly duplicated in prm-collection.service
+			// TODO: This code is mainly duplicated in offer-collection.service
 
-			self._pictureService.get(self._constants.PHOTO_TYPE_PRM, prm["id"]).then((filename) => {
-				prm["imageFileSource"] = 'eog';
-				prm["imageFileURI"] = filename;
-				prm["imageFileURI_OriginalValue"] = filename;
+			self._pictureService.get(self._constants.PHOTO_TYPE_OFFER, offer["id"]).then((filename) => {
+				offer["imageFileSource"] = 'eog';
+				offer["imageFileURI"] = filename;
+				offer["imageFileURI_OriginalValue"] = filename;
 
 				if (filename) {
 					self._pictureEXIFService.getEXIFMetadata(filename).then((exifMetadata) => {
-						prm["imageOrientation"] = exifMetadata["Orientation"];
-						resolve(prm);
+						offer["imageOrientation"] = exifMetadata["Orientation"];
+						resolve(offer);
 					})
 				} else {
-					resolve(prm);
+					resolve(offer);
 				}
 			}, (err) => {
 				resolve(undefined);
@@ -131,13 +131,13 @@ export class PrmModelService {
 		let data = this.JSON_to_URLEncoded(model, undefined, undefined);
 
 		return new Promise((resolve, reject) => {
-			let url = environment.apiUrl + "/api/promises";
+			let url = environment.apiUrl + "/api/offers";
 			this._apiService.post(url, data)
 			.subscribe((resp) => {
 				let obj = JSON.parse(resp["_body"]);
 
 				let func = () => {
-					self._events.publish("promise:saved", obj)
+					self._events.publish("offer:saved", obj)
 					resolve(obj);
 				}
 
@@ -145,7 +145,7 @@ export class PrmModelService {
 					cb(obj).then(() => {
 						func();
 					}).catch((err) => {
-						console.log("error in prmModelService calling the callback");
+						console.log("error in offerModelService calling the callback");
 						console.log(JSON.stringify(err));
 					})
 				} else {
@@ -175,12 +175,12 @@ export class PrmModelService {
 	delete(model) {
 		let self = this;
 		return new Promise((resolve, reject) => {
-			let url = environment.apiUrl + "/api/promises/" + model["id"];
+			let url = environment.apiUrl + "/api/offers/" + model["id"];
 			this._apiService.delete(url)
 			.subscribe((resp) => {
 				let obj = JSON.parse(resp["_body"]);
 				
-				self._events.publish("promise:deleted", obj)
+				self._events.publish("offer:deleted", obj)
 				
 				resolve(obj);
 			}, (err) => {

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { UserService } from '../../../app/_services/user.service';
 import { ApiService } from '../../../app/_services/api.service';
-import { PrmModelService } from '../../../app/_services/prm-model.service';
+import { OfferModelService } from '../../../app/_services/offer-model.service';
 import { FunctionPromiseService } from '../../../app/_services/function-promise.service';
 
 import { environment } from '../../../_environments/environment';
@@ -11,46 +11,46 @@ import { Constants } from '../../../_constants/constants';
 @Injectable()
 export class HomeService {
 	
-	isMostRecentlyCreatedPromisesFuncInitialized = false;
+	isMostRecentlyCreatedOffersFuncInitialized = false;
 
 	constructor(private _apiService: ApiService, private _userService: UserService,
 				private _constants: Constants,
-				private _prmModelService: PrmModelService, 
+				private _offerModelService: OfferModelService, 
 				private _functionPromiseService: FunctionPromiseService) {
 
 	}
 
 	init() {
 		let self = this;
-		self._functionPromiseService.initFunc(this._constants.FUNCTION_KEY_MOST_RECENTLY_CREATED_PROMISES_GET, (data) => {
+		self._functionPromiseService.initFunc(this._constants.FUNCTION_KEY_MOST_RECENTLY_CREATED_OFFERS_GET, (data) => {
 			let userId = data['userId'];
 			let count = data['count'];
 
 			return new Promise((resolve, reject) => {
-				let url = environment.apiUrl + "/api/promises/recent?count=" + count + "&userId=" + userId;
+				let url = environment.apiUrl + "/api/offers/recent?count=" + count + "&userId=" + userId;
 				self._apiService.get(url).subscribe((data) => {
-					let prms = JSON.parse(data["_body"]);
+					let offers = JSON.parse(data["_body"]);
 
-					prms.forEach((prm) => {
-						self._prmModelService.setPrmImageOrientation(prm);
+					offers.forEach((offer) => {
+						self._offerModelService.setOfferImageOrientation(offer);
 					});
 
-					resolve(prms);
+					resolve(offers);
 				}, (err) => {
 					reject(err);
 				});
 			})
 		})
 
-		this.isMostRecentlyCreatedPromisesFuncInitialized = true;
+		this.isMostRecentlyCreatedOffersFuncInitialized = true;
 	}
 
-	getMostRecentlyCreatedPromises() {
+	getMostRecentlyCreatedOffers() {
 		let self = this;
-		if (!self.isMostRecentlyCreatedPromisesFuncInitialized)
+		if (!self.isMostRecentlyCreatedOffersFuncInitialized)
 			self.init();
 
 		let data = {userId: self._userService.getCurrentUser()['id'], count: 3};
-		return self._functionPromiseService.get(data['userId']+"mrcp", self._constants.FUNCTION_KEY_MOST_RECENTLY_CREATED_PROMISES_GET, data);
+		return self._functionPromiseService.get(data['userId']+"mrcp", self._constants.FUNCTION_KEY_MOST_RECENTLY_CREATED_OFFERS_GET, data);
 	}
 }

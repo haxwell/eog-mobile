@@ -9,8 +9,8 @@ import { PictureService } from '../../../app/_services/picture.service'
 
 import { Constants } from '../../../_constants/constants'
 
-/* TODO: Move Promises to the Common area. Since it is called from this common component. */
-import { PrmDisplayPage } from '../../promises/display.prm'
+/* TODO: Move Offers to the Common area. Since it is called from this common component. */
+import { OfferDisplayPage } from '../../offers/display.offer'
 
 import { PermanentlyDismissUnresolvedRequestPage } from '../../../pages/requests/outgoing/_pages/permanently-dismiss-unresolved-request'
 import { NotCompleteOutgoingRequestPage } from '../../../pages/requests/outgoing/_pages/not.complete.request'
@@ -216,15 +216,15 @@ export class RequestsOutgoingView {
 			return undefined;
 	}
 
-	getThumbnailImage(prm) {
-		if (prm["imageFileURI"] !== undefined && prm["imageOrientation"] !== undefined)
-			return prm["imageFileURI"];
+	getThumbnailImage(offer) {
+		if (offer["imageFileURI"] !== undefined && offer["imageOrientation"] !== undefined)
+			return offer["imageFileURI"];
 		else
 			return "assets/img/mushroom.jpg";
 	}
 
-	getAvatarCSSClassString(prm) {
-		return this._pictureService.getOrientationCSS(prm);
+	getAvatarCSSClassString(offer) {
+		return this._pictureService.getOrientationCSS(offer);
 	}
 
 	hasRequestMessage(req) {
@@ -239,8 +239,8 @@ export class RequestsOutgoingView {
 		this.navCtrl.push(ProfilePage, { user: request["directionallyOppositeUser"], readOnly: true });
 	}
 
-	onViewPromise(request) {
-		this.navCtrl.push(PrmDisplayPage, { prm: request.prm });
+	onViewOffer(request) {
+		this.navCtrl.push(OfferDisplayPage, { offer: request.offer });
 	}
 
 	onPermanentlyDismissBtnTap(request) {

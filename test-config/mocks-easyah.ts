@@ -13,7 +13,7 @@ export class PictureServiceMock {
 	
 }
 
-export class PrmCollectionServiceMock {
+export class OfferCollectionServiceMock {
 
 	public resetModel(): any {
 

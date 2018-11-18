@@ -1,0 +1,47 @@
+<ion-header>
+	<ion-navbar>
+		<ion-title>
+			Delete an Offer - {{offer.title}}
+		</ion-title>
+	</ion-navbar>
+</ion-header>
+
+<ion-content padding>
+	<ion-row *ngIf="!isOfferAttachedToARequestNotInProgress() && !isOfferAttachedToAnInProgressRequest()">
+		<ion-label>Are you sure you want to delete this offer?</ion-label>
+	</ion-row>
+
+	<ion-row *ngIf="isOfferAttachedToARequestNotInProgress() || isOfferAttachedToAnInProgressRequest()">
+		<ion-label>People have asked to take you up on this offer...</ion-label>
+	</ion-row>
+	<ion-row *ngIf="isOfferAttachedToARequestNotInProgress()">
+		<ion-card>
+			<ion-card-header>
+				You have not yet accepted these requests. If you delete this offer, these requests will be cancelled.
+			</ion-card-header>
+			<ion-card-content>
+				<ion-item *ngFor="let req of getOfferRequestsNotInProgress()">
+					User: {{req.directionallyOppositeUser.realname}} 
+				</ion-item>
+			</ion-card-content>
+		</ion-card>
+	</ion-row>		
+	<ion-row *ngIf="isOfferAttachedToAnInProgressRequest()">
+		<ion-card>
+			<ion-card-header>
+				These requests are in progress. You will need to resolve these before deleting this offer.
+			</ion-card-header>
+			<ion-card-content>
+				<ion-item *ngFor="let req of getOfferRequestsInProgress()">
+					User: {{req.directionallyOppositeUser.realname}} 
+				</ion-item>
+			</ion-card-content>
+		</ion-card>
+	</ion-row>
+
+	<ion-row>
+		<button ion-button (click)="onCancelBtnTap($event)">Sorry, no.. Cancel</button>
+		<button ion-button color="danger" [disabled]="!isDeleteBtnEnabled()" (click)="onDeleteBtnTap($event)">DELETE!</button>
+	</ion-row>
+
+</ion-content>
