@@ -82,9 +82,11 @@ export class RequestsIncomingView {
 	getDirection() { return "incoming"; }
 
 	replaceModelElement(request) {
-		let temp = this.model.filter((obj) => { return obj["id"] !== request["id"]; });
-		temp.push(request);
-		this.model = temp;
+        if (request) {
+    		let temp = this.model.filter((obj) => { return obj["id"] !== request["id"]; });
+	    	temp.push(request);
+            this.model = temp;
+        }
 	}
 
 	ngOnInit() {
