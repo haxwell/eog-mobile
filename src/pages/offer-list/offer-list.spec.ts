@@ -9,6 +9,7 @@ import { OfferEditPage } from '../offers/edit.offer';
 import { OfferDisplayPage } from '../offers/display.offer';
 
 import { OfferCollectionService } from '../../app/_services/offer-collection.service';
+import { PictureService } from '../../app/_services/picture.service';
 import { UserService } from '../../app/_services/user.service';
 
 import {
@@ -16,6 +17,7 @@ import {
 } from '../../../test-config/mocks-ionic';
 
 import {
+  PictureServiceMock,
   UserServiceMock,
   OfferCollectionServiceMock
 } from '../../../test-config/mocks-easyah';
@@ -35,7 +37,8 @@ describe('OfferListPage Component', () => {
       ],
       providers: [
       	{ provide: OfferCollectionService, useClass: OfferCollectionServiceMock },
-      	{ provide: UserService, useClass: UserServiceMock },
+      	{ provide: PictureService, useClass: PictureServiceMock },
+        { provide: UserService, useClass: UserServiceMock },
         { provide: ViewController, useValue: mockView() },
         { provide: NavController, useValue: mockNavCtrl },
         { provide: NavParams, useClass: NavParamsMock }        
