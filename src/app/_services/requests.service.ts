@@ -175,7 +175,7 @@ export class RequestsService {
 					model = JSON.parse(obj["_body"]);
 
 				if (model)
-					this._offerModelService.setOfferImageOrientation(model.promise).then((offer) => {
+					this._offerModelService.setOfferImageOrientation(model.offer).then((offer) => {
 						resolve(this.changePromiseAttributeToOffer(model));
 					})
 				else {
