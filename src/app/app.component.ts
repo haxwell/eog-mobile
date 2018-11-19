@@ -59,8 +59,8 @@ export class EasyahApp {
   
   }
 
-  isLoggedIn() {
-    return this._isLoggedIn;
+  isMenuCoolToShow() {
+    return this._isLoggedIn && this.navCtrl.length() > 1;
   }
 
   getUser() {
