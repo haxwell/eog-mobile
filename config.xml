@@ -79,6 +79,9 @@
         <splash height="480" src="resources/ios/splash/Default~iphone.png" width="320" />
         <icon height="1024" src="resources/ios/icon/icon-1024.png" width="1024" />
         <splash height="2732" src="resources/ios/splash/Default@2x~universal~anyany.png" width="2732" />
+        <edit-config file="*-Info.plist" mode="merge" target="NSLocationWhenInUseUsageDescription">
+            <string>We use your location to provide content from people near you.</string>
+        </edit-config>
     </platform>
     <allow-navigation href="http://192.168.1.57:8101" />
     <plugin name="cordova-plugin-device" spec="^1.1.7" />
@@ -94,4 +97,7 @@
     </plugin>
     <engine name="android" spec="7.1.0" />
     <engine name="ios" spec="4.5.4" />
+    <plugin name="cordova-plugin-geolocation" spec="^4.0.1">
+        <variable name="GEOLOCATION_USAGE_DESCRIPTION" value="To provide content from people near you." />
+    </plugin>
 </widget>
