@@ -95,9 +95,9 @@
     <plugin name="phonegap-plugin-push" spec="^2.2.2">
         <variable name="FCM_VERSION" value="11.0.1" />
     </plugin>
-    <engine name="android" spec="7.1.0" />
-    <engine name="ios" spec="4.5.4" />
     <plugin name="cordova-plugin-geolocation" spec="^4.0.1">
         <variable name="GEOLOCATION_USAGE_DESCRIPTION" value="To provide content from people near you." />
     </plugin>
+    <engine name="android" spec="7.1.0" />
+    <engine name="ios" spec="4.5.4" />
 </widget>
