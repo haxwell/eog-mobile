@@ -12,6 +12,7 @@ import { Camera } from '@ionic-native/camera';
 import { FileTransfer } from '@ionic-native/file-transfer'
 import { File } from '@ionic-native/file'
 import { FilePath } from '@ionic-native/file-path'
+import { Geolocation } from '@ionic-native/geolocation'
 
 import { EasyahApp } from './app.component';
 import { EasyahHeader } from '../pages/common/easyah-header/easyah-header';
@@ -59,6 +60,7 @@ import { ProfilePoints } from '../pages/common/profile-points/profile-points';
 import { ApiService } from './_services/api.service';
 import { WebsocketService } from './_services/websocket.service';
 import { PushMessagingService } from './_services/push.messaging.service';
+import { GeolocationService } from './_services/geolocation.service';
 import { UserService } from './_services/user.service';
 import { UserMetadataService } from './_services/user-metadata.service';
 import { SearchService } from './_services/search.service';
@@ -201,6 +203,7 @@ export class CustomHammerConfig extends HammerGestureConfig {
     File,
     FilePath,
     FileTransfer,
+    Geolocation,
     ApiService,
     UserService,
     UserMetadataService,
@@ -225,6 +228,7 @@ export class CustomHammerConfig extends HammerGestureConfig {
     NotificationService,
     WebsocketService,
     PushMessagingService,
+    GeolocationService,
     UnseenChangesIndicatorService,
     HomeService,
     EventSubscriberService,

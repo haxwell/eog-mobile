@@ -61,5 +61,17 @@
 			</ion-item>
 		</ion-row>
 
+		<ion-row>
+			<ion-item id="profileSectionHeader">Location Settings</ion-item>
+		</ion-row>
+		<ion-row>
+			<ion-item>
+				<ion-label>Press this button to set your official location.</ion-label>
+			</ion-item>				
+			<ion-item>
+				<button ion-button [disabled]="!isSetCurrentLocationBtnAvailable()" (click)="onSetCurrentLocationAsOfficialLocation($event)">Set Your Location</button>
+			</ion-item>
+		</ion-row>
+
 
 </ion-content>

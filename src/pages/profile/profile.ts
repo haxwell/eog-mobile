@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { NavController, ModalController, NavParams, AlertController } from 'ionic-angular';
 import { Events } from 'ionic-angular';
 
+import { GeolocationService } from '../../app/_services/geolocation.service'
 import { ProfileService } from '../../pages/common/_services/profile.service'
 import { UserMetadataService } from '../../app/_services/user-metadata.service'
 import { RecommendationService } from '../../app/_services/recommendation.service'
@@ -28,6 +29,7 @@ export class ProfilePage {
 	user = undefined;
 	dirty = true;
 	isExiting = false;
+	locationDisplayString = undefined;
 
 	_currentUserCanSendRecommendationToProfileUser = undefined;
 	_currentUserCanSendPointToProfileUser = undefined;
@@ -44,6 +46,7 @@ export class ProfilePage {
 				private _profileService: ProfileService,
 				private _userMetadataService: UserMetadataService,
 				private _recommendationService: RecommendationService,
+				private _geolocationService: GeolocationService,
 				private _pointsService: PointsService,
 				private _pictureService: PictureService,
 				private _contactInfoVisibilityService: ContactInfoVisibilityService,
@@ -210,6 +213,28 @@ export class ProfilePage {
 
 		if (visObj)
 			return visObj["text"];
+	}
+
+	getLocationDisplayString() {
+		if (this.locationDisplayString === undefined) {
+			let model = this._profileService.getModel(this.user["id"]);
+
+			if (model["latitude"] && model["longitude"]) {
+				this.locationDisplayString = null;
+
+				console.log("in getLocationDisplayString")
+				console.log(JSON.stringify(model))
+
+				this._geolocationService.getCityStateFromLatlong(model["latitude"], model["longitude"]).then((obj) => {
+					this.locationDisplayString = obj["city"] + ", " + obj["state"];
+				}, (err) => {
+					console.log(err);
+					this.locationDisplayString = "TBD, TBD";
+				})
+			}
+		}
+
+		return this.locationDisplayString;
 	}
 
 	onChangePasswordBtnClick(event) {

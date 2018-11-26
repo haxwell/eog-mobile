@@ -102,4 +102,15 @@
 		</div>
 	</ion-row>
 
+	<ion-row *ngIf="isCurrentUsersProfile()">
+		<div class="centered">
+			<ion-list>
+				<ion-list-header class="listHeader">
+					Location Settings
+				</ion-list-header>
+				You have indicated you are in, or near, [ {{getLocationDisplayString()}} ].
+			</ion-list>
+		</div>
+	</ion-row>
+
 </ion-content>

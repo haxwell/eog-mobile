@@ -60,6 +60,11 @@ export class ProfileService {
 			model["realname"] = userObj["realname"];
 			model["phone"] = userObj["phone"];
 			model["email"] = userObj["email"];
+			model["latitude"] = userObj["latitude"];
+			model["longitude"] = userObj["longitude"];
+
+			console.log("initModel in profile.service.ts")
+			console.log(JSON.stringify(userObj));
 		});
 
 		let url = environment.apiUrl + "/api/user/" + userId + "/profile";
@@ -138,7 +143,9 @@ export class ProfileService {
 		tmp["email"] = model["email"];
 		tmp["keywords"] = model["keywords"];
 		tmp["description"] = model["description"];
-
+		tmp["latitude"] = model["latitude"];
+		tmp["longitude"] = model["longitude"];
+		
 		let data = this.JSON_to_UrlEncoded(tmp, undefined, undefined);
 		console.log(data);
 

@@ -8,6 +8,7 @@ import { Constants } from '../../_constants/constants'
 
 import { ProfileService } from '../../pages/common/_services/profile.service'
 import { PictureService } from '../../app/_services/picture.service'
+import { GeolocationService } from '../../app/_services/geolocation.service'
 import { UserService } from '../../app/_services/user.service'
 import { UserMetadataService } from '../../app/_services/user-metadata.service'
 import { ContactInfoVisibilityService } from './_services/contact-info-visibility.service'
@@ -32,6 +33,7 @@ export class ProfileEditPage {
 	isExiting = false;
 	cancelBtnPressed = false;
 	verifyPhoneOnSave = false;
+	newCurrentLocationHasBeenSet = false;
 
 	imageOrientation = undefined;
 
@@ -48,6 +50,7 @@ export class ProfileEditPage {
 				private _userService: UserService,
 				private _userMetadataService: UserMetadataService,
 				private _contactInfoVisibilityService: ContactInfoVisibilityService,
+				private _geolocationService: GeolocationService,
 				private _constants: Constants,
 				private _file: File) {
 
@@ -448,5 +451,112 @@ export class ProfileEditPage {
 		EXIF.getData(evt.target, function() {
 			self.imageOrientation = EXIF.getTag(this, "Orientation");
 		});
+	}
+
+	isSetCurrentLocationBtnAvailable() {
+		return !this.newCurrentLocationHasBeenSet;
+	}
+
+	onSetCurrentLocationAsOfficialLocation($event) {
+		let self = this;
+		console.log("In geolocation onSetCurrentLocationAsOfficialLocation");
+
+		self.loading = self.loadingCtrl.create({
+			content: 'Please wait...'
+		});
+
+		self.loading.present();
+
+		// TODO: Put this call in the geolocationService
+		self._geolocationService.getCurrentPosition().then((resp) => {
+			self.setChangedAttr("latitude", resp["coords"].latitude);
+			self.setChangedAttr("longitude", resp["coords"].longitude);
+			self.newCurrentLocationHasBeenSet = true;
+
+			self.loading.dismiss();
+
+			let alert = self.alertCtrl.create({
+				title: 'Success',
+				message: "Your location has been updated!",
+				buttons: [
+					{
+						text: 'OK', role: 'cancel', handler: () => {
+							// do nothing
+						}
+					}
+				]
+			})
+
+			alert.present();
+
+			console.log(JSON.stringify(self._profileService.getModel(self.user["id"])))
+		}).catch((error) => {
+			let alert = self.alertCtrl.create({
+				title: 'Hmmm..',
+				message: "Easyah could not read your device's location. Wanna just tell us where you are?",
+    			inputs: [{
+      				name: 'city',
+      				placeholder: 'city',
+      				type: 'text'
+    			}, {
+      				name: 'state',
+      				placeholder: 'state',
+      				type: 'text'
+    			}],
+    			buttons: [{
+      				text: 'Grr. No.',
+      				handler: (data) => {
+      					self.loading.dismiss();
+      				}
+    			}, {
+      				text: 'Here I am!',
+      				handler: (data) => {
+      					if ((data.city && data.city.length >= 3) && (data.state && data.state.length >= 2)) {
+                			
+                			self._geolocationService.getLatlongFromCityState(data.city, data.state).then((obj) => {
+                				
+                				self.setChangedAttr("latitude", obj["latitude"]);
+								self.setChangedAttr("longitude", obj["longitude"]);
+								self.newCurrentLocationHasBeenSet = true;
+
+								let alert = self.alertCtrl.create({
+									title: 'Success',
+									message: "Your location has been updated!",
+									buttons: [
+										{
+											text: 'OK', role: 'cancel', handler: () => {
+												self.loading.dismiss();
+											}
+										}
+									]
+								})
+
+								alert.present();
+                				
+                			}, (err) => {
+								let alert = self.alertCtrl.create({
+									title: 'Aargh...',
+									message: "Sorry, we couldn't find that location either. :(",
+									buttons: [
+										{
+											text: 'OK', role: 'cancel', handler: () => {
+												self.loading.dismiss();
+											}
+										}
+									]
+								})
+
+								alert.present();
+                			})
+                			
+            			} else {
+            				return false; // disble the button
+            			}
+            		}
+            	}]
+            });
+
+            alert.present();
+        });
 	}
 }

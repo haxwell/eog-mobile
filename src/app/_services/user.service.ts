@@ -188,6 +188,11 @@ export class UserService {
 			data += "&referringUsername="+user.referringUsername;
 		}
 
+		if (user.latitude && user.longitude) {
+			data += "&latitude="+user.latitude;
+			data += "&longitude="+user.longitude;
+		}
+
 		if (code !== undefined) {
 			data += "&newUserRegistrationCode=" + code;
 		}

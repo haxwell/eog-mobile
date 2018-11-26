@@ -18,7 +18,7 @@ import { CompleteOutgoingRequestPage } from '../../../pages/requests/outgoing/_p
 import { CancelOutgoingRequestPage } from '../../../pages/requests/outgoing/_pages/cancel.request'
 import { ProfilePage } from '../../../pages/profile/profile'
 
-import { CompleteRequestPage } from '../../../pages/requests/incoming/_pages/complete.request'
+//import { CompleteRequestPage } from '../../../pages/requests/incoming/_pages/complete.request'
 
 @Component({
   selector: 'requests-outgoing-view',
