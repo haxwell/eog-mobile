@@ -22,11 +22,11 @@ export class GeolocationService {
 					timeout: 6000
 				};
 
-				//this._geolocation.getCurrentPosition(options).then((resp) => {
-				//	resolve(resp);
-				//}, (err) => {
+				this._geolocation.getCurrentPosition(options).then((resp) => {
+					resolve(resp);
+				}, (err) => {
 					reject("err!!");
-				//})
+				})
 			});
 	}
 
@@ -42,13 +42,10 @@ export class GeolocationService {
 						let data = Object.assign({}, JSON.parse(b["_body"]));
 						let obj = data["results"][0].geometry.location;
 
-						console.log("getLatLongFromCityState")
-						console.log(obj);
-
 						rtn["latitude"] = obj.lat;
 						rtn["longitude"] = obj.lng;
 
-					 	resolve(obj);
+					 	resolve(rtn);
 					}, (err) => {
 						reject(err);
 					});

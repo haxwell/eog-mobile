@@ -58,7 +58,7 @@ export class ProfilePage {
 		this._userMetadataService.init();
 
 		this._events.subscribe('profile:changedContactInfoWasSaved', (savedModel) => {
-			this.model = savedModel;
+			this.ngOnInit();
 		})
 
 		this._events.subscribe('request:accepted', (data) => {
@@ -69,7 +69,6 @@ export class ProfilePage {
 
 	ngOnInit() {
 		this._profileService.init(this.user["id"]);
-		this.model = this._profileService.getModel(this.user["id"]);
 
 		this.setCurrentUserCanSendPointToProfileUser();
 		this.setCurrentUserCanSendRecommendationToProfileUser();
@@ -78,6 +77,8 @@ export class ProfilePage {
 		this._contactInfoVisibilityService.getContactInfoVisibilityId(this.user["id"]).then((visId: number) => {
 			self.contactInfoVisibilityId = visId;
 		})
+
+		this.locationDisplayString = undefined;
 	}
 
 	ionViewWillEnter() {
@@ -221,9 +222,6 @@ export class ProfilePage {
 
 			if (model["latitude"] && model["longitude"]) {
 				this.locationDisplayString = null;
-
-				console.log("in getLocationDisplayString")
-				console.log(JSON.stringify(model))
 
 				this._geolocationService.getCityStateFromLatlong(model["latitude"], model["longitude"]).then((obj) => {
 					this.locationDisplayString = obj["city"] + ", " + obj["state"];

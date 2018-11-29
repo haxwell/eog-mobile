@@ -17,11 +17,11 @@ export class SearchService {
 
 	}
 
-	searchOffers(qStr) {
+	searchOffers(qStr, distance, userId) {
 		let self = this;
 		return new Promise((resolve, reject) => {
 			let user = self._userService.getCurrentUser();
-			let url = environment.apiUrl + "/api/offers?q=" + qStr;
+			let url = environment.apiUrl + "/api/offers?q=" + qStr + "&d=" + distance + "&uid=" + userId;
 			self._apiService.get(url)
 			.subscribe((searchObj) => {
 				let rtn = JSON.parse(searchObj["_body"]);

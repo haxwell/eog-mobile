@@ -61,7 +61,10 @@ export class SearchPage {
 				self.loading.dismiss();
 		};
 
-		this._searchService.searchOffers(this.searchString).then((data: Array<Object>) => {
+		let user = self._userService.getCurrentUser();
+		let distance = 50; // TODO: Add a drop down where the user can select a distance.
+
+		this._searchService.searchOffers(this.searchString, distance, user["id"]).then((data: Array<Object>) => {
 
 			if (data.length === 0) {
 				self.offerResults = data;

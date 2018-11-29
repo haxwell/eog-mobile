@@ -7,6 +7,7 @@ import { HomePage } from '../home/home';
 import { CreateAccountPage } from './_pages/create.account'
 
 import { UserService } from '../../app/_services/user.service';
+import { GeolocationService } from '../../app/_services/geolocation.service';
 
 import { environment } from '../../_environments/environment';
 
@@ -23,6 +24,7 @@ export class LoginPage {
   constructor(public navCtrl: NavController,
               private _alertCtrl: AlertController,
               private _userService: UserService,
+              private _geolocationService: GeolocationService,
               private loadingCtrl: LoadingController,
               private splashScreen: SplashScreen,
               private _events: Events) {
@@ -57,7 +59,10 @@ export class LoginPage {
         self._events.publish("app:login", userObj);
 
         self.loading.dismiss();
-        this.navCtrl.push(HomePage);
+        
+        self.ensureLatitudeLongitudeIsSetForCurrentUser().then(() => {
+            self.navCtrl.push(HomePage);        
+        })
       })
       .catch((err) => {
           self.loading.dismiss();
@@ -262,5 +267,145 @@ export class LoginPage {
       
       alert.present();
   }
+
+  ensureLatitudeLongitudeIsSetForCurrentUser() {
+
+    return new Promise((resolve, reject) => {
+        let self = this;
+        if ((!self.user["latitude"] || self.user["latitude"]*1.0 === 0.0) && 
+            (!self.user["longitude"] || self.user["longitude"]*1.0 === 0.0)) {
+
+            let locAlert = self._alertCtrl.create({
+              title: 'FYI...',
+              message: "Easyah does not have a location set for you. We use your location to show you things that are local for you. We will try to set the location now.",
+              buttons: [{
+                text: 'OK',
+                handler: () => {
+
+                    //    
+                    // TODO: Very similar code in profile-edit.. Refactor it to a service with callbacks and all that good stuff.
+                    //
+
+                    let self = this;
+
+                    self._geolocationService.getCurrentPosition().then((resp) => {
+                        self.user["latitude"] = resp["coords"].latitude;
+                        self.user["longitude"] = resp["coords"].longitude;
+
+                        self._userService.save(self.user).then((obj) => {
+                            let alert = self._alertCtrl.create({
+                              title: 'Success',
+                              message: "Your location has been updated!",
+                              buttons: [{
+                                text: 'OK',
+                                handler: () => {
+                                  resolve();
+                                }
+                              }]
+                            })
+                            
+                            alert.present();
+
+                        }, (err) => {
+                            let errr = self._alertCtrl.create({
+                              title: 'Arggh!',
+                              message: "Something bad happened on the server. We hate when that happens. Please email us at info@easyah.io and let us know.",
+                              buttons: [{
+                                text: 'OK',
+                                handler: () => {
+                                  reject();
+                                }
+                              }]
+                            })
+                            
+                            errr.present();
+                        })
+                    }, (error) => {
+
+                      let alert = self._alertCtrl.create({
+                          title: 'Hmmm..',
+                          message: "Easyah could not read your device's location. Where are you?",
+                          inputs: [{
+                              name: 'city',
+                              placeholder: 'city',
+                              type: 'text'
+                          }, {
+                              name: 'state',
+                              placeholder: 'state',
+                              type: 'text'
+                          }],
+                          buttons: [{
+                              text: 'Here I am!',
+                              handler: (data) => {
+                                if ((data.city && data.city.length >= 3) && (data.state && data.state.length >= 2)) {
+
+                                    self._geolocationService.getLatlongFromCityState(data.city, data.state).then((obj) => {
+                                        
+                                        self.user["latitude"] = obj["latitude"];
+                                        self.user["longitude"] = obj["longitude"];
+
+                                        self._userService.save(self.user).then((obj) => {
+                                            let alert = self._alertCtrl.create({
+                                              title: 'Success',
+                                              message: "Your location has been updated!",
+                                              buttons: [
+                                                {
+                                                    text: 'OK', role: 'cancel', handler: () => {
+                                                      resolve();
+                                                    }
+                                                }
+                                              ]
+                                            })
+
+                                            alert.present();
+                                        }, (err) => {
+                                            let errr = self._alertCtrl.create({
+                                              title: 'Arggh!',
+                                              message: "Something bad happened on the server. We hate when that happens. Please email us at info@easyah.io and let us know.",                                      
+                                              buttons: [{
+                                                text: 'OK',
+                                                handler: () => {
+                                                    reject();
+                                                }
+                                              }]
+                                            })
+                                            
+                                            errr.present();
+                                        })
+                                    }, (err) => {
+                                        let errr = self._alertCtrl.create({
+                                          title: 'Arggh!',
+                                          message: "Sorry, we couldn't find that location either. You can set your location in your profile later on.",
+                                          buttons: [{
+                                            text: 'OK',
+                                            handler: () => {
+                                                reject();
+                                            }
+                                          }]
+                                        })
+                                        
+                                        errr.present();
+                                    })
+                                } else {
+                                  return false; // disble the button
+                                }
+                              } // end handler
+                            }] // end buttons
+                          }); // end alert 
+
+                          alert.present();
+                      }); // end catch error
+                }
+              }]
+            })
+            
+            locAlert.present();
+
+          } else {
+            resolve();
+          } // end if latlng
+        
+        }); // end promise
+    }
 
 }
