@@ -164,7 +164,7 @@ export class UserService {
 			});
 	}
 
-	save(user, code) {
+	save(user, code?) {
 		let self = this;
 		let url = environment.apiUrl + "/api/users";
 
