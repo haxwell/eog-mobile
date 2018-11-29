@@ -459,7 +459,6 @@ export class ProfileEditPage {
 
 	onSetCurrentLocationAsOfficialLocation($event) {
 		let self = this;
-		console.log("In geolocation onSetCurrentLocationAsOfficialLocation");
 
 		self.loading = self.loadingCtrl.create({
 			content: 'Please wait...'
@@ -467,7 +466,6 @@ export class ProfileEditPage {
 
 		self.loading.present();
 
-		// TODO: Put this call in the geolocationService
 		self._geolocationService.getCurrentPosition().then((resp) => {
 			self.setChangedAttr("latitude", resp["coords"].latitude);
 			self.setChangedAttr("longitude", resp["coords"].longitude);
@@ -489,7 +487,6 @@ export class ProfileEditPage {
 
 			alert.present();
 
-			console.log(JSON.stringify(self._profileService.getModel(self.user["id"])))
 		}).catch((error) => {
 			let alert = self.alertCtrl.create({
 				title: 'Hmmm..',
