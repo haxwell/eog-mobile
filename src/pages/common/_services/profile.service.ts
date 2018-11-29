@@ -49,7 +49,6 @@ export class ProfileService {
 	}
 
 	initModel(userId, model) {
-
 		this._pointsService.init();
 		this._recommendationService.init();
 		this._pictureService.init()
@@ -62,9 +61,6 @@ export class ProfileService {
 			model["email"] = userObj["email"];
 			model["latitude"] = userObj["latitude"];
 			model["longitude"] = userObj["longitude"];
-
-			console.log("initModel in profile.service.ts")
-			console.log(JSON.stringify(userObj));
 		});
 
 		let url = environment.apiUrl + "/api/user/" + userId + "/profile";
@@ -147,20 +143,19 @@ export class ProfileService {
 		tmp["longitude"] = model["longitude"];
 		
 		let data = this.JSON_to_UrlEncoded(tmp, undefined, undefined);
-		console.log(data);
 
 		let self = this;
 		return new Promise((resolve, reject) => {
 			let url = environment.apiUrl + "/api/profiles";
 			self._apiService.post(url, data)
 			.subscribe((resp) => {
-				console.log(JSON.parse(resp["_body"]));
+				let newModel = JSON.parse(resp["_body"]);
 
 				let userUpdateFunc = () => {
-					this._events.publish('profile:changedContactInfoWasSaved', model);
+					this._events.publish('profile:changedContactInfoWasSaved', newModel);
 
 					self.init(user["id"]);
-					resolve(JSON.parse(resp["_body"]));					
+					resolve(newModel);
 				}
 
 				if (self.isProfileImageChanged(model)) {
