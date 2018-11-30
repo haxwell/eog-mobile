@@ -59,7 +59,7 @@ if [[ $GIT_STATUS = "On branch develop"* ]] && [[ $GIT_STATUS = *"working tree c
         echo "Running zipalign on the new Easyah APK"
         rm easyah.apk --force && zipalign -v 4 platforms/android/app/build/outputs/apk/release/app-release-unsigned.apk easyah.apk
 
-        if [ $ENV = $ENV_PROD ] && [ $TAG_THIS_VERSION = "true" ]; then
+        if [ $ENV = $ENV_PROD ] && [ "$TAG_THIS_VERSION" = "true" ]; then
             VERSION=$(sed -nE 's/^\s*"version": "(.*?)",$/\1/p' package.json)
             echo "Merging the develop branch into master... Tagging this version as [ "$VERSION" ]..."
 
