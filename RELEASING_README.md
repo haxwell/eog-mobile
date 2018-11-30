@@ -74,3 +74,16 @@ In Project Settings, set Signing (Debug) and Signing (Release) to your provision
 Go to Product > Archive
 
 The archive should build and you should see it in the Organizer window.
+
+(The remaining part needs to be verified - 20181119184703)
+
+You will get an email, telling you the build has completed processing, and that you can use it for TestFlight, or submit to the Apple Store.
+
+You will need to go to appstoreconnect.apple.com to finish the release.
+
+Under My Apps, choose the "plus-sign-in-the-circle version or platform". Enter the new version number. 
+
+It will copy all the stuff from the previous version (though it may at first glance appear not to) Select the new build, and update whatever's necessary.
+
+Save, and Submit For Review.
+For
