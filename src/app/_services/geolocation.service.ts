@@ -19,7 +19,7 @@ export class GeolocationService {
 		return new Promise(
 			(resolve, reject) => {
 				let options = {
-					timeout: 6000
+					timeout: 18000
 				};
 
 				this._geolocation.getCurrentPosition(options).then((resp) => {
