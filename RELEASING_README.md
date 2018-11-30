@@ -75,6 +75,8 @@ Go to Product > Archive
 
 The archive should build and you should see it in the Organizer window.
 
+In the Organizer window, there is a Verify Archive button. Click it, accept the defaults, and be sure the archive is valid.
+
 (The remaining part needs to be verified - 20181119184703)
 
 You will get an email, telling you the build has completed processing, and that you can use it for TestFlight, or submit to the Apple Store.
