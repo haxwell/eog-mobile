@@ -90,7 +90,7 @@
     "protractor": "^5.1.2",
     "ts-loader": "^2.3.7",
     "ts-node": "^3.3.0",
-    "typescript": "2.6.2"
+    "typescript": "^2.9.0"
   },
   "description": "An Ionic project",
   "cordova": {

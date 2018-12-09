@@ -69,13 +69,17 @@ Look at the list of warnings etc that are generated. If there are any saying Upd
 
 Set your scheme to Generic IOS Device
 
-In Project Settings, set Signing (Debug) and Signing (Release) to your provisioning profile. I believe its correct when the line 'Signing Certificate' reads 'iPhone Developer: ....'
+In Project / Build Settings, the section Code Signing Identity, set Signing (Debug) and Signing (Release) to your provisioning profile. I believe its correct when the line reads 'iPhone Developer: ....'
+
+on the command line, in the dir ./platforms/ios run the command 'pod install'. You should get a response like `Pod installation complete! There is 1 dependency from the Podfile and 7 total pods installed.`
 
 Go to Product > Archive
 
 The archive should build and you should see it in the Organizer window.
 
-In the Organizer window, there is a Verify Archive button. Click it, accept the defaults, and be sure the archive is valid.
+In the Organizer window, there is a Verify Archive button. Click it, accept the defaults, and be sure the archive is valid. -- If it does not validate, you may need to go to File > Workspace Settings... and choose Legacy Build System under Shared Workspace Settings.
+
+From the Organizer window, distribute the app, to the ios App Store
 
 (The remaining part needs to be verified - 20181119184703)
 
