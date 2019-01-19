@@ -42,11 +42,14 @@ git push --tags
 Building and releasing an IOS version
 ---
 
-If you're reading this, we'll assume you just pulled a clean clone.
+If you're reading this, we'll assume you just pulled a clean clone. Be sure you are on the correct branch (develop, some-feature-branch, etc)
 
 Create the environment.ts file: cp src/_environments/environment.staging.ts src/_environments/environment.ts
 
+Run 'npm install'
 Run 'ionic cordova build ios --release'
+
+(expect errors.. EXPORT FAILED, '..archive not found at path..', etc. Don't you worry. Continue on.)
 
 cp ./resources/ios/icon/AppIcon* ./platforms/ios/Easyah/Images.xcassets/AppIcon.appiconset/
 cp ./resources/ios/icon/icon-20.png ./platforms/ios/Easyah/Images.xcassets/AppIcon.appiconset/
