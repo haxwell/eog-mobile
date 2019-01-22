@@ -19,6 +19,10 @@ For the error deploying with stompjs:
 
 Be sure the android-minSdkVersion in config.xml is set to at least 19.
 
+----------
+For the error with build-tools not being found
+    Are you sure its installed? Try 'sdkmanager "build-tools;28.0.3"' or whatever the latest version is for you. You can check that by 'android list sdk --all --use-sdk-wrapper | grep build'
+
 -----
 UNIT TESTS
 -----
