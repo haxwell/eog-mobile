@@ -259,7 +259,10 @@ export class UserService {
 				)
 			});
 		} else {
-			return false;
+			return new Promise((resolve, reject) => {
+				console.error("trying to get a user specific property before the user has been set")
+				resolve(false);
+			});
 		}
 	}
 
