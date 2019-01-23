@@ -26,7 +26,7 @@ import Moment from 'moment';
 export class ProfilePage {
 
 	model = {};
-	user = undefined;
+	userId = undefined;
 	dirty = true;
 	isExiting = false;
 	locationDisplayString = undefined;
@@ -53,7 +53,7 @@ export class ProfilePage {
 				private _events: Events,
 				private _constants: Constants) {
 
-		this.user = Object.assign({}, navParams.get('user'));
+		this.userId = Object.assign({}, navParams.get('userId'));
 
 		this._userMetadataService.init();
 
@@ -62,19 +62,19 @@ export class ProfilePage {
 		})
 
 		this._events.subscribe('request:accepted', (data) => {
-			if (data["request"]["directionallyOppositeUser"]["id"] === this.user["id"])
+			if (data["request"]["directionallyOppositeUser"]["id"] === this.userId)
 				this.ngOnInit();
 		})
 	}
 
 	ngOnInit() {
-		this._profileService.init(this.user["id"]);
+		this._profileService.init(this.userId);
 
 		this.setCurrentUserCanSendPointToProfileUser();
 		this.setCurrentUserCanSendRecommendationToProfileUser();
 
 		let self = this;
-		this._contactInfoVisibilityService.getContactInfoVisibilityId(this.user["id"]).then((visId: number) => {
+		this._contactInfoVisibilityService.getContactInfoVisibilityId(this.userId).then((visId: number) => {
 			self.contactInfoVisibilityId = visId;
 		})
 
@@ -86,27 +86,27 @@ export class ProfilePage {
 	}
 
 	isCurrentUsersProfile() {
-		return this._userService.getCurrentUser()["id"] === this.user["id"];
+		return this._userService.getCurrentUser()["id"] === this.userId;
 	}
 
 	isCurrentUserAllowedToSeeEmailInfo() {
-		return this._profileService.getModel(this.user["id"])["currentUserCanSeeEmailInfo"];
+		return this._profileService.getModel(this.userId)["currentUserCanSeeEmailInfo"];
 	}
 
 	isCurrentUserAllowedToSeePhoneInfo() {
-		return this._profileService.getModel(this.user["id"])["currentUserCanSeePhoneInfo"];
+		return this._profileService.getModel(this.userId)["currentUserCanSeePhoneInfo"];
 	}
 
 	onSendRecommendationBtnTap() {
 		let self = this;
-		self._recommendationService.sendARecommendationToAUser(this.user["id"]).then((data) => {
+		self._recommendationService.sendARecommendationToAUser(this.userId).then((data) => {
 			self.setCurrentUserCanSendRecommendationToProfileUser();
 		})
 	}
 
 	onSendPointBtnTap() {
 		let self = this;
-		self._pointsService.sendAPointToAUser(this.user["id"]).then((data) => {
+		self._pointsService.sendAPointToAUser(this.userId).then((data) => {
 			self.setCurrentUserCanSendPointToProfileUser();
 		});
 	}
@@ -120,11 +120,11 @@ export class ProfilePage {
 	}
 
 	getSocialMediaURL(name) {
-		return this._profileService.getModel(this.user["id"])[name+"Url"] || "";
+		return this._profileService.getModel(this.userId)[name+"Url"] || "";
 	}
 
 	onEditProfileBtnClick() {
-      this.navCtrl.push(ProfileEditPage, {user: this.user}); // TODO: Is it enough just to pass the ID?
+      this.navCtrl.push(ProfileEditPage, {userId: this.userId});
 	}
 
 	setCurrentUserCanSendPointToProfileUser() {
@@ -140,16 +140,16 @@ export class ProfilePage {
 	}
 
 	getModelAttr(key) {
-		let model = this._profileService.getModel(this.user["id"]) || {};
+		let model = this._profileService.getModel(this.userId) || {};
 		return model[key];
 	}
 
 	isFromGallery() {
-		return this._profileService.getModel(this.user["id"])["imageFileSource"] == 'gallery';
+		return this._profileService.getModel(this.userId)["imageFileSource"] == 'gallery';
 	}
 
 	isThumbnailImageAvailable() {
-		return this._profileService.getModel(this.user["id"])["imageFileURI"] !== undefined;
+		return this._profileService.getModel(this.userId)["imageFileURI"] !== undefined;
 	}
 
 	isThumbnailImageVisible() {
@@ -157,10 +157,10 @@ export class ProfilePage {
 	}
 
 	getThumbnailImage() {
-		if (this._profileService.getModel(this.user["id"])["imageFileURI"] === undefined)
+		if (this._profileService.getModel(this.userId)["imageFileURI"] === undefined)
 			return "assets/img/mushroom.jpg";
 		else
-			return this._profileService.getModel(this.user["id"])["imageFileURI"];
+			return this._profileService.getModel(this.userId)["imageFileURI"];
 	}
 
 	onGoBackBtnTap(evt) {
@@ -179,7 +179,7 @@ export class ProfilePage {
 	}
 
 	getAllTimePointCount() {
-		let val = this._profileService.getModel(this.user["id"])["allTimePointCount"];
+		let val = this._profileService.getModel(this.userId)["allTimePointCount"];
 		if (val === undefined) 
 			return 0;
 		else
@@ -188,8 +188,8 @@ export class ProfilePage {
 
 	getSuccessfulRequestPercentageAsString() {
 		
-		let drc = this._profileService.getModel(this.user["id"])["disputedRequestCount"];
-		let arc = this._profileService.getModel(this.user["id"])["archivedRequestCount"];
+		let drc = this._profileService.getModel(this.userId)["disputedRequestCount"];
+		let arc = this._profileService.getModel(this.userId)["archivedRequestCount"];
 
 		if (drc === undefined || arc === undefined || arc === 0)
 			return "--";
@@ -200,7 +200,7 @@ export class ProfilePage {
 	}
 
 	getHowLongAgoForMostRecentDisputedRequest() {
-		let val = this._profileService.getModel(this.user["id"])["mostRecentDisputedRequestTimestamp"]
+		let val = this._profileService.getModel(this.userId)["mostRecentDisputedRequestTimestamp"]
 		if (val === undefined)
 			return "None!";
 		else
@@ -218,7 +218,7 @@ export class ProfilePage {
 
 	getLocationDisplayString() {
 		if (this.locationDisplayString === undefined) {
-			let model = this._profileService.getModel(this.user["id"]);
+			let model = this._profileService.getModel(this.userId);
 
 			if (model["latitude"] && model["longitude"]) {
 				this.locationDisplayString = null;

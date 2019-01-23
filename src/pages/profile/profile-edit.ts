@@ -93,9 +93,6 @@ export class ProfileEditPage {
 					text: 'No', role: 'cancel', handler: () => {
 						if (this._profileService.isProfileImageChanged(this.model) && !this.isFromGallery()) {
 							
-							// TODO: the call to .removeFile here, and the one in the process of onSaveBtnTap()
-							//  are both the same. They should be a service method somewhere.
-
 							let lastSlash = self.model["imageFileURI"].lastIndexOf('/');
 							let path = self.model["imageFileURI"].substring(0,lastSlash+1);
 							let filename = self.model["imageFileURI"].substring(lastSlash+1);
