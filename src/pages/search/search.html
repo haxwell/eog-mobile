@@ -23,6 +23,14 @@
 					</ion-label>
 				</ion-item-divider>
 
+			<ion-item-group *ngIf="isUsersResultsEmpty()">
+				<ion-item-sliding #slidingItem>
+					<button ion-item>
+						<span >There are no matching users :/</span><br/>
+					</button>
+				</ion-item-sliding>
+			</ion-item-group>
+
 			<ion-item-group *ngFor="let user of getUsersResults()">
 
 				<ion-item-sliding #slidingItem (click)="onViewUser(user)">
