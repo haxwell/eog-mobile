@@ -1,0 +1,69 @@
+<ion-header no-border>
+	<ion-navbar>
+		<ion-buttons end *ngIf="showSkip">
+			<button ion-button (click)="startApp()" color="primary">Exit Tutorial</button>
+		</ion-buttons>
+	</ion-navbar>
+</ion-header>
+
+<ion-content no-bounce>
+	<ion-slides #slides (ionSlideWillChange)="onSlideChangeStart($event)" pager>
+		<ion-slide>
+			Welcome!<br/><br/>
+			Easyah is a positive energy machine!<br/><br/>Our goal is to create more, and more, positivity in the world.<br/><br/>
+			<img id="login-logo-img" src="assets/img/logo.jpg">
+		</ion-slide>
+		<ion-slide>
+			To see how we'll do this, you first have to know about Do-er's and Encouragers.<br/><br/>
+			<img [ngStyle]="{'width':'25%'}" id="tutorial-lightning-img" src="assets/img/lightning.png">
+			<img [ngStyle]="{'width':'50%'}" id="tutorial-heart-img" src="assets/img/heart.png">
+		</ion-slide>
+		<ion-slide>
+			<b>Do-er's</b><br/><br/>
+			Do-er's are out doing things that people feel grateful for.<br/><br/>
+			<img [ngStyle]="{'width':'40%'}" id="tutorial-lightning-time-and-energy-img" src="assets/img/lightning-time-and-energy.png">
+		</ion-slide>
+		<ion-slide>
+			<b>Do-er's</b><br/><br/>
+			When somebody wants to say Thank You to a Do-er, they can send that Do-er a Point.<br/><br/>
+			<img [ngStyle]="{'width':'83%'}" id="tutorial-people-lightning-img" src="assets/img/peopleLightning.png">
+		</ion-slide>
+		<ion-slide>
+			<b>Encouragers</b><br/><br/>
+			On the other hand, Encouragers appreciate what the Do-er's are doing, and want to help them in some way.<br/><br/>
+			<img [ngStyle]="{'width':'55%'}" id="tutorial-heart-img" src="assets/img/heart-skills-and-resources.png">
+		</ion-slide>
+		<ion-slide>
+			<b>Encouragers</b><br/><br/>
+			So they make an offer to share their skills and resources, in return for Points.<br/><br/>
+			<img [ngStyle]="{'width':'110%'}" id="tutorial-heartArrowsLightning-img" src="assets/img/heartArrowsLightning.png">
+		</ion-slide>
+		<ion-slide>
+			Rinse and repeat, and that's the basic idea behind Easyah!<br/><br/>
+
+			To get started, encourage someone by offering your special skill or resource to a fellow Do-er.<br/><br/> Tap on <b>Your Offers</b> in the menu!<br/><br/>
+		</ion-slide>
+		<ion-slide>
+			You can find our tutorials in the <b>About Easyah</b> menu, under <b>Tutorials.</b><br/><br/>
+
+			If you ever want to see this tutorial again, you can find it there.<br/><br/>
+
+			If you want to read a bit more about the app, check out the <b>Basic Concepts</b> app tutorial.<br/><br/> 
+		</ion-slide>
+		<ion-slide>
+			If you can think of a way to make our app better, be sure to let us know at<br/><br/>
+			<b>info @ easyah . io </b>
+			<br/><br/>
+			Join us online, in our Facebook group! Search for 'easyah.io'.<br/><br/>
+
+			<ion-checkbox [(ngModel)]="showThisTutorialNextTime" (ionChange)="showThisTutorialNextTimeChanged()"></ion-checkbox>
+			<ion-label>Show This Tutorial On Next Login</ion-label>
+			<br/>
+
+			<button ion-button icon-end large clear (click)="dismissTutorialView()">
+				Continue
+				<ion-icon name="arrow-forward"></ion-icon>
+			</button>
+		</ion-slide>
+	</ion-slides>
+</ion-content>

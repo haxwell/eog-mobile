@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { NavController, Navbar, ModalController } from 'ionic-angular';
-import { TutorialPage } from '../tutorial/tutorial'
+import { TutorialEasyahIntroPage } from '../tutorial-easyah-intro/tutorial-easyah-intro'
 
 import { UserService } from '../../app/_services/user.service'
 import { HomeService } from './_services/home.service'
@@ -38,7 +38,7 @@ export class HomePage {
         if (self.showTutorialPromise !== undefined && self._userService.getTutorialHasBeenShown() !== true) {
             self.showTutorialPromise.then((b) => {
                 if (b === true) {
-                    let modal = self._modalCtrl.create(TutorialPage, { });
+                    let modal = self._modalCtrl.create(TutorialEasyahIntroPage, { });
                   
                     modal.onDidDismiss((data) => { 
                       self._userService.setTutorialHasBeenShown(true);

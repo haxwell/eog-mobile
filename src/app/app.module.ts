@@ -19,6 +19,7 @@ import { EasyahHeader } from '../pages/common/easyah-header/easyah-header';
 import { LoginPage } from '../pages/login/login';
 import { AboutEasyahPage } from '../pages/about-easyah/about-easyah';
 import { TutorialPage } from '../pages/tutorial/tutorial';
+import { TutorialEasyahIntroPage } from '../pages/tutorial-easyah-intro/tutorial-easyah-intro';
 import { TutorialsListPage } from '../pages/about-easyah/_pages/tutorials-list-page';
 import { PrivacyPolicyPage } from '../pages/about-easyah/_pages/privacy-policy-page';
 import { NewAccountTutorialPage } from '../pages/login/_pages/new-account-tutorial-page';
@@ -105,6 +106,7 @@ export class CustomHammerConfig extends HammerGestureConfig {
     CreateAccountPage,
     HomePage,
     TutorialPage,
+    TutorialEasyahIntroPage,
     TutorialsListPage,
     PrivacyPolicyPage,
     NewAccountTutorialPage,
@@ -159,6 +161,7 @@ export class CustomHammerConfig extends HammerGestureConfig {
     CreateAccountPage,
     HomePage,
     TutorialPage,
+    TutorialEasyahIntroPage,
     TutorialsListPage,
     PrivacyPolicyPage,
     NewAccountTutorialPage,

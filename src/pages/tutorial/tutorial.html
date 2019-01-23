@@ -9,7 +9,9 @@
 <ion-content no-bounce>
 	<ion-slides #slides (ionSlideWillChange)="onSlideChangeStart($event)" pager>
 		<ion-slide>
-			Easyah makes it easier to collaborate with other people on big ideas. It uses the concept of paying-it-forward to make it work.<br/><br/>
+			Easyah<br/><br/>
+
+			Basic Concepts Tutorial<br/><br/>
 
 			Your feedback makes us awesome, so let us know your thoughts at info@easyah.io!<br/><br/>
 
@@ -97,11 +99,7 @@
 			<br/><br/>
 			Join us online, in our Facebook group! Search for 'easyah.io'.<br/><br/>
 
-			<ion-checkbox [(ngModel)]="showThisTutorialNextTime" (ionChange)="showThisTutorialNextTimeChanged()"></ion-checkbox>
-			<ion-label>Show This Tutorial On Next Login</ion-label>
-			<br/>
-
-			<button ion-button icon-end large clear (click)="startApp()">
+			<button ion-button icon-end large clear (click)="dismissTutorialView()">
 				Continue
 				<ion-icon name="arrow-forward"></ion-icon>
 			</button>				
