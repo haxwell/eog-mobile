@@ -104,8 +104,6 @@ export class OfferModelService {
 
 		return new Promise((resolve, reject) => {
 
-			// TODO: This code is mainly duplicated in offer-collection.service
-
 			self._pictureService.get(self._constants.PHOTO_TYPE_OFFER, offer["id"]).then((filename) => {
 				offer["imageFileSource"] = 'eog';
 				offer["imageFileURI"] = filename;

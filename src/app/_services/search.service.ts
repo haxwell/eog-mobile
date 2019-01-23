@@ -4,6 +4,7 @@ import { UserService } from './user.service';
 import { ApiService } from './api.service';
 import { PictureService } from './picture.service';
 import { PictureEXIFService } from './picture-exif.service';
+import { OfferModelService } from './offer-model.service'
 
 import { environment } from '../../_environments/environment';
 import { Constants } from '../../_constants/constants';
@@ -13,7 +14,7 @@ export class SearchService {
 	
 	constructor(private _apiService: ApiService, private _userService: UserService,
 				private _pictureService: PictureService, private _pictureEXIFService: PictureEXIFService,
-				private _constants: Constants) { 
+				private _offerModelService: OfferModelService, private _constants: Constants) { 
 
 	}
 
@@ -28,21 +29,8 @@ export class SearchService {
 
 				rtn = rtn.filter((obj) => { return obj["userId"] !== user["id"]; });
 
-				// TODO: This is duplicated in offer-collection-service.ts
 				rtn.forEach((offer) => {
-					self._pictureService.get(self._constants.PHOTO_TYPE_OFFER, offer["id"]).then((filename) => {
-						console.log("in search.ts, called to get the filename for offer " + offer["id"] + ", and got " + filename)
-						offer["imageFileSource"] = 'eog';
-						offer["imageFileURI"] = filename;
-						offer["imageFileURI_OriginalValue"] = filename;
-
-						if (filename) {
-							self._pictureEXIFService.getEXIFMetadata(filename).then((exifMetadata) => {
-								offer["imageOrientation"] = exifMetadata["Orientation"];
-							})
-						}
-
-					});
+					self._offerModelService.setOfferImageOrientation(offer);
 				});
 
 				resolve(rtn);
