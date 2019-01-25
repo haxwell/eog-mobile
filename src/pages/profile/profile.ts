@@ -128,13 +128,13 @@ export class ProfilePage {
 	}
 
 	setCurrentUserCanSendPointToProfileUser() {
-		this._userMetadataService.getMetadataValue(this.user, this._constants.FUNCTION_KEY_CAN_SEND_POINT_TO_USER).then((bool) => {
+		this._userMetadataService.getMetadataValue(this.userId, this._constants.FUNCTION_KEY_CAN_SEND_POINT_TO_USER).then((bool) => {
 			this._currentUserCanSendPointToProfileUser = bool;
 		})
 	}
 
 	setCurrentUserCanSendRecommendationToProfileUser() {
-		this._userMetadataService.getMetadataValue(this.user, this._constants.FUNCTION_KEY_CAN_SEND_RECOMMENDATION_TO_USER).then((bool) => {
+		this._userMetadataService.getMetadataValue(this.userId, this._constants.FUNCTION_KEY_CAN_SEND_RECOMMENDATION_TO_USER).then((bool) => {
 			this._currentUserCanSendRecommendationToProfileUser = bool;
 		})
 	}
