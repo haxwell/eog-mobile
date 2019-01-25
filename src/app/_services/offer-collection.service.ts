@@ -55,7 +55,7 @@ export class OfferCollectionService {
 			model["offers"] = JSON.parse(offersObj["_body"]);
 
 			model["offers"].forEach((offer) => {
-				_offerModelService.setOfferImageOrientation(offer);
+				self._offerModelService.setOfferImageOrientation(offer);
 			});
 
 			model["offers"].sort((a, b) => { let aText = a.title.toLowerCase(); let bText = b.title.toLowerCase(); if (aText > bText) return 1; else if (aText < bText) return -1; else return 0; })
