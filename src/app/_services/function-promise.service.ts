@@ -38,6 +38,7 @@ export class FunctionPromiseService {
 	}
 
 	get(resultKey, funcKey, data) {
+		var rtn = undefined;
 		var timestamp = new Date().getTime();
 
 		if (this.results[resultKey] !== undefined) {
@@ -53,9 +54,12 @@ export class FunctionPromiseService {
 
 		if (func !== undefined) {
 			this.results[resultKey] = {timestamp: timestamp, results: func(data)};
+			rtn = this.results[resultKey]["results"];
+		} else {
+			rtn = undefined;
 		}
 
-		return this.results[resultKey]["results"];
+		return rtn;
 	}
 
 }
