@@ -51,11 +51,11 @@ describe('FunctionPromise Service', () => {
     let count = 0;
     let func = { func: (data) => { return "response " + count++; } };
 
-    spyOn(func, "func")
-
+    spyOn(func, "func").and.callThrough();
+    expect(func.func).not.toHaveBeenCalled();
     service.setFreshnessFactorInMillis(1500); // one point five seconds
 
-    service.initFunc(funcKey, spy);
+    service.initFunc(funcKey, func.func);
       expect(func.func).not.toHaveBeenCalled();
 
     let response = service.get(resultKey, funcKey, data);
@@ -66,7 +66,7 @@ describe('FunctionPromise Service', () => {
       let response = service.get(resultKey, funcKey, data);
         expect(func.func).not.toHaveBeenCalled();
         expect(response).toEqual("response 0");
-    }, 500);
+    }, 750);
 
     setTimeout(() => {
       service.get(resultKey, funcKey, data);
