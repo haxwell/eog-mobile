@@ -74,7 +74,7 @@ export class PointsService {
 		return this.currentUserPointsAsSumPromise;
 	}
 
-	sendAPointToAUser(receivingUserId) {
+	sendAPointToAUser(receivingUserId: number) {
 		let self = this;
 		return new Promise((resolve, reject) => {
 			let user = self._userService.getCurrentUser();
@@ -92,7 +92,7 @@ export class PointsService {
 		});
 	}
 
-	isCurrentUserAbleToSendAPointTo(receivingUserId) {
+	isCurrentUserAbleToSendAPointTo(receivingUserId: number) {
 		return new Promise((resolve, reject) => {
 			let user = this._userService.getCurrentUser();
 			if (user) {

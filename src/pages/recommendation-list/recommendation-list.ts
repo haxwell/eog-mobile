@@ -107,7 +107,7 @@ export class RecommendationListPage {
 	}
 
 	onViewUser(item) {
-		this.navCtrl.push(ProfilePage, {user: item["userInfo"]});
+		this.navCtrl.push(ProfilePage, {userId: item["userInfo"]["id"]});
 	}
 
 	getAvatarCSSClassString() {

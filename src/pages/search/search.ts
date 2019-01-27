@@ -137,6 +137,6 @@ export class SearchPage {
 	}
 
 	onViewUser(_user) {
-		this.navCtrl.push(ProfilePage, {user: _user});
+		this.navCtrl.push(ProfilePage, {userId: _user["id"]});
 	}
 }

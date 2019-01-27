@@ -53,7 +53,7 @@ export class ProfilePage {
 				private _events: Events,
 				private _constants: Constants) {
 
-		this.userId = Object.assign({}, navParams.get('userId'));
+		this.userId = navParams.get('userId');
 
 		this._userMetadataService.init();
 

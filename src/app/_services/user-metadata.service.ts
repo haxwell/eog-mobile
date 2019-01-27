@@ -48,9 +48,9 @@ export class UserMetadataService extends DomainObjectMetadataService {
 		let self = this;
 		self.addMetadataCalculationFunction(
 			self._constants.FUNCTION_KEY_CAN_SEND_POINT_TO_USER, 
-			(user) => {
+			(userId: number) => {
 				return new Promise((resolve, reject) => {
-					this._pointsService.isCurrentUserAbleToSendAPointTo(user["id"]).then((bool) => {
+					this._pointsService.isCurrentUserAbleToSendAPointTo(userId).then((bool) => {
 						resolve(bool);
 					});
 				});
@@ -59,9 +59,9 @@ export class UserMetadataService extends DomainObjectMetadataService {
 
 		self.addMetadataCalculationFunction(
 			self._constants.FUNCTION_KEY_CAN_SEND_RECOMMENDATION_TO_USER, 
-			(user) => {
+			(userId: number) => {
 				return new Promise((resolve, reject) => {
-					this._recommendationService.isCurrentUserAbleToSendARecommendationTo(user["id"]).then((bool) => {
+					this._recommendationService.isCurrentUserAbleToSendARecommendationTo(userId).then((bool) => {
 						resolve(bool);
 					});
 				});
