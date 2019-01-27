@@ -27,7 +27,7 @@ import EXIF from 'exif-js';
 export class ProfileEditPage {
 
 	model = undefined;
-	user = undefined;
+	userId = undefined;
 	dirty = false;
 	loading = undefined;
 	isExiting = false;
@@ -54,19 +54,19 @@ export class ProfileEditPage {
 				private _constants: Constants,
 				private _file: File) {
 
-		this.user = Object.assign({}, navParams.get('user'));
+		this.userId = navParams.get('userId');
 		
-		this.model = this._profileService.getModel(this.user["id"]); 
+		this.model = this._profileService.getModel(this.userId); 
 
 		this._userMetadataService.init();
 	}
 
 	ngOnInit() {
 		this.contactInfoVisibilityChoices = this._contactInfoVisibilityService.getContactInfoVisibilityChoices();
-		this._contactInfoVisibilityService.getContactInfoVisibilityId(this.user["id"]).then((visId) => {
+		this._contactInfoVisibilityService.getContactInfoVisibilityId(this.userId).then((visId) => {
 			this.contactInfoVisibilityId = visId;
 		})
-	}	
+	}
 
 	isDirty() {
 		return this.dirty;
@@ -104,7 +104,7 @@ export class ProfileEditPage {
 								
 								self.model["imageFileURI"] = self.model["imageFileURI_OriginalValue"];
 
-								self._pictureService.setMostProbablePhotoPath(self._constants.PHOTO_TYPE_PROFILE, self.user["id"], self.model["imageFileURI"]);
+								self._pictureService.setMostProbablePhotoPath(self._constants.PHOTO_TYPE_PROFILE, self.userId, self.model["imageFileURI"]);
 								
 								self.navCtrl.pop();
 							});
@@ -139,14 +139,14 @@ export class ProfileEditPage {
 	}
 
 	isSaveBtnEnabled() {
-		let model = this._profileService.getModel(this.user["id"]);
+		let model = this._profileService.getModel(this.userId);
 
 		return this.isDirty() && model["phone"].length == 10;
 	}
 
 	onSaveBtnTap() {
 		let self = this;
-		let model = this._profileService.getModel(this.user["id"]);
+		let model = this._profileService.getModel(this.userId);
 
 		if (this.verifyPhoneOnSave) {
 			this.verifyPhone(model["phone"]);
@@ -161,7 +161,7 @@ export class ProfileEditPage {
 
 		self.loading.present();
 
-		self._contactInfoVisibilityService.saveContactInfoVisibilityByUserId(self.user["id"], self.contactInfoVisibilityId);
+		self._contactInfoVisibilityService.saveContactInfoVisibilityByUserId(self.userId, self.contactInfoVisibilityId);
 
 		this._profileService.save(model).then(() => {
 				self.setDirty(false);
@@ -273,7 +273,7 @@ export class ProfileEditPage {
 	setChangedAttr(key, value) {
 		let rtn = false;
 
-		let model = this._profileService.getModel(this.user["id"]);
+		let model = this._profileService.getModel(this.userId);
 		if (model[key] !== value) {
 			model[key] = value;
 			this.setDirty(true);
@@ -305,23 +305,23 @@ export class ProfileEditPage {
 	}
 
 	isFromGallery() {
-		return this._profileService.getModel(this.user["id"])["imageFileSource"] == 'gallery';
+		return this._profileService.getModel(this.userId)["imageFileSource"] == 'gallery';
 	}
 
 	isThumbnailImageAvailable() {
-		return this._profileService.getModel(this.user["id"])["imageFileURI"] !== undefined;
+		return this._profileService.getModel(this.userId)["imageFileURI"] !== undefined;
 	}
 
 	getThumbnailImage() {
-		if (this._profileService.getModel(this.user["id"])["imageFileURI"] === undefined)
+		if (this._profileService.getModel(this.userId)["imageFileURI"] === undefined)
 			return "assets/img/mushroom.jpg";
 		else
-			return this._profileService.getModel(this.user["id"])["imageFileURI"];
+			return this._profileService.getModel(this.userId)["imageFileURI"];
 	}
 
 	onThumbnailClick($event) {
 		let self = this;
-		let model = this._profileService.getModel(this.user["id"]);
+		let model = this._profileService.getModel(this.userId);
 		let modal = this.modalCtrl.create(ChoosePhotoSourcePage, {fileURI: model["imageFileURI"], fileSource: model["imageFileSource"]});
 		
 		modal.onDidDismiss((promise) => {
@@ -331,7 +331,7 @@ export class ProfileEditPage {
 						uriAndSource = {};
 					}
 
-					let model = this._profileService.getModel(this.user["id"]);
+					let model = this._profileService.getModel(this.userId);
 
 					if (model["imageFileURI"] !== undefined && model["imageFileSource"] == 'camera') {
 						let lastSlash = model["imageFileURI"].lastIndexOf('/');
@@ -339,7 +339,7 @@ export class ProfileEditPage {
 						let filename = model["imageFileURI"].substring(lastSlash+1);
 
 						self._file.removeFile(path, filename).then((data) => {
-							self._pictureService.setMostProbablePhotoPath(self._constants.PHOTO_TYPE_PROFILE, self.user["id"], uriAndSource["imageFileURI"]);
+							self._pictureService.setMostProbablePhotoPath(self._constants.PHOTO_TYPE_PROFILE, self.userId, uriAndSource["imageFileURI"]);
 
 							console.log("User saved a new profile image. [" + model["imageFileURI"] + "] is no longer the image to use, so it has been removed." );
 							console.log("setting profile header model to [" + uriAndSource["imageFileURI"] + "]");
@@ -354,7 +354,7 @@ export class ProfileEditPage {
 						console.log("no previous image to delete, so skipping that step...")
 						console.log("uriAndSource = " + JSON.stringify(uriAndSource))
 
-						self._pictureService.setMostProbablePhotoPath(self._constants.PHOTO_TYPE_PROFILE, self.user["id"], uriAndSource["imageFileURI"]);
+						self._pictureService.setMostProbablePhotoPath(self._constants.PHOTO_TYPE_PROFILE, self.userId, uriAndSource["imageFileURI"]);
 
 						model["imageFileURI"] = uriAndSource["imageFileURI"];
 						model["imageFileSource"] = uriAndSource["imageFileSource"];
@@ -384,19 +384,19 @@ export class ProfileEditPage {
 						let self = this;
 
 						let func = () => {
-							let model = self._profileService.getModel(self.user["id"]);
+							let model = self._profileService.getModel(self.userId);
 
 							model["imageFileURI"] = undefined;
 							model["imageFileSource"] = undefined;
 
-							self._pictureService.setMostProbablePhotoPath(self._constants.PHOTO_TYPE_PROFILE, self.user["id"], model["imageFileURI"]);
+							self._pictureService.setMostProbablePhotoPath(self._constants.PHOTO_TYPE_PROFILE, self.userId, model["imageFileURI"]);
 						}
 
-						console.log('deleting photo ' + self.user["id"]);
+						console.log('deleting photo ' + self.userId);
 
-						self._pictureService.delete(self._constants.PHOTO_TYPE_PROFILE, self.user["id"]).then(() => { 
+						self._pictureService.delete(self._constants.PHOTO_TYPE_PROFILE, self.userId).then(() => { 
 
-							let model = self._profileService.getModel(self.user["id"]);
+							let model = self._profileService.getModel(self.userId);
 
 							if (model["imageFileSource"] === 'camera' || model["imageFileSource"] === 'eog') {
 								
@@ -407,7 +407,7 @@ export class ProfileEditPage {
 								let filename = model["imageFileURI"].substring(lastSlash+1);
 
 								self._file.removeFile(path, filename).then((data) => {
-									console.log("Call to pictureService to DELETE photo for "+self.user['id']+" successful! Image was from camera or the eog api, so it was removed from phone.");
+									console.log("Call to pictureService to DELETE photo for "+ self.userId +" successful! Image was from camera or the eog api, so it was removed from phone.");
 
 									func();
 									
@@ -417,7 +417,7 @@ export class ProfileEditPage {
 									func();
 								});
 							} else {
-								console.log("Call to pictureService to DELETE photo for "+self.user['id']+" successful! Image was from phone's gallery, so did not try to remove it.");
+								console.log("Call to pictureService to DELETE photo for "+ self.userId +" successful! Image was from phone's gallery, so did not try to remove it.");
 
 								func();								
 							}
