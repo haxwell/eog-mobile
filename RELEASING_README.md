@@ -49,6 +49,8 @@ Create the environment.ts file: cp src/_environments/environment.staging.ts src/
 Run 'npm install'
 Run 'ionic cordova build ios --release'
 
+(You may get an error about GoogleToolboxForMac not being found, etc. Go to the i`./platforms/ios` dir and run `pod install`. The run `ionic cordova build ios --release` again.)
+
 (expect errors.. EXPORT FAILED, '..archive not found at path..', etc. Don't you worry. Continue on.)
 
 cp ./resources/ios/icon/AppIcon* ./platforms/ios/Easyah/Images.xcassets/AppIcon.appiconset/
@@ -56,9 +58,11 @@ cp ./resources/ios/icon/icon-20.png ./platforms/ios/Easyah/Images.xcassets/AppIc
 
 Open the project in XCode: open ./platforms/ios/Easyah.xcworkspace/
 
-In the Project Navigator, click on the Easyah entry, under Targets.
+In the Project Navigator, click on the Easyah entry, and then the Easyah entry to the right a bit under Targets.
 
 The setting for General > Signing, select the Team (TODO: add clarifying detail about how certificates, and Apple IDs, etc relate to the value you choose here.) For me, the value is only one, Johnathan James.
+
+The setting for Build Settings > Code Signing Identity should read `iOS Developer`. The Release setting below it should also read `iOS Developer`. The Development Team should read Johnathan James.
 
 Set the Build number appropriately. If in doubt, choose 1.
 
@@ -73,6 +77,8 @@ Look at the list of warnings etc that are generated. If there are any saying Upd
 Set your scheme to Generic IOS Device
 
 In Project Settings, set Signing (Debug) and Signing (Release) to your provisioning profile. I believe its correct when the line 'Signing Certificate' reads 'iPhone Developer: ....'
+
+Also under Targets > Easyah > Build Settings you will need to set Provisioning Profile to 'Easyah iOS Provisioning Profile' for the Release config. If there are columns to the right, set it in those as well. Set ALL of them.
 
 Go to Product > Archive
 
