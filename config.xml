@@ -99,5 +99,5 @@
         <variable name="GEOLOCATION_USAGE_DESCRIPTION" value="To provide content from people near you." />
     </plugin>
     <engine name="android" spec="7.1.4" />
-    <engine name="ios" spec="^4.5.5" />
+    <engine name="ios" spec="4.5.5" />
 </widget>
