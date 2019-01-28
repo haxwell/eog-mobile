@@ -80,7 +80,7 @@ export class EasyahApp {
     var view = this.navCtrl.getActive();
     if (view.component.name != "ProfilePage") {
       this._menuCtrl.close();
-      this.navCtrl.push(ProfilePage, {user: this._userService.getCurrentUser()});
+      this.navCtrl.push(ProfilePage, {userId: this._userService.getCurrentUser()["id"]});
     }
   }
 

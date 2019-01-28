@@ -42,20 +42,27 @@ git push --tags
 Building and releasing an IOS version
 ---
 
-If you're reading this, we'll assume you just pulled a clean clone.
+If you're reading this, we'll assume you just pulled a clean clone. Be sure you are on the correct branch (develop, some-feature-branch, etc)
 
 Create the environment.ts file: cp src/_environments/environment.staging.ts src/_environments/environment.ts
 
+Run 'npm install'
 Run 'ionic cordova build ios --release'
+
+(You may get an error about GoogleToolboxForMac not being found, etc. Go to the i`./platforms/ios` dir and run `pod install`. The run `ionic cordova build ios --release` again.)
+
+(expect errors.. EXPORT FAILED, '..archive not found at path..', etc. Don't you worry. Continue on.)
 
 cp ./resources/ios/icon/AppIcon* ./platforms/ios/Easyah/Images.xcassets/AppIcon.appiconset/
 cp ./resources/ios/icon/icon-20.png ./platforms/ios/Easyah/Images.xcassets/AppIcon.appiconset/
 
 Open the project in XCode: open ./platforms/ios/Easyah.xcworkspace/
 
-In the Project Navigator, click on the Easyah entry, under Targets.
+In the Project Navigator, click on the Easyah entry, and then the Easyah entry to the right a bit under Targets.
 
 The setting for General > Signing, select the Team (TODO: add clarifying detail about how certificates, and Apple IDs, etc relate to the value you choose here.) For me, the value is only one, Johnathan James.
+
+The setting for Build Settings > Code Signing Identity should read `iOS Developer`. The Release setting below it should also read `iOS Developer`. The Development Team should read Johnathan James.
 
 Set the Build number appropriately. If in doubt, choose 1.
 
@@ -72,6 +79,8 @@ Set your scheme to Generic IOS Device
 In Project / Build Settings, the section Code Signing Identity, set Signing (Debug) and Signing (Release) to your provisioning profile. I believe its correct when the line reads 'iPhone Developer: ....'
 
 on the command line, in the dir ./platforms/ios run the command 'pod install'. You should get a response like `Pod installation complete! There is 1 dependency from the Podfile and 7 total pods installed.`
+
+Also under Targets > Easyah > Build Settings you will need to set Provisioning Profile to 'Easyah iOS Provisioning Profile' for the Release config. If there are columns to the right, set it in those as well. Set ALL of them.
 
 Go to Product > Archive
 

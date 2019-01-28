@@ -32,7 +32,7 @@ export class UsersLineItem {
 
 	onViewProfile() {
       if (this.clickthru) 
-      	this.navCtrl.push(ProfilePage, { user: this.item, readOnly: true });
+      	this.navCtrl.push(ProfilePage, { userId: this.item["id"], readOnly: true });
 	}
 
 	getProfileImageFilepath() {

@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { NavController, ModalController } from 'ionic-angular';
 
 import { TutorialPage } from '../../tutorial/tutorial'
+import { TutorialEasyahIntroPage } from '../../tutorial-easyah-intro/tutorial-easyah-intro'
 import { AcceptRequestTutorialPage } from '../../requests/incoming/_pages/accept.request.tutorial';
 import { OutgoingRequestMadeTutorialPage } from '../../offers/_pages/outgoing-request-made-tutorial';
 
@@ -35,9 +36,14 @@ export class TutorialsListPage {
     	modal.present();
     }
 
+    onBasicConceptsTutorialBtnTap() {
+        let modal = this.modalCtrl.create(TutorialPage, { });
+        modal.present();
+    }
+
     onWelcomeTutorialBtnTap() {
-    	let modal = this.modalCtrl.create(TutorialPage, { });
-    	modal.present();
+        let modal = this.modalCtrl.create(TutorialEasyahIntroPage, { });
+        modal.present();
     }
 
 }

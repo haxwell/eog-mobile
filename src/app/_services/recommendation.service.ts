@@ -113,7 +113,7 @@ export class RecommendationService {
 		});
 	}
 
-	sendARecommendationToAUser(receivingUserId) {
+	sendARecommendationToAUser(receivingUserId: number) {
 		let self = this;
 		return new Promise((resolve, reject) => {
 			let user = self._userService.getCurrentUser();
@@ -130,7 +130,7 @@ export class RecommendationService {
 	}
 
 	// TODO: Does it make sense to move this to the metadataService? If so, what type stuff stays in this service?
-	isCurrentUserAbleToSendARecommendationTo(receivingUserId) {
+	isCurrentUserAbleToSendARecommendationTo(receivingUserId: number) {
 		return new Promise((resolve, reject) => {
 			let user = this._userService.getCurrentUser();
 			

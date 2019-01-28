@@ -64,6 +64,12 @@ export class OtherPeoplesOfferList {
 		this._offerMetadataService.init();
 	}
 
+	isListOfOffersEmpty() {
+		// TODO: Create Utility for this, duplicate code in search.ts
+		let rtn = this.offers == undefined || this.offers == null || this.offers.length == 0;
+		return rtn;
+	}
+
 	getListOfOffers() {
 		return this.offers;
 	}

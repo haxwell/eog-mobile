@@ -236,7 +236,7 @@ export class RequestsOutgoingView {
 	}
 
 	onViewContactInfoBtnTap(request) {
-		this.navCtrl.push(ProfilePage, { user: request["directionallyOppositeUser"], readOnly: true });
+		this.navCtrl.push(ProfilePage, { userId: request["directionallyOppositeUser"]["id"], readOnly: true });
 	}
 
 	onViewOffer(request) {

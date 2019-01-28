@@ -31,7 +31,7 @@ export class ProfileService {
 
 				}
 
-	init(userId) {
+	init(userId:number) {
 		this._recommendationService.init();
 		this._pointsService.init();
 		this._pictureService.reset(this._constants.PHOTO_TYPE_PROFILE, userId);
@@ -39,7 +39,7 @@ export class ProfileService {
 		this.modelCache[userId] = undefined;
 	}
 
-	getModel(userId) {
+	getModel(userId: number) {
 		if (this.modelCache[userId] === undefined) {
 			this.modelCache[userId] = {};
 			return this.initModel(userId, this.modelCache[userId]);
@@ -48,7 +48,7 @@ export class ProfileService {
 		}
 	}
 
-	initModel(userId, model) {
+	initModel(userId: number, model) {
 		this._pointsService.init();
 		this._recommendationService.init();
 		this._pictureService.init()

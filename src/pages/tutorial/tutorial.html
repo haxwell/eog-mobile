@@ -9,7 +9,9 @@
 <ion-content no-bounce>
 	<ion-slides #slides (ionSlideWillChange)="onSlideChangeStart($event)" pager>
 		<ion-slide>
-			Easyah makes it easier to collaborate with other people on big ideas. It uses the concept of paying-it-forward to make it work.<br/><br/>
+			Easyah<br/><br/>
+
+			Basic Concepts Tutorial<br/><br/>
 
 			Your feedback makes us awesome, so let us know your thoughts at info@easyah.io!<br/><br/>
 
@@ -51,7 +53,7 @@
 			All Time = # you've earned over all time<br/>
 		</ion-slide>
 		<ion-slide>
-			When you create a Offer, you have to decide how valuable your offer is to YOU.<br/><br/> Will doing your offer require a lot from you? Will it be in high demand? Then you would want to require more points.<br/><br/> If it's something relatively small, you would require fewer points.<br/><br/>
+			When you create an Offer, you have to decide how valuable your offer is to YOU.<br/><br/> Will doing your offer require a lot from you? Will it be in high demand? Then you would want to require more points.<br/><br/> If it's something relatively small, you would require fewer points.<br/><br/>
 			<img id="slide-dividing-line-img" src="assets/img/tutorial/white-on-black-8-divider.png"><br/><br/>
 			The cool thing is that people have to DO good things for others to earn their points.<br/><br/> So, your simple act of making a offer inspires good in the world, because before anyone can contact you, they will need to have earned at least the number of points you specify.<br/>
 		</ion-slide>
@@ -97,11 +99,7 @@
 			<br/><br/>
 			Join us online, in our Facebook group! Search for 'easyah.io'.<br/><br/>
 
-			<ion-checkbox [(ngModel)]="showThisTutorialNextTime" (ionChange)="showThisTutorialNextTimeChanged()"></ion-checkbox>
-			<ion-label>Show This Tutorial On Next Login</ion-label>
-			<br/>
-
-			<button ion-button icon-end large clear (click)="startApp()">
+			<button ion-button icon-end large clear (click)="dismissTutorialView()">
 				Continue
 				<ion-icon name="arrow-forward"></ion-icon>
 			</button>				

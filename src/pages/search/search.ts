@@ -100,6 +100,12 @@ export class SearchPage {
 		return this.offerResults;
 	}
 
+	isUsersResultsEmpty() {
+		// TODO: Create Utility for this, duplicate code in other-peoples-offer-list.ts
+		let rtn = this.usersResults == undefined || this.usersResults == null || this.usersResults.length == 0;
+		return rtn;
+	}
+
 	getUsersResults() {
 		if (this.usersResults !== undefined) {
 			let currentUser = this._userService.getCurrentUser();
@@ -131,6 +137,6 @@ export class SearchPage {
 	}
 
 	onViewUser(_user) {
-		this.navCtrl.push(ProfilePage, {user: _user});
+		this.navCtrl.push(ProfilePage, {userId: _user["id"]});
 	}
 }

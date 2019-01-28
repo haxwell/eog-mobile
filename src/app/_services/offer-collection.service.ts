@@ -4,6 +4,7 @@ import { UserService } from './user.service';
 import { ApiService } from './api.service';
 import { PictureService } from './picture.service';
 import { PictureEXIFService } from './picture-exif.service';
+import { OfferModelService } from './offer-model.service';
 
 import { environment } from '../../_environments/environment';
 import { Constants } from '../../_constants/constants'
@@ -24,6 +25,7 @@ export class OfferCollectionService {
 				private _userService: UserService,
 				private _pictureService: PictureService,
 				private _pictureEXIFService: PictureEXIFService,
+				private _offerModelService: OfferModelService,
 				private _constants: Constants) {
 
 	}
@@ -53,17 +55,7 @@ export class OfferCollectionService {
 			model["offers"] = JSON.parse(offersObj["_body"]);
 
 			model["offers"].forEach((offer) => {
-				self._pictureService.get(self._constants.PHOTO_TYPE_OFFER, offer["id"]).then((filename) => {
-					offer["imageFileSource"] = 'eog';
-					offer["imageFileURI"] = filename;
-					offer["imageFileURI_OriginalValue"] = filename;
-
-					if (filename) {
-						self._pictureEXIFService.getEXIFMetadata(filename).then((exifMetadata) => {
-							offer["imageOrientation"] = exifMetadata["Orientation"];
-						})
-					}
-				});
+				self._offerModelService.setOfferImageOrientation(offer);
 			});
 
 			model["offers"].sort((a, b) => { let aText = a.title.toLowerCase(); let bText = b.title.toLowerCase(); if (aText > bText) return 1; else if (aText < bText) return -1; else return 0; })
